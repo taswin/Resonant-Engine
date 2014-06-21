@@ -472,10 +472,10 @@ public class FluidUtility
 	/**
 	 * Does all the work needed to fill or drain an item of fluid when a player clicks on the block.
 	 */
-	public static boolean playerActivatedFluidItem(World world, int x, int y, int z, EntityPlayer entityplayer, int side)
+	public static boolean playerActivatedFluidItem(World world, int x, int y, int z, EntityPlayer player, int side)
 	{
 		// TODO Add double click support similar to the crates in assembly line
-		ItemStack current = entityplayer.inventory.getCurrentItem();
+		ItemStack current = player.inventory.getCurrentItem();
 
 		if (current != null && world.getBlockTileEntity(x, y, z) instanceof IFluidHandler)
 		{
@@ -487,9 +487,9 @@ public class FluidUtility
 				if (tank.fill(ForgeDirection.getOrientation(side), fluid.copy(), false) == fluid.amount)
 				{
 					tank.fill(ForgeDirection.getOrientation(side), fluid.copy(), true);
-					if (!entityplayer.capabilities.isCreativeMode)
+					if (!player.capabilities.isCreativeMode)
 					{
-						InventoryUtility.consumeHeldItem(entityplayer);
+						InventoryUtility.consumeHeldItem(player);
 					}
 					return true;
 				}
@@ -506,17 +506,12 @@ public class FluidUtility
 
 					if (fluid != null)
 					{
-						if (!entityplayer.capabilities.isCreativeMode)
+						if (!player.capabilities.isCreativeMode)
 						{
-							if (!entityplayer.inventory.addItemStackToInventory(filled))
-							{
-								return false;
-							}
-							else
-							{
-								InventoryUtility.dropItemStack(new VectorWorld(entityplayer), filled);
-							}
+							player.inventory.setInventorySlotContents(player.inventory.currentItem, InventoryUtility.decrStackSize(current, 1));
+							InventoryUtility.dropItemStack(world, new Vector3(player), filled, 0);
 						}
+
 						tank.drain(ForgeDirection.UNKNOWN, fluid.amount, true);
 						return true;
 					}
