@@ -21,12 +21,12 @@ import net.minecraft.world.{Explosion, IBlockAccess, World}
 import net.minecraftforge.client.IItemRenderer
 import org.lwjgl.opengl.{GL11, GL12}
 import resonant.api.items.ISimpleItemRenderer
-import resonant.lib.prefab.tile.item.ItemBlockTooltip
-import resonant.lib.prefab.tile.traits.TRotatable
-import resonant.lib.render.wrapper.RenderTileDummy
 import resonant.engine.{References, ResonantEngine}
 import resonant.lib.content.prefab.TIO
+import resonant.lib.prefab.tile.item.ItemBlockTooltip
+import resonant.lib.prefab.tile.traits.TRotatable
 import resonant.lib.render.RenderUtility
+import resonant.lib.render.wrapper.RenderTileDummy
 import resonant.lib.transform.region.Cuboid
 import resonant.lib.transform.vector.{TVectorWorld, Vector2, Vector3, VectorWorld}
 import resonant.lib.utility.{LanguageUtility, WrenchUtility}
@@ -148,6 +148,12 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   /** Use update() instead */
   final override def updateEntity() = update()
 
+  /** Called each tick */
+  def update()
+  {
+
+  }
+
   def blockUpdate() = update()
 
   def randomDisplayTick()
@@ -162,23 +168,8 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   {
   }
 
-  /** Called each tick */
-  def update()
-  {
-
-  }
-
   @Deprecated
   def creativeTab(value: CreativeTabs)
-  {
-    creativeTab = value
-  }
-
-  /**
-   * Sets the creative tab
-   * @param value - tab to set
-   */
-  def setCreativeTab(value: CreativeTabs)
   {
     creativeTab = value
   }
@@ -192,6 +183,15 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
     isCreativeTabSet = true
   }
 
+  /**
+   * Sets the creative tab
+   * @param value - tab to set
+   */
+  def setCreativeTab(value: CreativeTabs)
+  {
+    creativeTab = value
+  }
+
   def itemBlock(item: Class[_ <: ItemBlock]): Unit =
   { itemBlock = item }
 
@@ -199,18 +199,6 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   def bounds(cuboid: Cuboid)
   {
     bounds = cuboid
-  }
-
-  /** Bounds for the block */
-  def bounds = _bounds
-
-  /** Sets the block bounds */
-  def bounds_=(cuboid: Cuboid)
-  {
-    _bounds = cuboid
-
-    if (block != null)
-      block.setBlockBounds(_bounds.min.xf, _bounds.min.yf, _bounds.min.zf, _bounds.max.xf, _bounds.max.yf, _bounds.max.zf)
   }
 
   /** Sets the dummy block class uses by this spatial block */
@@ -256,12 +244,6 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   {
     this.worldObj = world
   }
-
-  override def x: Double = xCoord
-
-  override def y: Double = yCoord
-
-  override def z: Double = zCoord
 
   /** World location of the block, centered */
   def center: VectorWorld = toVectorWorld + 0.5
@@ -482,13 +464,13 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
     onWorldSeparate()
   }
 
+  def onWorldSeparate()
+  {
+  }
+
   def onDestroyedByExplosion(ex: Explosion)
   {
 
-  }
-
-  def onWorldSeparate()
-  {
   }
 
   /**
@@ -528,7 +510,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
 
     for (cuboid <- getCollisionBoxes)
     {
-      if (intersect != null)
+      if (intersect != null && cuboid.isInsideBounds(intersect))
       {
         boxes.add(cuboid)
       }
@@ -544,6 +526,18 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   override def getRenderBoundingBox: AxisAlignedBB = (getCollisionBounds + toVectorWorld).toAABB
 
   def getCollisionBounds: Cuboid = bounds
+
+  /** Bounds for the block */
+  def bounds = _bounds
+
+  /** Sets the block bounds */
+  def bounds_=(cuboid: Cuboid)
+  {
+    _bounds = cuboid
+
+    if (block != null)
+      block.setBlockBounds(_bounds.min.xf, _bounds.min.yf, _bounds.min.zf, _bounds.max.xf, _bounds.max.yf, _bounds.max.zf)
+  }
 
   /**
    * Called in the world.
@@ -575,15 +569,6 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   @SideOnly(Side.CLIENT)
   def getIcon: IIcon = SpatialBlock.icon.get(getTextureName)
 
-  @SideOnly(Side.CLIENT)
-  protected def getTextureName: String =
-  {
-    if (textureName == null)
-      return "MISSING_ICON_TILE_" + Block.getIdFromBlock(block) + "_" + name
-    else
-      return block.dummyTile.domain + textureName
-  }
-
   /** Gets the icon that renders on the top
     * @param meta - placement data
     * @return icon that will render on top */
@@ -606,30 +591,6 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
     if (icon == null)
       icon = SpatialBlock.icon.get(getTextureName)
     return icon
-  }
-
-  /** Gets the icon that renders on the sides
-    * @param meta - placement data
-    * @return icon that will render on sides */
-  @SideOnly(Side.CLIENT)
-  protected def getSideIcon(meta: Int): IIcon = getSideIcon(meta, 0)
-
-  /** Gets the icon that renders on the sides
-    * @param meta - placement data
-    * @param side - side of the icon
-    * @return icon that will render on sides */
-  @SideOnly(Side.CLIENT)
-  protected def getSideIcon(meta: Int, side: Int): IIcon =
-  {
-    var icon = SpatialBlock.icon.get(getTextureName + "_side")
-    if (icon == null)
-      icon = SpatialBlock.icon.get(getTextureName)
-    return icon
-  }
-
-  def setTextureName(value: java.lang.String)
-  {
-    textureName = value
   }
 
   @SideOnly(Side.CLIENT)
@@ -655,6 +616,20 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
     SpatialBlock.icon.put(getTextureName, iconRegister.registerIcon(getTextureName + "_top"))
     SpatialBlock.icon.put(getTextureName, iconRegister.registerIcon(getTextureName + "_side"))
     SpatialBlock.icon.put(getTextureName, iconRegister.registerIcon(getTextureName + "_bottom"))
+  }
+
+  @SideOnly(Side.CLIENT)
+  protected def getTextureName: String =
+  {
+    if (textureName == null)
+      return "MISSING_ICON_TILE_" + Block.getIdFromBlock(block) + "_" + name
+    else
+      return block.dummyTile.domain + textureName
+  }
+
+  def setTextureName(value: java.lang.String)
+  {
+    textureName = value
   }
 
   @SideOnly(Side.CLIENT)
@@ -779,6 +754,8 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   /** Gets the level of power provide to this block */
   def getStrongestIndirectPower: Int = world.getStrongestIndirectPower(xi, yi, zi)
 
+  override def world: World = getWorldObj
+
   /** Gets the level of power being provided by this block */
   def getWeakRedstonePower(access: IBlockAccess, side: Int): Int = getStrongRedstonePower(access, side)
 
@@ -857,11 +834,11 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
       player.openGui(mod, gui, world, xi, yi, zi)
   }
 
-  /** Is the world client side */
-  def client: Boolean = world.isRemote
-
   /** Is the world server side */
   def server: Boolean = !world.isRemote
+
+  /** Is the world client side */
+  def client: Boolean = world.isRemote
 
   def setMeta(meta: Int)
   { world.setBlockMetadataWithNotify(xi, yi, zi, meta, 3) }
@@ -872,28 +849,6 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
       return 0
     else
       return super.getBlockMetadata
-  }
-
-  protected def markRender()
-  {
-    world.func_147479_m(xi, yi, zi)
-  }
-
-  protected def markUpdate()
-  {
-    world.markBlockForUpdate(xi, yi, zi)
-  }
-
-  override def world: World = getWorldObj
-
-  protected def updateLight()
-  {
-    world.func_147451_t(xi, yi, zi)
-  }
-
-  protected def scheduleTick(delay: Int)
-  {
-    world.scheduleBlockUpdate(xi, yi, zi, block, delay)
   }
 
   /** gets the way this piston should face for that entity that placed it. */
@@ -917,5 +872,50 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
       return (if (rotation == 0) 2 else (if (rotation == 1) 5 else (if (rotation == 2) 3 else (if (rotation == 3) 4 else 0)))).asInstanceOf[Byte]
     }
     return 0
+  }
+
+  override def x: Double = xCoord
+
+  override def y: Double = yCoord
+
+  override def z: Double = zCoord
+
+  /** Gets the icon that renders on the sides
+    * @param meta - placement data
+    * @return icon that will render on sides */
+  @SideOnly(Side.CLIENT)
+  protected def getSideIcon(meta: Int): IIcon = getSideIcon(meta, 0)
+
+  /** Gets the icon that renders on the sides
+    * @param meta - placement data
+    * @param side - side of the icon
+    * @return icon that will render on sides */
+  @SideOnly(Side.CLIENT)
+  protected def getSideIcon(meta: Int, side: Int): IIcon =
+  {
+    var icon = SpatialBlock.icon.get(getTextureName + "_side")
+    if (icon == null)
+      icon = SpatialBlock.icon.get(getTextureName)
+    return icon
+  }
+
+  protected def markRender()
+  {
+    world.func_147479_m(xi, yi, zi)
+  }
+
+  protected def markUpdate()
+  {
+    world.markBlockForUpdate(xi, yi, zi)
+  }
+
+  protected def updateLight()
+  {
+    world.func_147451_t(xi, yi, zi)
+  }
+
+  protected def scheduleTick(delay: Int)
+  {
+    world.scheduleBlockUpdate(xi, yi, zi, block, delay)
   }
 }

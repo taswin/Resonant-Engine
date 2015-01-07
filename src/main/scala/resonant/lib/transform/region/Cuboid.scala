@@ -9,23 +9,18 @@ import net.minecraft.entity.Entity
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.{AxisAlignedBB, Vec3}
 import net.minecraft.world.World
-import resonant.lib.transform.vector.{ImmutableVector3, IVector3, Vector3}
+import resonant.lib.transform.vector.{IVector3, ImmutableVector3, Vector3}
 import resonant.lib.transform.{AbstractOperation, ITransform}
+
 class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboid]
 {
   def this() = this(new Vector3, new Vector3)
 
   def this(amount: Double) = this(new Vector3, new Vector3(amount))
 
-  def this(cuboid: Cuboid) = this(cuboid.min.clone, cuboid.max.clone)
-
   def this(minx: Double, miny: Double, minz: Double, maxx: Double, maxy: Double, maxz: Double) = this(new Vector3(minx, miny, minz), new Vector3(maxx, maxy, maxz))
 
-  def this(aabb: AxisAlignedBB) = this(aabb.minX, aabb.minY, aabb.minZ, aabb.maxX, aabb.maxY, aabb.maxZ)
-
   def this(block: Block) = this(block.getBlockBoundsMinX, block.getBlockBoundsMinY, block.getBlockBoundsMinZ, block.getBlockBoundsMaxX, block.getBlockBoundsMaxY, block.getBlockBoundsMaxZ)
-
-  def toAABB: AxisAlignedBB = AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, max.y, max.z)
 
   def toRectangle: Rectangle = new Rectangle(min.toVector2, max.toVector2)
 
@@ -58,7 +53,19 @@ class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboi
 
   override def +(amount: Cuboid): Cuboid = new Cuboid(min + amount.min, max + amount.max)
 
+  def add(vec: Vector3): Cuboid = this + vec
+
+  def addSet(vec: Vector3): Cuboid = this += vec
+
+  def subtract(vec: Vector3): Cuboid = this - vec
+
+  def -(vec: Vector3): Cuboid = this + (vec * -1)
+
   def +(vec: Vector3): Cuboid = new Cuboid(min + vec, max + vec)
+
+  def subtractSet(vec: Vector3): Cuboid = this -= vec
+
+  def -=(vec: Vector3): Cuboid = this += (vec * -1)
 
   def +=(vec: Vector3): Cuboid =
   {
@@ -66,18 +73,6 @@ class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboi
     max += vec
     return this
   }
-
-  def -(vec: Vector3): Cuboid = this + (vec * -1)
-
-  def -=(vec: Vector3): Cuboid = this += (vec * -1)
-
-  def add(vec: Vector3): Cuboid = this + vec
-
-  def addSet(vec: Vector3): Cuboid = this += vec
-
-  def subtract(vec: Vector3): Cuboid = this - vec
-
-  def subtractSet(vec: Vector3): Cuboid = this -= vec
 
   def *(amount: Double): Cuboid = new Cuboid(min * amount, max * amount)
 
@@ -95,16 +90,18 @@ class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboi
   {
     return intersects(v.xCoord, v.yCoord, v.zCoord)
   }
-  
+
   def intersects(v: IVector3): Boolean =
   {
     return intersects(v.x, v.y, v.z)
   }
 
-  def intersects(x: Double, y: Double, z: Double) : Boolean =
+  def intersects(x: Double, y: Double, z: Double): Boolean =
   {
     return isWithinX(x) && isWithinY(y) && isWithinZ(z)
   }
+
+  def isWithinX(v: Double): Boolean = isWithin(min.x, max.x, v)
 
   def doesOverlap(box: AxisAlignedBB): Boolean =
   {
@@ -122,54 +119,61 @@ class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboi
   }
 
   def isOutSideX(x: Double, i: Double): Boolean = (min.x > x || i > max.x)
-  def isOutSideY(y: Double, j: Double): Boolean = (min.y > y || j > max.y)
-  def isOutSideZ(z: Double, k: Double): Boolean = (min.z > z || k > max.z)
 
-  def isInsideBounds(x: Double, y: Double, z: Double, i: Double, j: Double, k: Double): Boolean =
-  {
-    return isWithin(min.x, max.x, x, i) && isWithin(min.y, max.y, y, j) && isWithin(min.z, max.z, z, k)
-  }
+  def isOutSideY(y: Double, j: Double): Boolean = (min.y > y || j > max.y)
+
+  def isOutSideZ(z: Double, k: Double): Boolean = (min.z > z || k > max.z)
 
   def isInsideBounds(other: Cuboid): Boolean =
   {
     return isInsideBounds(other.min.x, other.min.y, other.min.z, other.max.x, other.max.y, other.max.z)
   }
 
-  def isInsideBounds(other: AxisAlignedBB) : Boolean =
+  def isInsideBounds(other: AxisAlignedBB): Boolean =
   {
     return isInsideBounds(other.minX, other.minY, other.minZ, other.maxX, other.maxY, other.maxZ)
   }
-  
-  def isVecInYZ(v : Vec3): Boolean = isWithinY(v) && isWithinZ(v)
-  def isVecInYZ(v : IVector3): Boolean = isWithinY(v) && isWithinZ(v)
 
-  def isWithinXZ(v : Vec3): Boolean = isWithinX(v) && isWithinZ(v)
-  def isWithinXZ(v : IVector3): Boolean = isWithinX(v) && isWithinZ(v)
-  
-  def isWithinX(v: Double): Boolean = isWithin(min.x, max.x, v)
-  def isWithinX(v: Vec3): Boolean = isWithinX(v.xCoord)
-  def isWithinX(v: IVector3): Boolean = isWithinX(v.x())
+  def isInsideBounds(minX: Double, minY: Double, minZ: Double, maxX: Double, maxY: Double, maxZ: Double): Boolean =
+  {
+    return if (maxX > min.x && minX < max.x) (if (maxY > min.y && minY < max.y) maxZ > min.z && minZ < max.z else false) else false
+  }
 
-  def isWithinY(v: Double): Boolean = isWithin(min.y, max.y, v)
+  def isVecInYZ(v: Vec3): Boolean = isWithinY(v) && isWithinZ(v)
+
   def isWithinY(v: Vec3): Boolean = isWithinY(v.yCoord)
+
+  def isWithinZ(v: Vec3): Boolean = isWithinZ(v.zCoord)
+
+  def isVecInYZ(v: IVector3): Boolean = isWithinY(v) && isWithinZ(v)
+
   def isWithinY(v: IVector3): Boolean = isWithinY(v.y())
 
-  def isWithinZ(v: Double): Boolean = isWithin(min.z, max.z, v)
-  def isWithinZ(v: Vec3): Boolean = isWithinZ(v.zCoord)
+  def isWithinY(v: Double): Boolean = isWithin(min.y, max.y, v)
+
   def isWithinZ(v: IVector3): Boolean = isWithinZ(v.z())
-  
-  def isWithin(min: Double, max: Double, v: Double) : Boolean = v + 1E-5 >= min  && v  - 1E-5 <= max
+
+  def isWithinZ(v: Double): Boolean = isWithin(min.z, max.z, v)
+
+  def isWithin(min: Double, max: Double, v: Double): Boolean = v + 1E-5 >= min && v - 1E-5 <= max
+
+  def isWithinXZ(v: Vec3): Boolean = isWithinX(v) && isWithinZ(v)
+
+  def isWithinX(v: Vec3): Boolean = isWithinX(v.xCoord)
+
+  def isWithinXZ(v: IVector3): Boolean = isWithinX(v) && isWithinZ(v)
+
+  def isWithinX(v: IVector3): Boolean = isWithinX(v.x())
 
   /** Checks to see if a line segment is within the defined line. Assume the lines overlap each other.
-   * @param min - min point
-   * @param max - max point
-   * @param a - min line point
-   * @param b - max line point
-   * @return true if the line segment is within the bounds
-   */
-  def isWithin(min: Double, max: Double, a: Double , b: Double) : Boolean = a + 1E-5 >= min  && b - 1E-5 <= max
-
-  def center: Vector3 = (min + max) / 2
+    * @param min - min point
+    * @param max - max point
+    * @param a - min bound
+    * @param b - max bound
+    * @return true if the line segment is within the bounds
+    */
+  @deprecated
+  def isWithin(min: Double, max: Double, a: Double, b: Double): Boolean = a >= min && b <= max
 
   def expand(difference: Vector3): Cuboid =
   {
@@ -183,6 +187,14 @@ class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboi
     min - difference
     max + difference
     return this
+  }
+
+  /** @return List of vector block positions within this region. */
+  def getVectors: List[Vector3] =
+  {
+    val vectors = new ArrayList[Vector3];
+    foreach(vector => vectors.add(vector))
+    return vectors
   }
 
   /**
@@ -203,14 +215,6 @@ class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboi
     }
   }
 
-  /** @return List of vector block positions within this region. */
-  def getVectors: List[Vector3] =
-  {
-    val vectors = new ArrayList[Vector3];
-    foreach(vector => vectors.add(vector))
-    return vectors
-  }
-
   def getVectors(center: Vector3, radius: Int): List[Vector3] =
   {
     val vectors = new ArrayList[Vector3];
@@ -218,34 +222,47 @@ class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboi
     return vectors
   }
 
-  def radius : Double =
+  def radius: Double =
   {
     var m: Double = 0;
-    if(xSize > m)
+    if (xSize > m)
       m = xSize
-    if(ySize > m)
+    if (ySize > m)
       m = ySize
-    if(zSize > m)
+    if (zSize > m)
       m = zSize
     return m
   }
 
   def isSquared: Boolean = xSize == ySize && ySize == zSize
-  def isSquaredInt: Boolean = xSizeInt == ySizeInt && ySizeInt == zSizeInt
-  
+
   def xSize: Double = max.x - min.x
+
   def ySize: Double = max.y - min.y
+
   def zSize: Double = max.z - min.z
 
+  def isSquaredInt: Boolean = xSizeInt == ySizeInt && ySizeInt == zSizeInt
+
   def xSizeInt: Int = (max.x - min.x).asInstanceOf[Int]
+
   def ySizeInt: Int = (max.y - min.y).asInstanceOf[Int]
+
   def zSizeInt: Int = (max.z - min.z).asInstanceOf[Int]
 
   def distance(v: Vec3): Double = center.distance(v)
-  def distance(v: IVector3): Double = center.distance(v)
-  def distance(box: Cuboid): Double = distance(box.center)
+
+  def center: Vector3 = (min + max) / 2
+
   def distance(box: AxisAlignedBB): Double = distance(new Cuboid(box))
-  def distance(xx: Double, yy: Double, zz: Double) : Double =
+
+  def this(aabb: AxisAlignedBB) = this(aabb.minX, aabb.minY, aabb.minZ, aabb.maxX, aabb.maxY, aabb.maxZ)
+
+  def distance(box: Cuboid): Double = distance(box.center)
+
+  def distance(v: IVector3): Double = center.distance(v)
+
+  def distance(xx: Double, yy: Double, zz: Double): Double =
   {
     val center = this.center
     val x = center.x - xx;
@@ -254,12 +271,12 @@ class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboi
     return Math.sqrt(x * x + y * y + z * z)
   }
 
-  def volume() : Double =
+  def volume(): Double =
   {
-    return xSize *  ySize * zSize
+    return xSize * ySize * zSize
   }
 
-  def area() : Double =
+  def area(): Double =
   {
     return (2 * xSize * zSize) + (2 * xSize * ySize) + (2 * zSize * ySize)
   }
@@ -305,6 +322,8 @@ class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboi
 
   def getEntitiesExclude(world: World, entity: Entity): List[Entity] = world.getEntitiesWithinAABBExcludingEntity(entity, toAABB).asInstanceOf[List[Entity]]
 
+  def toAABB: AxisAlignedBB = AxisAlignedBB.getBoundingBox(min.x, min.y, min.z, max.x, max.y, max.z)
+
   override def writeNBT(nbt: NBTTagCompound): NBTTagCompound =
   {
     nbt.setTag("min", min.toNBT)
@@ -332,4 +351,6 @@ class Cuboid(var min: Vector3, var max: Vector3) extends AbstractOperation[Cuboi
   }
 
   override def clone: Cuboid = new Cuboid(this)
+
+  def this(cuboid: Cuboid) = this(cuboid.min.clone, cuboid.max.clone)
 }
