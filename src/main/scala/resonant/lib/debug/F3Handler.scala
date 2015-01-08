@@ -1,5 +1,6 @@
 package resonant.lib.debug
 
+import cpw.mods.fml.common.FMLCommonHandler
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraft.client.Minecraft
 import net.minecraftforge.client.event.RenderGameOverlayEvent
@@ -18,8 +19,11 @@ object F3Handler
   {
     if (Minecraft.getMinecraft().gameSettings.showDebugInfo)
     {
-      val world = Minecraft.getMinecraft().theWorld
       val player = Minecraft.getMinecraft.thePlayer
+      val dim = player.worldObj.provider.dimensionId
+
+      //TODO: Check if this will crash on multiplayer
+      val world = if (FMLCommonHandler.instance.getSidedDelegate.getServer == null) Minecraft.getMinecraft().theWorld else FMLCommonHandler.instance().getMinecraftServerInstance.worldServerForDimension(dim)
       val objectPosition = player.rayTrace(8, 1)
 
       if (objectPosition != null)

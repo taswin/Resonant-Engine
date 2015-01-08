@@ -48,14 +48,14 @@ class NodeDirectCurrent(parent: INodeProvider) extends NodeEnergy[NodeDirectCurr
   //Gets the instantaneous voltage of this component
   def voltage = current * resistance
 
-  //Gets the instantaneous current of this component
-  def current = _current
-
   //Gets the resistance of this component
   def resistance = _resistance
 
   //Resistance cannot be zero or there will be infinite current
   def resistance_=(resistance: Double) = _resistance = Math.max(resistance, Double.MinPositiveValue)
+
+  //Gets the instantaneous current of this component
+  def current = _current
 
   /**
    * Called during reconstruct to build the connection map. This is a general way used to search all adjacent TileEntity to see and try to connect to it.
@@ -110,7 +110,7 @@ class NodeDirectCurrent(parent: INodeProvider) extends NodeEnergy[NodeDirectCurr
 
   override def getDebugInfo = List(toString)
 
-  override def toString = "DC [Connections: " + connections.size() + " " + charge.toInt + "C " + current.toInt + "A " + voltage.toInt + "V]"
+  override def toString = "DC [" + connections.size() + " " + charge.toInt + "C " + BigDecimal(current).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "A " + BigDecimal(voltage).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "V]"
 
   def charge = _charge
 
