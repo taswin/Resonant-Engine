@@ -17,11 +17,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
-import resonant.lib.transform.vector.IVector3;
-import resonant.lib.utility.LanguageUtility;
-import resonant.lib.world.WorldUtility;
 import resonant.lib.transform.rotation.Quaternion;
 import resonant.lib.transform.vector.Vector3;
+import resonant.lib.utility.LanguageUtility;
+import resonant.lib.world.WorldUtility;
 
 import java.util.EnumSet;
 
@@ -73,7 +72,7 @@ public class RenderItemOverlayUtility
 					GL11.glPushMatrix();
 					GL11.glTranslated(x, y, z);
 					int angle = WorldUtility.getAngleFromForgeDirection(WorldUtility.invertX(dir));
-					RenderUtility.renderFloatingText("" + inventory[i].stackSize, translation.transform(new Quaternion(angle, Vector3.up())).add(0.5).add(new Vector3(0, 0.3, 0)));
+					RenderUtility.renderFloatingText("" + inventory[i].stackSize, translation.transform(new Quaternion(angle, Vector3.up())).add(0.5).add(new Vector3(0, 0.5, 0)));
 					GL11.glPopMatrix();
 				}
 			}
