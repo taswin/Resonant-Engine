@@ -6,6 +6,7 @@ import java.util.{Set => JSet}
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.IUpdate
 import resonant.api.tile.INodeProvider
+import resonant.lib.debug.DebugInfo
 import resonant.lib.grid.UpdateTicker
 import resonant.lib.grid.node.{NodeEnergy, TTileConnector}
 
@@ -24,15 +25,14 @@ import scala.collection.convert.wrapAll._
  *
  * @author Calclavia
  */
-class DCNode(parent: INodeProvider) extends NodeEnergy[DCNode](parent) with IUpdate with TTileConnector[DCNode]
+class NodeDirectCurrent(parent: INodeProvider) extends NodeEnergy[NodeDirectCurrent](parent) with IUpdate with TTileConnector[NodeDirectCurrent] with DebugInfo
 {
   /**
    * Charges are pushed to positive terminals. Any connections that is NOT
    */
   val positiveTerminals: JSet[ForgeDirection] = new util.HashSet()
-
-  private var _current = 0D
   var chargeCapacity = 10000D
+  private var _current = 0D
   private var _charge = chargeCapacity
   private var chargeAccumulator = 0D
 
@@ -41,25 +41,21 @@ class DCNode(parent: INodeProvider) extends NodeEnergy[DCNode](parent) with IUpd
   //Amount of charge to push on the next update
   private var pushChargeBuffer = 0D
 
-  //Gets the instantaneous current of this component
-  def current = _current
+  override def energy = charge * voltage
+
+  override def power = current * voltage
 
   //Gets the instantaneous voltage of this component
   def voltage = current * resistance
 
-  def charge = _charge
-
-  def charge_=(newCharge: Double) = _charge = Math.min(newCharge, chargeCapacity)
+  //Gets the instantaneous current of this component
+  def current = _current
 
   //Gets the resistance of this component
   def resistance = _resistance
 
   //Resistance cannot be zero or there will be infinite current
   def resistance_=(resistance: Double) = _resistance = Math.max(resistance, Double.MinPositiveValue)
-
-  override def energy = charge * voltage
-
-  override def power = current * voltage
 
   /**
    * Called during reconstruct to build the connection map. This is a general way used to search all adjacent TileEntity to see and try to connect to it.
@@ -112,6 +108,14 @@ class DCNode(parent: INodeProvider) extends NodeEnergy[DCNode](parent) with IUpd
     pushChargeBuffer += pushCharge
   }
 
+  override def getDebugInfo = List(toString)
+
+  override def toString = "DC [Connections: " + connections.size() + " " + charge.toInt + "C " + current.toInt + "A " + voltage.toInt + "V]"
+
+  def charge = _charge
+
+  def charge_=(newCharge: Double) = _charge = Math.min(newCharge, chargeCapacity)
+
   /**
    *
    * This recursive function will gather the paths into a list, then push charges backwards.
@@ -119,7 +123,7 @@ class DCNode(parent: INodeProvider) extends NodeEnergy[DCNode](parent) with IUpd
    * @param pushAmount - The amount of charges we are pushing
    * @param passed - The nodes we already went through while pushing
    */
-  protected def push(pushAmount: Double, passed: DCNode*): Double =
+  protected def push(pushAmount: Double, passed: NodeDirectCurrent*): Double =
   {
     val excluded = passed :+ this
 
@@ -171,6 +175,4 @@ class DCNode(parent: INodeProvider) extends NodeEnergy[DCNode](parent) with IUpd
    * The class used to compare when making connections
    */
   override protected def getCompareClass = getClass
-
-  override def toString = "DCNode [" + charge.toInt + "C " + current.toInt + "A " + voltage.toInt + "V][" + connections.size + " Connections]"
 }
