@@ -3,7 +3,7 @@ package resonant.lib.grid.thermal;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.world.World;
-import resonant.lib.type.Pair;
+import resonant.lib.collection.Pair;
 import resonant.lib.transform.vector.IVector3;
 import resonant.lib.transform.vector.IVectorWorld;
 

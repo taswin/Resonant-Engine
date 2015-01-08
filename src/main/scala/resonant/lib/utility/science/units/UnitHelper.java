@@ -2,7 +2,7 @@ package resonant.lib.utility.science.units;
 
 import resonant.engine.References;
 import resonant.engine.ResonantEngine;
-import resonant.lib.type.Pair;
+import resonant.lib.collection.Pair;
 
 import java.util.ArrayList;
 import java.util.List;

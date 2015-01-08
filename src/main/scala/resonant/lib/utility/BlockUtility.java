@@ -4,7 +4,6 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import resonant.engine.References;
 import resonant.engine.ResonantEngine;
-import resonant.lib.type.Pair;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;

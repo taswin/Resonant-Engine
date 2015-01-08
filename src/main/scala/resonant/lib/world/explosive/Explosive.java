@@ -7,7 +7,6 @@ import org.apache.logging.log4j.Level;
 import resonant.api.TriggerCause;
 import resonant.api.explosive.IExplosive;
 import resonant.engine.References;
-import resonant.lib.type.Pair;
 import resonant.lib.utility.LanguageUtility;
 import resonant.lib.world.edit.IWorldChangeAction;
 

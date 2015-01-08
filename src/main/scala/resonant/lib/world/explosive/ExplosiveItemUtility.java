@@ -7,8 +7,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import resonant.api.explosive.IExplosive;
 import resonant.api.items.IExplosiveItem;
 import resonant.engine.References;
-import resonant.engine.ResonantEngine;
-import resonant.lib.type.Pair;
 import resonant.lib.utility.LanguageUtility;
 
 import java.util.ArrayList;

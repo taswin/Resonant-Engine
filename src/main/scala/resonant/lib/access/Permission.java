@@ -1,6 +1,6 @@
 package resonant.lib.access;
 
-import resonant.lib.type.TreeNode;
+import resonant.lib.collection.TreeNode;
 
 import java.util.List;
 

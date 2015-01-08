@@ -8,11 +8,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.ForgeDirection;
-import resonant.lib.type.Pair;
-import resonant.lib.utility.nbt.ISaveObj;
-import resonant.lib.utility.nbt.NBTUtility;
+import resonant.lib.collection.Pair;
 import resonant.lib.transform.vector.Vector3;
 import resonant.lib.transform.vector.VectorWorld;
+import resonant.lib.utility.nbt.ISaveObj;
+import resonant.lib.utility.nbt.NBTUtility;
 
 import java.io.File;
 import java.util.HashMap;

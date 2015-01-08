@@ -4,8 +4,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import resonant.lib.type.Pair;
-import resonant.lib.type.Triple;
+import resonant.lib.collection.Pair;
+import resonant.lib.collection.Triple;
 
 /**
  * Used to store more complex info, than A + B = C, on two FluidStack mixing behavior

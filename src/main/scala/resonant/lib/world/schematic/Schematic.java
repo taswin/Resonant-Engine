@@ -2,7 +2,7 @@ package resonant.lib.world.schematic;
 
 import net.minecraft.block.Block;
 import net.minecraftforge.common.util.ForgeDirection;
-import resonant.lib.type.Pair;
+import resonant.lib.collection.Pair;
 import resonant.lib.transform.vector.Vector3;
 
 import java.util.HashMap;

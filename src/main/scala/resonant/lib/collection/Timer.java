@@ -1,4 +1,4 @@
-package resonant.lib.type;
+package resonant.lib.collection;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;

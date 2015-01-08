@@ -1,4 +1,4 @@
-package resonant.lib.type;
+package resonant.lib.collection;
 
 /**
  * Container for up to 3 objects

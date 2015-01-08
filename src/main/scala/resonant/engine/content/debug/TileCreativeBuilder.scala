@@ -7,14 +7,14 @@ import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
-import resonant.lib.prefab.tile.traits.TRotatable
 import resonant.engine.ResonantEngine
-import resonant.lib.`type`.Pair
+import resonant.lib.collection.Pair
 import resonant.lib.network.discriminator.{PacketTile, PacketType}
 import resonant.lib.network.handle.{TPacketReceiver, TPacketSender}
 import resonant.lib.prefab.tile.TileAdvanced
-import resonant.lib.world.schematic.SchematicRegistry
+import resonant.lib.prefab.tile.traits.TRotatable
 import resonant.lib.transform.vector.Vector3
+import resonant.lib.world.schematic.SchematicRegistry
 
 import scala.collection.JavaConversions._
 
