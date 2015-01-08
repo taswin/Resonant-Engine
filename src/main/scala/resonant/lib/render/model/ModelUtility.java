@@ -1,4 +1,4 @@
-package resonant.lib.render;
+package resonant.lib.render.model;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

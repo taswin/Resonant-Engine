@@ -88,7 +88,7 @@ class Sphere(c: IVector3, var r: Double) extends Shape3D[Sphere](c)
             {
               val entity = list1.get(l).asInstanceOf[Entity];
 
-              if (ClassIsAssignableFrom.isAssignableFrom(clazz, entity.getClass()) && distance3D(new Vector3(entity)) <= r)
+              if (clazz.isAssignableFrom(entity.getClass()) && distance3D(new Vector3(entity)) <= r)
               {
                 list.add(entity.asInstanceOf[E]);
               }

@@ -37,8 +37,6 @@ object Recipes
     return false
   }
 
-  def +=(crafting: IRecipe) = if (crafting != null) GameRegistry.addRecipe(crafting)
-
   /**
    * Removes a recipe by its IRecipe class.
    * @return True if successful
@@ -65,6 +63,8 @@ object Recipes
     return false
   }
 
+  def +=(crafting: IRecipe) = if (crafting != null) GameRegistry.addRecipe(crafting)
+
   /**
    * Removes all recipes that have a given output.
    * @return True if successful
@@ -74,6 +74,14 @@ object Recipes
     val matches = get filter (rec => rec.getRecipeOutput.isItemEqual(stack))
     CraftingManager.getInstance.getRecipeList.removeAll(matches)
     return matches.size > 0
+  }
+
+  def getRecipesByOutput(output: ItemStack): JList[IRecipe] =
+  {
+    return CraftingManager.getInstance.getRecipeList
+      .filter(_.isInstanceOf[IRecipe])
+      .map(_.asInstanceOf[IRecipe])
+      .filter(r => ItemStack.areItemStacksEqual(r.getRecipeOutput, output))
   }
 
 }

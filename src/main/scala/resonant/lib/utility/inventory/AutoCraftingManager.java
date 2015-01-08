@@ -13,7 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import resonant.lib.collection.Pair;
-import resonant.lib.utility.recipe.RecipeUtility;
+import resonant.lib.utility.recipe.Recipes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +65,7 @@ public class AutoCraftingManager
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static void printRecipes(ItemStack stack)
 	{
-		List<IRecipe> recipes = RecipeUtility.getRecipesByOutput(stack);
+		List<IRecipe> recipes = Recipes.getRecipesByOutput(stack);
 		for (IRecipe recipe : recipes)
 		{
 			if (recipe.getRecipeOutput() != null)
@@ -253,7 +253,7 @@ public class AutoCraftingManager
 	{
 		this.printDebug("IdealRecipe", outputItem.toString());
 
-		for (IRecipe object : RecipeUtility.getRecipesByOutput(outputItem))
+		for (IRecipe object : Recipes.getRecipesByOutput(outputItem))
 		{
 			if (AutoCraftingManager.areStacksEqual(outputItem, object.getRecipeOutput()))
 			{
