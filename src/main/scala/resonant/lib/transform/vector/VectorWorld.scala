@@ -35,16 +35,6 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
     world = newWorld
   }
 
-  override def set(vec: IVector3): VectorWorld =
-  {
-    if (vec.isInstanceOf[VectorWorld])
-      world = vec.asInstanceOf[VectorWorld].world
-    x = vec.x
-    y = vec.y
-    z = vec.z
-    return this
-  }
-
   /**
    * Conversions
    */
@@ -68,43 +58,72 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
 
   def toVector3 = new Vector3(x, y, z)
 
+  override def add(x: Double, y: Double, z: Double): VectorWorld = this +(x, y, z)
+
+  override def +(x: Double, y: Double, z: Double): VectorWorld = new VectorWorld(world, this.x + x, this.y + y, this.z + z)
+
+  override def addEquals(x: Double, y: Double, z: Double): VectorWorld = this +=(x, y, z)
+
+  override def +=(x: Double, y: Double, z: Double): VectorWorld = set(new VectorWorld(world, this.x + x, this.y + y, this.z + z))
+
+  override def set(vec: IVector3): VectorWorld =
+  {
+    if (vec.isInstanceOf[VectorWorld])
+      world = vec.asInstanceOf[VectorWorld].world
+    x = vec.x
+    y = vec.y
+    z = vec.z
+    return this
+  }
+
+  override def add(amount: ForgeDirection): VectorWorld = this + amount
+
+  override def +(amount: ForgeDirection): VectorWorld = this + new Vector3(amount)
+
+  override def addEquals(amount: ForgeDirection): VectorWorld = this += amount
+
+  override def +=(amount: ForgeDirection): VectorWorld = set(this + new Vector3(amount))
+
+  override def /(amount: IVector3): VectorWorld = new VectorWorld(world, x / amount.x, y / amount.y, z / amount.z)
+
+  /**
+   * "Generated" Alias Operation Methods override
+   */
+  override def add(amount: Double): VectorWorld = this + amount
+
   /**
    * Operations
    */
   override def +(amount: Double): VectorWorld = new VectorWorld(world, x + amount, y + amount, z + amount)
 
+  override def add(amount: IVector3): VectorWorld = this + amount
+
   override def +(amount: IVector3): VectorWorld = new VectorWorld(world, x + amount.x, y + amount.y, z + amount.z)
 
-  override def +(x: Double, y: Double, z: Double): VectorWorld = new VectorWorld(world, this.x + x, this.y + y, this.z + z)
-
-  override def +=(x: Double, y: Double, z: Double): VectorWorld = set(new VectorWorld(world, this.x + x, this.y + y, this.z + z))
-
-  override def add(x: Double, y: Double, z: Double): VectorWorld = this +(x, y, z)
-
-  override def addEquals(x: Double, y: Double, z: Double): VectorWorld = this +=(x, y, z)
-
-  override def +(amount: ForgeDirection): VectorWorld = this + new Vector3(amount)
-
-  override def +=(amount: ForgeDirection): VectorWorld = set(this + new Vector3(amount))
-
-  override def add(amount: ForgeDirection): VectorWorld = this + amount
-
-  override def addEquals(amount: ForgeDirection): VectorWorld = this += amount
-
-  override def *(amount: Double): VectorWorld = new VectorWorld(world, x * amount, y * amount, z * amount)
-
-  override def *(amount: IVector3): VectorWorld = new VectorWorld(world, x * amount.x, y * amount.y, z * amount.z)
+  override def subtract(amount: Double): VectorWorld = this - amount
 
   /**
    * "Generated" method override
    */
   override def -(amount: Double): VectorWorld = new VectorWorld(world, x - amount, y - amount, z - amount)
 
+  override def subtract(amount: IVector3): VectorWorld = this - amount
+
   override def -(amount: IVector3): VectorWorld = new VectorWorld(world, x - amount.x, y - amount.y, z - amount.z)
+
+  override def multiply(amount: Double): VectorWorld = this * amount
+
+  override def multiply(amount: IVector3): VectorWorld = this * amount
+
+  override def *(amount: IVector3): VectorWorld = new VectorWorld(world, x * amount.x, y * amount.y, z * amount.z)
+
+  override def divide(amount: Double): VectorWorld = this / amount
 
   override def /(amount: Double): VectorWorld = this * (1 / amount)
 
-  override def /(amount: IVector3): VectorWorld = new VectorWorld(world, x / amount.x, y / amount.y, z / amount.z)
+  override def *(amount: Double): VectorWorld = new VectorWorld(world, x * amount, y * amount, z * amount)
+
+  override def addEquals(amount: Double): VectorWorld = this += amount
 
   override def +=(amount: Double): VectorWorld =
   {
@@ -114,6 +133,8 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
     return this
   }
 
+  override def addEquals(amount: IVector3): VectorWorld = this += amount
+
   override def +=(amount: IVector3): VectorWorld =
   {
     x += amount.x
@@ -122,7 +143,11 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
     return this
   }
 
+  override def subtractEquals(amount: Double): VectorWorld = this -= amount
+
   override def -=(amount: Double): VectorWorld = this += -amount
+
+  override def subtractEquals(amount: IVector3): VectorWorld = this -= amount
 
   override def -=(amount: IVector3): VectorWorld =
   {
@@ -132,6 +157,8 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
     return this
   }
 
+  override def multiplyEquals(amount: Double): VectorWorld = this *= amount
+
   override def *=(amount: Double): VectorWorld =
   {
     x *= amount
@@ -139,6 +166,8 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
     z *= amount
     return this
   }
+
+  override def multiplyEquals(amount: IVector3): VectorWorld = this *= amount
 
   override def *=(amount: IVector3): VectorWorld =
   {
@@ -148,7 +177,11 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
     return this
   }
 
+  override def divideEquals(amount: Double): VectorWorld = this /= amount
+
   override def /=(amount: Double): VectorWorld = this *= (1 / amount)
+
+  override def divideEquals(amount: IVector3): VectorWorld = this /= amount
 
   override def /=(amount: IVector3): VectorWorld =
   {
@@ -159,39 +192,6 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
   }
 
   /**
-   * "Generated" Alias Operation Methods override
-   */
-  override def add(amount: Double): VectorWorld = this + amount
-
-  override def add(amount: IVector3): VectorWorld = this + amount
-
-  override def subtract(amount: Double): VectorWorld = this - amount
-
-  override def subtract(amount: IVector3): VectorWorld = this - amount
-
-  override def multiply(amount: Double): VectorWorld = this * amount
-
-  override def multiply(amount: IVector3): VectorWorld = this * amount
-
-  override def divide(amount: Double): VectorWorld = this / amount
-
-  override def addEquals(amount: Double): VectorWorld = this += amount
-
-  override def addEquals(amount: IVector3): VectorWorld = this += amount
-
-  override def subtractEquals(amount: Double): VectorWorld = this -= amount
-
-  override def subtractEquals(amount: IVector3): VectorWorld = this -= amount
-
-  override def multiplyEquals(amount: Double): VectorWorld = this *= amount
-
-  override def multiplyEquals(amount: IVector3): VectorWorld = this *= amount
-
-  override def divideEquals(amount: Double): VectorWorld = this /= amount
-
-  override def divideEquals(amount: IVector3): VectorWorld = this /= amount
-
-  /**
    * World Access
    */
   def getBlock: Block = if (world != null) super.getBlock(world) else null
@@ -200,7 +200,7 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
 
   def getTileEntity: TileEntity = if (world != null) super.getTileEntity(world) else null
 
-  def getHardness() : Float = super.getHardness(world)
+  def getHardness(): Float = super.getHardness(world)
 
   def getResistance(cause: Entity, xx: Double, yy: Double, zz: Double): Float =
   {
@@ -213,13 +213,13 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
 
   def setBlock(block: Block): Boolean = super.setBlock(world, block)
 
-  def setBlockToAir() : Boolean = super.setBlockToAir(world)
+  def setBlockToAir(): Boolean = super.setBlockToAir(world)
 
-  def isAirBlock() : Boolean = super.isAirBlock(world)
+  def isAirBlock(): Boolean = super.isAirBlock(world)
 
   def isBlockEqual(block: Block) = super.isBlockEqual(world, block)
 
-  def isBlockFreezable() : Boolean = super.isBlockFreezable(world)
+  def isBlockFreezable(): Boolean = super.isBlockFreezable(world)
 
   def rayTraceEntities(target: Vector3): MovingObjectPosition = super.rayTraceEntities(world, target)
 
@@ -229,8 +229,14 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
   {
     if (o.isInstanceOf[IVectorWorld])
     {
-      return (super.equals(o)) && this.world == (o.asInstanceOf[IVectorWorld]).world
+      return super.equals(o) && this.world == o.asInstanceOf[IVectorWorld].world
     }
+
+    if (o.isInstanceOf[VectorWorld])
+    {
+      return super.equals(o) && this.world == o.asInstanceOf[VectorWorld].world
+    }
+
     return false
   }
 
