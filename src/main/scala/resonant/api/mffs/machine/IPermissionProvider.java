@@ -1,7 +1,7 @@
 package resonant.api.mffs.machine;
 
 import com.mojang.authlib.GameProfile;
-import resonant.lib.access.java.Permission;
+import resonant.lib.access.Permission;
 
 /**
  * Used by tiles that provide permissions.

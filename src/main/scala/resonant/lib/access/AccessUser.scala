@@ -1,8 +1,7 @@
-package resonant.lib.access.scala
+package resonant.lib.access
 
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
-import resonant.lib.access.java.Permission
 
 class AccessUser(var username: String) extends AbstractAccess
 {

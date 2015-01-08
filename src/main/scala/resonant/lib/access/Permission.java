@@ -1,4 +1,4 @@
-package resonant.lib.access.java;
+package resonant.lib.access;
 
 import resonant.lib.type.TreeNode;
 

@@ -1,7 +1,6 @@
-package resonant.lib.access.scala
+package resonant.lib.access
 
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
-import resonant.lib.access.java.Permission
 
 /**
  * An access holder that holds a set of groups, with each group containing users.

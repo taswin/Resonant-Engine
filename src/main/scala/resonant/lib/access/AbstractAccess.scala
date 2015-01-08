@@ -1,7 +1,6 @@
-package resonant.lib.access.scala
+package resonant.lib.access
 
 import net.minecraft.nbt.{NBTTagCompound, NBTTagList, NBTTagString}
-import resonant.lib.access.java.{Permission, Permissions}
 
 /**
  * The abstract access class.

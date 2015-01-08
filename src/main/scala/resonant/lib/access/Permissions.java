@@ -1,4 +1,4 @@
-package resonant.lib.access.java;
+package resonant.lib.access;
 
 /**
  * Constants that represent permissions by which machines and entities used in combination with

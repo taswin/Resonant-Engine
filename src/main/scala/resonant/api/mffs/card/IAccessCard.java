@@ -1,7 +1,7 @@
 package resonant.api.mffs.card;
 
 import net.minecraft.item.ItemStack;
-import resonant.lib.access.scala.AbstractAccess;
+import resonant.lib.access.AbstractAccess;
 
 /**
  * Applied to Item ID and group cards.
