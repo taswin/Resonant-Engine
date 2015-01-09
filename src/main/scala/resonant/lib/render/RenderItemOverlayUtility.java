@@ -27,10 +27,10 @@ import java.util.EnumSet;
 @SideOnly(Side.CLIENT)
 public class RenderItemOverlayUtility
 {
-    public static final ForgeDirection[] forge_sides = { ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.WEST, ForgeDirection.EAST };
+	public static final ForgeDirection[] forge_sides = { ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.WEST, ForgeDirection.EAST };
 
 	public static RenderBlocks renderBlocks = new RenderBlocks();
-    public static RenderItem renderItem = ((RenderItem) RenderManager.instance.getEntityClassRenderObject(EntityItem.class));
+	public static RenderItem renderItem = ((RenderItem) RenderManager.instance.getEntityClassRenderObject(EntityItem.class));
 
 	public static void renderTopOverlay(TileEntity tileEntity, ItemStack[] inventory, ForgeDirection dir, double x, double y, double z)
 	{
@@ -60,18 +60,23 @@ public class RenderItemOverlayUtility
 				translation.multiply(0.85);
 				GL11.glPushMatrix();
 				GL11.glTranslated(x + 0.5f, y + 0.5f, z + 0.5f);
-				RenderUtility.rotateBlockBasedOnDirection(dir);
+
+				if (dir != null)
+					RenderUtility.rotateBlockBasedOnDirection(dir);
+
+				GL11.glTranslated(0, 0, scale / 6);
+
 				GL11.glTranslated(translation.x(), translation.y(), translation.z());
 				GL11.glScalef(scale, scale, scale);
 				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
-				renderItem(tileEntity.getWorldObj(), ForgeDirection.UP, inventory[i], new Vector3(0, 0, 0), 0, 4);
+				renderItem(tileEntity.getWorldObj(), ForgeDirection.NORTH, inventory[i], new Vector3(0, 0, 0), 0, 1);
 				GL11.glPopMatrix();
 
 				if (isLooking)
 				{
 					GL11.glPushMatrix();
 					GL11.glTranslated(x, y, z);
-					int angle = WorldUtility.getAngleFromForgeDirection(WorldUtility.invertX(dir));
+					int angle = dir != null ? WorldUtility.getAngleFromForgeDirection(WorldUtility.invertX(dir)) : 0;
 					RenderUtility.renderFloatingText("" + inventory[i].stackSize, translation.transform(new Quaternion(angle, Vector3.up())).add(0.5).add(new Vector3(0, 0.5, 0)));
 					GL11.glPopMatrix();
 				}
