@@ -68,7 +68,6 @@ public class RenderItemOverlayUtility
 
 				GL11.glTranslated(translation.x(), translation.y(), translation.z());
 				GL11.glScalef(scale, scale, scale);
-				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
 				renderItem(tileEntity.getWorldObj(), ForgeDirection.NORTH, inventory[i], new Vector3(0, 0, 0), 0, 1);
 				GL11.glPopMatrix();
 
