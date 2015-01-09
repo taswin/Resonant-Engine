@@ -131,7 +131,6 @@ public class ResonantEngine
 			blockInfiniteFluid = contentRegistry.newBlock(TileInfiniteFluid.class);
 		}
 
-		//Finish and close all resources
 		ResourceFactory.preInit();
 
 		loadables.preInit();
