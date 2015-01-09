@@ -11,14 +11,14 @@ import resonant.engine.ResonantEngine
 import resonant.lib.collection.Pair
 import resonant.lib.network.discriminator.{PacketTile, PacketType}
 import resonant.lib.network.handle.{TPacketReceiver, TPacketSender}
-import resonant.lib.prefab.tile.TileAdvanced
+import resonant.lib.prefab.tile.spatial.SpatialTile
 import resonant.lib.prefab.tile.traits.TRotatable
 import resonant.lib.transform.vector.Vector3
 import resonant.lib.world.schematic.SchematicRegistry
 
 import scala.collection.JavaConversions._
 
-class TileCreativeBuilder extends TileAdvanced(Material.iron) with TRotatable with TPacketReceiver with TPacketSender
+class TileCreativeBuilder extends SpatialTile(Material.iron) with TRotatable with TPacketReceiver with TPacketSender
 {
   //Current build task vars
   var doBuild: Boolean = false

@@ -2,8 +2,10 @@ package resonant.lib.prefab.tile;
 
 import net.minecraft.block.material.Material;
 import net.minecraftforge.common.util.ForgeDirection;
+import resonant.api.tile.INodeProvider;
 import resonant.api.tile.node.INode;
 import resonant.lib.grid.branch.NodeBranchPart;
+import resonant.lib.prefab.tile.spatial.SpatialTile;
 
 import java.util.List;
 
@@ -12,8 +14,13 @@ import java.util.List;
  * used as a template for creating wire, pipes, or grid based blocks.
  * @author Darkguardsman
  */
-public class TileConductor extends TileNode
+public class TileConductor extends SpatialTile implements INodeProvider
 {
+    @Override public Material material()
+    {
+        return null;
+    }
+
     public NodeBranchPart node;
 
     public TileConductor()
@@ -28,7 +35,6 @@ public class TileConductor extends TileNode
         return (N) getNode();
     }
 
-    @Override
     public void getNodes(List<INode> nodes)
     {
         nodes.add(getNode());

@@ -4,7 +4,6 @@ import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import resonant.lib.prefab.tile.spatial.BlockDummy;
 import resonant.junit.TestRegistry;
-import resonant.lib.prefab.tile.TileConductor;
 import resonant.lib.world.schematic.StringSchematic;
 
 /**
@@ -12,39 +11,38 @@ import resonant.lib.world.schematic.StringSchematic;
  */
 public class WireMap extends StringSchematic
 {
-    private static Block wire;
-    int numberOfWires;
-    int numberOfBranches;
-    int numberOfJunctions;
+	private static Block wire;
+	int numberOfWires;
+	int numberOfBranches;
+	int numberOfJunctions;
 
-    public WireMap(String[][] map, int numberOfWires, int numberOfBranches, int numberOfJunctions)
-    {
-        super(map);
-        this.numberOfWires = numberOfWires;
-        this.numberOfBranches = numberOfBranches;
-        this.numberOfJunctions = numberOfJunctions;
-        addBlock('-', wire());
-    }
+	public WireMap(String[][] map, int numberOfWires, int numberOfBranches, int numberOfJunctions)
+	{
+		super(map);
+		this.numberOfWires = numberOfWires;
+		this.numberOfBranches = numberOfBranches;
+		this.numberOfJunctions = numberOfJunctions;
+		addBlock('-', wire());
+	}
 
-    public static Block wire()
-    {
-        if (wire == null)
-        {
-            if (Block.getBlockFromName("wire") == null)
-            {
-                TestRegistry.registerBlock(new BlockDummy("JUnit", null, new TileConductor()), "wire");
-            }
-            wire = Block.getBlockFromName("wire");
-        }
-        return wire;
-    }
+	public static Block wire()
+	{
+		if (wire == null)
+		{
+			if (Block.getBlockFromName("wire") == null)
+			{
+//				TestRegistry.registerBlock(new BlockDummy("JUnit", null, new TileConductor()), "wire");
+			}
+			wire = Block.getBlockFromName("wire");
+		}
+		return wire;
+	}
 
-
-    public static enum WireTests
-    {
-        SIMPLE(new String[][]{
-                new String[]{
-                    /*0*/ "0123456789ABCDEF",
+	public static enum WireTests
+	{
+		SIMPLE(new String[][] {
+				new String[] {
+					/*0*/ "0123456789ABCDEF",
                     /*1*/ "0123456789ABCDEF",
                     /*2*/ "0123456789ABCDEF",
                     /*3*/ "0123456789ABCDEF",
@@ -59,11 +57,11 @@ public class WireMap extends StringSchematic
                     /*12*/"0123456789ABCDEF",
                     /*13*/"0123456789ABCDEF",
                     /*14*/"0123456789ABCDEF",
-                    /*15*/"0123456789ABCDEF"}},
-                9, 4, 1
-        ),
-        JUNCTION_FIVE(new String[][]{
-                new String[]{
+                    /*15*/"0123456789ABCDEF" } },
+				9, 4, 1
+		),
+		JUNCTION_FIVE(new String[][] {
+				new String[] {
                     /*0*/ "0123456789ABCDEF",
                     /*1*/ "0123456789ABCDEF",
                     /*2*/ "0123456789ABCDEF",
@@ -79,32 +77,32 @@ public class WireMap extends StringSchematic
                     /*12*/"0123456789ABCDEF",
                     /*13*/"0123456789ABCDEF",
                     /*14*/"0123456789ABCDEF",
-                    /*15*/"0123456789ABCDEF"}},
-                27, 12, 5
-        );
+                    /*15*/"0123456789ABCDEF" } },
+				27, 12, 5
+		);
 
-        String[][] map;
-        int numberOfWires;
-        int numberOfBranches;
-        int numberOfJunctions;
+		String[][] map;
+		int numberOfWires;
+		int numberOfBranches;
+		int numberOfJunctions;
 
-        private WireTests(String[][] map, int numberOfWires, int numberOfBranches, int numberOfJunctions)
-        {
-            this.map = map;
-            this.numberOfWires = numberOfWires;
-            this.numberOfBranches = numberOfBranches;
-            this.numberOfJunctions = numberOfJunctions;
-        }
+		private WireTests(String[][] map, int numberOfWires, int numberOfBranches, int numberOfJunctions)
+		{
+			this.map = map;
+			this.numberOfWires = numberOfWires;
+			this.numberOfBranches = numberOfBranches;
+			this.numberOfJunctions = numberOfJunctions;
+		}
 
-        public WireMap create()
-        {
-            return new WireMap(map, numberOfWires, numberOfBranches, numberOfJunctions);
-        }
+		public WireMap create()
+		{
+			return new WireMap(map, numberOfWires, numberOfBranches, numberOfJunctions);
+		}
 
-        public void build(World world, int x, int y, int z)
-        {
-            create().build(world, x, y, z);
-        }
+		public void build(World world, int x, int y, int z)
+		{
+			create().build(world, x, y, z);
+		}
 
-    }
+	}
 }

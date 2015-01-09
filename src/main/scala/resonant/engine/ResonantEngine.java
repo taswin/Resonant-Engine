@@ -71,7 +71,7 @@ public class ResonantEngine
 {
 	public static final ModManager contentRegistry = new ModManager().setPrefix(References.PREFIX).setTab(CreativeTabs.tabTools);
 	public static final boolean runningAsDev = System.getProperty("development") != null && System.getProperty("development").equalsIgnoreCase("true");
-    @SidedProxy(clientSide = "resonant.engine.ClientProxy", serverSide = "resonant.engine.CommonProxy")
+	@SidedProxy(clientSide = "resonant.engine.ClientProxy", serverSide = "resonant.engine.CommonProxy")
 	public static CommonProxy proxy;
 	@Mod.Metadata(References.ID)
 	public static ModMetadata metadata;
@@ -81,10 +81,10 @@ public class ResonantEngine
 	public static Block blockInfiniteFluid;
 	public static Block ore = null;
 	public static Item itemWrench;
-    public static Item instaHole;
-    @Deprecated
-    public static ResourceFactoryHandler resourceFactory = new ResourceFactoryHandler();
-    private static boolean oresRequested = false;
+	public static Item instaHole;
+	@Deprecated
+	public static ResourceFactoryHandler resourceFactory = new ResourceFactoryHandler();
+	private static boolean oresRequested = false;
 	private static ThermalGrid thermalGrid = new ThermalGrid();
 	public final PacketManager packetHandler = new PacketManager(References.CHANNEL);
 	private LoadableHandler loadables = new LoadableHandler();
@@ -138,8 +138,8 @@ public class ResonantEngine
 		 * Multiblock Handling
 		 */
 		SyntheticMultiblock.instance = new SyntheticMultiblock();
-        if(runningAsDev)
-            instaHole = contentRegistry.newItem(new ItemInstaHole());
+		if (runningAsDev)
+			instaHole = contentRegistry.newItem(new ItemInstaHole());
 		if (References.CONFIGURATION.get("Content", "LoadScrewDriver", true).getBoolean(true))
 		{
 			itemWrench = new ItemScrewdriver();
@@ -178,12 +178,12 @@ public class ResonantEngine
 		//Register UpdateTicker
 		FMLCommonHandler.instance().bus().register(UpdateTicker$.MODULE$.world());
 
-        //Late registration of content
-        if(oresRequested)
-        {
-            ore = contentRegistry.newBlock("ReOres", BlockOre.class, ItemBlockOre.class);
-            DefinedResources.registerSet(0, ore, References.CONFIGURATION);
-        }
+		//Late registration of content
+		if (oresRequested)
+		{
+			ore = contentRegistry.newBlock("ReOres", BlockOre.class, ItemBlockOre.class);
+			DefinedResources.registerSet(0, ore, References.CONFIGURATION);
+		}
 
 		loadables.init();
 	}
@@ -217,7 +217,7 @@ public class ResonantEngine
 		MachineRecipes.instance.addRecipe(RecipeType.GRINDER.name(), Blocks.gravel, Blocks.sand);
 		MachineRecipes.instance.addRecipe(RecipeType.GRINDER.name(), Blocks.glass, Blocks.sand);
 
-        References.CONFIGURATION.save();
+		References.CONFIGURATION.save();
 	}
 
 	@EventHandler

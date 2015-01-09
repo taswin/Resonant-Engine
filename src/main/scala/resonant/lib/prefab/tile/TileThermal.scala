@@ -1,12 +1,13 @@
 package resonant.lib.prefab.tile
 
 import net.minecraft.block.material.Material
+import resonant.lib.prefab.tile.spatial.SpatialTile
 import resonant.lib.prefab.tile.traits.TThermal
 
 /**
  * @since 27/05/14
  * @author tgame14
  */
-abstract class TileThermal(material: Material) extends TileAdvanced(material: Material) with TThermal
+abstract class TileThermal(material: Material) extends SpatialTile(material: Material) with TThermal
 {
 }

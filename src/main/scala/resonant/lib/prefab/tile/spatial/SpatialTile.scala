@@ -4,7 +4,10 @@ import java.util.{HashSet => JHashSet, Set => JSet}
 
 import net.minecraft.block.material.Material
 import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.network.Packet
 import resonant.api.tile.IPlayerUsing
+import resonant.engine.ResonantEngine
+import resonant.lib.network.netty.AbstractPacket
 import resonant.lib.prefab.TraitTicker
 
 /**
@@ -23,6 +26,13 @@ abstract class SpatialTile(material: Material) extends SpatialBlock(material) wi
   {
     super[TraitTicker].update()
   }
+
+  override def getDescriptionPacket: Packet =
+  {
+    ResonantEngine.instance.packetHandler.toMCPacket(getDescPacket)
+  }
+
+  def getDescPacket: AbstractPacket = null
 
   override def tile: SpatialTile = this
 

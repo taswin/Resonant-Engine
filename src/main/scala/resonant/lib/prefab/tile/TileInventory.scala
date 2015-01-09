@@ -2,8 +2,10 @@ package resonant.lib.prefab.tile
 
 import net.minecraft.block.material.Material
 import resonant.lib.content.prefab.TInventory
+import resonant.lib.prefab.tile.spatial.SpatialTile
 
-abstract class TileInventory(material: Material) extends TileAdvanced(material: Material) with TInventory
+@deprecated
+abstract class TileInventory(material: Material) extends SpatialTile(material: Material) with TInventory
 {
   var maxSlots = 0
 
@@ -11,7 +13,6 @@ abstract class TileInventory(material: Material) extends TileAdvanced(material: 
 
   def setSizeInventory(slots: Int)
   {
-      maxSlots = slots
+    maxSlots = slots
   }
-
 }

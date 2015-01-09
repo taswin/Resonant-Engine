@@ -9,7 +9,7 @@ import resonant.lib.transform.vector.TVectorWorld
  * A trait that is applied to packet receivers
  * @author Calclavia
  */
-trait TPacketReceiver extends IPacketReceiver with TVectorWorld
+trait TPacketReceiver extends IPacketReceiver
 {
   override def read(buf: ByteBuf, player: EntityPlayer, packet: PacketType)
   {

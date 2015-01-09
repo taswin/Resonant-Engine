@@ -101,10 +101,4 @@ class TileInfiniteFluid extends TileIO(Material.iron) with IFluidHandler
       }
       return false
     }*/
-  override def getNodes(nodes: util.List[INode]): Unit =
-  {
-
-  }
-
-  override def getNode[N <: INode](nodeType: Class[_ <: N], from: ForgeDirection): N = null.asInstanceOf[N];
 }
