@@ -4,7 +4,7 @@ import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 import org.objectweb.asm.tree.ClassNode;
-import resonant.engine.References;
+import resonant.engine.Reference;
 import resonant.engine.ResonantEngine;
 
 import java.io.IOException;
@@ -93,8 +93,8 @@ public class ClassHeirachyManager implements IClassTransformer
         catch (IOException e)
         {
             if(ResonantEngine.runningAsDev)
-                References.LOGGER.catching(e);
-        }
+				Reference.LOGGER.catching(e);
+		}
 
         if (cache != null)
 		{
@@ -108,7 +108,7 @@ public class ClassHeirachyManager implements IClassTransformer
 		catch (ClassNotFoundException e)
 		{
             if(ResonantEngine.runningAsDev)
-                References.LOGGER.catching(e);
+				Reference.LOGGER.catching(e);
 		}
 
 		return cache;

@@ -7,7 +7,7 @@ import cpw.mods.fml.relauncher.Side;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.world.WorldEvent;
 import org.apache.logging.log4j.Level;
-import resonant.engine.References;
+import resonant.engine.Reference;
 import resonant.lib.utility.ReflectionUtility;
 
 import java.io.File;
@@ -183,14 +183,14 @@ public class SaveManager
 					}
 					catch (Exception e)
 					{
-						References.LOGGER.catching(Level.FATAL, e);
-						References.LOGGER.fatal("SaveManager: An object %s(%s) has thrown an exception during loading, its state cannot be restored. Report this to the mod author", nbt.getString("id"), obj.getClass().getName());
+						Reference.LOGGER.catching(Level.FATAL, e);
+						Reference.LOGGER.fatal("SaveManager: An object %s(%s) has thrown an exception during loading, its state cannot be restored. Report this to the mod author", nbt.getString("id"), obj.getClass().getName());
 						obj = null;
 					}
 				}
 				else
 				{
-					References.LOGGER.warn("SaveManager: Skipping object with id " + nbt.getString("id"));
+					Reference.LOGGER.warn("SaveManager: Skipping object with id " + nbt.getString("id"));
 				}
 
 				return obj;

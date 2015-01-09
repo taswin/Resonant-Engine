@@ -12,9 +12,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import resonant.engine.References;
+import resonant.engine.Reference;
 import resonant.lib.mod.loadable.ICompatProxy;
-import resonant.lib.wrapper.ByteBufWrapper;
 import resonant.lib.network.discriminator.PacketEntity;
 import resonant.lib.network.discriminator.PacketTile;
 import resonant.lib.network.discriminator.PacketType;
@@ -22,6 +21,7 @@ import resonant.lib.network.handle.TPacketSender;
 import resonant.lib.transform.vector.IVector3;
 import resonant.lib.transform.vector.IVectorWorld;
 import resonant.lib.transform.vector.Vector3;
+import resonant.lib.wrapper.ByteBufWrapper;
 
 import java.util.EnumMap;
 
@@ -106,7 +106,7 @@ public class PacketManager implements ICompatProxy
 	@Override
 	public String modId()
 	{
-		return References.NAME;
+		return Reference.NAME;
 	}
 
 	/**

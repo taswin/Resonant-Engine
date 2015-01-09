@@ -21,7 +21,7 @@ import net.minecraft.world.{Explosion, IBlockAccess, World}
 import net.minecraftforge.client.IItemRenderer
 import org.lwjgl.opengl.{GL11, GL12}
 import resonant.api.items.ISimpleItemRenderer
-import resonant.engine.{References, ResonantEngine}
+import resonant.engine.{Reference, ResonantEngine}
 import resonant.lib.content.prefab.TIO
 import resonant.lib.prefab.tile.item.ItemBlockTooltip
 import resonant.lib.prefab.tile.traits.TRotatable
@@ -174,15 +174,6 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
     creativeTab = value
   }
 
-  /** Gets the creative tab */
-  def creativeTab = _creativeTab
-
-  def creativeTab_=(value: CreativeTabs): Unit =
-  {
-    _creativeTab = value
-    isCreativeTabSet = true
-  }
-
   /**
    * Sets the creative tab
    * @param value - tab to set
@@ -190,6 +181,15 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   def setCreativeTab(value: CreativeTabs)
   {
     creativeTab = value
+  }
+
+  /** Gets the creative tab */
+  def creativeTab = _creativeTab
+
+  def creativeTab_=(value: CreativeTabs): Unit =
+  {
+    _creativeTab = value
+    isCreativeTabSet = true
   }
 
   def itemBlock(item: Class[_ <: ItemBlock]): Unit =
@@ -279,6 +279,16 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
     return block
   }
 
+  def access: IBlockAccess =
+  {
+    if (world != null)
+    {
+      return world
+    }
+
+    return _access
+  }
+
   /**
    * Number of items dropped when broken.
    * This method is used by the default implementation of getDrops
@@ -320,7 +330,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
         case e: Exception =>
         {
           if (ResonantEngine.runningAsDev)
-            References.LOGGER.catching(e)
+            Reference.LOGGER.catching(e)
         }
       }
     return false
@@ -619,20 +629,6 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   }
 
   @SideOnly(Side.CLIENT)
-  protected def getTextureName: String =
-  {
-    if (textureName == null)
-      return "MISSING_ICON_TILE_" + Block.getIdFromBlock(block) + "_" + name
-    else
-      return block.dummyTile.domain + textureName
-  }
-
-  def setTextureName(value: java.lang.String)
-  {
-    textureName = value
-  }
-
-  @SideOnly(Side.CLIENT)
   def colorMultiplier = 0xFFFFFF
 
   /**
@@ -651,19 +647,6 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
 
   @SideOnly(Side.CLIENT)
   def hasSpecialRenderer = getSpecialRenderer != null
-
-  @SideOnly(Side.CLIENT)
-  def getSpecialRenderer: TileEntitySpecialRenderer =
-  {
-    val tesr: TileEntitySpecialRenderer = TileEntityRendererDispatcher.instance.getSpecialRendererByClass(getClass)
-
-    if (tesr != null && !tesr.isInstanceOf[RenderTileDummy])
-    {
-      return tesr
-    }
-
-    return null
-  }
 
   @SideOnly(Side.CLIENT)
   def renderInventory(itemStack: ItemStack)
@@ -694,6 +677,19 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
           }
         }
     }
+  }
+
+  @SideOnly(Side.CLIENT)
+  def getSpecialRenderer: TileEntitySpecialRenderer =
+  {
+    val tesr: TileEntitySpecialRenderer = TileEntityRendererDispatcher.instance.getSpecialRendererByClass(getClass)
+
+    if (tesr != null && !tesr.isInstanceOf[RenderTileDummy])
+    {
+      return tesr
+    }
+
+    return null
   }
 
   /**
@@ -727,16 +723,6 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
 
   def metadata: Int = if (access != null) access.getBlockMetadata(xi, yi, zi) else 0
 
-  def access: IBlockAccess =
-  {
-    if (world != null)
-    {
-      return world
-    }
-
-    return _access
-  }
-
   //TODO: Get rid of parameters
   def shouldSideBeRendered(access: IBlockAccess, x: Int, y: Int, z: Int, side: Int): Boolean =
   {
@@ -753,8 +739,6 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
 
   /** Gets the level of power provide to this block */
   def getStrongestIndirectPower: Int = world.getStrongestIndirectPower(xi, yi, zi)
-
-  override def world: World = getWorldObj
 
   /** Gets the level of power being provided by this block */
   def getWeakRedstonePower(access: IBlockAccess, side: Int): Int = getStrongRedstonePower(access, side)
@@ -899,10 +883,26 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
     return icon
   }
 
+  @SideOnly(Side.CLIENT)
+  protected def getTextureName: String =
+  {
+    if (textureName == null)
+      return "MISSING_ICON_TILE_" + Block.getIdFromBlock(block) + "_" + name
+    else
+      return block.dummyTile.domain + textureName
+  }
+
+  def setTextureName(value: java.lang.String)
+  {
+    textureName = value
+  }
+
   protected def markRender()
   {
     world.func_147479_m(xi, yi, zi)
   }
+
+  override def world: World = getWorldObj
 
   protected def markUpdate()
   {

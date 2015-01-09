@@ -3,7 +3,7 @@ package resonant.engine.content;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import resonant.engine.References;
+import resonant.engine.Reference;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class ItemCircuit extends ItemBase
 	@Override
 	public String getUnlocalizedName(ItemStack itemStack)
 	{
-		return "item." + References.PREFIX + TYPES[itemStack.getItemDamage()];
+		return "item." + Reference.PREFIX + TYPES[itemStack.getItemDamage()];
 	}
 
 	@Override

@@ -11,7 +11,7 @@ import java.io.File;
 /**
  * References too common static objects used by Resonant Engine and its sub mods
  */
-public final class References
+public final class Reference
 {
 	public static final String ID = "ResonantEngine";
 	public static final String NAME = "Resonant Engine";

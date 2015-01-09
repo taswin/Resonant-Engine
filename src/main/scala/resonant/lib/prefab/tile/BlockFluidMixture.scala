@@ -5,8 +5,7 @@ import net.minecraft.block.material.Material
 import net.minecraft.item.ItemStack
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.fluids.{BlockFluidFinite, Fluid, FluidContainerRegistry, FluidStack}
-import resonant.api.recipe.MachineRecipes
-import resonant.lib.factory.resources.RecipeType
+import resonant.api.recipe.{MachineRecipes, RecipeType}
 
 /**
  * @author Calclavia

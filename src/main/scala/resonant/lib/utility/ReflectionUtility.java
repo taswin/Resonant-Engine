@@ -2,7 +2,8 @@ package resonant.lib.utility;
 
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.relauncher.ReflectionHelper;
-import resonant.engine.References;
+import org.apache.logging.log4j.Level;
+import resonant.engine.Reference;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -13,8 +14,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-
-import org.apache.logging.log4j.Level;
 
 /**
  * @author DarkGuardsman
@@ -80,11 +79,11 @@ public class ReflectionUtility extends ReflectionHelper
         }
         catch (NoSuchFieldException e)
         {
-            References.LOGGER.catching(Level.ERROR, e);
+            Reference.LOGGER.catching(Level.ERROR, e);
         }
         catch (IllegalAccessException e)
         {
-            References.LOGGER.catching(Level.ERROR, e);
+            Reference.LOGGER.catching(Level.ERROR, e);
         }
     }
     /** Sets a field inside of Minecraft's code that is normally srg or obfuscated

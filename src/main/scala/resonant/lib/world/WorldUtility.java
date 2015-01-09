@@ -11,11 +11,11 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.ForgeEventFactory;
-import resonant.engine.References;
-import resonant.lib.utility.DummyPlayer;
-import resonant.lib.wrapper.BitmaskWrapper;
+import resonant.engine.Reference;
 import resonant.lib.transform.rotation.Quaternion;
 import resonant.lib.transform.vector.Vector3;
+import resonant.lib.utility.DummyPlayer;
+import resonant.lib.wrapper.BitmaskWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -277,16 +277,16 @@ public class WorldUtility
 				nameToClassMap.put(findTileID, replaceTile);
 				classToNameMap.put(replaceTile, findTileID);
 				classToNameMap.remove(findTile);
-				References.LOGGER.info("Replaced TileEntity: " + findTile);
+				Reference.LOGGER.info("Replaced TileEntity: " + findTile);
 			}
 			else
 			{
-				References.LOGGER.error("Failed to replace TileEntity: " + findTile);
+				Reference.LOGGER.error("Failed to replace TileEntity: " + findTile);
 			}
 		}
 		catch (Exception e)
 		{
-			References.LOGGER.error("Failed to replace TileEntity: " + findTile);
+			Reference.LOGGER.error("Failed to replace TileEntity: " + findTile);
 			e.printStackTrace();
 		}
 	}

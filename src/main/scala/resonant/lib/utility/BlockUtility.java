@@ -2,7 +2,7 @@ package resonant.lib.utility;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import resonant.engine.References;
+import resonant.engine.Reference;
 import resonant.engine.ResonantEngine;
 
 import java.lang.reflect.Field;
@@ -42,7 +42,7 @@ public class BlockUtility
         catch (IllegalAccessException e)
         {
             if(ResonantEngine.runningAsDev)
-                References.LOGGER.catching(e);
+                Reference.LOGGER.catching(e);
         }
         return 0;
     }
@@ -73,7 +73,7 @@ public class BlockUtility
         catch (IllegalAccessException e)
         {
             if(ResonantEngine.runningAsDev)
-                References.LOGGER.catching(e);
+                Reference.LOGGER.catching(e);
         }
         return 0;
 	}

@@ -1,4 +1,4 @@
-package resonant.lib.factory.resources;
+package resonant.api.recipe;
 
 /**
  * The type of recipe for a specific type of machinery

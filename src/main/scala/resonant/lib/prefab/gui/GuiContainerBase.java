@@ -12,13 +12,13 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
-import resonant.engine.References;
+import resonant.engine.Reference;
 import resonant.lib.render.RenderUtility;
-import resonant.lib.utility.science.UnitDisplay;
-import resonant.lib.utility.science.UnitDisplay.Unit;
 import resonant.lib.transform.region.Rectangle;
 import resonant.lib.transform.vector.Vector2;
 import resonant.lib.utility.LanguageUtility;
+import resonant.lib.utility.science.UnitDisplay;
+import resonant.lib.utility.science.UnitDisplay.Unit;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -42,13 +42,13 @@ public class GuiContainerBase extends GuiContainer
 	{
 		super(container);
 		this.ySize = 217;
-		this.baseTexture = References.GUI_BASE;
+		this.baseTexture = Reference.GUI_BASE;
 	}
 
 	public GuiContainerBase()
 	{
 		this(new ContainerDummy());
-		this.baseTexture = References.GUI_EMPTY_FILE;
+		this.baseTexture = Reference.GUI_EMPTY_FILE;
 	}
 
 	protected void drawString(String str, int x, int y)
@@ -188,7 +188,7 @@ public class GuiContainerBase extends GuiContainer
 
 	protected void drawSlot(int x, int y, GuiSlotType type, float r, float g, float b)
 	{
-		this.mc.renderEngine.bindTexture(References.GUI_COMPONENTS);
+		this.mc.renderEngine.bindTexture(Reference.GUI_COMPONENTS);
 		GL11.glColor4f(r, g, b, 1.0F);
 
 		this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 0, 0, 18, 18);
@@ -211,7 +211,7 @@ public class GuiContainerBase extends GuiContainer
 
 	protected void drawBar(int x, int y, float scale)
 	{
-		this.mc.renderEngine.bindTexture(References.GUI_COMPONENTS);
+		this.mc.renderEngine.bindTexture(Reference.GUI_COMPONENTS);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		/** Draw background progress bar/ */
@@ -226,7 +226,7 @@ public class GuiContainerBase extends GuiContainer
 
 	protected void drawForce(int x, int y, float scale)
 	{
-		this.mc.renderEngine.bindTexture(References.GUI_COMPONENTS);
+		this.mc.renderEngine.bindTexture(Reference.GUI_COMPONENTS);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		/** Draw background progress bar/ */
@@ -241,7 +241,7 @@ public class GuiContainerBase extends GuiContainer
 
 	protected void drawLongBlueBar(int x, int y, float scale)
 	{
-		mc.renderEngine.bindTexture(References.GUI_COMPONENTS);
+		mc.renderEngine.bindTexture(Reference.GUI_COMPONENTS);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		/** Draw background progress bar/ */
@@ -256,7 +256,7 @@ public class GuiContainerBase extends GuiContainer
 
 	protected void drawElectricity(int x, int y, float scale)
 	{
-		this.mc.renderEngine.bindTexture(References.GUI_COMPONENTS);
+		this.mc.renderEngine.bindTexture(Reference.GUI_COMPONENTS);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		/** Draw background progress bar/ */
@@ -271,7 +271,7 @@ public class GuiContainerBase extends GuiContainer
 
 	protected void drawMeter(int x, int y, float scale, float r, float g, float b)
 	{
-		this.mc.renderEngine.bindTexture(References.GUI_COMPONENTS);
+		this.mc.renderEngine.bindTexture(Reference.GUI_COMPONENTS);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		/** Draw the background meter. */
@@ -289,7 +289,7 @@ public class GuiContainerBase extends GuiContainer
 
 	protected void drawMeter(int x, int y, float scale, FluidStack liquidStack)
 	{
-		this.mc.renderEngine.bindTexture(References.GUI_COMPONENTS);
+		this.mc.renderEngine.bindTexture(Reference.GUI_COMPONENTS);
 
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
@@ -303,13 +303,13 @@ public class GuiContainerBase extends GuiContainer
 		}
 
 		/** Draw measurement lines */
-		this.mc.renderEngine.bindTexture(References.GUI_COMPONENTS);
+		this.mc.renderEngine.bindTexture(Reference.GUI_COMPONENTS);
 		this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 40, 49 * 2, meterWidth, meterHeight);
 	}
 
 	protected void drawSlot(int x, int y, SlotType type, float r, float g, float b)
 	{
-		this.mc.renderEngine.bindTexture(References.GUI_COMPONENTS);
+		this.mc.renderEngine.bindTexture(Reference.GUI_COMPONENTS);
 		GL11.glColor4f(r, g, b, 1.0F);
 
 		this.drawTexturedModalRect(this.containerWidth + x, this.containerHeight + y, 0, 0, 18, 18);

@@ -10,7 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
-import resonant.engine.References;
+import resonant.engine.Reference;
 import resonant.lib.transform.rotation.Quaternion;
 import resonant.lib.transform.vector.Vector3;
 
@@ -26,7 +26,7 @@ import static org.lwjgl.opengl.GL11.*;
 @SideOnly(Side.CLIENT)
 public class FXElectricBolt2 extends EntityFX
 {
-	public static final ResourceLocation TEXTURE = new ResourceLocation(References.DOMAIN, References.MODEL_PATH + "fadedSphere.png");
+	public static final ResourceLocation TEXTURE = new ResourceLocation(Reference.DOMAIN, Reference.MODEL_PATH + "fadedSphere.png");
 	public static final ResourceLocation PARTICLE_RESOURCE = new ResourceLocation("textures/particle/particles.png");
 	private final Map<Integer, Integer> parentIDMap = new HashMap<Integer, Integer>();
 	/**

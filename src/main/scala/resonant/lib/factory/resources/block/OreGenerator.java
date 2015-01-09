@@ -1,4 +1,4 @@
-package resonant.lib.prefab.ore;
+package resonant.lib.factory.resources.block;
 
 import cpw.mods.fml.common.IWorldGenerator;
 import net.minecraft.block.Block;

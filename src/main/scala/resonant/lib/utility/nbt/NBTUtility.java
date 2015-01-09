@@ -6,10 +6,10 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
 import net.minecraft.server.MinecraftServer;
-import resonant.engine.References;
-import resonant.lib.utility.science.units.UnitHelper;
+import resonant.engine.Reference;
 import resonant.lib.transform.vector.Vector2;
 import resonant.lib.transform.vector.Vector3;
+import resonant.lib.utility.science.units.UnitHelper;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -48,7 +48,7 @@ public class NBTUtility
 		}
 		catch (Exception e)
 		{
-			References.LOGGER.fatal("Failed to save " + file.getName() + ".dat!");
+			Reference.LOGGER.fatal("Failed to save " + file.getName() + ".dat!");
 			e.printStackTrace();
 			return false;
 		}
@@ -81,7 +81,7 @@ public class NBTUtility
 		}
 		catch (Exception e)
 		{
-			References.LOGGER.fatal("Failed to load " + file.getName() + ".dat!");
+			Reference.LOGGER.fatal("Failed to load " + file.getName() + ".dat!");
 			e.printStackTrace();
 			return null;
 		}

@@ -10,7 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
-import resonant.engine.References;
+import resonant.engine.Reference;
 import resonant.lib.render.RenderUtility;
 import resonant.lib.transform.rotation.Quaternion;
 import resonant.lib.transform.vector.Vector3;
@@ -26,7 +26,7 @@ import java.util.*;
 @SideOnly(Side.CLIENT)
 public class FXElectricBolt extends EntityFX
 {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(References.DOMAIN, References.TEXTURE_DIRECTORY + "fadedSphere.png");
+	private static final ResourceLocation TEXTURE = new ResourceLocation(Reference.DOMAIN, Reference.TEXTURE_DIRECTORY + "fadedSphere.png");
 	/**
 	 * Determines how complex the bolt is.
 	 */

@@ -3,7 +3,7 @@ package resonant.lib.utility;
 import buildcraft.api.tools.IToolWrench;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import resonant.engine.References;
+import resonant.engine.Reference;
 import resonant.engine.ResonantEngine;
 import resonant.engine.content.ItemScrewdriver;
 import resonant.lib.mod.compat.ModEnum;
@@ -55,10 +55,10 @@ public class WrenchUtility
                     }
                 } catch (ClassNotFoundException e)
                 {
-                    References.LOGGER.error("Failed to use reflection for IC2 Wrench support");
+                    Reference.LOGGER.error("Failed to use reflection for IC2 Wrench support");
                     if (ResonantEngine.runningAsDev)
                     {
-                        References.LOGGER.catching(e);
+                        Reference.LOGGER.catching(e);
                     }
                 }
             }
@@ -123,10 +123,10 @@ public class WrenchUtility
                     }
                 } catch (ClassNotFoundException e)
                 {
-                    References.LOGGER.error("Failed to use reflection for IC2 Wrench support");
+                    Reference.LOGGER.error("Failed to use reflection for IC2 Wrench support");
                     if (ResonantEngine.runningAsDev)
                     {
-                        References.LOGGER.catching(e);
+                        Reference.LOGGER.catching(e);
                     }
                 }
             }
@@ -184,31 +184,31 @@ public class WrenchUtility
                     }
                 } catch (ClassNotFoundException e)
                 {
-                    References.LOGGER.error("Failed to use reflection to get IC2 wrench classes");
+                    Reference.LOGGER.error("Failed to use reflection to get IC2 wrench classes");
                     if (ResonantEngine.runningAsDev)
                     {
-                        References.LOGGER.catching(e);
+                        Reference.LOGGER.catching(e);
                     }
                 } catch (NoSuchMethodException e)
                 {
-                    References.LOGGER.error("Failed to use reflection to access IC2 wrench methods");
+                    Reference.LOGGER.error("Failed to use reflection to access IC2 wrench methods");
                     if (ResonantEngine.runningAsDev)
                     {
-                        References.LOGGER.catching(e);
+                        Reference.LOGGER.catching(e);
                     }
                 } catch (InvocationTargetException e)
                 {
-                    References.LOGGER.error("Failed to use reflection to invoke IC2 wrench methods");
+                    Reference.LOGGER.error("Failed to use reflection to invoke IC2 wrench methods");
                     if (ResonantEngine.runningAsDev)
                     {
-                        References.LOGGER.catching(e);
+                        Reference.LOGGER.catching(e);
                     }
                 } catch (IllegalAccessException e)
                 {
-                    References.LOGGER.error("Reflection failure: Something is blocking access to IC2 wrench methods");
+                    Reference.LOGGER.error("Reflection failure: Something is blocking access to IC2 wrench methods");
                     if (ResonantEngine.runningAsDev)
                     {
-                        References.LOGGER.catching(e);
+                        Reference.LOGGER.catching(e);
                     }
                 }
             }

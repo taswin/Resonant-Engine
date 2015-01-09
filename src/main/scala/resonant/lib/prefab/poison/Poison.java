@@ -8,7 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import resonant.api.armor.IAntiPoisonArmor;
 import resonant.api.tile.IAntiPoisonBlock;
-import resonant.engine.References;
+import resonant.engine.Reference;
 import resonant.lib.transform.vector.Vector3;
 
 import java.util.EnumSet;
@@ -33,7 +33,7 @@ public abstract class Poison
 		this.name = name;
 		poisons.put(name, this);
 		poisonIDs.put(name, ++maxID);
-		isDisabled = References.CONFIGURATION.get("Disable Poison", "Disable " + this.name, false).getBoolean(false);
+		isDisabled = Reference.CONFIGURATION.get("Disable Poison", "Disable " + this.name, false).getBoolean(false);
 	}
 
 	public static Poison getPoison(String name)

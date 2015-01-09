@@ -14,7 +14,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
 import resonant.api.tile.IRemovable;
 import resonant.api.tile.IRemovable.*;
-import resonant.engine.References;
+import resonant.engine.Reference;
 import resonant.lib.transform.vector.Vector3;
 import resonant.lib.transform.vector.VectorWorld;
 import resonant.lib.utility.inventory.InventoryUtility;
@@ -175,7 +175,7 @@ public class PlayerInteractionHandler
                             }
                         } catch (Exception e)
                         {
-                            References.LOGGER.error("Failed to pick up block using event system");
+                            Reference.LOGGER.error("Failed to pick up block using event system");
                             e.printStackTrace();
                         }
                     }

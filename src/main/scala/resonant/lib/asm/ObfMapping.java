@@ -6,7 +6,7 @@ import net.minecraft.launchwrapper.LaunchClassLoader;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.commons.Remapper;
 import org.objectweb.asm.tree.*;
-import resonant.engine.References;
+import resonant.engine.Reference;
 import resonant.engine.ResonantEngine;
 
 import java.io.IOException;
@@ -28,7 +28,7 @@ public class ObfMapping
 		catch (IOException iox)
 		{
             if(ResonantEngine.runningAsDev)
-                References.LOGGER.catching(iox);
+				Reference.LOGGER.catching(iox);
 		}
 		obfuscated = obf;
 	}

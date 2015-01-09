@@ -1,6 +1,6 @@
 package resonant.lib.utility.science.units;
 
-import resonant.engine.References;
+import resonant.engine.Reference;
 import resonant.engine.ResonantEngine;
 import resonant.lib.collection.Pair;
 
@@ -46,7 +46,7 @@ public class UnitHelper
 			catch (NumberFormatException e)
 			{
                 if(ResonantEngine.runningAsDev)
-                    References.LOGGER.catching(e);
+					Reference.LOGGER.catching(e);
 
 			}
 		}
@@ -86,7 +86,7 @@ public class UnitHelper
 			catch (NumberFormatException e)
 			{
                 if(ResonantEngine.runningAsDev)
-                    References.LOGGER.catching(e);
+					Reference.LOGGER.catching(e);
 			}
 		}
 		if (var instanceof Integer || var instanceof Float || var instanceof Double)
@@ -125,7 +125,7 @@ public class UnitHelper
 			catch (NumberFormatException e)
 			{
                 if(ResonantEngine.runningAsDev)
-                    References.LOGGER.catching(e);
+					Reference.LOGGER.catching(e);
 			}
 		}
 		if (var instanceof Integer || var instanceof Float || var instanceof Double)
@@ -193,7 +193,7 @@ public class UnitHelper
 			catch (NumberFormatException e)
 			{
                 if(ResonantEngine.runningAsDev)
-                    References.LOGGER.catching(e);
+					Reference.LOGGER.catching(e);
 			}
 			editedString.replaceAll("[0-9]", "");
 			chars = editedString.toCharArray();

@@ -8,10 +8,6 @@ import resonant.lib.grid.UpdateTicker
 
 object RECommand extends CommandBase
 {
-  override def getCommandName: String = "ue"
-
-  override def getCommandUsage(par1ICommandSender: ICommandSender): String = "/ue help"
-
   override def processCommand(sender: ICommandSender, args: Array[String])
   {
       if (args == null || args.length == 0 || args(0).equalsIgnoreCase("help"))
@@ -23,7 +19,7 @@ object RECommand extends CommandBase
       }
       if (args(0).equalsIgnoreCase("version"))
       {
-        sender.addChatMessage(new ChatComponentText("Version: " + References.VERSION +"  Build: " + References.BUILD_VERSION))
+        sender.addChatMessage(new ChatComponentText("Version: " + Reference.VERSION + "  Build: " + Reference.BUILD_VERSION))
       }
       if (args(0).equalsIgnoreCase("gridinfo"))
       {
@@ -40,6 +36,10 @@ object RECommand extends CommandBase
 
         throw new WrongUsageException(this.getCommandUsage(sender))
   }
+
+  override def getCommandName: String = "ue"
+
+  override def getCommandUsage(par1ICommandSender: ICommandSender): String = "/ue help"
 
   override def getRequiredPermissionLevel: Int = 0
 

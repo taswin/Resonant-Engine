@@ -1,4 +1,4 @@
-package resonant.lib.prefab.ore;
+package resonant.lib.factory.resources.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;

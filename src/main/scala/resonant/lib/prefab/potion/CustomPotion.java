@@ -3,7 +3,7 @@ package resonant.lib.prefab.potion;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
-import resonant.engine.References;
+import resonant.engine.Reference;
 
 /**
  * @author Calclavia, Darkguardsman
@@ -55,9 +55,9 @@ public abstract class CustomPotion extends Potion
 
 	public static int getPotionID(String name, int id)
 	{
-		References.CONFIGURATION.load();
-		int finalID = References.CONFIGURATION.get("Potion ID", name + " ID", id).getInt(id);
-		References.CONFIGURATION.save();
+		Reference.CONFIGURATION.load();
+		int finalID = Reference.CONFIGURATION.get("Potion ID", name + " ID", id).getInt(id);
+		Reference.CONFIGURATION.save();
 		return finalID;
 	}
 

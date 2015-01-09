@@ -2,7 +2,7 @@ package resonant.engine.content;
 
 import net.minecraft.item.Item;
 import net.minecraft.util.IIcon;
-import resonant.engine.References;
+import resonant.engine.Reference;
 
 /**
  * An Base Item Class for Basic Components. Do not use this! Make your own!
@@ -16,8 +16,8 @@ public class ItemBase extends Item
 	public ItemBase(String name)
 	{
 		super();
-		this.setUnlocalizedName(References.PREFIX + name);
-		this.setTextureName(References.PREFIX + name);
+		this.setUnlocalizedName(Reference.PREFIX + name);
+		this.setTextureName(Reference.PREFIX + name);
 		this.setNoRepair();
 	}
 }

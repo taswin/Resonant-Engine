@@ -13,7 +13,6 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -29,16 +28,16 @@ import net.minecraftforge.oredict.OreDictionary;
 import resonant.api.IUpdate;
 import resonant.api.mffs.fortron.FrequencyGridRegistry;
 import resonant.api.recipe.MachineRecipes;
+import resonant.api.recipe.RecipeType;
 import resonant.api.tile.IBoilHandler;
 import resonant.engine.content.ItemScrewdriver;
-import resonant.engine.content.debug.ItemInstaHole;
 import resonant.engine.content.debug.TileCreativeBuilder;
 import resonant.engine.content.debug.TileInfiniteFluid;
 import resonant.engine.content.tool.ToolMode;
 import resonant.engine.content.tool.ToolModeGeneral;
 import resonant.engine.content.tool.ToolModeRotation;
 import resonant.lib.debug.F3Handler$;
-import resonant.lib.factory.resources.*;
+import resonant.lib.factory.resources.ResourceFactory;
 import resonant.lib.grid.UpdateTicker;
 import resonant.lib.grid.UpdateTicker$;
 import resonant.lib.grid.frequency.FrequencyGrid;
@@ -66,60 +65,32 @@ import java.util.Arrays;
  * @author Calclavia, DarkGuardsman
  */
 
-@Mod(modid = References.ID, name = References.NAME, version = References.VERSION)
+@Mod(modid = Reference.ID, name = Reference.NAME, version = Reference.VERSION)
 public class ResonantEngine
 {
-	public static final ModManager contentRegistry = new ModManager().setPrefix(References.PREFIX).setTab(CreativeTabs.tabTools);
+	public static final ModManager contentRegistry = new ModManager().setPrefix(Reference.PREFIX);
 	public static final boolean runningAsDev = System.getProperty("development") != null && System.getProperty("development").equalsIgnoreCase("true");
 	@SidedProxy(clientSide = "resonant.engine.ClientProxy", serverSide = "resonant.engine.CommonProxy")
 	public static CommonProxy proxy;
-	@Mod.Metadata(References.ID)
+	@Mod.Metadata(Reference.ID)
 	public static ModMetadata metadata;
-	@Instance(References.ID)
+	@Instance(Reference.ID)
 	public static ResonantEngine instance;
 	public static BlockDummy blockCreativeBuilder;
 	public static Block blockInfiniteFluid;
 	public static Block ore = null;
 	public static Item itemWrench;
-	public static Item instaHole;
-	@Deprecated
-	public static ResourceFactoryHandler resourceFactory = new ResourceFactoryHandler();
-	private static boolean oresRequested = false;
 	private static ThermalGrid thermalGrid = new ThermalGrid();
-	public final PacketManager packetHandler = new PacketManager(References.CHANNEL);
+	public final PacketManager packetHandler = new PacketManager(Reference.CHANNEL);
 	private LoadableHandler loadables = new LoadableHandler();
-
-	/**
-	 * Requests that all ores are generated
-	 * Must be called in pre-init
-	 */
-	public static void requestAllOres()
-	{
-		for (DefinedResources resource : DefinedResources.values())
-		{
-			requestOre(resource);
-		}
-	}
-
-	/**
-	 * Requests that all ores are generated
-	 * Must be called in pre-init
-	 *
-	 * @param resource - resource to request its ore to generate, still restricted by configs
-	 */
-	public static void requestOre(DefinedResources resource)
-	{
-		oresRequested = true;
-		resource.requested = true;
-	}
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent evt)
 	{
 		ConfigScanner.instance().generateSets(evt.getAsmData());
-		ConfigHandler.sync(References.CONFIGURATION, References.DOMAIN);
+		ConfigHandler.sync(Reference.CONFIGURATION, Reference.DOMAIN);
 
-		References.CONFIGURATION.load();
+		Reference.CONFIGURATION.load();
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy);
 
 		loadables.applyModule(proxy);
@@ -138,28 +109,30 @@ public class ResonantEngine
 		 * Multiblock Handling
 		 */
 		SyntheticMultiblock.instance = new SyntheticMultiblock();
-		if (runningAsDev)
-			instaHole = contentRegistry.newItem(new ItemInstaHole());
-		if (References.CONFIGURATION.get("Content", "LoadScrewDriver", true).getBoolean(true))
+
+		if (Reference.CONFIGURATION.get("Content", "LoadScrewDriver", true).getBoolean(true))
 		{
 			itemWrench = new ItemScrewdriver();
-			GameRegistry.registerItem(itemWrench, "screwdriver", References.ID);
+			GameRegistry.registerItem(itemWrench, "screwdriver", Reference.ID);
 		}
-		if (References.CONFIGURATION.get("Content", "LoadParts", true).getBoolean(true))
+
+		if (Reference.CONFIGURATION.get("Content", "LoadParts", true).getBoolean(true))
 		{
 			//TODO setup chips, motor, and basic crafting parts
 		}
-		if (References.CONFIGURATION.get("Creative Tools", "CreativeBuilder", true).getBoolean(true))
+
+		if (Reference.CONFIGURATION.get("Creative Tools", "CreativeBuilder", true).getBoolean(true))
 		{
 			blockCreativeBuilder = contentRegistry.newBlock(TileCreativeBuilder.class);
 		}
-		if (References.CONFIGURATION.get("Creative Tools", "InfiniteSource", true).getBoolean(true))
+
+		if (Reference.CONFIGURATION.get("Creative Tools", "InfiniteSource", true).getBoolean(true))
 		{
 			blockInfiniteFluid = contentRegistry.newBlock(TileInfiniteFluid.class);
 		}
 
-		//BlockCreativeBuilder.register(new SchematicTestRoom());
 		//Finish and close all resources
+		ResourceFactory.preInit();
 
 		loadables.preInit();
 	}
@@ -167,23 +140,16 @@ public class ResonantEngine
 	@EventHandler
 	public void init(FMLInitializationEvent evt)
 	{
-		ResonantEngine.metadata.modId = References.NAME;
-		ResonantEngine.metadata.name = References.NAME;
-		ResonantEngine.metadata.description = References.NAME + " is a mod developement framework designed to assist in creation of mods. It provided basic classes for packet handling, tile creation, inventory handling, saving/loading of NBT, and general all around prefabs.";
+		ResonantEngine.metadata.modId = Reference.NAME;
+		ResonantEngine.metadata.name = Reference.NAME;
+		ResonantEngine.metadata.description = Reference.NAME + " is a mod developement framework designed to assist in creation of mods. It provided basic classes for packet handling, tile creation, inventory handling, saving/loading of NBT, and general all around prefabs.";
 		ResonantEngine.metadata.url = "https://github.com/Universal-Electricity/Resonant-Engine";
-		ResonantEngine.metadata.version = References.VERSION + References.BUILD_VERSION;
+		ResonantEngine.metadata.version = Reference.VERSION + Reference.BUILD_VERSION;
 		ResonantEngine.metadata.authorList = Arrays.asList("Calclavia", "DarkCow", "tgame14", "Maxwolf");
 		ResonantEngine.metadata.autogenerated = false;
 
 		//Register UpdateTicker
 		FMLCommonHandler.instance().bus().register(UpdateTicker$.MODULE$.world());
-
-		//Late registration of content
-		if (oresRequested)
-		{
-			ore = contentRegistry.newBlock("ReOres", BlockOre.class, ItemBlockOre.class);
-			DefinedResources.registerSet(0, ore, References.CONFIGURATION);
-		}
 
 		loadables.init();
 	}
@@ -191,6 +157,9 @@ public class ResonantEngine
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent evt)
 	{
+		/**
+		 * Initiate ticker
+		 */
 		UpdateTicker.threaded().addUpdater(ResonantEngine.thermalGrid);
 
 		if (!UpdateTicker.threaded().isAlive())
@@ -217,7 +186,7 @@ public class ResonantEngine
 		MachineRecipes.instance.addRecipe(RecipeType.GRINDER.name(), Blocks.gravel, Blocks.sand);
 		MachineRecipes.instance.addRecipe(RecipeType.GRINDER.name(), Blocks.glass, Blocks.sand);
 
-		References.CONFIGURATION.save();
+		Reference.CONFIGURATION.save();
 	}
 
 	@EventHandler

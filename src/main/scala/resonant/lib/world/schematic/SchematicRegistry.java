@@ -1,6 +1,6 @@
 package resonant.lib.world.schematic;
 
-import resonant.engine.References;
+import resonant.engine.Reference;
 
 import java.util.HashMap;
 
@@ -41,7 +41,7 @@ public final class SchematicRegistry extends HashMap<String, Schematic>
 		}
 		else
 		{
-			References.LOGGER.error("Failed to register schematic as the name '" + name + "' is already in use.\nSchematic: " + schematic
+			Reference.LOGGER.error("Failed to register schematic as the name '" + name + "' is already in use.\nSchematic: " + schematic
 					+ " Class: " + schematic.getClass());
 		}
 	}

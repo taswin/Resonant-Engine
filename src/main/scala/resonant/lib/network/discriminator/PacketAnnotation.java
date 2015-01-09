@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import resonant.engine.References;
+import resonant.engine.Reference;
 import resonant.lib.network.handle.TPacketReceiver;
 import resonant.lib.network.netty.PacketManager;
 
@@ -102,22 +102,22 @@ public class PacketAnnotation extends PacketType
 					}
 					else
 					{
-						References.LOGGER.error("Sent Annotation packet to null Tile: " + x + " : " + y + " : " + z);
+						Reference.LOGGER.error("Sent Annotation packet to null Tile: " + x + " : " + y + " : " + z);
 					}
 				}
 				else
 				{
-					References.LOGGER.fatal("PacketAnnotation: Unsupported class type " + clazz);
+					Reference.LOGGER.fatal("PacketAnnotation: Unsupported class type " + clazz);
 				}
 			}
 			else
 			{
-				References.LOGGER.fatal("PacketAnnotation: Unknown classID " + this.classID);
+				Reference.LOGGER.fatal("PacketAnnotation: Unknown classID " + this.classID);
 			}
 		}// TODO replace catch with a set area of catches to allow for crashing on bad crashes
 		catch (Exception e)
 		{
-			References.LOGGER.fatal("Failed to read Annotation Packet", e);
+			Reference.LOGGER.fatal("Failed to read Annotation Packet", e);
 			throw new UnsupportedOperationException(e);
 		}
 	}
@@ -146,13 +146,13 @@ public class PacketAnnotation extends PacketType
 				}
 				else
 				{
-					References.LOGGER.error("Sent Annotation packet to null Tile: " + x + " : " + y + " : " + z);
+					Reference.LOGGER.error("Sent Annotation packet to null Tile: " + x + " : " + y + " : " + z);
 				}
 			}
 		}
 		catch (Exception e)
 		{
-			References.LOGGER.fatal("Failed to read Annotation Packet", e);
+			Reference.LOGGER.fatal("Failed to read Annotation Packet", e);
 			throw new UnsupportedOperationException(e);
 		}
 	}

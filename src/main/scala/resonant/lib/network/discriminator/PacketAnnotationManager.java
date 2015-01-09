@@ -10,12 +10,12 @@ import io.netty.buffer.Unpooled;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.FluidTank;
-import resonant.engine.References;
+import resonant.engine.Reference;
 import resonant.engine.ResonantEngine;
 import resonant.lib.network.Synced;
 import resonant.lib.network.netty.PacketManager;
-import resonant.lib.utility.nbt.ISaveObj;
 import resonant.lib.transform.vector.Vector3;
+import resonant.lib.utility.nbt.ISaveObj;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -284,7 +284,7 @@ public class PacketAnnotationManager
 
 						if (result == null)
 						{
-							References.LOGGER.fatal("Calclavia packet read a null field for " + obj.getClass().getSimpleName());
+							Reference.LOGGER.fatal("Calclavia packet read a null field for " + obj.getClass().getSimpleName());
 						}
 					}
 					else
@@ -330,7 +330,7 @@ public class PacketAnnotationManager
 			}
 			catch (Exception e)
 			{
-				References.LOGGER.fatal("Resonant Engine annotation packet failed for " + obj.getClass().getSimpleName());
+				Reference.LOGGER.fatal("Resonant Engine annotation packet failed for " + obj.getClass().getSimpleName());
 				e.printStackTrace();
 			}
 		}

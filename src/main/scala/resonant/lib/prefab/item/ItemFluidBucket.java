@@ -11,7 +11,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.*;
-import resonant.engine.References;
+import resonant.engine.Reference;
 
 import java.util.List;
 
@@ -40,8 +40,8 @@ public class ItemFluidBucket extends ItemFluidContainer
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister reg)
 	{
-		this.icon_bucket = reg.registerIcon(References.PREFIX + "bucket_pass");
-		this.icon_fluid = reg.registerIcon(References.PREFIX + "bucket_fluid_pass");
+		this.icon_bucket = reg.registerIcon(Reference.PREFIX + "bucket_pass");
+		this.icon_fluid = reg.registerIcon(Reference.PREFIX + "bucket_fluid_pass");
 	}
 
 	@SideOnly(Side.CLIENT)
