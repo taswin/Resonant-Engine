@@ -52,6 +52,39 @@ object NBTWrapper
 
       underlying.setTag(name, tagList)
     }
+
+    def getMap[K: ClassTag, V: ClassTag](name: String): Map[K, V] =
+    {
+      val tagList = underlying.getTagList(name, 10)
+      var map = Map.empty[K, V]
+
+      for (i <- 0 until tagList.tagCount)
+      {
+        val innerTag = tagList.getCompoundTagAt(i)
+
+        if (NBTUtility.loadObject(innerTag, "k").isInstanceOf[K] && NBTUtility.loadObject(innerTag, "v").isInstanceOf[V])
+          map += NBTUtility.loadObject(innerTag, "k").asInstanceOf[K] -> NBTUtility.loadObject(innerTag, "v").asInstanceOf[V]
+      }
+
+      return map
+    }
+
+    def setMap(name: String, map: Map[_, _])
+    {
+      val tagList: NBTTagList = new NBTTagList
+
+      map.foreach(
+        keyVal =>
+        {
+          val innerTag = new NBTTagCompound
+          NBTUtility.saveObject(innerTag, "k", keyVal._1)
+          NBTUtility.saveObject(innerTag, "v", keyVal._2)
+          tagList.appendTag(innerTag)
+        }
+      )
+
+      underlying.setTag(name, tagList)
+    }
   }
 
 }
