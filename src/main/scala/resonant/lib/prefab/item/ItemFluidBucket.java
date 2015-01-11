@@ -40,8 +40,8 @@ public class ItemFluidBucket extends ItemFluidContainer
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister reg)
 	{
-		this.icon_bucket = reg.registerIcon(Reference.prefix + "bucket_pass");
-		this.icon_fluid = reg.registerIcon(Reference.prefix + "bucket_fluid_pass");
+		this.icon_bucket = reg.registerIcon(Reference.prefix() + "bucket_pass");
+		this.icon_fluid = reg.registerIcon(Reference.prefix() + "bucket_fluid_pass");
 	}
 
 	@SideOnly(Side.CLIENT)

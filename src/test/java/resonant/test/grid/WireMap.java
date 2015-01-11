@@ -2,12 +2,13 @@ package resonant.test.grid;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
-import resonant.lib.prefab.tile.spatial.BlockDummy;
 import resonant.junit.TestRegistry;
+import resonant.lib.prefab.tile.TileConductor;
+import resonant.lib.prefab.tile.spatial.BlockDummy;
 import resonant.lib.world.schematic.StringSchematic;
 
 /**
- * Created by robert on 11/21/2014.
+ * @author DarkCow
  */
 public class WireMap extends StringSchematic
 {
@@ -31,7 +32,7 @@ public class WireMap extends StringSchematic
 		{
 			if (Block.getBlockFromName("wire") == null)
 			{
-//				TestRegistry.registerBlock(new BlockDummy("JUnit", null, new TileConductor()), "wire");
+				TestRegistry.registerBlock(new BlockDummy("JUnit", null, new TileConductor()), "wire");
 			}
 			wire = Block.getBlockFromName("wire");
 		}

@@ -16,8 +16,8 @@ public class ItemBase extends Item
 	public ItemBase(String name)
 	{
 		super();
-		this.setUnlocalizedName(Reference.prefix + name);
-		this.setTextureName(Reference.prefix + name);
+		this.setUnlocalizedName(Reference.prefix() + name);
+		this.setTextureName(Reference.prefix() + name);
 		this.setNoRepair();
 	}
 }

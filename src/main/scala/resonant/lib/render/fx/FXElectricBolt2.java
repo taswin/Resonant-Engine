@@ -26,7 +26,7 @@ import static org.lwjgl.opengl.GL11.*;
 @SideOnly(Side.CLIENT)
 public class FXElectricBolt2 extends EntityFX
 {
-	public static final ResourceLocation TEXTURE = new ResourceLocation(Reference.domain, Reference.modelPath + "fadedSphere.png");
+	public static final ResourceLocation TEXTURE = new ResourceLocation(Reference.domain(), Reference.modelPath() + "fadedSphere.png");
 	public static final ResourceLocation PARTICLE_RESOURCE = new ResourceLocation("textures/particle/particles.png");
 	private final Map<Integer, Integer> parentIDMap = new HashMap<Integer, Integer>();
 	/**
