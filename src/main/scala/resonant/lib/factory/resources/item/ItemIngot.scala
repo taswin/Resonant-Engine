@@ -1,5 +1,6 @@
 package resonant.lib.factory.resources.item
 
+import net.minecraft.creativetab.CreativeTabs
 import resonant.engine.Reference
 
 /**
@@ -8,4 +9,5 @@ import resonant.engine.Reference
 class ItemIngot extends TItemResource
 {
   setTextureName(Reference.PREFIX + "ingot")
+  setCreativeTab(CreativeTabs.tabMaterials)
 }
