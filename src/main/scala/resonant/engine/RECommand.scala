@@ -19,7 +19,7 @@ object RECommand extends CommandBase
       }
       if (args(0).equalsIgnoreCase("version"))
       {
-        sender.addChatMessage(new ChatComponentText("Version: " + Reference.VERSION + "  Build: " + Reference.BUILD_VERSION))
+        sender.addChatMessage(new ChatComponentText("Version: " + Reference.version + "  Build: " + Reference.buildVersion))
       }
       if (args(0).equalsIgnoreCase("gridinfo"))
       {

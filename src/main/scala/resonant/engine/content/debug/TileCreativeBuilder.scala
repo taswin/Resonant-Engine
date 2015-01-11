@@ -64,7 +64,7 @@ class TileCreativeBuilder extends SpatialTile(Material.iron) with TRotatable wit
    */
   override def activate(player: EntityPlayer, side: Int, hit: Vector3): Boolean =
   {
-    player.openGui(ResonantEngine.instance, -1, world, x.toInt, y.toInt, z.toInt)
+    player.openGui(ResonantEngine, -1, world, x.toInt, y.toInt, z.toInt)
     return true
   }
 

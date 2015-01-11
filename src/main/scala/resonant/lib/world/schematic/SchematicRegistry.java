@@ -41,7 +41,7 @@ public final class SchematicRegistry extends HashMap<String, Schematic>
 		}
 		else
 		{
-			Reference.LOGGER.error("Failed to register schematic as the name '" + name + "' is already in use.\nSchematic: " + schematic
+			Reference.logger().error("Failed to register schematic as the name '" + name + "' is already in use.\nSchematic: " + schematic
 					+ " Class: " + schematic.getClass());
 		}
 	}

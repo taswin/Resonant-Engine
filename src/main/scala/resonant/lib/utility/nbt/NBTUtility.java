@@ -48,7 +48,7 @@ public class NBTUtility
 		}
 		catch (Exception e)
 		{
-			Reference.LOGGER.fatal("Failed to save " + file.getName() + ".dat!");
+			Reference.logger().fatal("Failed to save " + file.getName() + ".dat!");
 			e.printStackTrace();
 			return false;
 		}
@@ -81,7 +81,7 @@ public class NBTUtility
 		}
 		catch (Exception e)
 		{
-			Reference.LOGGER.fatal("Failed to load " + file.getName() + ".dat!");
+			Reference.logger().fatal("Failed to load " + file.getName() + ".dat!");
 			e.printStackTrace();
 			return null;
 		}

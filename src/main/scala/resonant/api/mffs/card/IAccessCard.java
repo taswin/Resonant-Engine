@@ -4,7 +4,7 @@ import net.minecraft.item.ItemStack;
 import resonant.lib.access.AbstractAccess;
 
 /**
- * Applied to Item ID and group cards.
+ * Applied to Item id and group cards.
  *
  * @author Calclavia
  */

@@ -175,7 +175,7 @@ public class PlayerInteractionHandler
                             }
                         } catch (Exception e)
                         {
-                            Reference.LOGGER.error("Failed to pick up block using event system");
+                            Reference.logger().error("Failed to pick up block using event system");
                             e.printStackTrace();
                         }
                     }

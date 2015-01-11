@@ -4,37 +4,21 @@ import io.netty.buffer.ByteBuf
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.tileentity.TileEntity
 import resonant.engine.ResonantEngine
-import resonant.lib.wrapper.ByteBufWrapper._
 import resonant.lib.network.discriminator.PacketTile
 import resonant.lib.network.netty.AbstractPacket
 import resonant.lib.transform.vector.IVectorWorld
+import resonant.lib.wrapper.ByteBufWrapper._
 
 /**
- * Implement this if an object can send a packet with an ID
+ * Implement this if an object can send a packet with an id
  *
- * GetDescriptionPacket will FORWARD with an packet ID of zero to the write method
+ * GetDescriptionPacket will FORWARD with an packet id of zero to the write method
  *
  * @author Calclavia
  */
 trait TPacketSender extends TileEntity
 {
-  override def getDescriptionPacket = ResonantEngine.instance.packetHandler.toMCPacket(getPacket(0))
-
-  /**
-   * Override this method
-   * Be sure to super this method or manually write the ID into the packet when sending
-   */
-  def write(buf: ByteBuf, id: Int)
-  {
-    buf <<< id
-  }
-
-  def getPacket(id: Int): PacketTile =
-  {
-    val packet = new PacketTile(this)
-    write(packet.data, id)
-    return packet
-  }
+  override def getDescriptionPacket = ResonantEngine.packetHandler.toMCPacket(getPacket(0))
 
   /** Sends the desc packet to all players around this tile */
   def sendDescPacket()
@@ -50,6 +34,22 @@ trait TPacketSender extends TileEntity
       sendPacket(getPacket(id))
   }
 
+  def getPacket(id: Int): PacketTile =
+  {
+    val packet = new PacketTile(this)
+    write(packet.data, id)
+    return packet
+  }
+
+  /**
+   * Override this method
+   * Be sure to super this method or manually write the id into the packet when sending
+   */
+  def write(buf: ByteBuf, id: Int)
+  {
+    buf <<< id
+  }
+
   /**
    * Sends the packet to all players
    * @param packet - packet to send
@@ -57,7 +57,7 @@ trait TPacketSender extends TileEntity
   def sendPacket(packet: AbstractPacket)
   {
     if (!getWorldObj.isRemote)
-      ResonantEngine.instance.packetHandler.sendToAll(packet)
+      ResonantEngine.packetHandler.sendToAll(packet)
     else
       throw new RuntimeException("[TPacketReceiver] Trying to send a packet to clients from client side.")
   }
@@ -69,7 +69,7 @@ trait TPacketSender extends TileEntity
   def sendPacket(packet: AbstractPacket, distance: Double)
   {
     if (!getWorldObj.isRemote)
-      ResonantEngine.instance.packetHandler.sendToAllAround(packet, this.asInstanceOf[IVectorWorld], distance)
+      ResonantEngine.packetHandler.sendToAllAround(packet, this.asInstanceOf[IVectorWorld], distance)
     else
       throw new RuntimeException("[TPacketReceiver] Trying to send a packet to clients from client side.")
   }
@@ -81,7 +81,7 @@ trait TPacketSender extends TileEntity
   def sendPacket(packet: AbstractPacket, player: EntityPlayer)
   {
     if (!getWorldObj.isRemote)
-      ResonantEngine.instance.packetHandler.sendToPlayer(packet, player.asInstanceOf[EntityPlayerMP])
+      ResonantEngine.packetHandler.sendToPlayer(packet, player.asInstanceOf[EntityPlayerMP])
     else
       throw new RuntimeException("[TPacketReceiver] Trying to send a packet to clients from client side.")
   }

@@ -3,13 +3,12 @@ package resonant.lib.utility;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import resonant.engine.Reference;
-import resonant.engine.ResonantEngine;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
 
 /**
- * Created by robert on 8/7/2014.
+ * @author DarkCow
  */
 public class BlockUtility
 {
@@ -41,8 +40,7 @@ public class BlockUtility
         }
         catch (IllegalAccessException e)
         {
-            if(ResonantEngine.runningAsDev)
-                Reference.LOGGER.catching(e);
+            Reference.logger().catching(e);
         }
         return 0;
     }
@@ -72,8 +70,7 @@ public class BlockUtility
         }
         catch (IllegalAccessException e)
         {
-            if(ResonantEngine.runningAsDev)
-                Reference.LOGGER.catching(e);
+            Reference.logger().catching(e);
         }
         return 0;
 	}

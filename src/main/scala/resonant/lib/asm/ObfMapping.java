@@ -7,7 +7,6 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.commons.Remapper;
 import org.objectweb.asm.tree.*;
 import resonant.engine.Reference;
-import resonant.engine.ResonantEngine;
 
 import java.io.IOException;
 
@@ -27,8 +26,7 @@ public class ObfMapping
 		}
 		catch (IOException iox)
 		{
-            if(ResonantEngine.runningAsDev)
-				Reference.LOGGER.catching(iox);
+			Reference.logger().catching(iox);
 		}
 		obfuscated = obf;
 	}

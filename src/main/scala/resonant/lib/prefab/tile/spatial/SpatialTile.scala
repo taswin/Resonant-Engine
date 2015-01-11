@@ -29,7 +29,7 @@ abstract class SpatialTile(material: Material) extends SpatialBlock(material) wi
 
   override def getDescriptionPacket: Packet =
   {
-    ResonantEngine.instance.packetHandler.toMCPacket(getDescPacket)
+    ResonantEngine.packetHandler.toMCPacket(getDescPacket)
   }
 
   def getDescPacket: AbstractPacket = null

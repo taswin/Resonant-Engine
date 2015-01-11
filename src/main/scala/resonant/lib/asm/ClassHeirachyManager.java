@@ -5,7 +5,6 @@ import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 import org.objectweb.asm.tree.ClassNode;
 import resonant.engine.Reference;
-import resonant.engine.ResonantEngine;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -92,8 +91,7 @@ public class ClassHeirachyManager implements IClassTransformer
 		}
         catch (IOException e)
         {
-            if(ResonantEngine.runningAsDev)
-				Reference.LOGGER.catching(e);
+			Reference.logger().catching(e);
 		}
 
         if (cache != null)
@@ -107,8 +105,7 @@ public class ClassHeirachyManager implements IClassTransformer
 		}
 		catch (ClassNotFoundException e)
 		{
-            if(ResonantEngine.runningAsDev)
-				Reference.LOGGER.catching(e);
+			Reference.logger().catching(e);
 		}
 
 		return cache;

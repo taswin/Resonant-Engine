@@ -277,16 +277,16 @@ public class WorldUtility
 				nameToClassMap.put(findTileID, replaceTile);
 				classToNameMap.put(replaceTile, findTileID);
 				classToNameMap.remove(findTile);
-				Reference.LOGGER.info("Replaced TileEntity: " + findTile);
+				Reference.logger().info("Replaced TileEntity: " + findTile);
 			}
 			else
 			{
-				Reference.LOGGER.error("Failed to replace TileEntity: " + findTile);
+				Reference.logger().error("Failed to replace TileEntity: " + findTile);
 			}
 		}
 		catch (Exception e)
 		{
-			Reference.LOGGER.error("Failed to replace TileEntity: " + findTile);
+			Reference.logger().error("Failed to replace TileEntity: " + findTile);
 			e.printStackTrace();
 		}
 	}

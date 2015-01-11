@@ -183,14 +183,14 @@ public class SaveManager
 					}
 					catch (Exception e)
 					{
-						Reference.LOGGER.catching(Level.FATAL, e);
-						Reference.LOGGER.fatal("SaveManager: An object %s(%s) has thrown an exception during loading, its state cannot be restored. Report this to the mod author", nbt.getString("id"), obj.getClass().getName());
+						Reference.logger().catching(Level.FATAL, e);
+						Reference.logger().fatal("SaveManager: An object %s(%s) has thrown an exception during loading, its state cannot be restored. Report this to the mod author", nbt.getString("id"), obj.getClass().getName());
 						obj = null;
 					}
 				}
 				else
 				{
-					Reference.LOGGER.warn("SaveManager: Skipping object with id " + nbt.getString("id"));
+					Reference.logger().warn("SaveManager: Skipping object with id " + nbt.getString("id"));
 				}
 
 				return obj;
@@ -257,7 +257,7 @@ public class SaveManager
 					}
 					else
 					{
-						throw new Exception("SaveManager: Object does not have a save ID");
+						throw new Exception("SaveManager: Object does not have a save id");
 					}
 				}
 				else
@@ -274,7 +274,7 @@ public class SaveManager
 	}
 
 	/**
-	 * Gets the ID that the class will be saved using
+	 * Gets the id that the class will be saved using
 	 */
 	public static String getID(Class clazz)
 	{
@@ -282,7 +282,7 @@ public class SaveManager
 	}
 
 	/**
-	 * Gets the class that was registered with the ID
+	 * Gets the class that was registered with the id
 	 */
 	public static Class getClass(String id)
 	{

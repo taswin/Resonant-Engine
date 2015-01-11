@@ -33,7 +33,7 @@ public abstract class Poison
 		this.name = name;
 		poisons.put(name, this);
 		poisonIDs.put(name, ++maxID);
-		isDisabled = Reference.CONFIGURATION.get("Disable Poison", "Disable " + this.name, false).getBoolean(false);
+		isDisabled = Reference.config().get("Disable Poison", "Disable " + this.name, false).getBoolean(false);
 	}
 
 	public static Poison getPoison(String name)

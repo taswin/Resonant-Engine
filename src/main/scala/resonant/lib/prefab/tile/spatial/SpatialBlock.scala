@@ -21,7 +21,6 @@ import net.minecraft.world.{Explosion, IBlockAccess, World}
 import net.minecraftforge.client.IItemRenderer
 import org.lwjgl.opengl.{GL11, GL12}
 import resonant.api.items.ISimpleItemRenderer
-import resonant.engine.{Reference, ResonantEngine}
 import resonant.lib.content.prefab.TIO
 import resonant.lib.prefab.tile.item.ItemBlockTooltip
 import resonant.lib.prefab.tile.traits.TRotatable
@@ -88,7 +87,7 @@ object SpatialBlock
 
 }
 
-abstract class SpatialBlock(val material: Material) extends TileEntity with TVectorWorld
+abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVectorWorld
 {
   /** Name of the block, unlocalized */
   var name = getClass.getSimpleName.replaceFirst("Tile", "").decapitalizeFirst
@@ -329,8 +328,6 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
       {
         case e: Exception =>
         {
-          if (ResonantEngine.runningAsDev)
-            Reference.LOGGER.catching(e)
         }
       }
     return false
@@ -591,6 +588,20 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
     return icon
   }
 
+  @SideOnly(Side.CLIENT)
+  protected def getTextureName: String =
+  {
+    if (textureName == null)
+      return "MISSING_ICON_TILE_" + Block.getIdFromBlock(block) + "_" + name
+    else
+      return block.dummyTile.domain + textureName
+  }
+
+  def setTextureName(value: String)
+  {
+    textureName = value
+  }
+
   /** Gets the icon that renders on the bottom
     * @param meta - placement data
     * @return icon that will render on bottom */
@@ -614,20 +625,6 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
     if (icon == null)
       icon = SpatialBlock.icon.get(getTextureName)
     return icon
-  }
-
-  @SideOnly(Side.CLIENT)
-  protected def getTextureName: String =
-  {
-    if (textureName == null)
-      return "MISSING_ICON_TILE_" + Block.getIdFromBlock(block) + "_" + name
-    else
-      return block.dummyTile.domain + textureName
-  }
-
-  def setTextureName(value: String)
-  {
-    textureName = value
   }
 
   @SideOnly(Side.CLIENT)
@@ -780,6 +777,8 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
    * @return true if solid
    */
   def isSolid(access: IBlockAccess, side: Int): Boolean = material.isSolid
+
+  final def material = newMaterial
 
   /** Render pass */
   def getRenderBlockPass: Int = 0

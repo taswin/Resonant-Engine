@@ -24,7 +24,7 @@ public class ResonantPacketHandler extends SimpleChannelInboundHandler<AbstractP
 		switch (FMLCommonHandler.instance().getEffectiveSide())
 		{
 			case CLIENT:
-				packet.handleClientSide(ResonantEngine.proxy.getClientPlayer());
+				packet.handleClientSide(ResonantEngine.proxy().getClientPlayer());
 				break;
 			case SERVER:
 				packet.handleServerSide(((NetHandlerPlayServer) netHandler).playerEntity);

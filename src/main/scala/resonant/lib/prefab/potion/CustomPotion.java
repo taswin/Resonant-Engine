@@ -41,7 +41,7 @@ public abstract class CustomPotion extends Potion
 	/**
 	 * Creates a new type of potion
 	 *
-	 * @param id          - The ID of this potion. Make it greater than 20.
+	 * @param id          - The id of this potion. Make it greater than 20.
 	 * @param isBadEffect - Is this potion a good potion or a bad one?
 	 * @param color       - The color of this potion.
 	 * @param name        - The name of this potion.
@@ -55,9 +55,9 @@ public abstract class CustomPotion extends Potion
 
 	public static int getPotionID(String name, int id)
 	{
-		Reference.CONFIGURATION.load();
-		int finalID = Reference.CONFIGURATION.get("Potion ID", name + " ID", id).getInt(id);
-		Reference.CONFIGURATION.save();
+		Reference.config().load();
+		int finalID = Reference.config().get("Potion id", name + " id", id).getInt(id);
+		Reference.config().save();
 		return finalID;
 	}
 

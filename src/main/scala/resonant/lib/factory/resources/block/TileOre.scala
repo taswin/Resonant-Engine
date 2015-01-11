@@ -33,7 +33,7 @@ class TileOre extends SpatialBlock(Material.rock) with TBlockResource
   override def registerIcons(iconRegister: IIconRegister)
   {
     super.registerIcons(iconRegister)
-    SpatialBlock.icon.put("oreForeground", iconRegister.registerIcon(Reference.PREFIX + "oreForeground"))
+    SpatialBlock.icon.put("oreForeground", iconRegister.registerIcon(Reference.prefix + "oreForeground"))
   }
 
   @SideOnly(Side.CLIENT)

@@ -4,10 +4,10 @@ import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
+import resonant.api.IUpdate;
 import resonant.api.tile.IReactor;
 import resonant.engine.ResonantEngine;
 import resonant.lib.grid.thermal.EventThermal.EventThermalUpdate;
-import resonant.api.IUpdate;
 import resonant.lib.transform.vector.VectorWorld;
 
 import java.util.HashMap;
@@ -127,7 +127,7 @@ public class ThermalGrid implements IUpdate
 	@Override
 	public boolean canUpdate()
 	{
-		return !ResonantEngine.proxy.isPaused();
+		return !ResonantEngine.proxy().isPaused();
 		// && ++tick % 20 == 0;
 	}
 

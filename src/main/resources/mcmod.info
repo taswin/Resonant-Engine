@@ -1,7 +1,7 @@
 [{
     "modid": "ResonantEngine",
     "name": "Resonant Engine",
-    "description": "Universal Electricity is a Minecraft modding library that provides an easy, flexible energy framework and compatibility bridges between various energy systems in Minecraft.",
+    "description": "Resonant Engine is a mod development engine designed to assist mod development by providing basic classes for packet handling, block creation, inventory handling, saving/loading of NBT and various prefabs.",
     "version": "${version}",
     "mcversion": "${mcversion}",
     "url": "http://universalelectricity.com/resonant-engine/",

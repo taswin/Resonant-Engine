@@ -1,18 +1,21 @@
 package resonant.engine;
 
 import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.Loader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.AdvancedModelLoader;
-import resonant.lib.render.wrapper.BlockRenderHandler$;
 import resonant.engine.content.debug.GuiCreativeBuilder;
 import resonant.engine.content.debug.TileCreativeBuilder;
 import resonant.lib.render.model.FixedTechneModelLoader;
+import resonant.lib.render.wrapper.BlockRenderHandler$;
+import resonant.lib.render.wrapper.RenderTileDummy;
 
 import javax.swing.*;
 
@@ -77,5 +80,14 @@ public class ClientProxy extends CommonProxy
 	public EntityPlayer getClientPlayer()
 	{
 		return Minecraft.getMinecraft().thePlayer;
+	}
+
+	@Override
+	public void registerDummyRenderer(Class<? extends TileEntity> clazz)
+	{
+		if (!TileEntityRendererDispatcher.instance.mapSpecialRenderers.containsKey(clazz))
+		{
+			ClientRegistry.bindTileEntitySpecialRenderer(clazz, new RenderTileDummy());
+		}
 	}
 }

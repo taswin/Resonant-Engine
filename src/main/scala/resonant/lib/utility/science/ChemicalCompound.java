@@ -15,7 +15,7 @@ public enum ChemicalCompound
 	 */
 	public final String formula;
 	/**
-	 * IUPAC ID
+	 * IUPAC id
 	 */
 	public final String compoundName;
 	/**

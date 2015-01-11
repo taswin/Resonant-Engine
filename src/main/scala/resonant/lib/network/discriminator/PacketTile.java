@@ -103,7 +103,7 @@ public class PacketTile extends PacketType
 				}
 				catch (IndexOutOfBoundsException ex)
 				{
-					System.out.println("Packet sent to a Tile[" + tile + "] failed to provide a packet ID");
+					System.out.println("Packet sent to a Tile[" + tile + "] failed to provide a packet id");
 					System.out.println("Location: " + new Vector3(x, y, z));
 					return;
 				}

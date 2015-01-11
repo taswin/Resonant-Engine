@@ -4,7 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import resonant.engine.ResonantEngine;
+import resonant.engine.content.ResonantContent;
 import resonant.lib.prefab.tile.multiblock.reference.IMultiBlock;
 import resonant.lib.transform.vector.Vector3;
 
@@ -19,7 +19,7 @@ public class SyntheticMultiblock
 
 	public SyntheticMultiblock()
 	{
-		blockMulti = ResonantEngine.contentRegistry.newBlock(TileSyntheticPart.class).setCreativeTab(null);
+		blockMulti = ResonantContent.manager().newBlock(TileSyntheticPart.class).setCreativeTab(null);
 	}
 
 	public void create(IMultiBlock tile)

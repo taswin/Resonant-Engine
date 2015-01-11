@@ -8,6 +8,6 @@ import resonant.engine.Reference
  */
 class ItemIngot extends TItemResource
 {
-  setTextureName(Reference.PREFIX + "ingot")
+  setTextureName(Reference.prefix + "ingot")
   setCreativeTab(CreativeTabs.tabMaterials)
 }

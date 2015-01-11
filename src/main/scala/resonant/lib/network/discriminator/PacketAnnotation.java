@@ -102,22 +102,22 @@ public class PacketAnnotation extends PacketType
 					}
 					else
 					{
-						Reference.LOGGER.error("Sent Annotation packet to null Tile: " + x + " : " + y + " : " + z);
+						Reference.logger().error("Sent Annotation packet to null Tile: " + x + " : " + y + " : " + z);
 					}
 				}
 				else
 				{
-					Reference.LOGGER.fatal("PacketAnnotation: Unsupported class type " + clazz);
+					Reference.logger().fatal("PacketAnnotation: Unsupported class type " + clazz);
 				}
 			}
 			else
 			{
-				Reference.LOGGER.fatal("PacketAnnotation: Unknown classID " + this.classID);
+				Reference.logger().fatal("PacketAnnotation: Unknown classID " + this.classID);
 			}
 		}// TODO replace catch with a set area of catches to allow for crashing on bad crashes
 		catch (Exception e)
 		{
-			Reference.LOGGER.fatal("Failed to read Annotation Packet", e);
+			Reference.logger().fatal("Failed to read Annotation Packet", e);
 			throw new UnsupportedOperationException(e);
 		}
 	}
@@ -146,13 +146,13 @@ public class PacketAnnotation extends PacketType
 				}
 				else
 				{
-					Reference.LOGGER.error("Sent Annotation packet to null Tile: " + x + " : " + y + " : " + z);
+					Reference.logger().error("Sent Annotation packet to null Tile: " + x + " : " + y + " : " + z);
 				}
 			}
 		}
 		catch (Exception e)
 		{
-			Reference.LOGGER.fatal("Failed to read Annotation Packet", e);
+			Reference.logger().fatal("Failed to read Annotation Packet", e);
 			throw new UnsupportedOperationException(e);
 		}
 	}

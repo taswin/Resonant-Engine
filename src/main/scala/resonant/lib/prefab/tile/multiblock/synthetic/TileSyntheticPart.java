@@ -9,13 +9,13 @@ import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
-import resonant.lib.prefab.tile.spatial.SpatialBlock;
-import resonant.lib.prefab.tile.spatial.SpatialTile;
 import resonant.engine.ResonantEngine;
-import resonant.lib.prefab.tile.multiblock.reference.IMultiBlock;
 import resonant.lib.network.discriminator.PacketTile;
 import resonant.lib.network.discriminator.PacketType;
 import resonant.lib.network.handle.IPacketReceiver;
+import resonant.lib.prefab.tile.multiblock.reference.IMultiBlock;
+import resonant.lib.prefab.tile.spatial.SpatialBlock;
+import resonant.lib.prefab.tile.spatial.SpatialTile;
 import resonant.lib.transform.vector.Vector3;
 
 /**
@@ -128,7 +128,7 @@ public class TileSyntheticPart extends SpatialTile implements IPacketReceiver
 		if (this.mainBlockPosition != null)
 		{
 			final PacketTile packetTile = new PacketTile(this, new Object[] { this.mainBlockPosition.xi(), this.mainBlockPosition.yi(), this.mainBlockPosition.zi() });
-			return ResonantEngine.instance.packetHandler.toMCPacket(packetTile);
+			return ResonantEngine.packetHandler().toMCPacket(packetTile);
 		}
 
 		return null;

@@ -26,7 +26,7 @@ import java.util.*;
 @SideOnly(Side.CLIENT)
 public class FXElectricBolt extends EntityFX
 {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(Reference.DOMAIN, Reference.TEXTURE_DIRECTORY + "fadedSphere.png");
+	private static final ResourceLocation TEXTURE = new ResourceLocation(Reference.domain(), Reference.textureDirectory() + "fadedSphere.png");
 	/**
 	 * Determines how complex the bolt is.
 	 */

@@ -1,6 +1,5 @@
 package resonant.lib.mod.content;
 
-import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.block.Block;
@@ -8,10 +7,11 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import resonant.lib.prefab.tile.item.ItemBlockMetadata;
 import resonant.api.items.ISimpleItemRenderer;
-import resonant.lib.prefab.tile.spatial.SpatialBlock;
+import resonant.engine.ResonantEngine;
+import resonant.lib.prefab.tile.item.ItemBlockMetadata;
 import resonant.lib.prefab.tile.spatial.BlockDummy;
+import resonant.lib.prefab.tile.spatial.SpatialBlock;
 import resonant.lib.render.wrapper.ItemRenderHandler;
 import resonant.lib.utility.LanguageUtility;
 
@@ -28,9 +28,6 @@ import java.util.WeakHashMap;
  */
 public class ModManager
 {
-	@SidedProxy(clientSide = "resonant.lib.mod.content.ClientRegistryProxy", serverSide = "resonant.lib.mod.content.CommonRegistryProxy")
-	public static CommonRegistryProxy proxy;
-
 	public final WeakHashMap<Block, String> blocks = new WeakHashMap();
 	public final WeakHashMap<Item, String> items = new WeakHashMap();
 
@@ -40,10 +37,10 @@ public class ModManager
 	public ModManager setPrefix(String modPrefix)
 	{
 		this.modPrefix = modPrefix;
-        if(!modPrefix.endsWith(":"))
-        {
-            this.modPrefix += ":";
-        }
+		if (!modPrefix.endsWith(":"))
+		{
+			this.modPrefix += ":";
+		}
 		return this;
 	}
 
@@ -131,24 +128,24 @@ public class ModManager
 
 		if (spatial.tile() != null)
 		{
-			proxy.registerTileEntity(name, modPrefix, spatial.tile().getClass());
+			ResonantEngine.proxy().registerTileEntity(name, modPrefix, spatial.tile().getClass());
 
 			if (!spatial.normalRender())
 			{
-				proxy.registerDummyRenderer(spatial.tile().getClass());
+				ResonantEngine.proxy().registerDummyRenderer(spatial.tile().getClass());
 			}
 		}
 
 		return block;
 	}
 
-    /**
-     * Creates a new instance of the block class as long as it has a default constructor
-     */
-    public Block newBlock(Class<? extends Block> blockClazz, Class<? extends ItemBlock> itemBlockClass)
-    {
-        return newBlock(blockClazz.getSimpleName(), blockClazz, itemBlockClass);
-    }
+	/**
+	 * Creates a new instance of the block class as long as it has a default constructor
+	 */
+	public Block newBlock(Class<? extends Block> blockClazz, Class<? extends ItemBlock> itemBlockClass)
+	{
+		return newBlock(blockClazz.getSimpleName(), blockClazz, itemBlockClass);
+	}
 
 	/**
 	 * Creates a new instance of the block class as long as it has a default constructor
@@ -158,25 +155,26 @@ public class ModManager
 		return newBlock(blockClazz.getSimpleName(), blockClazz);
 	}
 
-    /**
-     * Creates a new instance of the block class as long as it has a default constructor
-     */
-    public Block newBlock(String name, Class<? extends Block> blockClazz, Class<? extends ItemBlock> itemBlockClass)
-    {
-        try
-        {
-            return newBlock(name, blockClazz.newInstance(), itemBlockClass);
-        }
-        catch (InstantiationException e)
-        {
-            e.printStackTrace();
-        }
-        catch (IllegalAccessException e)
-        {
-            e.printStackTrace();
-        }
-        return null;
-    }
+	/**
+	 * Creates a new instance of the block class as long as it has a default constructor
+	 */
+	public Block newBlock(String name, Class<? extends Block> blockClazz, Class<? extends ItemBlock> itemBlockClass)
+	{
+		try
+		{
+			return newBlock(name, blockClazz.newInstance(), itemBlockClass);
+		}
+		catch (InstantiationException e)
+		{
+			e.printStackTrace();
+		}
+		catch (IllegalAccessException e)
+		{
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	/**
 	 * Creates a new instance of the block class as long as it has a default constructor
 	 */

@@ -3,7 +3,7 @@ package resonant.lib.factory.resources
 import net.minecraft.block.Block
 import net.minecraft.item.Item
 import net.minecraftforge.oredict.OreDictionary
-import resonant.engine.ResonantEngine
+import resonant.engine.content.ResonantContent
 import resonant.lib.factory.resources.block.{TBlockResource, TileOre}
 import resonant.lib.factory.resources.item.{ItemIngot, TItemResource}
 import resonant.lib.prefab.tile.spatial.SpatialBlock
@@ -61,7 +61,7 @@ object ResourceFactory
     newResource.name = resourceType + material.capitalizeFirst
     newResource.asInstanceOf[TBlockResource].resourceMaterial = material
 
-    val result = ResonantEngine.contentRegistry.newBlock(newResource)
+    val result = ResonantContent.manager.newBlock(newResource)
     generatedBlocks += (resourceType, material) -> result
 
     //Register ore dictionary
@@ -79,7 +79,7 @@ object ResourceFactory
     assert(materials.contains(material))
     val newResource = resourceItems(resourceType).newInstance()
     newResource.asInstanceOf[TItemResource].material = material
-    val result = ResonantEngine.contentRegistry.newItem(resourceType + material.capitalizeFirst, newResource)
+    val result = ResonantContent.manager.newItem(resourceType + material.capitalizeFirst, newResource)
     generatedItems += (resourceType, material) -> result
 
     //Register ore dictionary

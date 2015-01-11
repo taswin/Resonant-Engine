@@ -79,11 +79,11 @@ public class ReflectionUtility extends ReflectionHelper
         }
         catch (NoSuchFieldException e)
         {
-            Reference.LOGGER.catching(Level.ERROR, e);
+            Reference.logger().catching(Level.ERROR, e);
         }
         catch (IllegalAccessException e)
         {
-            Reference.LOGGER.catching(Level.ERROR, e);
+            Reference.logger().catching(Level.ERROR, e);
         }
     }
     /** Sets a field inside of Minecraft's code that is normally srg or obfuscated

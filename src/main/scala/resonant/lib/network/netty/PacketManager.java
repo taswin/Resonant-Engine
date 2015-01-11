@@ -106,7 +106,7 @@ public class PacketManager implements ICompatProxy
 	@Override
 	public String modId()
 	{
-		return Reference.NAME;
+		return Reference.name();
 	}
 
 	/**
@@ -122,7 +122,7 @@ public class PacketManager implements ICompatProxy
 
 	/**
 	 * @param packet the packet to send to the players in the dimension
-	 * @param dimId  the dimension ID to send to.
+	 * @param dimId  the dimension id to send to.
 	 */
 	public void sendToAllInDimension(AbstractPacket packet, int dimId)
 	{

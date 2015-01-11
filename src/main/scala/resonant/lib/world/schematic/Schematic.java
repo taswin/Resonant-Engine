@@ -14,8 +14,10 @@ import java.util.HashMap;
  */
 public abstract class Schematic
 {
-    /** Registry and unlocalized name "schematic.NAME-OF-SCHEMATIC.name" */
-    private String schematicName;
+	/**
+	 * Registry and unlocalized name "schematic.name-OF-SCHEMATIC.name"
+	 */
+	private String schematicName;
 
     public Schematic()
     {
@@ -29,7 +31,7 @@ public abstract class Schematic
 	/**
 	 * The name of the schematic that is unlocalized.
 	 *
-	 * @return "schematic.NAME-OF-SCHEMATIC.name"
+	 * @return "schematic.name-OF-SCHEMATIC.name"
 	 */
 	public String getName()
     {

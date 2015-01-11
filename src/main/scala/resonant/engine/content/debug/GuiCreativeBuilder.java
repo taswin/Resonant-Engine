@@ -3,11 +3,11 @@ package resonant.engine.content.debug;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import resonant.engine.ResonantEngine;
-import resonant.lib.prefab.gui.GuiContainerBase;
 import resonant.lib.network.discriminator.PacketTile;
+import resonant.lib.prefab.gui.GuiContainerBase;
+import resonant.lib.utility.LanguageUtility;
 import resonant.lib.world.schematic.Schematic;
 import resonant.lib.world.schematic.SchematicRegistry;
-import resonant.lib.utility.LanguageUtility;
 
 public class GuiCreativeBuilder extends GuiContainerBase
 {
@@ -81,7 +81,7 @@ public class GuiCreativeBuilder extends GuiContainerBase
 
 			if (builder.size() > 0)
 			{
-				ResonantEngine.instance.packetHandler.sendToServer(new PacketTile(builder, 0, builder.schematicID(), builder.size()));
+				ResonantEngine.packetHandler().sendToServer(new PacketTile(builder, 0, builder.schematicID(), builder.size()));
 				this.mc.thePlayer.closeScreen();
 			}
 		}

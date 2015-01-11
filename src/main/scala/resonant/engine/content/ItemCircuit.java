@@ -27,7 +27,7 @@ public class ItemCircuit extends ItemBase
 	@Override
 	public String getUnlocalizedName(ItemStack itemStack)
 	{
-		return "item." + Reference.PREFIX + TYPES[itemStack.getItemDamage()];
+		return "item." + Reference.prefix + TYPES[itemStack.getItemDamage()];
 	}
 
 	@Override

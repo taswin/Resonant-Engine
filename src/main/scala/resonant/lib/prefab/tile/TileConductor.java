@@ -16,11 +16,6 @@ import java.util.List;
  */
 public class TileConductor extends SpatialTile implements INodeProvider
 {
-    @Override public Material material()
-    {
-        return null;
-    }
-
     public NodeBranchPart node;
 
     public TileConductor()

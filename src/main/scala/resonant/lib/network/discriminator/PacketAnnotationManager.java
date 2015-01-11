@@ -27,15 +27,16 @@ import java.util.List;
  * @author tgame14
  * @since 26/05/14
  */
+@Deprecated
 public class PacketAnnotationManager
 {
 	public static final PacketAnnotationManager INSTANCE = new PacketAnnotationManager();
 	/**
-	 * A map of sync classes with their correspoding ID.
+	 * A map of sync classes with their correspoding id.
 	 */
 	protected final BiMap<Class, Integer> classPacketIDMap = HashBiMap.create();
 	/**
-	 * Class ID : List of PacketSet sorted by ID
+	 * Class id : List of PacketSet sorted by id
 	 */
 	protected final HashMap<Integer, HashMap<Integer, PacketSet>> packetSetIDMap = new HashMap<Integer, HashMap<Integer, PacketSet>>();
 	private int maxID = 0;
@@ -118,11 +119,11 @@ public class PacketAnnotationManager
 	{
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER)
 		{
-			ResonantEngine.instance.packetHandler.sendToAll(new PacketAnnotation(obj, packetSetID));
+			ResonantEngine.packetHandler().sendToAll(new PacketAnnotation(obj, packetSetID));
 		}
 		else
 		{
-			ResonantEngine.instance.packetHandler.sendToServer(new PacketAnnotation(obj, packetSetID));
+			ResonantEngine.packetHandler().sendToServer(new PacketAnnotation(obj, packetSetID));
 		}
 	}
 
@@ -284,7 +285,7 @@ public class PacketAnnotationManager
 
 						if (result == null)
 						{
-							Reference.LOGGER.fatal("Calclavia packet read a null field for " + obj.getClass().getSimpleName());
+							Reference.logger().fatal("Calclavia packet read a null field for " + obj.getClass().getSimpleName());
 						}
 					}
 					else
@@ -330,7 +331,7 @@ public class PacketAnnotationManager
 			}
 			catch (Exception e)
 			{
-				Reference.LOGGER.fatal("Resonant Engine annotation packet failed for " + obj.getClass().getSimpleName());
+				Reference.logger().fatal("Resonant Engine annotation packet failed for " + obj.getClass().getSimpleName());
 				e.printStackTrace();
 			}
 		}
