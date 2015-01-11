@@ -3,9 +3,6 @@
 
 death.attack.electrocution=%1$s got electrocuted!
 
-tile.resonant:unknown.name=Unknown Block
-item.resonant:unknown.name=Unknown Item
-
 ## Ores
 tile.resonant:oreCopper.name=Copper Ore
 tile.resonant:oreTin.name=Tin Ore

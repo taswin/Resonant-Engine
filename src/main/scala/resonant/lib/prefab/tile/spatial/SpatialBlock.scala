@@ -29,13 +29,13 @@ import resonant.lib.render.RenderUtility
 import resonant.lib.render.wrapper.RenderTileDummy
 import resonant.lib.transform.region.Cuboid
 import resonant.lib.transform.vector.{TVectorWorld, Vector2, Vector3, VectorWorld}
-import resonant.lib.utility.{LanguageUtility, WrenchUtility}
+import resonant.lib.utility.WrenchUtility
+import resonant.lib.wrapper.StringWrapper._
 import resonant.lib.wrapper.WrapList._
 
 import scala.beans.BeanProperty
 import scala.collection.convert.wrapAll._
 import scala.collection.immutable
-
 /**
  * All blocks inherit this class.
  *
@@ -91,7 +91,7 @@ object SpatialBlock
 abstract class SpatialBlock(val material: Material) extends TileEntity with TVectorWorld
 {
   /** Name of the block, unlocalized */
-  var name = LanguageUtility.decapitalizeFirst(this.getClass().getSimpleName().replaceFirst("Tile", ""))
+  var name = getClass.getSimpleName.replaceFirst("Tile", "").decapitalizeFirst
   /** ItemBlock class used to place this block */
   var itemBlock: Class[_ <: ItemBlock] = classOf[ItemBlockTooltip]
   /** ???? */
@@ -148,13 +148,13 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   /** Use update() instead */
   final override def updateEntity() = update()
 
+  def blockUpdate() = update()
+
   /** Called each tick */
   def update()
   {
 
   }
-
-  def blockUpdate() = update()
 
   def randomDisplayTick()
   {
@@ -530,13 +530,6 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
 
   def getCollisionBoxes: java.lang.Iterable[Cuboid] = immutable.List[Cuboid](bounds)
 
-  def getSelectBounds: Cuboid = bounds
-
-  @SideOnly(Side.CLIENT)
-  override def getRenderBoundingBox: AxisAlignedBB = (getCollisionBounds + toVectorWorld).toAABB
-
-  def getCollisionBounds: Cuboid = bounds
-
   /** Bounds for the block */
   def bounds = _bounds
 
@@ -548,6 +541,13 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
     if (block != null)
       block.setBlockBounds(_bounds.min.xf, _bounds.min.yf, _bounds.min.zf, _bounds.max.xf, _bounds.max.yf, _bounds.max.zf)
   }
+
+  def getSelectBounds: Cuboid = bounds
+
+  @SideOnly(Side.CLIENT)
+  override def getRenderBoundingBox: AxisAlignedBB = (getCollisionBounds + toVectorWorld).toAABB
+
+  def getCollisionBounds: Cuboid = bounds
 
   /**
    * Called in the world.
@@ -603,6 +603,33 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
     return icon
   }
 
+  /** Gets the icon that renders on the sides
+    * @param meta - placement data
+    * @param side - side of the icon
+    * @return icon that will render on sides */
+  @SideOnly(Side.CLIENT)
+  protected def getSideIcon(meta: Int, side: Int): IIcon =
+  {
+    var icon = SpatialBlock.icon.get(getTextureName + "_side")
+    if (icon == null)
+      icon = SpatialBlock.icon.get(getTextureName)
+    return icon
+  }
+
+  @SideOnly(Side.CLIENT)
+  protected def getTextureName: String =
+  {
+    if (textureName == null)
+      return "MISSING_ICON_TILE_" + Block.getIdFromBlock(block) + "_" + name
+    else
+      return block.dummyTile.domain + textureName
+  }
+
+  def setTextureName(value: String)
+  {
+    textureName = value
+  }
+
   @SideOnly(Side.CLIENT)
   def registerIcons(iconRegister: IIconRegister)
   {
@@ -649,6 +676,19 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
   def hasSpecialRenderer = getSpecialRenderer != null
 
   @SideOnly(Side.CLIENT)
+  def getSpecialRenderer: TileEntitySpecialRenderer =
+  {
+    val tesr: TileEntitySpecialRenderer = TileEntityRendererDispatcher.instance.getSpecialRendererByClass(getClass)
+
+    if (tesr != null && !tesr.isInstanceOf[RenderTileDummy])
+    {
+      return tesr
+    }
+
+    return null
+  }
+
+  @SideOnly(Side.CLIENT)
   def renderInventory(itemStack: ItemStack)
   {
     val tesr: TileEntitySpecialRenderer = getSpecialRenderer
@@ -659,7 +699,7 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
     }
     else if (normalRender || forceItemToRenderAsBlock)
     {
-      RenderUtility.renderNormalBlockAsItem(itemStack.getItem().asInstanceOf[ItemBlock].field_150939_a, itemStack.getItemDamage(), RenderUtility.renderBlocks)
+      RenderUtility.renderNormalBlockAsItem(itemStack.getItem.asInstanceOf[ItemBlock].field_150939_a, itemStack.getItemDamage, RenderUtility.renderBlocks)
     }
     if (noDynamicItemRenderCrash)
     {
@@ -677,19 +717,6 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
           }
         }
     }
-  }
-
-  @SideOnly(Side.CLIENT)
-  def getSpecialRenderer: TileEntitySpecialRenderer =
-  {
-    val tesr: TileEntitySpecialRenderer = TileEntityRendererDispatcher.instance.getSpecialRendererByClass(getClass)
-
-    if (tesr != null && !tesr.isInstanceOf[RenderTileDummy])
-    {
-      return tesr
-    }
-
-    return null
   }
 
   /**
@@ -869,33 +896,6 @@ abstract class SpatialBlock(val material: Material) extends TileEntity with TVec
     * @return icon that will render on sides */
   @SideOnly(Side.CLIENT)
   protected def getSideIcon(meta: Int): IIcon = getSideIcon(meta, 0)
-
-  /** Gets the icon that renders on the sides
-    * @param meta - placement data
-    * @param side - side of the icon
-    * @return icon that will render on sides */
-  @SideOnly(Side.CLIENT)
-  protected def getSideIcon(meta: Int, side: Int): IIcon =
-  {
-    var icon = SpatialBlock.icon.get(getTextureName + "_side")
-    if (icon == null)
-      icon = SpatialBlock.icon.get(getTextureName)
-    return icon
-  }
-
-  @SideOnly(Side.CLIENT)
-  protected def getTextureName: String =
-  {
-    if (textureName == null)
-      return "MISSING_ICON_TILE_" + Block.getIdFromBlock(block) + "_" + name
-    else
-      return block.dummyTile.domain + textureName
-  }
-
-  def setTextureName(value: java.lang.String)
-  {
-    textureName = value
-  }
 
   protected def markRender()
   {

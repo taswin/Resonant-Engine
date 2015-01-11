@@ -40,7 +40,8 @@ object ResourceFactory
 
   def registerMaterialColor(material: String, color: Int)
   {
-    materialColorCache += material -> color
+    if (!materialColorCache.contains(material))
+      materialColorCache += material -> color
   }
 
   def requestBlocks(material: String, except: String*): Map[String, Block] =
@@ -57,9 +58,10 @@ object ResourceFactory
   {
     assert(materials.contains(material))
     val newResource = resourceBlocks(resourceType).newInstance()
+    newResource.name = resourceType + material.capitalizeFirst
     newResource.asInstanceOf[TBlockResource].resourceMaterial = material
 
-    val result = ResonantEngine.contentRegistry.newBlock(resourceType + material.capitalizeFirst, newResource)
+    val result = ResonantEngine.contentRegistry.newBlock(newResource)
     generatedBlocks += (resourceType, material) -> result
 
     //Register ore dictionary
@@ -88,6 +90,10 @@ object ResourceFactory
   def getBlock(resourceType: String, material: String) = generatedBlocks((resourceType, material))
 
   def getItem(resourceType: String, material: String) = generatedItems((resourceType, material))
+
+  def getMaterial(block: Block) = generatedBlocks.map(keyVal => (keyVal._2, keyVal._1._2)).getOrElse(block, null)
+
+  def getMaterial(item: Item) = generatedItems.map(keyVal => (keyVal._2, keyVal._1._2)).getOrElse(item, null)
 
   def preInit()
   {

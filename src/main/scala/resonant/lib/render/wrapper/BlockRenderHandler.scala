@@ -14,7 +14,7 @@ object BlockRenderHandler extends ISimpleBlockRenderingHandler
 {
   val ID = RenderingRegistry.getNextAvailableRenderId()
 
-  def renderInventoryBlock(block: Block, metadata: Int, modelID: Int, renderer: RenderBlocks)
+  override def renderInventoryBlock(block: Block, metadata: Int, modelID: Int, renderer: RenderBlocks)
   {
     if (block.isInstanceOf[BlockDummy])
     {
@@ -29,7 +29,7 @@ object BlockRenderHandler extends ISimpleBlockRenderingHandler
     }
   }
 
-  def renderWorldBlock(access: IBlockAccess, x: Int, y: Int, z: Int, block: Block, modelId: Int, renderBlocks: RenderBlocks): Boolean =
+  override def renderWorldBlock(access: IBlockAccess, x: Int, y: Int, z: Int, block: Block, modelId: Int, renderBlocks: RenderBlocks): Boolean =
   {
     var renderer: SpatialBlock = null
 
@@ -56,14 +56,14 @@ object BlockRenderHandler extends ISimpleBlockRenderingHandler
 
     if (renderer != null)
     {
-      return renderer.renderStatic(renderBlocks, new Vector3(x, y, z), 0);
+      return renderer.renderStatic(renderBlocks, new Vector3(x, y, z), 0)
     }
 
     return false
   }
 
-  def shouldRender3DInInventory(modelId: Int) = true
+  override def shouldRender3DInInventory(modelId: Int) = true
 
-  def getRenderId() = BlockRenderHandler.ID
+  override def getRenderId = BlockRenderHandler.ID
 
 }
