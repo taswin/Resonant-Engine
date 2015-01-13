@@ -71,6 +71,47 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
     eject
   }
 
+  /**
+   * Injects and ejects data from the TileEntity.
+   */
+  def inject(access: IBlockAccess, x: Int, y: Int, z: Int)
+  {
+    if (access.isInstanceOf[World])
+    {
+      dummyTile.world(access.asInstanceOf[World])
+    }
+
+    dummyTile._access = access
+    dummyTile.xCoord = x
+    dummyTile.yCoord = y
+    dummyTile.zCoord = z
+
+    val tile: TileEntity = access.getTileEntity(x, y, z)
+
+    if (tile.isInstanceOf[SpatialBlock])
+    {
+      (tile.asInstanceOf[SpatialBlock]).block = this
+    }
+  }
+
+  def eject()
+  {
+    dummyTile.world(null)
+    dummyTile.xCoord = 0
+    dummyTile.yCoord = 0
+    dummyTile.zCoord = 0
+  }
+
+  def getTile(world: IBlockAccess, x: Int, y: Int, z: Int): SpatialBlock =
+  {
+    val tile: TileEntity = world.getTileEntity(x, y, z)
+    if (tile.isInstanceOf[SpatialBlock])
+    {
+      return tile.asInstanceOf[SpatialBlock]
+    }
+    return dummyTile
+  }
+
   override def getExplosionResistance(entity: Entity): Float = dummyTile.getExplosionResistance(entity)
 
   override def getExplosionResistance(entity: Entity, world: World, x: Int, y: Int, z: Int, explosionX: Double, explosionY: Double, explosionZ: Double): Float =
@@ -314,47 +355,6 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
     return value
   }
 
-  /**
-   * Injects and ejects data from the TileEntity.
-   */
-  def inject(access: IBlockAccess, x: Int, y: Int, z: Int)
-  {
-    if (access.isInstanceOf[World])
-    {
-      dummyTile.world(access.asInstanceOf[World])
-    }
-
-    dummyTile._access = access
-    dummyTile.xCoord = x
-    dummyTile.yCoord = y
-    dummyTile.zCoord = z
-
-    val tile: TileEntity = access.getTileEntity(x, y, z)
-
-    if (tile.isInstanceOf[SpatialBlock])
-    {
-      (tile.asInstanceOf[SpatialBlock]).block = this
-    }
-  }
-
-  def eject()
-  {
-    dummyTile.world(null)
-    dummyTile.xCoord = 0
-    dummyTile.yCoord = 0
-    dummyTile.zCoord = 0
-  }
-
-  def getTile(world: IBlockAccess, x: Int, y: Int, z: Int): SpatialBlock =
-  {
-    val tile: TileEntity = world.getTileEntity(x, y, z)
-    if (tile.isInstanceOf[SpatialBlock])
-    {
-      return tile.asInstanceOf[SpatialBlock]
-    }
-    return dummyTile
-  }
-
   override def getRenderBlockPass: Int = dummyTile.getRenderBlockPass
 
   override def tickRate(world: World): Int = dummyTile.tickRate(world)
@@ -375,7 +375,7 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
   {
     if (!world.isRemote && world.getGameRules.getGameRuleBooleanValue("doTileDrops"))
     {
-      InventoryUtility.dropItemStack(world, new Vector3(x, y, z), itemStack)
+      InventoryUtility.dropItemStack(world, new Vector3(x, y, z) + 0.5, itemStack)
     }
   }
 }

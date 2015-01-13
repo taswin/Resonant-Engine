@@ -13,9 +13,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import resonant.lib.utility.DummyPlayer;
 import resonant.lib.transform.vector.Vector3;
 import resonant.lib.transform.vector.VectorWorld;
+import resonant.lib.utility.DummyPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -348,9 +348,9 @@ public class InventoryUtility
 
 			if (randomAmount > 0)
 			{
-				randomX = world.rand.nextFloat() * randomAmount + (1.0F - randomAmount) * 0.5D;
-				randomY = world.rand.nextFloat() * randomAmount + (1.0F - randomAmount) * 0.5D;
-				randomZ = world.rand.nextFloat() * randomAmount + (1.0F - randomAmount) * 0.5D;
+				randomX = (world.rand.nextFloat() - 0.5) * 2 * randomAmount;
+				randomY = (world.rand.nextFloat() - 0.5) * 2 * randomAmount;
+				randomZ = (world.rand.nextFloat() - 0.5) * 2 * randomAmount;
 			}
 
 			EntityItem entityitem = new EntityItem(world, x + randomX, y + randomY, z + randomZ, itemStack);

@@ -6,10 +6,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import resonant.lib.utility.inventory.InventoryUtility;
-import resonant.lib.utility.nbt.NBTUtility;
 import resonant.lib.transform.vector.Vector3;
 import resonant.lib.transform.vector.VectorWorld;
+import resonant.lib.utility.inventory.InventoryUtility;
+import resonant.lib.utility.nbt.NBTUtility;
 
 /**
  * An item that can store a block's tile data.
@@ -26,16 +26,19 @@ public class ItemBlockSaved extends ItemBlockTooltip
 		this.setMaxStackSize(1);
 	}
 
+	@Deprecated
 	public static ItemStack getItemStackWithNBT(VectorWorld vector)
 	{
 		return getItemStackWithNBT(vector.world(), vector);
 	}
 
+	@Deprecated
 	public static ItemStack getItemStackWithNBT(World world, Vector3 vector)
 	{
 		return getItemStackWithNBT(world, vector.xi(), vector.yi(), vector.zi());
 	}
 
+	@Deprecated
 	public static ItemStack getItemStackWithNBT(World world, int x, int y, int z)
 	{
 		return getItemStackWithNBT(world.getBlock(x, y, z), world, x, y, z);
