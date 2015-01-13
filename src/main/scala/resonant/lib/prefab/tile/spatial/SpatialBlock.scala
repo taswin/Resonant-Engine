@@ -256,36 +256,11 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   def getDrops(metadata: Int, fortune: Int): util.ArrayList[ItemStack] =
   {
     val drops: util.ArrayList[ItemStack] = new util.ArrayList[ItemStack]
-    if (getBlockType != null)
+    if (block != null)
     {
-      drops.add(new ItemStack(getBlockType, quantityDropped(metadata, fortune), metadataDropped(metadata, fortune)))
+      drops.add(new ItemStack(block, quantityDropped(metadata, fortune), metadataDropped(metadata, fortune)))
     }
     return drops
-  }
-
-  /** Block object that goes to this tile */
-  override def getBlockType: Block =
-  {
-    if (access != null)
-    {
-      val b: Block = access.getBlock(xi, yi, zi)
-      if (b == null)
-      {
-        return block
-      }
-      return b
-    }
-    return block
-  }
-
-  def access: IBlockAccess =
-  {
-    if (world != null)
-    {
-      return world
-    }
-
-    return _access
   }
 
   /**
@@ -307,6 +282,21 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
    * @return meta value, shouldn't be less then 0
    */
   def metadataDropped(meta: Int, fortune: Int): Int = 0
+
+  /** Block object that goes to this tile */
+  override def getBlockType: Block =
+  {
+    if (access != null)
+    {
+      val b: Block = access.getBlock(xi, yi, zi)
+      if (b == null)
+      {
+        return block
+      }
+      return b
+    }
+    return block
+  }
 
   /**
    * Detects if the player is holding the control key down.
@@ -349,7 +339,7 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
    * @param target - block hit by a ray trace
    * @return ItemStack of your block, can be null but shouldn't unless the block can't be placed
    */
-  def getPickBlock(target: MovingObjectPosition): ItemStack = new ItemStack(getBlockType, 1, metadataDropped(metadata, 0))
+  def getPickBlock(target: MovingObjectPosition): ItemStack = new ItemStack(block, 1, metadataDropped(metadata, 0))
 
   /**
    * Gets the light value of the block
@@ -527,6 +517,8 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
 
   def getCollisionBoxes: java.lang.Iterable[Cuboid] = immutable.List[Cuboid](bounds)
 
+  def getSelectBounds: Cuboid = bounds
+
   /** Bounds for the block */
   def bounds = _bounds
 
@@ -538,8 +530,6 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
     if (block != null)
       block.setBlockBounds(_bounds.min.xf, _bounds.min.yf, _bounds.min.zf, _bounds.max.xf, _bounds.max.yf, _bounds.max.zf)
   }
-
-  def getSelectBounds: Cuboid = bounds
 
   @SideOnly(Side.CLIENT)
   override def getRenderBoundingBox: AxisAlignedBB = (getCollisionBounds + toVectorWorld).toAABB
@@ -588,20 +578,6 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
     return icon
   }
 
-  @SideOnly(Side.CLIENT)
-  protected def getTextureName: String =
-  {
-    if (textureName == null)
-      return "MISSING_ICON_TILE_" + Block.getIdFromBlock(block) + "_" + name
-    else
-      return block.dummyTile.domain + textureName
-  }
-
-  def setTextureName(value: String)
-  {
-    textureName = value
-  }
-
   /** Gets the icon that renders on the bottom
     * @param meta - placement data
     * @return icon that will render on bottom */
@@ -625,6 +601,20 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
     if (icon == null)
       icon = SpatialBlock.icon.get(getTextureName)
     return icon
+  }
+
+  @SideOnly(Side.CLIENT)
+  protected def getTextureName: String =
+  {
+    if (textureName == null)
+      return "MISSING_ICON_TILE_" + Block.getIdFromBlock(block) + "_" + name
+    else
+      return block.dummyTile.domain + textureName
+  }
+
+  def setTextureName(value: String)
+  {
+    textureName = value
   }
 
   @SideOnly(Side.CLIENT)
@@ -673,19 +663,6 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   def hasSpecialRenderer = getSpecialRenderer != null
 
   @SideOnly(Side.CLIENT)
-  def getSpecialRenderer: TileEntitySpecialRenderer =
-  {
-    val tesr: TileEntitySpecialRenderer = TileEntityRendererDispatcher.instance.getSpecialRendererByClass(getClass)
-
-    if (tesr != null && !tesr.isInstanceOf[RenderTileDummy])
-    {
-      return tesr
-    }
-
-    return null
-  }
-
-  @SideOnly(Side.CLIENT)
   def renderInventory(itemStack: ItemStack)
   {
     val tesr: TileEntitySpecialRenderer = getSpecialRenderer
@@ -714,6 +691,19 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
           }
         }
     }
+  }
+
+  @SideOnly(Side.CLIENT)
+  def getSpecialRenderer: TileEntitySpecialRenderer =
+  {
+    val tesr: TileEntitySpecialRenderer = TileEntityRendererDispatcher.instance.getSpecialRendererByClass(getClass)
+
+    if (tesr != null && !tesr.isInstanceOf[RenderTileDummy])
+    {
+      return tesr
+    }
+
+    return null
   }
 
   /**
@@ -746,6 +736,16 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   }
 
   def metadata: Int = if (access != null) access.getBlockMetadata(xi, yi, zi) else 0
+
+  def access: IBlockAccess =
+  {
+    if (world != null)
+    {
+      return world
+    }
+
+    return _access
+  }
 
   //TODO: Get rid of parameters
   def shouldSideBeRendered(access: IBlockAccess, x: Int, y: Int, z: Int, side: Int): Boolean =
@@ -901,12 +901,12 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
     world.func_147479_m(xi, yi, zi)
   }
 
-  override def world: World = getWorldObj
-
   protected def markUpdate()
   {
     world.markBlockForUpdate(xi, yi, zi)
   }
+
+  override def world: World = getWorldObj
 
   protected def updateLight()
   {
