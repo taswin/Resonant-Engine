@@ -173,15 +173,6 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
     creativeTab = value
   }
 
-  /**
-   * Sets the creative tab
-   * @param value - tab to set
-   */
-  def setCreativeTab(value: CreativeTabs)
-  {
-    creativeTab = value
-  }
-
   /** Gets the creative tab */
   def creativeTab = _creativeTab
 
@@ -189,6 +180,15 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   {
     _creativeTab = value
     isCreativeTabSet = true
+  }
+
+  /**
+   * Sets the creative tab
+   * @param value - tab to set
+   */
+  def setCreativeTab(value: CreativeTabs)
+  {
+    creativeTab = value
   }
 
   def itemBlock(item: Class[_ <: ItemBlock]): Unit =
@@ -248,7 +248,7 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   def center: VectorWorld = toVectorWorld + 0.5
 
   /**
-   * Gets all ItemStacks dropped by this machine when its destroyed
+   * Gets all ItemStacks dropped by this machine when it is destroyed. This is called AFTER the block is destroyed!
    * @param metadata - meta value of the block when broken
    * @param fortune - bonus of the tool mining it
    * @return ArrayList of Items
@@ -340,6 +340,18 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
    * @return ItemStack of your block, can be null but shouldn't unless the block can't be placed
    */
   def getPickBlock(target: MovingObjectPosition): ItemStack = new ItemStack(block, 1, metadataDropped(metadata, 0))
+
+  def metadata: Int = if (access != null) access.getBlockMetadata(xi, yi, zi) else 0
+
+  def access: IBlockAccess =
+  {
+    if (world != null)
+    {
+      return world
+    }
+
+    return _access
+  }
 
   /**
    * Gets the light value of the block
@@ -663,6 +675,19 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   def hasSpecialRenderer = getSpecialRenderer != null
 
   @SideOnly(Side.CLIENT)
+  def getSpecialRenderer: TileEntitySpecialRenderer =
+  {
+    val tesr: TileEntitySpecialRenderer = TileEntityRendererDispatcher.instance.getSpecialRendererByClass(getClass)
+
+    if (tesr != null && !tesr.isInstanceOf[RenderTileDummy])
+    {
+      return tesr
+    }
+
+    return null
+  }
+
+  @SideOnly(Side.CLIENT)
   def renderInventory(itemStack: ItemStack)
   {
     val tesr: TileEntitySpecialRenderer = getSpecialRenderer
@@ -691,19 +716,6 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
           }
         }
     }
-  }
-
-  @SideOnly(Side.CLIENT)
-  def getSpecialRenderer: TileEntitySpecialRenderer =
-  {
-    val tesr: TileEntitySpecialRenderer = TileEntityRendererDispatcher.instance.getSpecialRendererByClass(getClass)
-
-    if (tesr != null && !tesr.isInstanceOf[RenderTileDummy])
-    {
-      return tesr
-    }
-
-    return null
   }
 
   /**
@@ -735,18 +747,6 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
     }
   }
 
-  def metadata: Int = if (access != null) access.getBlockMetadata(xi, yi, zi) else 0
-
-  def access: IBlockAccess =
-  {
-    if (world != null)
-    {
-      return world
-    }
-
-    return _access
-  }
-
   //TODO: Get rid of parameters
   def shouldSideBeRendered(access: IBlockAccess, x: Int, y: Int, z: Int, side: Int): Boolean =
   {
@@ -760,6 +760,8 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
 
   /** Is this block being indirectly being powered */
   def isIndirectlyPowered: Boolean = world.isBlockIndirectlyGettingPowered(xi, yi, zi)
+
+  override def world: World = getWorldObj
 
   /** Gets the level of power provide to this block */
   def getStrongestIndirectPower: Int = world.getStrongestIndirectPower(xi, yi, zi)
@@ -905,8 +907,6 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   {
     world.markBlockForUpdate(xi, yi, zi)
   }
-
-  override def world: World = getWorldObj
 
   protected def updateLight()
   {

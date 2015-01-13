@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
@@ -68,7 +69,7 @@ public class RenderItemOverlayUtility
 
 				GL11.glTranslated(translation.x(), translation.y(), translation.z());
 				GL11.glScalef(scale, scale, scale);
-				renderItem(tileEntity.getWorldObj(), ForgeDirection.NORTH, inventory[i], new Vector3(0, 0, 0), 0, 1);
+				renderItem(tileEntity.getWorldObj(), inventory[i], new Vector3(0, 0, 0), 0, 1);
 				GL11.glPopMatrix();
 
 				if (isLooking)
@@ -230,17 +231,24 @@ public class RenderItemOverlayUtility
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, var11 * scale, var12 * scale);
 	}
 
-	public static void renderItem(World world, ForgeDirection dir, ItemStack itemStack, Vector3 position, float rotationYaw, int angle)
+	public static void renderItem(World world, ItemStack itemStack, Vector3 position, float rotationYaw, int angle)
 	{
 		if (itemStack != null)
 		{
-			EntityItem entityItem = new EntityItem(world, 0.0D, 0.0D, 0.0D, itemStack.copy());
+			EntityItem entityItem = new EntityItem(world, position.x(), position.y(), position.z(), itemStack.copy());
 			entityItem.getEntityItem().stackSize = 1;
 			entityItem.hoverStart = 0.0F;
 			GL11.glPushMatrix();
-			GL11.glTranslated(position.x(), position.y(), position.z());
-			GL11.glRotatef(180.0F + rotationYaw, 0.0F, 1.0F, 0.0F);
-			GL11.glRotatef(90 * angle, 1, 0, 0);
+
+			if (!(itemStack.getItem() instanceof ItemBlock))
+			{
+				GL11.glRotatef(180 + rotationYaw, 0, 1, 0);
+				GL11.glRotatef(90 * angle, 1, 0, 0);
+			}
+			else
+			{
+				GL11.glTranslated(0, 0, -0.15);
+			}
 
 			RenderItem renderItem = ((RenderItem) RenderManager.instance.getEntityClassRenderObject(EntityItem.class));
 

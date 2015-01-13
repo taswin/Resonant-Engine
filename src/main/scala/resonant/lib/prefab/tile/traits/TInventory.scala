@@ -9,8 +9,8 @@ import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.tile.IInventoryProvider
 import resonant.api.tile.node.IExternalInventory
 import resonant.lib.prefab.tile.spatial.SpatialBlock
-import resonant.lib.utility.inventory.{ExternalInventory, InventoryUtility}
 import resonant.lib.transform.vector.Vector3
+import resonant.lib.utility.inventory.{ExternalInventory, InventoryUtility}
 
 /**
  * A trait applied to inventory objects.
@@ -38,17 +38,25 @@ trait TInventory extends SpatialBlock with IInventoryProvider with ISidedInvento
 
   override def getStackInSlot(index: Int): ItemStack = this.getInventory().getStackInSlot(index)
 
+  override def getInventory(): IExternalInventory = inventory
+
   override def setInventorySlotContents(index: Int, stack: ItemStack)
   {
     this.getInventory().setInventorySlotContents(index, stack)
     onInventoryChanged()
   }
 
+  /** Called each time the inventory changes */
+  def onInventoryChanged()
+  {
+
+  }
+
   override def getStackInSlotOnClosing(index: Int): ItemStack = this.getInventory().getStackInSlotOnClosing(index)
 
-  override def getInventoryName : String = getBlockType.getLocalizedName
+  override def getInventoryName: String = getBlockType.getLocalizedName
 
-  override def hasCustomInventoryName : Boolean = inventory.hasCustomInventoryName()
+  override def hasCustomInventoryName: Boolean = inventory.hasCustomInventoryName()
 
   override def getInventoryStackLimit = getInventory.getInventoryStackLimit
 
@@ -160,29 +168,25 @@ trait TInventory extends SpatialBlock with IInventoryProvider with ISidedInvento
     return false
   }
 
-  /** Called each time the inventory changes */
-  def onInventoryChanged()
+  override def onRemove(block: Block, metadata: Int)
   {
-
-  }
-
-  override def onRemove(block: Block, par6: Int)
-  {
-    super.onRemove(block, par6)
-    dropEntireInventory(block, par6)
+    super.onRemove(block, metadata)
+    dropEntireInventory(block, metadata)
   }
 
   def dropEntireInventory(block: Block, par6: Int)
   {
     if (!world.isRemote)
     {
-
-      (0 until getSizeInventory) filter (getStackInSlot(_) != null) foreach (
-                                                                            i =>
-                                                                            {
-                                                                              InventoryUtility.dropItemStack(world, center, getStackInSlot(i))
-                                                                              setInventorySlotContents(i, null)
-                                                                            })
+      (0 until getSizeInventory)
+        .filter(getStackInSlot(_) != null)
+        .foreach(
+          i =>
+          {
+            InventoryUtility.dropItemStack(world, center, getStackInSlot(i))
+            setInventorySlotContents(i, null)
+          }
+        )
     }
     onInventoryChanged()
     markDirty()
@@ -199,6 +203,4 @@ trait TInventory extends SpatialBlock with IInventoryProvider with ISidedInvento
     super.writeToNBT(nbt)
     getInventory.save(nbt)
   }
-
-  override def getInventory(): IExternalInventory = inventory
 }
