@@ -70,6 +70,11 @@ public class BranchGridTest extends TestCase
 			assertEquals("Should only be " + WireMap.WireTests.JUNCTION_FIVE.numberOfJunctions + " junction", WireMap.WireTests.JUNCTION_FIVE.numberOfJunctions, j, 0);
 		}
 	*/
+    public void testDummy()
+    {
+
+    }
+
     @Override
     protected void setUp() throws Exception
     {
