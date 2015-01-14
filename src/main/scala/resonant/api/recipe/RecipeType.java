@@ -6,5 +6,5 @@ package resonant.api.recipe;
  */
 public enum RecipeType
 {
-	CRUSHER, GRINDER, MIXER, SMELTER, SAWMILL
+	GRINDER, SIFTER, MIXER, SMELTER, SAWMILL
 }

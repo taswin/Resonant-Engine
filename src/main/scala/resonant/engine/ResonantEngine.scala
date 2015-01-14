@@ -97,12 +97,12 @@ object ResonantEngine
     OreDictionary.registerOre("oreIron", Blocks.iron_ore)
     OreDictionary.registerOre("oreLapis", Blocks.lapis_ore)
     MachineRecipes.instance.addRecipe(RecipeType.SMELTER.name, new FluidStack(FluidRegistry.LAVA, FluidContainerRegistry.BUCKET_VOLUME), new ItemStack(Blocks.stone))
-    MachineRecipes.instance.addRecipe(RecipeType.CRUSHER.name, Blocks.cobblestone, Blocks.gravel)
-    MachineRecipes.instance.addRecipe(RecipeType.CRUSHER.name, Blocks.stone, Blocks.cobblestone)
-    MachineRecipes.instance.addRecipe(RecipeType.CRUSHER.name, Blocks.chest, new ItemStack(Blocks.planks, 7, 0))
-    MachineRecipes.instance.addRecipe(RecipeType.GRINDER.name, Blocks.cobblestone, Blocks.sand)
-    MachineRecipes.instance.addRecipe(RecipeType.GRINDER.name, Blocks.gravel, Blocks.sand)
-    MachineRecipes.instance.addRecipe(RecipeType.GRINDER.name, Blocks.glass, Blocks.sand)
+    MachineRecipes.instance.addRecipe(RecipeType.GRINDER.name, Blocks.cobblestone, Blocks.gravel)
+    MachineRecipes.instance.addRecipe(RecipeType.GRINDER.name, Blocks.stone, Blocks.cobblestone)
+    MachineRecipes.instance.addRecipe(RecipeType.GRINDER.name, Blocks.chest, new ItemStack(Blocks.planks, 7, 0))
+    MachineRecipes.instance.addRecipe(RecipeType.SIFTER.name, Blocks.cobblestone, Blocks.sand)
+    MachineRecipes.instance.addRecipe(RecipeType.SIFTER.name, Blocks.gravel, Blocks.sand)
+    MachineRecipes.instance.addRecipe(RecipeType.SIFTER.name, Blocks.glass, Blocks.sand)
     Reference.config.save()
   }
 
