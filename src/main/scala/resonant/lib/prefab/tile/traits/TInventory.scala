@@ -11,6 +11,7 @@ import resonant.api.tile.node.IExternalInventory
 import resonant.lib.prefab.tile.spatial.SpatialBlock
 import resonant.lib.transform.vector.Vector3
 import resonant.lib.utility.inventory.{ExternalInventory, InventoryUtility}
+import resonant.lib.wrapper.ItemWrapper._
 
 /**
  * A trait applied to inventory objects.
@@ -38,8 +39,6 @@ trait TInventory extends SpatialBlock with IInventoryProvider with ISidedInvento
 
   override def getStackInSlot(index: Int): ItemStack = this.getInventory().getStackInSlot(index)
 
-  override def getInventory(): IExternalInventory = inventory
-
   override def setInventorySlotContents(index: Int, stack: ItemStack)
   {
     this.getInventory().setInventorySlotContents(index, stack)
@@ -62,17 +61,19 @@ trait TInventory extends SpatialBlock with IInventoryProvider with ISidedInvento
 
   override def isUseableByPlayer(entityplayer: EntityPlayer) = getInventory.isUseableByPlayer(entityplayer)
 
-  override def openInventory = getInventory.openInventory()
+  override def getInventory: IExternalInventory = inventory
 
-  override def closeInventory = getInventory.closeInventory()
+  override def openInventory() = getInventory.openInventory()
 
-  def isItemValidForSlot(i: Int, itemstack: ItemStack): Boolean = this.getInventory.isItemValidForSlot(i, itemstack)
+  override def closeInventory() = getInventory.closeInventory()
+
+  def isItemValidForSlot(i: Int, itemStack: ItemStack): Boolean = this.getInventory.isItemValidForSlot(i, itemStack)
 
   def getAccessibleSlotsFromSide(var1: Int): Array[Int] = this.getInventory.getAccessibleSlotsFromSide(var1)
 
-  def canInsertItem(i: Int, itemstack: ItemStack, j: Int): Boolean = this.getInventory.canInsertItem(i, itemstack, j)
+  def canInsertItem(i: Int, itemStack: ItemStack, j: Int): Boolean = this.getInventory.canInsertItem(i, itemStack, j)
 
-  def canExtractItem(i: Int, itemstack: ItemStack, j: Int): Boolean = this.getInventory.canExtractItem(i, itemstack, j)
+  def canExtractItem(i: Int, itemStack: ItemStack, j: Int): Boolean = this.getInventory.canExtractItem(i, itemStack, j)
 
   def canStore(stack: ItemStack, slot: Int, side: ForgeDirection): Boolean = false
 
@@ -86,24 +87,26 @@ trait TInventory extends SpatialBlock with IInventoryProvider with ISidedInvento
   def interactCurrentItem(inventory: IInventory, slotID: Int, player: EntityPlayer): Boolean =
   {
     val stackInInventory: ItemStack = inventory.getStackInSlot(slotID)
-    val current: ItemStack = player.inventory.getCurrentItem
+    val current = player.inventory.getCurrentItem
+
     if (current != null)
     {
-      if (stackInInventory == null || ItemStack.areItemStacksEqual(stackInInventory, current))
+      if (stackInInventory == null || current.areItemsEqual(stackInInventory))
       {
         return insertCurrentItem(inventory, slotID, player)
       }
     }
+
     return extractItem(inventory, slotID, player)
   }
 
   def insertCurrentItem(inventory: IInventory, slotID: Int, player: EntityPlayer): Boolean =
   {
-    val stackInInventory: ItemStack = inventory.getStackInSlot(slotID)
+    val stackInInventory = inventory.getStackInSlot(slotID)
     var current: ItemStack = player.inventory.getCurrentItem
     if (current != null)
     {
-      if (stackInInventory == null || ItemStack.areItemStacksEqual(stackInInventory, current))
+      if (stackInInventory == null || current.areItemsEqual(stackInInventory))
       {
         if (inventory.isItemValidForSlot(slotID, current))
         {

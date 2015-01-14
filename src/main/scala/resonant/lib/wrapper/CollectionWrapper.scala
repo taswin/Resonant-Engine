@@ -6,9 +6,8 @@ import java.util.{Collection, List => JList}
  * Wraps java non-generic lists to auto-cast generic for Scala compatibility.
  * @author Calclavia
  */
-object WrapList
+object CollectionWrapper
 {
-
   implicit class ListWithGenericAdd[T](list: JList[T])
   {
     def add(value: Any) = list.add(value.asInstanceOf[T])

@@ -29,8 +29,8 @@ import resonant.lib.render.wrapper.RenderTileDummy
 import resonant.lib.transform.region.Cuboid
 import resonant.lib.transform.vector.{TVectorWorld, Vector2, Vector3, VectorWorld}
 import resonant.lib.utility.WrenchUtility
+import resonant.lib.wrapper.CollectionWrapper._
 import resonant.lib.wrapper.StringWrapper._
-import resonant.lib.wrapper.WrapList._
 
 import scala.beans.BeanProperty
 import scala.collection.convert.wrapAll._
@@ -198,6 +198,18 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   def bounds(cuboid: Cuboid)
   {
     bounds = cuboid
+  }
+
+  /** Bounds for the block */
+  def bounds = _bounds
+
+  /** Sets the block bounds */
+  def bounds_=(cuboid: Cuboid)
+  {
+    _bounds = cuboid
+
+    if (block != null)
+      block.setBlockBounds(_bounds.min.xf, _bounds.min.yf, _bounds.min.zf, _bounds.max.xf, _bounds.max.yf, _bounds.max.zf)
   }
 
   /** Sets the dummy block class uses by this spatial block */
@@ -531,18 +543,6 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
 
   def getSelectBounds: Cuboid = bounds
 
-  /** Bounds for the block */
-  def bounds = _bounds
-
-  /** Sets the block bounds */
-  def bounds_=(cuboid: Cuboid)
-  {
-    _bounds = cuboid
-
-    if (block != null)
-      block.setBlockBounds(_bounds.min.xf, _bounds.min.yf, _bounds.min.zf, _bounds.max.xf, _bounds.max.yf, _bounds.max.zf)
-  }
-
   @SideOnly(Side.CLIENT)
   override def getRenderBoundingBox: AxisAlignedBB = (getCollisionBounds + toVectorWorld).toAABB
 
@@ -590,6 +590,20 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
     return icon
   }
 
+  @SideOnly(Side.CLIENT)
+  protected def getTextureName: String =
+  {
+    if (textureName == null)
+      return "MISSING_ICON_TILE_" + Block.getIdFromBlock(block) + "_" + name
+    else
+      return block.dummyTile.domain + textureName
+  }
+
+  def setTextureName(value: String)
+  {
+    textureName = value
+  }
+
   /** Gets the icon that renders on the bottom
     * @param meta - placement data
     * @return icon that will render on bottom */
@@ -613,20 +627,6 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
     if (icon == null)
       icon = SpatialBlock.icon.get(getTextureName)
     return icon
-  }
-
-  @SideOnly(Side.CLIENT)
-  protected def getTextureName: String =
-  {
-    if (textureName == null)
-      return "MISSING_ICON_TILE_" + Block.getIdFromBlock(block) + "_" + name
-    else
-      return block.dummyTile.domain + textureName
-  }
-
-  def setTextureName(value: String)
-  {
-    textureName = value
   }
 
   @SideOnly(Side.CLIENT)
@@ -761,8 +761,6 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   /** Is this block being indirectly being powered */
   def isIndirectlyPowered: Boolean = world.isBlockIndirectlyGettingPowered(xi, yi, zi)
 
-  override def world: World = getWorldObj
-
   /** Gets the level of power provide to this block */
   def getStrongestIndirectPower: Int = world.getStrongestIndirectPower(xi, yi, zi)
 
@@ -854,6 +852,8 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
 
   def setMeta(meta: Int)
   { world.setBlockMetadataWithNotify(xi, yi, zi, meta, 3) }
+
+  override def world: World = getWorldObj
 
   override def getBlockMetadata: Int =
   {

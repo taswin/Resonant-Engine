@@ -7,8 +7,8 @@ import net.minecraft.item.{Item, ItemStack}
 import org.lwjgl.input.Keyboard
 import resonant.lib.render.EnumColor
 import resonant.lib.utility.TooltipUtility
+import resonant.lib.wrapper.CollectionWrapper._
 import resonant.lib.wrapper.StringWrapper._
-import resonant.lib.wrapper.WrapList._
 
 /**
  * @author Calclavia

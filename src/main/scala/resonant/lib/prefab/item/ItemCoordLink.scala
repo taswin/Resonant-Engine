@@ -10,9 +10,8 @@ import net.minecraft.block.Block
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import resonant.lib.prefab.item.ItemTooltip
-import resonant.lib.wrapper.WrapList._
 import resonant.lib.transform.vector.VectorWorld
+import resonant.lib.wrapper.CollectionWrapper._
 
 /**
  * @author Calclavia

@@ -16,7 +16,7 @@ import resonant.lib.render.wrapper.BlockRenderHandler
 import resonant.lib.transform.region.Cuboid
 import resonant.lib.transform.vector.Vector3
 import resonant.lib.utility.inventory.InventoryUtility
-import resonant.lib.wrapper.WrapList._
+import resonant.lib.wrapper.CollectionWrapper._
 
 class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyTile: SpatialBlock) extends Block(dummyTile.material) with ITileEntityProvider
 {
@@ -69,47 +69,6 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
     inject(world, x, y, z)
     getTile(world, x, y, z).onFillRain
     eject
-  }
-
-  /**
-   * Injects and ejects data from the TileEntity.
-   */
-  def inject(access: IBlockAccess, x: Int, y: Int, z: Int)
-  {
-    if (access.isInstanceOf[World])
-    {
-      dummyTile.world(access.asInstanceOf[World])
-    }
-
-    dummyTile._access = access
-    dummyTile.xCoord = x
-    dummyTile.yCoord = y
-    dummyTile.zCoord = z
-
-    val tile: TileEntity = access.getTileEntity(x, y, z)
-
-    if (tile.isInstanceOf[SpatialBlock])
-    {
-      (tile.asInstanceOf[SpatialBlock]).block = this
-    }
-  }
-
-  def eject()
-  {
-    dummyTile.world(null)
-    dummyTile.xCoord = 0
-    dummyTile.yCoord = 0
-    dummyTile.zCoord = 0
-  }
-
-  def getTile(world: IBlockAccess, x: Int, y: Int, z: Int): SpatialBlock =
-  {
-    val tile: TileEntity = world.getTileEntity(x, y, z)
-    if (tile.isInstanceOf[SpatialBlock])
-    {
-      return tile.asInstanceOf[SpatialBlock]
-    }
-    return dummyTile
   }
 
   override def getExplosionResistance(entity: Entity): Float = dummyTile.getExplosionResistance(entity)
@@ -201,6 +160,47 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
     inject(world, x, y, z)
     getTile(world, x, y, z).blockUpdate()
     eject
+  }
+
+  /**
+   * Injects and ejects data from the TileEntity.
+   */
+  def inject(access: IBlockAccess, x: Int, y: Int, z: Int)
+  {
+    if (access.isInstanceOf[World])
+    {
+      dummyTile.world(access.asInstanceOf[World])
+    }
+
+    dummyTile._access = access
+    dummyTile.xCoord = x
+    dummyTile.yCoord = y
+    dummyTile.zCoord = z
+
+    val tile: TileEntity = access.getTileEntity(x, y, z)
+
+    if (tile.isInstanceOf[SpatialBlock])
+    {
+      (tile.asInstanceOf[SpatialBlock]).block = this
+    }
+  }
+
+  def eject()
+  {
+    dummyTile.world(null)
+    dummyTile.xCoord = 0
+    dummyTile.yCoord = 0
+    dummyTile.zCoord = 0
+  }
+
+  def getTile(world: IBlockAccess, x: Int, y: Int, z: Int): SpatialBlock =
+  {
+    val tile: TileEntity = world.getTileEntity(x, y, z)
+    if (tile.isInstanceOf[SpatialBlock])
+    {
+      return tile.asInstanceOf[SpatialBlock]
+    }
+    return dummyTile
   }
 
   @SideOnly(Side.CLIENT)
