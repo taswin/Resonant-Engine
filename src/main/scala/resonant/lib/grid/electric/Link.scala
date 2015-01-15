@@ -18,4 +18,10 @@ class Link(val intersectionA: Intersection, val intersectionB: Intersection)
     // Calculating current based on voltage and resistance.
     current = voltage / resistance
   }
+
+  def reconstruct()
+  {
+    intersectionA.links += this
+    intersectionB.links += this
+  }
 }

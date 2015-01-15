@@ -8,5 +8,6 @@ import resonant.lib.prefab.tile.spatial.SpatialTile
 
 class TileElectric(material: Material) extends SpatialTile(material: Material) with TElectric with TEnergyBuffer
 {
-  override def getEnergyStorage(): EnergyStorage = dcNode.getEnergyStorage()
+  @deprecated
+  override def getEnergyStorage(): EnergyStorage = null
 }

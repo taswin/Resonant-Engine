@@ -6,6 +6,7 @@ import java.util.{Set => JSet}
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.tile.INodeProvider
 import resonant.lib.debug.DebugInfo
+import resonant.lib.grid.GridNode
 import resonant.lib.grid.node.{NodeGrid, TTileConnector}
 
 /**
@@ -31,9 +32,20 @@ class NodeDC(parent: INodeProvider) extends NodeGrid[NodeDC](parent) with TTileC
   var voltage = 0d
   var resistance = 0d
 
+  def buffer(voltage: Double)
+  {
+
+  }
+
+  def power = current * voltage
+
   override def getDebugInfo = List(toString)
 
   override def toString = "DC [" + connections.size() + " " + BigDecimal(current).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "A " + BigDecimal(voltage).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "V]"
+
+  def current = 0d
+
+  override protected def newGrid: GridNode[NodeDC] = new GridDC
 
   /**
    * The class used to compare when making connections

@@ -10,5 +10,6 @@ import resonant.lib.prefab.TEnergyBuffer
  */
 abstract class TileElectricInventory(material: Material) extends TileInventory(material: Material) with TElectric with TEnergyBuffer
 {
-  override def getEnergyStorage() : EnergyStorage = dcNode.getEnergyStorage()
+  @deprecated
+  override def getEnergyStorage(): EnergyStorage = null
 }

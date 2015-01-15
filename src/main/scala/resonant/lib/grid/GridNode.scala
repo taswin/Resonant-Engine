@@ -28,8 +28,26 @@ class GridNode[N <: NodeGrid[N]](node: Class[N]) extends Grid[N](node)
     getNodes.foreach(_.onGridReconstruct())
   }
 
+  def deconstruct(first: N)
+  {
+    remove(first)
+    first.setGrid(null)
+
+    getNodes.toList.foreach(n =>
+    {
+      if (n.grid == this)
+      {
+        n.setGrid(null)
+        n.reconstruct()
+      }
+    })
+
+    //This grid is now dead
+    dead = true
+  }
+
   /**
-   * Populates the node list
+   * Populates the node list recursively
    */
   protected def populate(node: N, prev: N = null.asInstanceOf[N])
   {
@@ -48,23 +66,5 @@ class GridNode[N <: NodeGrid[N]](node: Class[N]) extends Grid[N](node)
       node.grid.remove(node)
       node.setGrid(this)
     }
-  }
-
-  def deconstruct(first: N)
-  {
-    remove(first)
-    first.setGrid(null)
-
-    getNodes.toList.foreach(n =>
-    {
-      if (n.grid == this)
-      {
-        n.setGrid(null)
-        n.reconstruct()
-      }
-    })
-
-    //This grid is now dead
-    dead = true
   }
 }

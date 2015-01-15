@@ -16,7 +16,7 @@ class GridDC extends GridNode[NodeDC](classOf[NodeDC]) with IUpdate
 {
   /**
    * Intersections can be thought of as the edges of each node
-   * There should always be (node.size - 1) amount of intersections.
+   * There should always at least (node.size - 1) amount of intersections.
    */
   var intersections = Set.empty[Intersection]
 
@@ -26,6 +26,11 @@ class GridDC extends GridNode[NodeDC](classOf[NodeDC]) with IUpdate
    */
   var links = Set.empty[Link]
 
+  var componentMap = Map.empty[NodeDC, Link]
+  var recursed = Set.empty[NodeDC]
+  private var intersectionBuilder = Seq.empty[Intersection]
+  private var recusedNodes = Seq.empty[NodeDC]
+
   /**
    * Reconstruct must build the links and intersections of the grid
    */
@@ -33,7 +38,24 @@ class GridDC extends GridNode[NodeDC](classOf[NodeDC]) with IUpdate
   {
     intersections = Set.empty[Intersection]
     links = Set.empty[Link]
+
     super.reconstruct(first)
+
+
+    //Build links based on the recusion
+    val headLastLink = new Link(intersectionBuilder.last, intersectionBuilder.head)
+    links += headLastLink
+    componentMap += recusedNodes(0) -> headLastLink
+
+    for (i <- 0 until intersectionBuilder.size - 1)
+    {
+      val link = new Link(intersectionBuilder(i), intersectionBuilder(i + 1))
+      links += link
+      componentMap += recusedNodes(i + 1) -> link
+    }
+
+    links.foreach(_.reconstruct())
+
     UpdateTicker.world.addUpdater(this)
   }
 
@@ -68,17 +90,22 @@ class GridDC extends GridNode[NodeDC](classOf[NodeDC]) with IUpdate
 
   override def canUpdate: Boolean = getNodes.size > 0
 
-  override protected def populateNode(node: NodeDC, prev: NodeDC)
+  protected def recurseNode(node: NodeDC, prev: NodeDC, prevIntersection: Intersection = null)
   {
-    super.populateNode(node, prev)
+    recursed += node
 
-    if (prev != null)
+    //If the node has more than two connections, we can build a link into two intersections.
+    if (node.connections.size >= 2)
     {
-      //Build an intersection between prev and node
-      val intersection = new Intersection
-      intersection.links :+=
-      node.connections.foreach(n => populate(n, node))
-      links :+= new Link(prev, node)
+      //Find or create new intersections
+      val interA = if (prevIntersection == null) new Intersection else prevIntersection
+      val interB = new Intersection
+
+      //Build link between the intersections
+      val link = new Link(interA, interB)
+      componentMap += node -> link
+
+      node.connections.filterNot(recursed.contains).foreach(next => recurseNode(next, node, interB))
     }
   }
 }

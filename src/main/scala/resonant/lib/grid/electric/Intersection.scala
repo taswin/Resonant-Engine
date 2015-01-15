@@ -9,4 +9,7 @@ class Intersection
 {
   var potential = 0d
   var links = Set.empty[Link]
+
+  //The DCNodes this intersection is intersecting
+  var between = Set.empty[NodeDC]
 }
