@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.tile.INodeProvider
 import resonant.api.tile.node.INode
-import resonant.lib.grid.electric.NodeDirectCurrent
+import resonant.lib.grid.electric.NodeDC
 import resonant.lib.utility.nbt.ISaveObj
 
 /**
@@ -13,7 +13,7 @@ import resonant.lib.utility.nbt.ISaveObj
  */
 trait TElectric extends TIO with INodeProvider with ISaveObj
 {
-  protected var dcNode: NodeDirectCurrent = new NodeDirectCurrent(this)
+  protected var dcNode: NodeDC = new NodeDC(this)
 
   override def start()
   {
@@ -41,7 +41,7 @@ trait TElectric extends TIO with INodeProvider with ISaveObj
 
   override def getNode[N <: INode](nodeType: Class[_ <: N], from: ForgeDirection): N =
   {
-    if (classOf[NodeDirectCurrent].isAssignableFrom(nodeType))
+    if (classOf[NodeDC].isAssignableFrom(nodeType))
       return dcNode.asInstanceOf[N]
 
     return null.asInstanceOf[N]
