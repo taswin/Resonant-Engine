@@ -1,19 +1,18 @@
 package resonant.lib.content.prefab
 
 import net.minecraft.block.Block
-import net.minecraft.item.ItemStack
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.tile.INodeProvider
 import resonant.api.tile.node.INode
 import resonant.lib.grid.electric.NodeDC
-import resonant.lib.utility.nbt.ISaveObj
+import resonant.lib.prefab.tile.spatial.SpatialTile
 
 /**
  * A trait for all INodeProviders that implement a DC circuit. Nodes must handle energy storage themself.
  */
-trait TElectric extends TIO with INodeProvider with ISaveObj
+trait TElectric extends SpatialTile with INodeProvider
 {
-  protected var dcNode: NodeDC = new NodeDC(this)
+  protected var dcNode = new NodeDC(this)
 
   override def start()
   {
@@ -46,17 +45,4 @@ trait TElectric extends TIO with INodeProvider with ISaveObj
 
     return null.asInstanceOf[N]
   }
-
-  protected def recharge(stack: ItemStack)
-  {
-    //if (stack != null && Compatibility.getHandler(stack.getItem, null) != null)
-    //   electricNode.removeEnergy(ForgeDirection.UNKNOWN, Compatibility.chargeItem(stack, electricNode.getEnergy(ForgeDirection.UNKNOWN), true), true)
-  }
-
-  protected def discharge(stack: ItemStack)
-  {
-    // if (stack != null && Compatibility.getHandler(stack.getItem, null) != null)
-    //   electricNode.addEnergy(ForgeDirection.UNKNOWN, Compatibility.dischargeItem(stack, electricNode.getEnergyCapacity(ForgeDirection.UNKNOWN) - electricNode.getEnergy(ForgeDirection.UNKNOWN), true), true)
-  }
-
 }
