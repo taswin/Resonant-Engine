@@ -15,71 +15,41 @@ import scala.collection.convert.wrapAll._
 class GridDC extends GridNode[NodeDC](classOf[NodeDC]) with IUpdate
 {
   /**
-   * Intersections can be thought of as the edges of each node
    * There should always at least (node.size - 1) amount of intersections.
    */
-  var intersections = Set.empty[Intersection]
-
-  /**
-   * Links can be thought of as the path between one node to the other
-   * There should always be node.size amount of links
-   */
-  var links = Set.empty[Link]
-
-  var componentMap = Map.empty[NodeDC, Link]
-  var recursed = Set.empty[NodeDC]
-  private var intersectionBuilder = Seq.empty[Intersection]
-  private var recusedNodes = Seq.empty[NodeDC]
+  var junctions = Set.empty[Junction]
 
   /**
    * Reconstruct must build the links and intersections of the grid
    */
   override def reconstruct(first: NodeDC)
   {
-    intersections = Set.empty[Intersection]
-    links = Set.empty[Link]
-
+    junctions = Set.empty[Junction]
     super.reconstruct(first)
-
-
-    //Build links based on the recusion
-    val headLastLink = new Link(intersectionBuilder.last, intersectionBuilder.head)
-    links += headLastLink
-    componentMap += recusedNodes(0) -> headLastLink
-
-    for (i <- 0 until intersectionBuilder.size - 1)
-    {
-      val link = new Link(intersectionBuilder(i), intersectionBuilder(i + 1))
-      links += link
-      componentMap += recusedNodes(i + 1) -> link
-    }
-
-    links.foreach(_.reconstruct())
-
     UpdateTicker.world.addUpdater(this)
   }
 
   override def update(deltaTime: Double)
   {
-    links.foreach(_.calculate())
+    getNodes.foreach(_.calculate())
 
     /**
      * Potential difference creates current, which acts to decrease potential difference.
      * Any system forwards to minimal inner energy, and only equipotential systems have minimal energy.
      */
-    intersections.foreach(
-      intersection =>
+    junctions.foreach(
+      junction =>
       {
-        intersection.links.foreach(
-          link =>
+        junction.nodes.foreach(
+          node =>
           {
-            link.calculate()
-            val delta = link.current * deltaTime
+            node.calculate()
+            val delta = node.current * deltaTime
 
-            if (intersection == link.intersectionA)
-              intersection.potential += delta
-            else if (intersection == link.intersectionB)
-              intersection.potential -= delta
+            if (junction == node.junctionA)
+              junction.voltage += delta
+            else if (junction == node.junctionB)
+              junction.voltage -= delta
           }
         )
       }
@@ -90,22 +60,47 @@ class GridDC extends GridNode[NodeDC](classOf[NodeDC]) with IUpdate
 
   override def canUpdate: Boolean = getNodes.size > 0
 
-  protected def recurseNode(node: NodeDC, prev: NodeDC, prevIntersection: Intersection = null)
+  /**
+   * Populates the node and junctions recursively
+   * TODO: Unit test the grid population algorithm
+   */
+  override protected def populate(node: NodeDC, prev: NodeDC = null)
   {
-    recursed += node
-
-    //If the node has more than two connections, we can build a link into two intersections.
-    if (node.connections.size >= 2)
+    //Check if we already traversed through this node and if it is valid. Proceed if we haven't already done so.
+    if (!getNodes.contains(node) && isValidNode(node))
     {
-      //Find or create new intersections
-      val interA = if (prevIntersection == null) new Intersection else prevIntersection
-      val interB = new Intersection
+      //Add this node into the list of nodes.
+      add(node)
 
-      //Build link between the intersections
-      val link = new Link(interA, interB)
-      componentMap += node -> link
+      //If the node has at least a positive and negative connection, we can build two junctions across it.
+      if (node.positives.size > 0 && node.negatives.size > 0)
+      {
+        //Use the junction that this node came from. If this is the first node being reecursed, then create a new junction.
+        node.junctionA = if (prev == null) null else prev.junctionB
+        //Create a new junction for intersection B
+        node.junctionB =
+          {
+            //Look through all junctions, see if there is already one that is connected to this one, but NOT the previous junction
+            junctions.find(j => j.nodes.contains(node) && node.junctionA != j) match
+            {
+              case Some(x) => x
+              case _ => new Junction
+            }
+          }
 
-      node.connections.filterNot(recursed.contains).foreach(next => recurseNode(next, node, interB))
+        //Add junctionB to the list of junctions
+        junctions += node.junctionB
+
+        //Assign connection to all the junction
+        node.junctionA.nodes += node
+        node.junctionA.nodes ++= node.negatives
+        node.junctionB.nodes += node
+        node.junctionB.nodes ++= node.positives
+
+        //Recursively populate for all nodes connected to junction B, because junction A simply goes backwards in the graph. There is no point iterating it.
+        node.junctionB.nodes.foreach(next => populate(next, node))
+      }
     }
   }
+
 }
