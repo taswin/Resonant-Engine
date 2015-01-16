@@ -18,4 +18,9 @@ class Junction
    * The nodes that this junction is connected with.
    */
   var nodes = Set.empty[NodeDC]
+
+  /**
+   * The wires that collapsed into this junction
+   */
+  var wires = Set.empty[NodeDC]
 }

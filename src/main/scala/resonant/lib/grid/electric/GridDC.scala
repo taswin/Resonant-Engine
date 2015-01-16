@@ -62,6 +62,43 @@ class GridDC extends GridNode[NodeDC](classOf[NodeDC]) with IUpdate
   override def canUpdate: Boolean = getNodes.size > 0
 
   /**
+   * Collapse all wires into junctions. These junctions will be referenced to
+   */
+  def collapseWires()
+  {
+    /**
+     * Filter a set of nodes to all wires
+     */
+    def filterWires(nodes: Set[NodeDC]) = nodes.filter(_.isInstanceOf[NodeDCWire]).map(_.asInstanceOf[NodeDCWire])
+
+    /**
+     * Finds all the wire nodes connected to this one.
+     */
+    def recurseFind(wire: NodeDCWire): Set[NodeDCWire] =
+    {
+      val wireConnections = filterWires(wire.connections.toSet)
+      return wireConnections ++ wireConnections.map(n => recurseFind(n)).flatten
+    }
+
+    var recursed = Set.empty[NodeDC]
+
+    val nodes = getNodes.filter(_.isInstanceOf[NodeDCWire]).map(_.asInstanceOf[NodeDCWire])
+
+    for (node <- nodes)
+    {
+      if (!recursed.contains(node))
+      {
+        //Create a junction
+        val junction = new Junction
+        val foundWires = recurseFind(node).toSet[NodeDC]
+        recursed ++= foundWires
+        junction.wires = foundWires
+        junctions += junction
+      }
+    }
+  }
+
+  /**
    * Populates the node and junctions recursively
    * TODO: Unit test the grid population algorithm
    */
@@ -113,5 +150,4 @@ class GridDC extends GridNode[NodeDC](classOf[NodeDC]) with IUpdate
       }
     }
   }
-
 }
