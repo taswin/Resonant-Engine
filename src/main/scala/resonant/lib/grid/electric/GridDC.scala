@@ -26,10 +26,9 @@ class GridDC extends GridNode[NodeDC](classOf[NodeDC]) with IUpdate
   {
     junctions = Set.empty[Junction]
     super.reconstruct(first)
-    UpdateTicker.world.addUpdater(this)
     solveWires()
     solveGraph()
-    println("Junctions: " + junctions.size)
+    UpdateTicker.world.addUpdater(this)
   }
 
   /**
@@ -120,19 +119,7 @@ class GridDC extends GridNode[NodeDC](classOf[NodeDC]) with IUpdate
                 case _ => new Junction
               }
             }
-          /*
-          //Add junctionB to the list of junctions
-          junctions += node.junctionA
-          junctions += node.junctionB
 
-
-          //Assign connection to all the junction
-          node.junctionA.nodes += node
-          node.junctionA.nodes ++= node.negatives
-
-          node.junctionB.nodes += node
-          node.junctionB.nodes ++= node.positives
-          */
           //Recursively populate for all nodes connected to junction B, because junction A simply goes backwards in the graph. There is no point iterating it.
           node.junctionB.nodes.foreach(next => solveGraph(next, node))
         }
@@ -184,5 +171,7 @@ class GridDC extends GridNode[NodeDC](classOf[NodeDC]) with IUpdate
     super.populateNode(node, prev)
     node.junctionA = null
     node.junctionB = null
+    node.voltage = 0
+    node.current = 0
   }
 }

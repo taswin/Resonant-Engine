@@ -54,19 +54,18 @@ class NodeDC(parent: INodeProvider) extends NodeGrid[NodeDC](parent) with TTileC
   /**
    * Generates a potential difference across the two intersections that go across this node.
    */
-  def generateVoltage(voltage: Double)
+  def setVoltage(voltage: Double)
   {
     if (junctionA != null && junctionB != null)
     {
-      junctionA.voltage += voltage / 2
-      junctionB.voltage -= voltage / 2
+      junctionA.voltage = voltage / 2
+      junctionB.voltage = -voltage / 2
     }
   }
 
   override def getDebugInfo = List(toString)
 
-  //  override def toString = "DC [" + connections.size() + " " + BigDecimal(current).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "A " + BigDecimal(voltage).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "V]"
-  override def toString = "DC [" + connections.size() + " " + current + "A " + voltage + "V]"
+  override def toString = "DC [" + connections.size() + " " + BigDecimal(current).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "A " + BigDecimal(voltage).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "V]"
 
   protected[electric] def calculate()
   {
@@ -77,6 +76,9 @@ class NodeDC(parent: INodeProvider) extends NodeGrid[NodeDC](parent) with TTileC
     {
       // Calculating potential difference across this link.
       voltage = Math.abs(junctionA.voltage - junctionB.voltage)
+
+      if (voltage < 0.0001d)
+        voltage = 0
 
       // Calculating current based on voltage and resistance.
       current = voltage / resistance
