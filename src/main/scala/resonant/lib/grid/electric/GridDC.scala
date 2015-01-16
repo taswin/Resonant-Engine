@@ -27,6 +27,7 @@ class GridDC extends GridNode[NodeDC](classOf[NodeDC]) with IUpdate
     junctions = Set.empty[Junction]
     super.reconstruct(first)
     UpdateTicker.world.addUpdater(this)
+    println("Junctions: " + junctions.size)
   }
 
   override def update(deltaTime: Double)
@@ -71,17 +72,21 @@ class GridDC extends GridNode[NodeDC](classOf[NodeDC]) with IUpdate
     {
       //Add this node into the list of nodes.
       add(node)
+      node.calculate()
 
       //If the node has at least a positive and negative connection, we can build two junctions across it.
       if (node.positives.size > 0 && node.negatives.size > 0)
       {
         //Use the junction that this node came from. If this is the first node being reecursed, then create a new junction.
-        node.junctionA = if (prev == null) null else prev.junctionB
+        node.junctionA = if (prev == null) new Junction else prev.junctionB
         //Create a new junction for intersection B
         node.junctionB =
           {
-            //Look through all junctions, see if there is already one that is connected to this one, but NOT the previous junction
-            junctions.find(j => j.nodes.contains(node) && node.junctionA != j) match
+            /**
+             * Look through all junctions, see if there is already one that is connected to this junction, but NOT the previous junction
+             * If the junction does NOT exist, then create a new one
+             */
+            junctions.find(j => node.junctionA != j && j.nodes.contains(node)) match
             {
               case Some(x) => x
               case _ => new Junction
@@ -89,16 +94,22 @@ class GridDC extends GridNode[NodeDC](classOf[NodeDC]) with IUpdate
           }
 
         //Add junctionB to the list of junctions
+        junctions += node.junctionA
         junctions += node.junctionB
 
         //Assign connection to all the junction
         node.junctionA.nodes += node
         node.junctionA.nodes ++= node.negatives
+
         node.junctionB.nodes += node
         node.junctionB.nodes ++= node.positives
 
         //Recursively populate for all nodes connected to junction B, because junction A simply goes backwards in the graph. There is no point iterating it.
         node.junctionB.nodes.foreach(next => populate(next, node))
+      }
+      else
+      {
+        println("Found invalid")
       }
     }
   }
