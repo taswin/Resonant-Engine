@@ -13,7 +13,7 @@ class NodeDCWire(parent: INodeProvider) extends NodeDC(parent)
   override def toString: String =
   {
     if (junctionA != null)
-      "DC [" + connections.size() + " Total: " + BigDecimal(junctionA.voltage).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "V Source: " + BigDecimal(junctionA.sourceVoltage).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "V Incoming: " + BigDecimal(junctionA.incomingVoltage).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "V]"
+      "DC [" + connections.size() + " Total: " + BigDecimal(junctionA.voltage).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "V Source: " + BigDecimal(junctionA.sourceVoltage).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "V]"
     else
       "DC [" + connections.size() + " Null Junction]"
   }

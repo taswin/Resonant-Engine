@@ -101,10 +101,12 @@ class GridDC extends GridNode[NodeDC](classOf[NodeDC]) with IUpdate
                  * Look through all junctions, see if there is already one that is connected to this junction, but NOT the previous junction
                  * If the junction does NOT exist, then create a new one
                  */
-                junctions.find(j => (j.nodes.contains(node) || j.wires.contains(node)) && j.wires.exists(node.negatives.contains)) match
+                junctions.find(j => j.nodes.contains(node) && j.wires.exists(node.negatives.contains)) match
                 {
                   case Some(x) => x
-                  case _ => new Junction //Rarely should we need to create a new junction
+                  case _ =>
+                    println("Warning: Creating new junction. This should not happen yet.")
+                    new Junction //Rarely should we need to create a new junction
                 }
               }
               else
@@ -120,12 +122,17 @@ class GridDC extends GridNode[NodeDC](classOf[NodeDC]) with IUpdate
                * Look through all junctions, see if there is already one that is connected to this junction, but NOT the previous junction
                * If the junction does NOT exist, then create a new one
                */
-              junctions.find(j => (j.nodes.contains(node) || j.wires.contains(node)) && j.wires.exists(node.positives.contains) && node.junctionA != j) match
+              junctions.find(j => j.nodes.contains(node) /* && j.wires.exists(node.positives.contains)*/ && node.junctionA != j) match
               {
                 case Some(x) => x
-                case _ => new Junction //Rarely should we need to create a new junction
+                case _ =>
+                  println("Warning: Creating new junction. This should not happen yet.")
+                  new Junction //Rarely should we need to create a new junction
               }
             }
+
+          junctions += node.junctionA
+          junctions += node.junctionB
 
           //Recursively populate for all nodes connected to junction B, because junction A simply goes backwards in the graph. There is no point iterating it.
           node.junctionB.nodes.foreach(next => solveGraph(next, node))
@@ -147,9 +154,9 @@ class GridDC extends GridNode[NodeDC](classOf[NodeDC]) with IUpdate
   override def update(deltaTime: Double)
   {
     //Calculate all nodes except batteries
-    getNodes.foreach(_.calculate())
-    junctions.foreach(_.update(deltaTime))
-    //    getNodes.foreach(_.nextVoltage = 0)
+    val nodes = getNodes.filterNot(_.isInstanceOf[NodeDCWire])
+    junctions.foreach(_.update(deltaTime * 5))
+    nodes.foreach(_.nextVoltage = 0)
   }
 
   override def updateRate: Int = if (getNodes.size > 0) 20 else 0

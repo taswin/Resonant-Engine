@@ -16,8 +16,6 @@ class Junction
 
   var sourceVoltage = 0d
 
-  var incomingVoltage = 0d
-
   /**
    * The nodes that this junction is connected with.
    */
@@ -31,12 +29,14 @@ class Junction
   def update(deltaTime: Double)
   {
     sourceVoltage = 0
-    voltage = 0
 
     //Loop through every node that is connected to this junction
     nodes.foreach(
       node =>
       {
+        //This is required to propagate voltage
+        node.calculate()
+
         /**
          * Potential difference creates current, which acts to decrease potential difference.
          * Any system forwards to minimal inner energy, and only equipotential systems have minimal energy.
@@ -44,9 +44,9 @@ class Junction
         val delta = node.current * deltaTime
 
         if (this == node.junctionA)
-          incomingVoltage -= delta
+          voltage -= delta
         else if (this == node.junctionB)
-          incomingVoltage += delta
+          voltage += delta
 
         /**
          * Push generated voltages into this node
@@ -61,6 +61,7 @@ class Junction
       }
     )
 
-    voltage = sourceVoltage + incomingVoltage
+    if (sourceVoltage != 0)
+      voltage = sourceVoltage
   }
 }

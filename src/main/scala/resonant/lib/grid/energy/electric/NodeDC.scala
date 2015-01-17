@@ -40,7 +40,14 @@ class NodeDC(parent: INodeProvider) extends NodeGrid[NodeDC](parent) with TTileC
 
   protected[electric] var nextVoltage = 0d
 
+  /**
+   * Junction A is always preferably negative
+   */
   protected[electric] var junctionA: Junction = null
+
+  /**
+   * Junction B is always preferably positive
+   */
   protected[electric] var junctionB: Junction = null
 
   def positives: JSet[NodeDC] = directionMap.filter(keyVal => positiveTerminals.contains(keyVal._2)).keySet
@@ -55,7 +62,7 @@ class NodeDC(parent: INodeProvider) extends NodeGrid[NodeDC](parent) with TTileC
   /**
    * Generates a potential difference across the two intersections that go across this node.
    */
-  def setVoltage(voltage: Double)
+  def generateVoltage(voltage: Double)
   {
     nextVoltage = voltage
   }
