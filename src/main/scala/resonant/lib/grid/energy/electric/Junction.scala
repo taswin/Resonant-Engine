@@ -55,10 +55,8 @@ class Junction
         {
           if (this == node.junctionA)
             sourceVoltage -= node.nextVoltage / 2
-          if (this == node.junctionB)
+          else if (this == node.junctionB)
             sourceVoltage += node.nextVoltage / 2
-
-          node.nextVoltage = 0
         }
       }
     )

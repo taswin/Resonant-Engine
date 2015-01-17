@@ -146,9 +146,10 @@ class GridDC extends GridNode[NodeDC](classOf[NodeDC]) with IUpdate
 
   override def update(deltaTime: Double)
   {
-    //Accumulate voltage set
-    getNodes.foreach(_.calculate())
-    junctions.foreach(_.update(deltaTime * 5))
+    //Calculate all nodes except batteries
+    getNodes.filter(_.nextVoltage == 0).foreach(_.calculate())
+    junctions.foreach(_.update(deltaTime))
+    //    getNodes.foreach(_.nextVoltage = 0)
   }
 
   override def updateRate: Int = if (getNodes.size > 0) 20 else 0
