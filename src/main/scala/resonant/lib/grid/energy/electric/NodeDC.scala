@@ -5,7 +5,7 @@ import java.util.{Set => JSet}
 
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.tile.INodeProvider
-import resonant.lib.debug.DebugInfo
+import resonant.lib.debug.IDebugInfo
 import resonant.lib.grid.core.{GridNode, NodeGrid, TTileConnector}
 
 import scala.beans.BeanProperty
@@ -18,7 +18,7 @@ import scala.collection.convert.wrapAll._
  *
  * @author Calclavia
  */
-class NodeDC(parent: INodeProvider) extends NodeGrid[NodeDC](parent) with TTileConnector[NodeDC] with DebugInfo
+class NodeDC(parent: INodeProvider) extends NodeGrid[NodeDC](parent) with TTileConnector[NodeDC] with IDebugInfo
 {
   /**
    * The positive terminals are the directions in which charge can flow out of this DC component.

@@ -6,8 +6,6 @@ import net.minecraft.client.Minecraft
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import resonant.lib.transform.vector.VectorWorld
 
-import scala.collection.convert.wrapAll._
-
 /**
  * A handler that allows GUI display on the F3 GUI
  * @author Calclavia
@@ -30,9 +28,9 @@ object F3Handler
       {
         val tile = new VectorWorld(world, objectPosition.blockX, objectPosition.blockY, objectPosition.blockZ).getTileEntity
 
-        if (tile.isInstanceOf[DebugInfo])
+        if (tile.isInstanceOf[IDebugInfo])
         {
-          event.left.addAll(tile.asInstanceOf[DebugInfo].getDebugInfo)
+          event.left.addAll(tile.asInstanceOf[IDebugInfo].getDebugInfo)
         }
       }
     }
