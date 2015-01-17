@@ -6,7 +6,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.ForgeDirection;
 import resonant.api.IUpdate;
 import resonant.api.tile.IReactor;
-import resonant.engine.ResonantEngine;
 import resonant.lib.grid.thermal.EventThermal.EventThermalUpdate;
 import resonant.lib.transform.vector.VectorWorld;
 
@@ -107,7 +106,7 @@ public class ThermalGrid implements IUpdate
 			/** Spread heat to surrounding. */
 			for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
 			{
-				VectorWorld adjacent = (VectorWorld) pos.clone().$plus(dir);
+				VectorWorld adjacent = pos.add(dir);
 				float deltaTemperature = getTemperature(pos) - getTemperature(adjacent);
 
 				Material adjacentMat = adjacent.world().getBlock(adjacent.xi(), adjacent.yi(), adjacent.zi()).getMaterial();
@@ -125,15 +124,8 @@ public class ThermalGrid implements IUpdate
 	}
 
 	@Override
-	public boolean canUpdate()
+	public int updateRate()
 	{
-		return !ResonantEngine.proxy().isPaused();
-		// && ++tick % 20 == 0;
-	}
-
-	@Override
-	public boolean continueUpdate()
-	{
-		return true;
+		return 20;
 	}
 }

@@ -50,9 +50,15 @@ class UpdateTicker extends Thread
    */
   private var deltaTime = 0L
 
+  private var highestUpdateRate = 20
+
   def addUpdater(updater: IUpdate)
   {
-    enqueue(() => updaters.add(updater))
+    enqueue(() =>
+    {
+      updaters.add(updater)
+      highestUpdateRate = updaters.map(_.updateRate).max
+    })
   }
 
   def enqueue(f: () => Unit)
@@ -82,7 +88,7 @@ class UpdateTicker extends Thread
         last = current
       }
 
-      Thread.sleep(50L)
+      Thread.sleep(1000 / highestUpdateRate)
     }
   }
 
@@ -99,11 +105,11 @@ class UpdateTicker extends Thread
       updaters synchronized
       {
         if (this == UpdateTicker.threaded)
-          updaters.par.filter(_.canUpdate()).foreach(_.update(getDeltaTime / 1000d))
+          updaters.par.foreach(_.update(getDeltaTime / 1000d))
         else
-          updaters.filter(_.canUpdate()).foreach(_.update(getDeltaTime / 1000d))
+          updaters.foreach(_.update(getDeltaTime / 1000d))
 
-        updaters.removeAll(updaters.filterNot(_.continueUpdate()))
+        updaters.removeAll(updaters.filter(_.updateRate <= 0))
       }
 
       queuedEvents synchronized

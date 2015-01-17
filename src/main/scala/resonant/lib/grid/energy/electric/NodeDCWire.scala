@@ -9,4 +9,12 @@ import resonant.api.tile.INodeProvider
 class NodeDCWire(parent: INodeProvider) extends NodeDC(parent)
 {
 
+  override def toString: String =
+  {
+    if (junctionA != null)
+      "DC [" + connections.size() + " " + BigDecimal(junctionA.voltage).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "V]"
+    else
+      "DC [" + connections.size() + " Null Junction]"
+  }
+
 }

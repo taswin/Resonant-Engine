@@ -15,16 +15,9 @@ public interface IUpdate
 	public void update(double deltaTime);
 
 	/**
-	 * Can this updater update?
-	 *
-	 * @return True to allow update(deltaTime) to be called.
+	 * Returns the update rate of the updater. How many times per second should it update?
+	 * This method is only useful for threaded tickers. By default, update rate should be 20 per second.
+	 * @return An integer representing how many times update is called every single second. A value of zero will remove this updater from the list.
 	 */
-	public boolean canUpdate();
-
-	/**
-	 * Should this updater continue receiving updates?
-	 *
-	 * @return True to leave the updater in the ticker. False to remove the updater from the ticker.
-	 */
-	public boolean continueUpdate();
+	public int updateRate();
 }

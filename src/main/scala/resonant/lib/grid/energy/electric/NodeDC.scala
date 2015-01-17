@@ -88,17 +88,15 @@ class NodeDC(parent: INodeProvider) extends NodeGrid[NodeDC](parent) with TTileC
     if (junctionA != null && junctionB != null)
     {
       // Calculating potential difference across this link.
-      voltage = Math.abs(potentialDifference)
+      voltage = junctionA.voltage - junctionB.voltage
 
-      if (voltage < 0.0001d)
+      if (Math.abs(voltage) < 0.0001d)
         voltage = 0
 
       // Calculating current based on voltage and resistance.
       current = voltage / resistance
     }
   }
-
-  def potentialDifference = if (junctionA != null && junctionB != null) junctionA.voltage - junctionB.voltage else 0d
 
   override protected def newGrid: GridNode[NodeDC] = new GridDC
 

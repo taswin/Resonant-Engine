@@ -32,8 +32,6 @@ class Junction
 
   def update(deltaTime: Double)
   {
-    nextVoltage = voltage
-
     nodes.foreach(
       node =>
       {
@@ -45,12 +43,10 @@ class Junction
         val delta = node.current * deltaTime
 
         if (this == node.junctionA)
-          nextVoltage = nextVoltage - Math.signum(node.potentialDifference) * delta
+          voltage -= delta
         else if (this == node.junctionB)
-          nextVoltage = nextVoltage + Math.signum(node.potentialDifference) * delta
+          voltage += delta
       }
     )
-
-    voltage = nextVoltage
   }
 }
