@@ -69,7 +69,7 @@ class NodeDC(parent: INodeProvider) extends NodeGrid[NodeDC](parent) with TTileC
     voltage = 0
     current = 0
 
-    if (junctionA != null && junctionB != null)
+    if (junctionA != null && junctionB != null && nextVoltage == 0)
     {
       // Calculating potential difference across this link.
       voltage = junctionA.voltage - junctionB.voltage

@@ -147,7 +147,7 @@ class GridDC extends GridNode[NodeDC](classOf[NodeDC]) with IUpdate
   override def update(deltaTime: Double)
   {
     //Calculate all nodes except batteries
-    getNodes.filter(_.nextVoltage == 0).foreach(_.calculate())
+    getNodes.foreach(_.calculate())
     junctions.foreach(_.update(deltaTime))
     //    getNodes.foreach(_.nextVoltage = 0)
   }
