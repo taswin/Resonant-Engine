@@ -39,6 +39,8 @@ class NodeDC(parent: INodeProvider) extends NodeGrid[NodeDC](parent) with TTileC
   @BeanProperty
   var resistance = 0.1d
 
+  protected[electric] var nextVoltage = 0d
+
   protected[electric] var junctionA: Junction = null
   protected[electric] var junctionB: Junction = null
 
@@ -56,18 +58,30 @@ class NodeDC(parent: INodeProvider) extends NodeGrid[NodeDC](parent) with TTileC
    */
   def setVoltage(voltage: Double)
   {
-    if (junctionA != null && junctionB != null)
-    {
-      junctionA.voltage = voltage / 2
-      junctionB.voltage = -voltage / 2
-    }
+    nextVoltage = voltage
   }
 
   override def getDebugInfo = List(toString)
 
   override def toString = "DC [" + connections.size() + " " + BigDecimal(current).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "A " + BigDecimal(voltage).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "V]"
 
-  protected[electric] def calculate()
+  protected[electric] def update(deltaTime: Double)
+  {
+    if (nextVoltage > 0)
+    {
+      if (junctionA != null && junctionB != null)
+      {
+        junctionA.voltage = -nextVoltage / 2
+        junctionB.voltage = nextVoltage / 2
+      }
+
+      nextVoltage = 0
+    }
+
+    calculate()
+  }
+
+  private def calculate()
   {
     voltage = 0
     current = 0
@@ -75,7 +89,7 @@ class NodeDC(parent: INodeProvider) extends NodeGrid[NodeDC](parent) with TTileC
     if (junctionA != null && junctionB != null)
     {
       // Calculating potential difference across this link.
-      voltage = Math.abs(junctionA.voltage - junctionB.voltage)
+      voltage = Math.abs(potentialDifference)
 
       if (voltage < 0.0001d)
         voltage = 0
@@ -84,6 +98,8 @@ class NodeDC(parent: INodeProvider) extends NodeGrid[NodeDC](parent) with TTileC
       current = voltage / resistance
     }
   }
+
+  def potentialDifference = if (junctionA != null && junctionB != null) junctionA.voltage - junctionB.voltage else 0d
 
   override protected def newGrid: GridNode[NodeDC] = new GridDC
 

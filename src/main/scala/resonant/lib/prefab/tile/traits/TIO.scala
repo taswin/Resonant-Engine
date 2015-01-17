@@ -31,15 +31,18 @@ trait TIO extends SpatialTile with IIO
 
   def toggleIO(side: Int, entityPlayer: EntityPlayer): Boolean =
   {
-    val newIO = (getIO(ForgeDirection.getOrientation(side)) + 1) % 3
-    setIO(ForgeDirection.getOrientation(side), newIO)
-
     if (!world.isRemote)
     {
-      entityPlayer.addChatMessage(new ChatComponentText("Side changed to: " + (if (newIO == 0) "None" else (if (newIO == 1) "Input" else "Output"))))
-    }
+      val newIO = (getIO(ForgeDirection.getOrientation(side)) + 1) % 3
+      setIO(ForgeDirection.getOrientation(side), newIO)
 
-    world.notifyBlocksOfNeighborChange(xi, yi, zi, block)
+      if (!world.isRemote)
+      {
+        entityPlayer.addChatMessage(new ChatComponentText("Side changed to: " + (if (newIO == 0) "None" else (if (newIO == 1) "Input" else "Output"))))
+      }
+
+      world.notifyBlocksOfNeighborChange(xi, yi, zi, block)
+    }
     return true
   }
 
@@ -71,23 +74,6 @@ trait TIO extends SpatialTile with IIO
     return dirs
   }
 
-  override def getIO(dir: ForgeDirection): Int =
-  {
-    val currentIO: String = getIOMapBase3
-    return Integer.parseInt("" + currentIO.charAt(dir.ordinal))
-  }
-
-  def getIOMapBase3: String =
-  {
-    var currentIO: String = Integer.toString(ioMap, 3)
-    while (currentIO.length < 6)
-    {
-      currentIO = "0" + currentIO
-    }
-    return currentIO
-
-  }
-
   /**
    * The electrical output direction.
    *
@@ -109,10 +95,27 @@ trait TIO extends SpatialTile with IIO
     return dirs
   }
 
+  override def getIO(dir: ForgeDirection): Int =
+  {
+    val currentIO: String = getIOMapBase3
+    return Integer.parseInt("" + currentIO.charAt(dir.ordinal))
+  }
+
+  def getIOMapBase3: String =
+  {
+    var currentIO: String = Integer.toString(ioMap, 3)
+    while (currentIO.length < 6)
+    {
+      currentIO = "0" + currentIO
+    }
+    return currentIO
+
+  }
+
   override def readFromNBT(nbt: NBTTagCompound)
   {
     super.readFromNBT(nbt)
-    
+
     if (saveIOMap && nbt.hasKey("ioMap"))
     {
       ioMap = nbt.getShort("ioMap")

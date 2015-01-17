@@ -94,10 +94,10 @@ class GridDC extends GridNode[NodeDC](classOf[NodeDC]) with IUpdate
                  * Look through all junctions, see if there is already one that is connected to this junction, but NOT the previous junction
                  * If the junction does NOT exist, then create a new one
                  */
-                junctions.find(j => j.nodes.contains(node) || j.wires.contains(node)) match
+                junctions.find(j => (j.nodes.contains(node) || j.wires.contains(node)) && j.wires.exists(node.negatives.contains)) match
                 {
                   case Some(x) => x
-                  case _ => new Junction
+                  case _ => new Junction //Rarely should we need to create a new junction
                 }
               }
               else
@@ -113,10 +113,10 @@ class GridDC extends GridNode[NodeDC](classOf[NodeDC]) with IUpdate
                * Look through all junctions, see if there is already one that is connected to this junction, but NOT the previous junction
                * If the junction does NOT exist, then create a new one
                */
-              junctions.find(j => node.junctionA != j && (j.nodes.contains(node) || j.wires.contains(node))) match
+              junctions.find(j => (j.nodes.contains(node) || j.wires.contains(node)) && j.wires.exists(node.positives.contains) && node.junctionA != j) match
               {
                 case Some(x) => x
-                case _ => new Junction
+                case _ => new Junction //Rarely should we need to create a new junction
               }
             }
 
@@ -139,27 +139,9 @@ class GridDC extends GridNode[NodeDC](classOf[NodeDC]) with IUpdate
 
   override def update(deltaTime: Double)
   {
-    /**
-     * Potential difference creates current, which acts to decrease potential difference.
-     * Any system forwards to minimal inner energy, and only equipotential systems have minimal energy.
-     */
-    junctions.foreach(
-      junction =>
-      {
-        junction.nodes.foreach(
-          node =>
-          {
-            node.calculate()
-            val delta = node.current * deltaTime
-
-            if (junction == node.junctionA)
-              junction.voltage += delta
-            else if (junction == node.junctionB)
-              junction.voltage -= delta
-          }
-        )
-      }
-    )
+    //Accumulate voltage set
+    getNodes.foreach(_.update(deltaTime))
+    junctions.foreach(_.update(deltaTime))
   }
 
   override def continueUpdate: Boolean = canUpdate
