@@ -28,7 +28,7 @@ class GridDC extends GridNode[NodeDC](classOf[NodeDC]) with IUpdate
     super.reconstruct(first)
     solveWires()
     solveGraph()
-    UpdateTicker.threaded.addUpdater(this)
+    UpdateTicker.world.addUpdater(this)
   }
 
   /**
@@ -147,7 +147,7 @@ class GridDC extends GridNode[NodeDC](classOf[NodeDC]) with IUpdate
   override def update(deltaTime: Double)
   {
     //Accumulate voltage set
-    getNodes.foreach(_.update(deltaTime))
+    getNodes.foreach(_.calculate())
     junctions.foreach(_.update(deltaTime * 5))
   }
 

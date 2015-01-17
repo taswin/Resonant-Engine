@@ -64,23 +64,7 @@ class NodeDC(parent: INodeProvider) extends NodeGrid[NodeDC](parent) with TTileC
 
   override def toString = "DC [" + connections.size() + " " + BigDecimal(current).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "A " + BigDecimal(voltage).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "V]"
 
-  protected[electric] def update(deltaTime: Double)
-  {
-    if (nextVoltage > 0)
-    {
-      if (junctionA != null && junctionB != null)
-      {
-        junctionA.voltage = -nextVoltage / 2
-        junctionB.voltage = nextVoltage / 2
-      }
-
-      nextVoltage = 0
-    }
-
-    calculate()
-  }
-
-  private def calculate()
+  protected[electric] def calculate()
   {
     voltage = 0
     current = 0
@@ -90,6 +74,7 @@ class NodeDC(parent: INodeProvider) extends NodeGrid[NodeDC](parent) with TTileC
       // Calculating potential difference across this link.
       voltage = junctionA.voltage - junctionB.voltage
 
+      //If voltage is very small, approximate it to zero
       if (Math.abs(voltage) < 0.0001d)
         voltage = 0
 
