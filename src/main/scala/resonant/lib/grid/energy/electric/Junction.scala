@@ -1,4 +1,4 @@
-package resonant.lib.grid.electric
+package resonant.lib.grid.energy.electric
 
 /**
  * An junction is the intersection between multiple nodes.

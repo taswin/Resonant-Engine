@@ -1,4 +1,4 @@
-package resonant.lib.grid.electric
+package resonant.lib.grid.energy.electric
 
 import resonant.api.IUpdate
 import resonant.lib.grid.{GridNode, UpdateTicker}

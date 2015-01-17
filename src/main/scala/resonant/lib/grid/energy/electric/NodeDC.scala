@@ -1,4 +1,4 @@
-package resonant.lib.grid.electric
+package resonant.lib.grid.energy.electric
 
 import java.util
 import java.util.{Set => JSet}

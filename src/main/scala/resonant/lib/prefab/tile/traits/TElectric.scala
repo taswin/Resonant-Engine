@@ -4,7 +4,7 @@ import net.minecraft.block.Block
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.tile.INodeProvider
 import resonant.api.tile.node.INode
-import resonant.lib.grid.electric.NodeDC
+import resonant.lib.grid.energy.electric.NodeDC
 import resonant.lib.prefab.tile.spatial.SpatialTile
 
 /**
