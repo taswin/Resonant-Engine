@@ -1,4 +1,4 @@
-package resonant.lib.prefab.tile
+package resonant.lib.prefab.tile.mixed
 
 import net.minecraft.block.material.Material
 import resonant.lib.content.prefab.TIO

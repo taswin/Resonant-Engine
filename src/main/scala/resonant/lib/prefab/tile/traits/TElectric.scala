@@ -35,9 +35,6 @@ trait TElectric extends SpatialTile with INodeProvider
     dcNode.deconstruct()
   }
 
-  @deprecated
-  def getVoltage = 120
-
   override def getNode[N <: INode](nodeType: Class[_ <: N], from: ForgeDirection): N =
   {
     if (classOf[NodeDC].isAssignableFrom(nodeType))

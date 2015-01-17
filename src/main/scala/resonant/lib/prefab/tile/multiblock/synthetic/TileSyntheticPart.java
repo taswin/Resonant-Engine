@@ -31,9 +31,9 @@ public class TileSyntheticPart extends SpatialTile implements IPacketReceiver
 	public TileSyntheticPart()
 	{
 		super(Material.piston);
-		blockHardness(0.8f);
-		normalRender(false);
-		isOpaqueCube(false);
+		setBlockHardness(0.8f);
+		setNormalRender(false);
+		setIsOpaqueCube(false);
 	}
 
 	public Vector3 getMainBlock()

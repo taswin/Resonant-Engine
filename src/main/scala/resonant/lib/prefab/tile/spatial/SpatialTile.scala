@@ -8,14 +8,14 @@ import net.minecraft.network.Packet
 import resonant.api.tile.IPlayerUsing
 import resonant.engine.ResonantEngine
 import resonant.lib.network.netty.AbstractPacket
-import resonant.lib.prefab.TraitTicker
+import resonant.lib.prefab.tile.traits.TTicker
 
 /**
  * All tiles inherit this class.
  *
  * @author Calclavia
  */
-abstract class SpatialTile(material: Material) extends SpatialBlock(material) with IPlayerUsing with TraitTicker
+abstract class SpatialTile(material: Material) extends SpatialBlock(material) with IPlayerUsing with TTicker
 {
   /**
    * The players to send packets to for machine update info.
@@ -24,7 +24,7 @@ abstract class SpatialTile(material: Material) extends SpatialBlock(material) wi
 
   override def update()
   {
-    super[TraitTicker].update()
+    super[TTicker].update()
   }
 
   override def getDescriptionPacket: Packet =

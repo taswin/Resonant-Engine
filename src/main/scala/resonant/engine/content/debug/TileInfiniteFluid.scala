@@ -1,13 +1,10 @@
 package resonant.engine.content.debug
 
-import java.util
-
 import net.minecraft.block.material.Material
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids._
-import resonant.api.tile.node.INode
-import resonant.lib.prefab.tile.TileIO
+import resonant.lib.prefab.tile.mixed.TileIO
 
 /**
  * Designed to debug fluid devices by draining everything that comes in at one time

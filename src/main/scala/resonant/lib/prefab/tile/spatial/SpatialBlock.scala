@@ -117,6 +117,7 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   @BeanProperty
   var tickRandomly: Boolean = false
   /** False will make the block glass like */
+  @BeanProperty
   var isOpaqueCube: Boolean = true
   /** World accessor */
   var _access: IBlockAccess = null
@@ -167,8 +168,11 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   {
   }
 
-  @Deprecated
-  def creativeTab(value: CreativeTabs)
+  /**
+   * Sets the creative tab
+   * @param value - tab to set
+   */
+  def setCreativeTab(value: CreativeTabs)
   {
     creativeTab = value
   }
@@ -182,15 +186,6 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
     isCreativeTabSet = true
   }
 
-  /**
-   * Sets the creative tab
-   * @param value - tab to set
-   */
-  def setCreativeTab(value: CreativeTabs)
-  {
-    creativeTab = value
-  }
-
   def itemBlock(item: Class[_ <: ItemBlock]): Unit =
   { itemBlock = item }
 
@@ -200,49 +195,17 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
     bounds = cuboid
   }
 
-  /** Bounds for the block */
-  def bounds = _bounds
-
-  /** Sets the block bounds */
-  def bounds_=(cuboid: Cuboid)
-  {
-    _bounds = cuboid
-
-    if (block != null)
-      block.setBlockBounds(_bounds.min.xf, _bounds.min.yf, _bounds.min.zf, _bounds.max.xf, _bounds.max.yf, _bounds.max.zf)
-  }
-
   /** Sets the dummy block class uses by this spatial block */
   def setBlock(block: BlockDummy)
   {
     this.block = block
   }
 
-  /** Sets the resistance to being broken by tools or general actions */
-  @deprecated
-  def blockHardness(hardness: Float): Unit = blockHardness = hardness
-
-  /** Sets the resistance to the block being blown up */
-  @deprecated
-  def blockResistance(resistance: Float): Unit = blockResistance = resistance
-
   /** Sets the stepping sound */
   def stepSound(sound: Block.SoundType): Unit = stepSound = sound
 
   /** Sets the block can provide power to other blocks */
   def canProvidePower(bool: Boolean): Unit = providePower = bool
-
-  /** When set true the block will update every so often   */
-  @deprecated
-  def tickRandomly(bool: Boolean): Unit = tickRandomly = bool
-
-  /** When true renders the block as a standard block */
-  @deprecated
-  def normalRender(bool: Boolean): Unit = normalRender = bool
-
-  /** Forces the renderer to render a standard block during tile rendering */
-  @deprecated
-  def forceStandardRender(bool: Boolean): Unit = forceItemToRenderAsBlock = bool
 
   /** When true tells the dummy block we have a custom item renderer */
   def customItemRender(bool: Boolean): Unit = customItemRender = bool
@@ -284,16 +247,6 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
    * @return number of items, 0 will result in no drop
    */
   def quantityDropped(meta: Int, fortune: Int): Int = 1
-
-  /**
-   * Gets the meta value when this block is dropped.
-   * This method is used by the default implementation of getDrops
-   *
-   * @param meta - meta value of the block
-   * @param fortune - bonus of the tool mining it
-   * @return meta value, shouldn't be less then 0
-   */
-  def metadataDropped(meta: Int, fortune: Int): Int = 0
 
   /** Block object that goes to this tile */
   override def getBlockType: Block =
@@ -353,17 +306,15 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
    */
   def getPickBlock(target: MovingObjectPosition): ItemStack = new ItemStack(block, 1, metadataDropped(metadata, 0))
 
-  def metadata: Int = if (access != null) access.getBlockMetadata(xi, yi, zi) else 0
-
-  def access: IBlockAccess =
-  {
-    if (world != null)
-    {
-      return world
-    }
-
-    return _access
-  }
+  /**
+   * Gets the meta value when this block is dropped.
+   * This method is used by the default implementation of getDrops
+   *
+   * @param meta - meta value of the block
+   * @param fortune - bonus of the tool mining it
+   * @return meta value, shouldn't be less then 0
+   */
+  def metadataDropped(meta: Int, fortune: Int): Int = 0
 
   /**
    * Gets the light value of the block
@@ -548,6 +499,18 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
 
   def getCollisionBounds: Cuboid = bounds
 
+  /** Bounds for the block */
+  def bounds = _bounds
+
+  /** Sets the block bounds */
+  def bounds_=(cuboid: Cuboid)
+  {
+    _bounds = cuboid
+
+    if (block != null)
+      block.setBlockBounds(_bounds.min.xf, _bounds.min.yf, _bounds.min.zf, _bounds.max.xf, _bounds.max.yf, _bounds.max.zf)
+  }
+
   /**
    * Called in the world.
    */
@@ -590,6 +553,18 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
     return icon
   }
 
+  /** Gets the icon that renders on the bottom
+    * @param meta - placement data
+    * @return icon that will render on bottom */
+  @SideOnly(Side.CLIENT)
+  protected def getBottomIcon(meta: Int): IIcon =
+  {
+    var icon = SpatialBlock.icon.get(getTextureName + "_bottom")
+    if (icon == null)
+      icon = SpatialBlock.icon.get(getTextureName)
+    return icon
+  }
+
   @SideOnly(Side.CLIENT)
   protected def getTextureName: String =
   {
@@ -602,18 +577,6 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   def setTextureName(value: String)
   {
     textureName = value
-  }
-
-  /** Gets the icon that renders on the bottom
-    * @param meta - placement data
-    * @return icon that will render on bottom */
-  @SideOnly(Side.CLIENT)
-  protected def getBottomIcon(meta: Int): IIcon =
-  {
-    var icon = SpatialBlock.icon.get(getTextureName + "_bottom")
-    if (icon == null)
-      icon = SpatialBlock.icon.get(getTextureName)
-    return icon
   }
 
   /** Gets the icon that renders on the sides
@@ -675,19 +638,6 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   def hasSpecialRenderer = getSpecialRenderer != null
 
   @SideOnly(Side.CLIENT)
-  def getSpecialRenderer: TileEntitySpecialRenderer =
-  {
-    val tesr: TileEntitySpecialRenderer = TileEntityRendererDispatcher.instance.getSpecialRendererByClass(getClass)
-
-    if (tesr != null && !tesr.isInstanceOf[RenderTileDummy])
-    {
-      return tesr
-    }
-
-    return null
-  }
-
-  @SideOnly(Side.CLIENT)
   def renderInventory(itemStack: ItemStack)
   {
     val tesr: TileEntitySpecialRenderer = getSpecialRenderer
@@ -745,6 +695,31 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
       GL11.glPopMatrix()
       GL11.glPopAttrib()
     }
+  }
+
+  def metadata: Int = if (access != null) access.getBlockMetadata(xi, yi, zi) else 0
+
+  def access: IBlockAccess =
+  {
+    if (world != null)
+    {
+      return world
+    }
+
+    return _access
+  }
+
+  @SideOnly(Side.CLIENT)
+  def getSpecialRenderer: TileEntitySpecialRenderer =
+  {
+    val tesr: TileEntitySpecialRenderer = TileEntityRendererDispatcher.instance.getSpecialRendererByClass(getClass)
+
+    if (tesr != null && !tesr.isInstanceOf[RenderTileDummy])
+    {
+      return tesr
+    }
+
+    return null
   }
 
   //TODO: Get rid of parameters
@@ -853,8 +828,6 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   def setMeta(meta: Int)
   { world.setBlockMetadataWithNotify(xi, yi, zi, meta, 3) }
 
-  override def world: World = getWorldObj
-
   override def getBlockMetadata: Int =
   {
     if (world == null)
@@ -902,6 +875,8 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   {
     world.func_147479_m(xi, yi, zi)
   }
+
+  override def world: World = getWorldObj
 
   protected def markUpdate()
   {

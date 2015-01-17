@@ -1,10 +1,10 @@
-package resonant.lib.prefab
+package resonant.lib.prefab.tile.traits
 
 /**
  * An object that can handle ticks.
  * @author Calclavia
  */
-trait TraitTicker
+trait TTicker
 {
   protected var ticks = 0L
 

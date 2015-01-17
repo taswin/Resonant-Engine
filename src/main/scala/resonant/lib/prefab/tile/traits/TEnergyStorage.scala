@@ -3,14 +3,16 @@ package resonant.lib.content.prefab
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.lib.grid.energy.EnergyStorage
 
+import scala.beans.BeanProperty
+
 /**
  * Any object that can store energy
  * @deprecated due to almost no use this class is to be replaced with TEnergyBuffer which does the same thing without forge direction usage
  * @author Calclavia
  */
-@Deprecated
 trait TEnergyStorage
 {
+  @BeanProperty
   var energy: EnergyStorage = _
 
   /**
@@ -24,7 +26,6 @@ trait TEnergyStorage
       energy.setEnergy(amount)
   }
 
-  //@Callback
   def getEnergy(from: ForgeDirection): Double =
   {
     if (energy != null)
@@ -34,7 +35,6 @@ trait TEnergyStorage
     return 0
   }
 
-  //@Callback
   def getEnergyCapacity(from: ForgeDirection): Double =
   {
     if (energy != null)
