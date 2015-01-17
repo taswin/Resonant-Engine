@@ -1,4 +1,4 @@
-package resonant.lib.grid
+package resonant.lib.grid.core
 
 import java.util
 import java.util.Collections
@@ -65,8 +65,6 @@ class UpdateTicker extends Thread
     queuedEvents.add(event)
   }
 
-  def getDeltaTime = deltaTime
-
   def getUpdaterCount = updaters.size
 
   override def run()
@@ -85,16 +83,6 @@ class UpdateTicker extends Thread
       }
 
       Thread.sleep(50L)
-    }
-  }
-
-  @SubscribeEvent
-  def tickEnd(event: TickEvent.ServerTickEvent)
-  {
-    if(event.phase == Phase.END)
-    {
-      deltaTime = 50
-      update()
     }
   }
 
@@ -133,5 +121,17 @@ class UpdateTicker extends Thread
           e.printStackTrace()
         }
       }
+  }
+
+  def getDeltaTime = deltaTime
+
+  @SubscribeEvent
+  def tickEnd(event: TickEvent.ServerTickEvent)
+  {
+    if (event.phase == Phase.END)
+    {
+      deltaTime = 50
+      update()
+    }
   }
 }

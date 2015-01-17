@@ -1,7 +1,7 @@
-package resonant.lib.grid.node
+package resonant.lib.grid.core
 
 import resonant.api.tile.INodeProvider
-import resonant.lib.grid.GridNode
+
 import scala.collection.convert.wrapAll._
 /**
  * A node that is part of a larger grid of nodes

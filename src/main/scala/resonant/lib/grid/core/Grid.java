@@ -1,4 +1,4 @@
-package resonant.lib.grid;
+package resonant.lib.grid.core;
 
 import resonant.api.IGrid;
 import resonant.api.tile.IGridProvider;

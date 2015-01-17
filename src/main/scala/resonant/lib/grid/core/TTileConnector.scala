@@ -1,4 +1,4 @@
-package resonant.lib.grid.node
+package resonant.lib.grid.core
 
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.common.util.ForgeDirection

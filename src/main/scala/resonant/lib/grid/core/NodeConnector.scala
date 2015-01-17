@@ -1,4 +1,4 @@
-package resonant.lib.grid.node
+package resonant.lib.grid.core
 
 import java.util.{Map => JMap, Set => JSet}
 
@@ -19,23 +19,17 @@ import scala.collection.mutable
  */
 abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(parent) with INodeConnector[A]
 {
-  /** The bitmask containing sides that this node may connect to */
-  var connectionMask = 0x3F
-
-  /** The bitmask containing the connected sides */
-  protected var _connectedMask = 0x00
-
-  def connectedMask = _connectedMask
-
-  /** Functional event handler when the connection changes */
-  var onConnectionChanged: () => Unit = () => ()
-
-  var isInvalid = false
-
   /**
    * Connections to other nodes specifically.
    */
   private val connectionMap = mutable.WeakHashMap.empty[A, ForgeDirection]
+  /** The bitmask containing sides that this node may connect to */
+  var connectionMask = 0x3F
+  /** Functional event handler when the connection changes */
+  var onConnectionChanged: () => Unit = () => ()
+  var isInvalid = false
+  /** The bitmask containing the connected sides */
+  protected var _connectedMask = 0x00
 
   /**
    * Can this node connect with another node?
@@ -73,14 +67,6 @@ abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(pa
     }
   }
 
-  def clearConnections()
-  {
-    connectionMap.clear()
-    _connectedMask = 0x00
-  }
-
-  override def connections: JSet[A] = connectionMap.keys.toSet[A]
-
   def directionMap: JMap[A, ForgeDirection] = connectionMap
 
   /**
@@ -100,6 +86,8 @@ abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(pa
     isInvalid = false
   }
 
+  def connectedMask = _connectedMask
+
   def rebuild()
   {
 
@@ -112,5 +100,13 @@ abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(pa
     isInvalid = true
   }
 
+  def clearConnections()
+  {
+    connectionMap.clear()
+    _connectedMask = 0x00
+  }
+
   override def toString: String = getClass.getSimpleName + "[Connections: " + connections.size + "]"
+
+  override def connections: JSet[A] = connectionMap.keys.toSet[A]
 }

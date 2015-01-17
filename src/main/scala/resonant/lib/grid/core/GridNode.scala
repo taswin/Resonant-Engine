@@ -1,6 +1,4 @@
-package resonant.lib.grid
-
-import resonant.lib.grid.node.NodeGrid
+package resonant.lib.grid.core
 
 import scala.collection.convert.wrapAll._
 

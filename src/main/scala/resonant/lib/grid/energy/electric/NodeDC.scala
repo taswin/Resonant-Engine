@@ -6,8 +6,7 @@ import java.util.{Set => JSet}
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.tile.INodeProvider
 import resonant.lib.debug.DebugInfo
-import resonant.lib.grid.GridNode
-import resonant.lib.grid.node.{NodeGrid, TTileConnector}
+import resonant.lib.grid.core.{GridNode, NodeGrid, TTileConnector}
 
 import scala.beans.BeanProperty
 import scala.collection.convert.wrapAll._

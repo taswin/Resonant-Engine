@@ -22,8 +22,8 @@ import resonant.engine.content.ResonantContent
 import resonant.engine.content.tool.{ToolMode, ToolModeGeneral, ToolModeRotation}
 import resonant.lib.debug.F3Handler
 import resonant.lib.factory.resources.ResourceFactory
-import resonant.lib.grid.UpdateTicker
-import resonant.lib.grid.frequency.FrequencyGrid
+import resonant.lib.grid.core.UpdateTicker
+import resonant.lib.grid.frequency.GridFrequency
 import resonant.lib.grid.thermal.{BoilEvent, EventThermal, ThermalGrid}
 import resonant.lib.mod.config.{ConfigHandler, ConfigScanner}
 import resonant.lib.mod.loadable.LoadableHandler
@@ -89,8 +89,8 @@ object ResonantEngine
     }
 
     loadables.postInit()
-    FrequencyGridRegistry.CLIENT_INSTANCE = new FrequencyGrid
-    FrequencyGridRegistry.SERVER_INSTANCE = new FrequencyGrid
+    FrequencyGridRegistry.CLIENT_INSTANCE = new GridFrequency
+    FrequencyGridRegistry.SERVER_INSTANCE = new GridFrequency
     OreDictionary.registerOre("ingotGold", Items.gold_ingot)
     OreDictionary.registerOre("ingotIron", Items.iron_ingot)
     OreDictionary.registerOre("oreGold", Blocks.gold_ore)
@@ -109,8 +109,8 @@ object ResonantEngine
   @EventHandler
   def serverStopped(event: FMLServerStoppedEvent)
   {
-    FrequencyGridRegistry.CLIENT_INSTANCE = new FrequencyGrid
-    FrequencyGridRegistry.SERVER_INSTANCE = new FrequencyGrid
+    FrequencyGridRegistry.CLIENT_INSTANCE = new GridFrequency
+    FrequencyGridRegistry.SERVER_INSTANCE = new GridFrequency
   }
 
   @EventHandler

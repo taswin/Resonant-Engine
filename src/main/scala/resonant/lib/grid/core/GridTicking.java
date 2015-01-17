@@ -1,7 +1,6 @@
-package resonant.lib.grid;
+package resonant.lib.grid.core;
 
 import resonant.api.IUpdate;
-import resonant.lib.grid.node.Node;
 
 public class GridTicking<N extends Node> extends Grid<N> implements IUpdate {
 

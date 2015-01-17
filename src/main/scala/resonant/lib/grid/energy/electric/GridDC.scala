@@ -1,7 +1,7 @@
 package resonant.lib.grid.energy.electric
 
 import resonant.api.IUpdate
-import resonant.lib.grid.{GridNode, UpdateTicker}
+import resonant.lib.grid.core.{GridNode, UpdateTicker}
 
 import scala.collection.convert.wrapAll._
 

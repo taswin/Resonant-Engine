@@ -1,4 +1,4 @@
-package resonant.lib.grid.node
+package resonant.lib.grid.core
 
 import net.minecraft.entity.Entity
 import net.minecraft.tileentity.TileEntity
