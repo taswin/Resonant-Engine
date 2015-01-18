@@ -42,7 +42,6 @@ import resonant.lib.utility.{PlayerInteractionHandler, PotionUtility}
 object ResonantEngine
 {
   val packetHandler: PacketManager = new PacketManager(Reference.channel)
-  private val thermalGrid = new ThermalGrid
   private val loadables: LoadableHandler = new LoadableHandler
   @SidedProxy(clientSide = "resonant.engine.ClientProxy", serverSide = "resonant.engine.CommonProxy")
   var proxy: CommonProxy = null
@@ -81,7 +80,7 @@ object ResonantEngine
   @EventHandler
   def postInit(evt: FMLPostInitializationEvent)
   {
-    UpdateTicker.threaded.addUpdater(ResonantEngine.thermalGrid)
+    UpdateTicker.threaded.addUpdater(ThermalGrid)
 
     if (!UpdateTicker.threaded.isAlive)
     {

@@ -3,8 +3,8 @@ package resonant.lib.grid.thermal;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
-import resonant.lib.utility.science.ChemElement;
 import resonant.lib.transform.vector.Vector3;
+import resonant.lib.utility.science.ChemElement;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -29,7 +29,7 @@ public class ThermalPhysics
 	 *
 	 * @return The temperature of the coordinate in the world in kelvin.
 	 */
-	public static float getTemperatureForCoordinate(World world, int x, int z)
+	public static float getDefaultTemperature(World world, int x, int z)
 	{
 		int averageTemperature = 273 + (int) ((world.getBiomeGenForCoords(x, z).getFloatTemperature(x, 0, z) - 0.4) * 50);
 		double dayNightVariance = averageTemperature * 0.05;
@@ -44,12 +44,12 @@ public class ThermalPhysics
 	 * @param temperature          - K
 	 * @return Q, energy in joules
 	 */
-	public static double getEnergyForTemperatureChange(float mass, double specificHeatCapacity, float temperature)
+	public static double getEnergyForTemperatureChange(double mass, double specificHeatCapacity, double temperature)
 	{
 		return mass * specificHeatCapacity * temperature;
 	}
 
-	public static float getTemperatureForEnergy(float mass, long specificHeatCapacity, long energy)
+	public static double getTemperatureForEnergy(float mass, double specificHeatCapacity, double energy)
 	{
 		return energy / (mass * specificHeatCapacity);
 	}
@@ -61,7 +61,7 @@ public class ThermalPhysics
 
 	public static double getRequiredBoilWaterEnergy(World world, int x, int z, int volume)
 	{
-		float temperatureChange = 373 - ThermalPhysics.getTemperatureForCoordinate(world, x, z);
+		float temperatureChange = 373 - ThermalPhysics.getDefaultTemperature(world, x, z);
 		float mass = getMass(volume, 1);
 		return ThermalPhysics.getEnergyForTemperatureChange(mass, 4200, temperatureChange) + ThermalPhysics.getEnergyForStateChange(mass, 2257000);
 	}

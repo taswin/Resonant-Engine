@@ -148,13 +148,13 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   /** Use update() instead */
   final override def updateEntity() = update()
 
-  def blockUpdate() = update()
-
   /** Called each tick */
   def update()
   {
 
   }
+
+  def blockUpdate() = update()
 
   def randomDisplayTick()
   {
@@ -190,9 +190,21 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   { itemBlock = item }
 
   /** Sets the bounding box of the block */
-  def bounds(cuboid: Cuboid)
+  def setBounds(cuboid: Cuboid)
   {
     bounds = cuboid
+  }
+
+  /** Bounds for the block */
+  def bounds = _bounds
+
+  /** Sets the block bounds */
+  def bounds_=(cuboid: Cuboid)
+  {
+    _bounds = cuboid
+
+    if (block != null)
+      block.setBlockBounds(_bounds.min.xf, _bounds.min.yf, _bounds.min.zf, _bounds.max.xf, _bounds.max.yf, _bounds.max.zf)
   }
 
   /** Sets the dummy block class uses by this spatial block */
@@ -209,9 +221,6 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
 
   /** When true tells the dummy block we have a custom item renderer */
   def customItemRender(bool: Boolean): Unit = customItemRender = bool
-
-  /** When false the block is see threw */
-  def isOpaqueCube(bool: Boolean): Unit = isOpaqueCube = bool
 
   /** Sets the active world */
   def world(world: World)
@@ -315,6 +324,18 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
    * @return meta value, shouldn't be less then 0
    */
   def metadataDropped(meta: Int, fortune: Int): Int = 0
+
+  def metadata: Int = if (access != null) access.getBlockMetadata(xi, yi, zi) else 0
+
+  def access: IBlockAccess =
+  {
+    if (world != null)
+    {
+      return world
+    }
+
+    return _access
+  }
 
   /**
    * Gets the light value of the block
@@ -499,18 +520,6 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
 
   def getCollisionBounds: Cuboid = bounds
 
-  /** Bounds for the block */
-  def bounds = _bounds
-
-  /** Sets the block bounds */
-  def bounds_=(cuboid: Cuboid)
-  {
-    _bounds = cuboid
-
-    if (block != null)
-      block.setBlockBounds(_bounds.min.xf, _bounds.min.yf, _bounds.min.zf, _bounds.max.xf, _bounds.max.yf, _bounds.max.zf)
-  }
-
   /**
    * Called in the world.
    */
@@ -566,33 +575,6 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   }
 
   @SideOnly(Side.CLIENT)
-  protected def getTextureName: String =
-  {
-    if (textureName == null)
-      return "MISSING_ICON_TILE_" + Block.getIdFromBlock(block) + "_" + name
-    else
-      return block.dummyTile.domain + textureName
-  }
-
-  def setTextureName(value: String)
-  {
-    textureName = value
-  }
-
-  /** Gets the icon that renders on the sides
-    * @param meta - placement data
-    * @param side - side of the icon
-    * @return icon that will render on sides */
-  @SideOnly(Side.CLIENT)
-  protected def getSideIcon(meta: Int, side: Int): IIcon =
-  {
-    var icon = SpatialBlock.icon.get(getTextureName + "_side")
-    if (icon == null)
-      icon = SpatialBlock.icon.get(getTextureName)
-    return icon
-  }
-
-  @SideOnly(Side.CLIENT)
   def registerIcons(iconRegister: IIconRegister)
   {
     if (useSidedTextures)
@@ -618,6 +600,20 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   }
 
   @SideOnly(Side.CLIENT)
+  protected def getTextureName: String =
+  {
+    if (textureName == null)
+      return "MISSING_ICON_TILE_" + Block.getIdFromBlock(block) + "_" + name
+    else
+      return block.dummyTile.domain + textureName
+  }
+
+  def setTextureName(value: String)
+  {
+    textureName = value
+  }
+
+  @SideOnly(Side.CLIENT)
   def colorMultiplier = 0xFFFFFF
 
   /**
@@ -636,6 +632,19 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
 
   @SideOnly(Side.CLIENT)
   def hasSpecialRenderer = getSpecialRenderer != null
+
+  @SideOnly(Side.CLIENT)
+  def getSpecialRenderer: TileEntitySpecialRenderer =
+  {
+    val tesr: TileEntitySpecialRenderer = TileEntityRendererDispatcher.instance.getSpecialRendererByClass(getClass)
+
+    if (tesr != null && !tesr.isInstanceOf[RenderTileDummy])
+    {
+      return tesr
+    }
+
+    return null
+  }
 
   @SideOnly(Side.CLIENT)
   def renderInventory(itemStack: ItemStack)
@@ -695,31 +704,6 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
       GL11.glPopMatrix()
       GL11.glPopAttrib()
     }
-  }
-
-  def metadata: Int = if (access != null) access.getBlockMetadata(xi, yi, zi) else 0
-
-  def access: IBlockAccess =
-  {
-    if (world != null)
-    {
-      return world
-    }
-
-    return _access
-  }
-
-  @SideOnly(Side.CLIENT)
-  def getSpecialRenderer: TileEntitySpecialRenderer =
-  {
-    val tesr: TileEntitySpecialRenderer = TileEntityRendererDispatcher.instance.getSpecialRendererByClass(getClass)
-
-    if (tesr != null && !tesr.isInstanceOf[RenderTileDummy])
-    {
-      return tesr
-    }
-
-    return null
   }
 
   //TODO: Get rid of parameters
@@ -836,6 +820,8 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
       return super.getBlockMetadata
   }
 
+  override def world: World = getWorldObj
+
   /** gets the way this piston should face for that entity that placed it. */
   def determineOrientation(entityLiving: EntityLivingBase): Byte =
   {
@@ -871,12 +857,23 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   @SideOnly(Side.CLIENT)
   protected def getSideIcon(meta: Int): IIcon = getSideIcon(meta, 0)
 
+  /** Gets the icon that renders on the sides
+    * @param meta - placement data
+    * @param side - side of the icon
+    * @return icon that will render on sides */
+  @SideOnly(Side.CLIENT)
+  protected def getSideIcon(meta: Int, side: Int): IIcon =
+  {
+    var icon = SpatialBlock.icon.get(getTextureName + "_side")
+    if (icon == null)
+      icon = SpatialBlock.icon.get(getTextureName)
+    return icon
+  }
+
   protected def markRender()
   {
     world.func_147479_m(xi, yi, zi)
   }
-
-  override def world: World = getWorldObj
 
   protected def markUpdate()
   {

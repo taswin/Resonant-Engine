@@ -1,15 +1,15 @@
 package resonant.api.tile;
 
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.IFluidHandler;
 
-public interface IReactor extends IFluidHandler
+public interface IReactor
 {
-	public void heat(long energy);
-
-	public float getTemperature();
-
-	public boolean isOverToxic();
+	/**
+	 * Transfers heat energy into the reactor
+	 *
+	 * @param energy - Heat in joules
+	 */
+	public void heat(double energy);
 
 	public World world();
 }
