@@ -1,7 +1,5 @@
 package resonant.lib.grid.core
 
-import java.util
-import java.util.Collections
 import java.util.concurrent.ConcurrentLinkedQueue
 
 import cpw.mods.fml.common.eventhandler.{Event, SubscribeEvent}
@@ -11,6 +9,7 @@ import net.minecraftforge.common.MinecraftForge
 import resonant.api.IUpdate
 
 import scala.collection.convert.wrapAll._
+import scala.collection.mutable
 
 /**
  * A ticker to update all grids. This is multi-threaded based on configuration.
@@ -29,16 +28,14 @@ class UpdateTicker extends Thread
   setPriority(Thread.MIN_PRIORITY)
 
   /**
-   * For updaters to be ticked.
+   * A map of all updaters and how many milliseconds has passed since the last update
    */
-  private final val updaters: java.util.Set[IUpdate] = Collections.newSetFromMap(new util.WeakHashMap[IUpdate, java.lang.Boolean]())
-
-  private final val queue = new ConcurrentLinkedQueue[() => Unit]()
+  private final val updaters = mutable.WeakHashMap.empty[IUpdate, Long]
 
   /**
-   * For queuing Forge events to be invoked the next tick.
+   * A queue of functions that will be executed in the next update loop.
    */
-  private final val queuedEvents = new ConcurrentLinkedQueue[Event]()
+  private final val queue = new ConcurrentLinkedQueue[() => Unit]()
 
   /**
    * Becomes true if the network needs to be paused.
@@ -50,14 +47,13 @@ class UpdateTicker extends Thread
    */
   private var deltaTime = 0L
 
-  private var highestUpdateRate = 20
+  private var shortestPeriod = 1000 / 20
 
   def addUpdater(updater: IUpdate)
   {
     enqueue(() =>
     {
-      updaters.add(updater)
-      highestUpdateRate = updaters.map(_.updateRate).max
+      updaters += updater -> 0
     })
   }
 
@@ -66,9 +62,17 @@ class UpdateTicker extends Thread
     queue.add(f)
   }
 
+  def removeUpdater(updater: IUpdate)
+  {
+    enqueue(() =>
+    {
+      updaters -= updater
+    })
+  }
+
   def queueEvent(event: Event)
   {
-    queuedEvents.add(event)
+    queue.add(() => MinecraftForge.EVENT_BUS.post(event))
   }
 
   def getUpdaterCount = updaters.size
@@ -84,11 +88,20 @@ class UpdateTicker extends Thread
         val current = System.currentTimeMillis()
         deltaTime = current - last
         update()
-
         last = current
       }
 
-      Thread.sleep(1000 / highestUpdateRate)
+      Thread.sleep(shortestPeriod)
+    }
+  }
+
+  @SubscribeEvent
+  def tickEnd(event: TickEvent.ServerTickEvent)
+  {
+    if (event.phase == Phase.END)
+    {
+      deltaTime = 50
+      update()
     }
   }
 
@@ -104,18 +117,28 @@ class UpdateTicker extends Thread
 
       updaters synchronized
       {
+        updaters --= updaters.keys.filter(_.updateRate <= 0)
+
         if (this == UpdateTicker.threaded)
-          updaters.par.foreach(_.update(getDeltaTime / 1000d))
+        {
+          updaters.foreach(keyVal => updaters(keyVal._1) = keyVal._2 + deltaTime)
+
+          updaters.par
+            .filter(keyVal => keyVal._2 >= 1000 / keyVal._1.updateRate())
+            .foreach(
+              keyVal =>
+              {
+                keyVal._1.update(getDeltaTime / 1000d)
+                updaters(keyVal._1) = keyVal._2 % (1000 / keyVal._1.updateRate())
+              }
+            )
+
+          shortestPeriod = updaters.keys.map(1000 / _.updateRate).min
+        }
         else
-          updaters.foreach(_.update(getDeltaTime / 1000d))
-
-        updaters.removeAll(updaters.filter(_.updateRate <= 0))
-      }
-
-      queuedEvents synchronized
-      {
-        queuedEvents.foreach(MinecraftForge.EVENT_BUS.post)
-        queuedEvents.clear()
+        {
+          updaters.keys.foreach(_.update(getDeltaTime / 1000d))
+        }
       }
     }
     catch
@@ -130,14 +153,4 @@ class UpdateTicker extends Thread
   }
 
   def getDeltaTime = deltaTime
-
-  @SubscribeEvent
-  def tickEnd(event: TickEvent.ServerTickEvent)
-  {
-    if (event.phase == Phase.END)
-    {
-      deltaTime = 50
-      update()
-    }
-  }
 }
