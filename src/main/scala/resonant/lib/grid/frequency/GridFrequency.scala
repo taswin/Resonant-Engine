@@ -12,8 +12,10 @@ import resonant.lib.transform.vector.Vector3
 
 import scala.collection.convert.wrapAll._
 
-class GridFrequency extends Grid[IBlockFrequency](classOf[IBlockFrequency]) with FrequencyGridRegistry.IFrequencyGrid
+class GridFrequency extends Grid[IBlockFrequency] with FrequencyGridRegistry.IFrequencyGrid
 {
+  nodeClass = classOf[IBlockFrequency]
+
   /**
    * Adds a node to the grid.
    * @param node
@@ -34,9 +36,9 @@ class GridFrequency extends Grid[IBlockFrequency](classOf[IBlockFrequency]) with
 
   def getNodes[C <: IBlockFrequency](clazz: Class[C], p: C => Boolean): Set[C] = getNodes(n => (clazz.isAssignableFrom(n.getClass()) && p(n.asInstanceOf[C]))).asInstanceOf[Set[C]]
 
-  override def getNodes[C <: IBlockFrequency](clazz: Class[C]): Set[C] = getNodes(n => clazz.isAssignableFrom(n.getClass())).asInstanceOf[Set[C]]
-
   def getNodes(p: IBlockFrequency => Boolean): Set[IBlockFrequency] = getNodes().filter(p)
+
+  override def getNodes[C <: IBlockFrequency](clazz: Class[C]): Set[C] = getNodes(n => clazz.isAssignableFrom(n.getClass())).asInstanceOf[Set[C]]
 
   override def getNodes(frequency: Int): Set[IBlockFrequency] = getNodes(_.getFrequency() == frequency)
 

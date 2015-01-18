@@ -8,13 +8,8 @@ import scala.collection.convert.wrapAll._
  * @param N The type of node we can connect
  * @author Calclavia
  */
-class GridNode[N <: NodeGrid[N]](node: Class[N]) extends Grid[N](node)
+class GridNode[N <: NodeGrid[N]] extends Grid[N]
 {
-  /**
-   * Is the grid dead?
-   */
-  var dead = false
-
   /**
    * Rebuild the node list starting from the first node and recursively iterating through its connections.
    */
@@ -39,9 +34,6 @@ class GridNode[N <: NodeGrid[N]](node: Class[N]) extends Grid[N](node)
         n.reconstruct()
       }
     })
-
-    //This grid is now dead
-    dead = true
   }
 
   /**

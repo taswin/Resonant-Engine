@@ -12,12 +12,14 @@ import scala.collection.convert.wrapAll._
  *
  * @author Calclavia
  */
-class GridDC extends GridNode[NodeDC](classOf[NodeDC]) with IUpdate
+class GridDC extends GridNode[NodeDC] with IUpdate
 {
   /**
    * There should always at least (node.size - 1) amount of intersections.
    */
   var junctions = Set.empty[Junction]
+
+  nodeClass = classOf[NodeDC]
 
   /**
    * Reconstruct must build the links and intersections of the grid
