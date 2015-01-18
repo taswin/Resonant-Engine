@@ -16,7 +16,7 @@ class GridNode[N <: NodeGrid[N]] extends Grid[N]
   def reconstruct(first: N)
   {
     //TODO: Reconstruct may be called MANY times unnecessarily multiple times. Add check to prevent extra calls
-    getNodes.clear()
+    clear()
     populate(first)
     getNodes.foreach(_.onGridReconstruct())
   }

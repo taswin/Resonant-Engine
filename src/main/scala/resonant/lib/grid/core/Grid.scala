@@ -6,16 +6,15 @@ import resonant.api.IGrid
 
 import scala.beans.BeanProperty
 import scala.collection.convert.wrapAll._
-import scala.reflect.internal.util.WeakHashSet
+import scala.collection.mutable
 
 /**
  * Collection of nodes patterened in a grid
  */
 class Grid[N <: AnyRef] extends IGrid[N]
 {
-  val nodes = new WeakHashSet[N]
+  private val _nodes = mutable.WeakHashMap.empty[N, Boolean]
   //    Collections.newSetFromMap(mutable.WeakHashMap.empty[N,Boolean])
-  //    Collections.newSetFromMap(new util.WeakHashMap[N, Boolean])
 
   @BeanProperty
   var nodeClass: Class[N] = null
@@ -25,9 +24,14 @@ class Grid[N <: AnyRef] extends IGrid[N]
    */
   def deconstruct()
   {
-    nodes synchronized
+    clear()
+  }
+
+  def clear()
+  {
+    _nodes synchronized
     {
-      nodes.clear()
+      _nodes.clear()
     }
   }
 
@@ -49,7 +53,10 @@ class Grid[N <: AnyRef] extends IGrid[N]
    */
   def add(node: N)
   {
-    nodes.add(node)
+    _nodes synchronized
+    {
+      _nodes += node -> false
+    }
   }
 
   /**
@@ -57,7 +64,10 @@ class Grid[N <: AnyRef] extends IGrid[N]
    */
   def remove(node: N)
   {
-    nodes.remove(node)
+    _nodes synchronized
+    {
+      _nodes -= node
+    }
   }
 
   /**
@@ -66,4 +76,6 @@ class Grid[N <: AnyRef] extends IGrid[N]
   def getNodes: JSet[N] = nodes
 
   override def toString = getClass.getSimpleName + "[" + hashCode + ", Nodes: " + nodes.size + "]"
+
+  def nodes = _nodes.keySet
 }

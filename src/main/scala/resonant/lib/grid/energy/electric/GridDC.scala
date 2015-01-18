@@ -165,7 +165,6 @@ class GridDC extends GridNode[NodeDC] with IUpdate
     val nodes = getNodes.filterNot(_.isInstanceOf[NodeDCWire])
     junctions.foreach(_.update(deltaTime * 5))
     nodes.foreach(_.nextVoltage = 0)
-    println(deltaTime)
   }
 
   override def updateRate: Int = if (getNodes.size > 0) 20 else 0

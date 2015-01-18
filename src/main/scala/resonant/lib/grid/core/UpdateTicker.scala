@@ -38,8 +38,9 @@ class UpdateTicker extends Thread
   private final val queue = new ConcurrentLinkedQueue[() => Unit]()
 
   /**
-   * Becomes true if the network needs to be paused.
+   * Becomes true if the grid needs to be paused.
    */
+  //TODO: Make this pause when "escape" is used
   var pause = false
 
   /**
@@ -95,16 +96,6 @@ class UpdateTicker extends Thread
     }
   }
 
-  @SubscribeEvent
-  def tickEnd(event: TickEvent.ServerTickEvent)
-  {
-    if (event.phase == Phase.END)
-    {
-      deltaTime = 50
-      update()
-    }
-  }
-
   def update()
   {
     try
@@ -153,4 +144,14 @@ class UpdateTicker extends Thread
   }
 
   def getDeltaTime = deltaTime
+
+  @SubscribeEvent
+  def tickEnd(event: TickEvent.ServerTickEvent)
+  {
+    if (event.phase == Phase.END)
+    {
+      deltaTime = 50
+      update()
+    }
+  }
 }
