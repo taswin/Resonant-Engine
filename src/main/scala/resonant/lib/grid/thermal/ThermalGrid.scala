@@ -102,5 +102,5 @@ object ThermalGrid extends IUpdate
     deltaTemperatureMap += pos -> (deltaTemperatureMap(pos) + temperature)
   }
 
-  override def updateRate = 20
+  override def updatePeriod = 50
 }

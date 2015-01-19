@@ -48,7 +48,7 @@ class UpdateTicker extends Thread
    */
   private var deltaTime = 0L
 
-  private var shortestPeriod = 1000 / 20
+  private var shortestPeriod = 50
 
   def addUpdater(updater: IUpdate)
   {
@@ -108,23 +108,25 @@ class UpdateTicker extends Thread
 
       updaters synchronized
       {
-        updaters --= updaters.keys.filter(_.updateRate <= 0)
+        updaters --= updaters.keys.filter(_.updatePeriod <= 0)
 
         if (this == UpdateTicker.threaded)
         {
           updaters.foreach(keyVal => updaters(keyVal._1) = keyVal._2 + deltaTime)
 
-          updaters.par
-            .filter(keyVal => keyVal._2 >= 1000 / keyVal._1.updateRate())
+          updaters
+            .filter(keyVal => keyVal._1.updatePeriod > 0 && keyVal._2 >= keyVal._1.updatePeriod)
             .foreach(
               keyVal =>
               {
                 keyVal._1.update(getDeltaTime / 1000d)
-                updaters(keyVal._1) = keyVal._2 % (1000 / keyVal._1.updateRate())
+
+                if (keyVal._1.updatePeriod > 0)
+                  updaters(keyVal._1) = keyVal._2 % keyVal._1.updatePeriod
               }
             )
 
-          shortestPeriod = updaters.keys.map(1000 / _.updateRate).min
+          shortestPeriod = updaters.keys.filter(_.updatePeriod > 0).map(_.updatePeriod).min
         }
         else
         {

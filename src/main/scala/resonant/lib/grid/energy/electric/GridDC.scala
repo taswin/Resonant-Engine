@@ -162,12 +162,12 @@ class GridDC extends GridNode[NodeDC] with IUpdate
   override def update(deltaTime: Double)
   {
     //Calculate all nodes except batteries
-    val nodes = getNodes.filterNot(_.isInstanceOf[NodeDCWire])
+    val nodes = this.nodes.filterNot(_.isInstanceOf[NodeDCWire])
     junctions.foreach(_.update(deltaTime * 5))
     nodes.foreach(_.nextVoltage = 0)
   }
 
-  override def updateRate: Int = if (getNodes.size > 0) 20 else 0
+  override def updatePeriod: Int = if (getNodes.size > 0) 50 else 0
 
   override protected def populateNode(node: NodeDC, prev: NodeDC)
   {

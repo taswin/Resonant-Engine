@@ -15,9 +15,9 @@ public interface IUpdate
 	public void update(double deltaTime);
 
 	/**
-	 * Returns the update rate of the updater. How many times per second should it update?
-	 * This method is only useful for threaded tickers. By default, update rate should be 20 per second.
-	 * @return An integer representing how many times update is called every single second. A value of zero will remove this updater from the list.
+	 * Returns how many milliseconds there should be in successive updates. This method is only useful for threaded tickers.
+	 * By default, update period should be 50 milliseconds (20 updates per second).
+	 * @return An integer representing how many milliseconds between each update. A value of zero will remove this updater from the list.
 	 */
-	public int updateRate();
+	public int updatePeriod();
 }
