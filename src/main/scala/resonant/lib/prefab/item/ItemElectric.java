@@ -7,9 +7,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import resonant.api.items.IEnergyItem;
+import resonant.lib.mod.compat.energy.Compatibility;
 import resonant.lib.utility.science.UnitDisplay;
 import resonant.lib.utility.science.UnitDisplay.Unit;
-import resonant.lib.mod.compat.energy.Compatibility;
 
 import java.util.List;
 
@@ -19,6 +19,7 @@ import java.util.List;
  *
  * @author Calclavia
  */
+@Deprecated
 public abstract class ItemElectric extends Item implements IEnergyItem
 {
 	private static final String ENERGY_NBT = "electricity";
@@ -95,13 +96,7 @@ public abstract class ItemElectric extends Item implements IEnergyItem
 	}
 
 	@Override
-	public double getVoltage(ItemStack itemStack)
-	{
-		return 120;
-	}
-
-	@Override
-	public void setEnergy(ItemStack itemStack, double joules)
+	public ItemStack setEnergy(ItemStack itemStack, double joules)
 	{
 		if (itemStack.getTagCompound() == null)
 		{
@@ -110,7 +105,8 @@ public abstract class ItemElectric extends Item implements IEnergyItem
 
 		double electricityStored = Math.max(Math.min(joules, getEnergyCapacity(itemStack)), 0);
 		itemStack.getTagCompound().setDouble(ENERGY_NBT, electricityStored);
-		itemStack.setItemDamage((int) (100 - ((double) electricityStored / (double) getEnergyCapacity(itemStack)) * 100));
+		itemStack.setItemDamage((int) (100 - (electricityStored / getEnergyCapacity(itemStack)) * 100));
+		return itemStack;
 	}
 
 	public double getTransfer(ItemStack itemStack)

@@ -7,7 +7,6 @@ import scala.beans.BeanProperty
 
 /**
  * Any object that can store energy
- * @deprecated due to almost no use this class is to be replaced with TEnergyBuffer which does the same thing without forge direction usage
  * @author Calclavia
  */
 trait TEnergyStorage

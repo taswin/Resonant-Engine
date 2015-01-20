@@ -35,6 +35,7 @@ import resonant.lib.wrapper.StringWrapper._
 import scala.beans.BeanProperty
 import scala.collection.convert.wrapAll._
 import scala.collection.immutable
+
 /**
  * All blocks inherit this class.
  *
@@ -148,13 +149,13 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   /** Use update() instead */
   final override def updateEntity() = update()
 
+  def blockUpdate() = update()
+
   /** Called each tick */
   def update()
   {
 
   }
-
-  def blockUpdate() = update()
 
   def randomDisplayTick()
   {
@@ -257,6 +258,16 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
    */
   def quantityDropped(meta: Int, fortune: Int): Int = 1
 
+  /**
+   * Gets the meta value when this block is dropped.
+   * This method is used by the default implementation of getDrops
+   *
+   * @param meta - meta value of the block
+   * @param fortune - bonus of the tool mining it
+   * @return meta value, shouldn't be less then 0
+   */
+  def metadataDropped(meta: Int, fortune: Int): Int = 0
+
   /** Block object that goes to this tile */
   override def getBlockType: Block =
   {
@@ -314,28 +325,6 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
    * @return ItemStack of your block, can be null but shouldn't unless the block can't be placed
    */
   def getPickBlock(target: MovingObjectPosition): ItemStack = new ItemStack(block, 1, metadataDropped(metadata, 0))
-
-  /**
-   * Gets the meta value when this block is dropped.
-   * This method is used by the default implementation of getDrops
-   *
-   * @param meta - meta value of the block
-   * @param fortune - bonus of the tool mining it
-   * @return meta value, shouldn't be less then 0
-   */
-  def metadataDropped(meta: Int, fortune: Int): Int = 0
-
-  def metadata: Int = if (access != null) access.getBlockMetadata(xi, yi, zi) else 0
-
-  def access: IBlockAccess =
-  {
-    if (world != null)
-    {
-      return world
-    }
-
-    return _access
-  }
 
   /**
    * Gets the light value of the block
@@ -634,19 +623,6 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   def hasSpecialRenderer = getSpecialRenderer != null
 
   @SideOnly(Side.CLIENT)
-  def getSpecialRenderer: TileEntitySpecialRenderer =
-  {
-    val tesr: TileEntitySpecialRenderer = TileEntityRendererDispatcher.instance.getSpecialRendererByClass(getClass)
-
-    if (tesr != null && !tesr.isInstanceOf[RenderTileDummy])
-    {
-      return tesr
-    }
-
-    return null
-  }
-
-  @SideOnly(Side.CLIENT)
   def renderInventory(itemStack: ItemStack)
   {
     val tesr: TileEntitySpecialRenderer = getSpecialRenderer
@@ -677,6 +653,19 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
     }
   }
 
+  @SideOnly(Side.CLIENT)
+  def getSpecialRenderer: TileEntitySpecialRenderer =
+  {
+    val tesr: TileEntitySpecialRenderer = TileEntityRendererDispatcher.instance.getSpecialRendererByClass(getClass)
+
+    if (tesr != null && !tesr.isInstanceOf[RenderTileDummy])
+    {
+      return tesr
+    }
+
+    return null
+  }
+
   /**
    * Render the dynamic, changing faces of this part and other gfx as in a TESR.
    * The Tessellator will need to be started if it is to be used.
@@ -704,6 +693,34 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
       GL11.glPopMatrix()
       GL11.glPopAttrib()
     }
+  }
+
+  def metadata: Int = if (access != null) access.getBlockMetadata(xi, yi, zi) else 0
+
+  def access: IBlockAccess =
+  {
+    if (world != null)
+    {
+      return world
+    }
+
+    return _access
+  }
+
+  /**
+   * Is the player looking at this block?
+   * @return True if the player is looking at this block.
+   */
+  def isPlayerLooking(player: EntityPlayer): Boolean =
+  {
+    val objectPosition: MovingObjectPosition = player.rayTrace(8, 1)
+
+    if (objectPosition != null)
+    {
+      return objectPosition.blockX == xi && objectPosition.blockY == yi && objectPosition.blockZ == zi
+    }
+
+    return false
   }
 
   //TODO: Get rid of parameters
@@ -812,6 +829,8 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   def setMeta(meta: Int)
   { world.setBlockMetadataWithNotify(xi, yi, zi, meta, 3) }
 
+  override def world: World = getWorldObj
+
   override def getBlockMetadata: Int =
   {
     if (world == null)
@@ -819,8 +838,6 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
     else
       return super.getBlockMetadata
   }
-
-  override def world: World = getWorldObj
 
   /** gets the way this piston should face for that entity that placed it. */
   def determineOrientation(entityLiving: EntityLivingBase): Byte =
@@ -844,6 +861,8 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
     }
     return 0
   }
+
+  override def toString: String = "[" + getClass.getSimpleName + " " + x + ", " + y + ", " + z + "]"
 
   override def x: Double = xCoord
 
