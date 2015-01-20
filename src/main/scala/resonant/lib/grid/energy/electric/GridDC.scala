@@ -30,7 +30,7 @@ class GridDC extends GridNode[NodeDC] with IUpdate
     super.reconstruct(first)
     solveWires()
     solveGraph()
-    UpdateTicker.threaded.addUpdater(this)
+    UpdateTicker.world.addUpdater(this)
   }
 
   /**
@@ -156,18 +156,17 @@ class GridDC extends GridNode[NodeDC] with IUpdate
   override def deconstruct(first: NodeDC)
   {
     super.deconstruct(first)
-    UpdateTicker.threaded.removeUpdater(this)
+    UpdateTicker.world.removeUpdater(this)
   }
 
   override def update(deltaTime: Double)
   {
     //Calculate all nodes except batteries
-    val nodes = this.nodes.filterNot(_.isInstanceOf[NodeDCWire])
-    junctions.foreach(_.update(deltaTime * 5))
+    junctions.foreach(_.update(deltaTime * 10))
     nodes.foreach(_.nextVoltage = 0)
   }
 
-  override def updatePeriod: Int = if (getNodes.size > 0) 50 else 0
+  override def updatePeriod: Int = if (getNodes.size > 0) 20 else 0
 
   override protected def populateNode(node: NodeDC, prev: NodeDC)
   {

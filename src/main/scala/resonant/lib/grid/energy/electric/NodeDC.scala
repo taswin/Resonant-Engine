@@ -16,6 +16,8 @@ import scala.collection.convert.wrapAll._
  *
  * A DC component must be in between two junction nodes in order to function.
  *
+ * Flow of current should be positive when current from junction A is flowing to B
+ *
  * @author Calclavia
  */
 class NodeDC(parent: INodeProvider) extends NodeGrid[NodeDC](parent) with TTileConnector[NodeDC] with IDebugInfo
@@ -36,7 +38,7 @@ class NodeDC(parent: INodeProvider) extends NodeGrid[NodeDC](parent) with TTileC
   var voltage = 0d
   var current = 0d
   @BeanProperty
-  var resistance = 0.1d
+  var resistance = 1d
 
   protected[electric] var nextVoltage = 0d
 
@@ -76,7 +78,7 @@ class NodeDC(parent: INodeProvider) extends NodeGrid[NodeDC](parent) with TTileC
     voltage = 0
     current = 0
 
-    if (junctionA != null && junctionB != null && nextVoltage == 0)
+    if (junctionA != null && junctionB != null)
     {
       // Calculating potential difference across this link.
       voltage = junctionA.voltage - junctionB.voltage
@@ -86,7 +88,14 @@ class NodeDC(parent: INodeProvider) extends NodeGrid[NodeDC](parent) with TTileC
         voltage = 0
 
       // Calculating current based on voltage and resistance.
-      current = voltage / resistance
+      if (nextVoltage != 0)
+      {
+        current = Math.max(Math.max(Math.abs(junctionA.inCurrent), Math.abs(junctionA.outCurrent)), Math.max(Math.abs(junctionB.inCurrent), Math.abs(junctionB.outCurrent))) * Math.signum(voltage)
+      }
+      else
+      {
+        current = voltage / resistance
+      }
     }
   }
 
