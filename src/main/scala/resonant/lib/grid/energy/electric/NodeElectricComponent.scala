@@ -112,7 +112,7 @@ class NodeElectricComponent(parent: INodeProvider) extends NodeGrid[NodeElectric
       if (nextVoltage != 0)
       {
         //This is a voltage source. Calculate current based on junction current
-        current = Math.max(Math.max(Math.abs(junctionA.currentIn), Math.abs(junctionA.currentOut)), Math.max(Math.abs(junctionB.currentIn), Math.abs(junctionB.currentOut))) * Math.signum(voltage)
+        current = junctionB.currentOut * Math.signum(voltage)
       }
       else
       {

@@ -89,10 +89,26 @@ class Junction
       }
     )
 
+    //TODO: By Kirchoff's Law, current coming in should equal to current going out. Attempt to re-balance that.
+    nodes.foreach(
+      node =>
+      {
+        if (node.nextVoltage != 0)
+        {
+          if (this == node.junctionA)
+          {
+            currentIn = currentOut
+          }
+          else if (this == node.junctionB)
+          {
+            currentOut = currentIn
+          }
+        }
+      }
+    )
+
     if (sourceVoltage != 0)
       voltage = sourceVoltage
-
-    //TODO: By Kirchoff's Law, current coming in should equal to current going out. Attempt to re-balance that.
   }
 
   /**
