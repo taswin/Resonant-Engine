@@ -15,7 +15,7 @@ import resonant.lib.prefab.tile.traits.TTicker
  *
  * @author Calclavia
  */
-abstract class SpatialTile(material: Material) extends SpatialBlock(material) with IPlayerUsing with TTicker
+class SpatialTile(material: Material) extends SpatialBlock(material) with IPlayerUsing with TTicker
 {
   /**
    * The players to send packets to for machine update info.

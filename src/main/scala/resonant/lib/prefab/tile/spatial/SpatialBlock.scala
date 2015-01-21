@@ -19,6 +19,7 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{AxisAlignedBB, IIcon, MathHelper, MovingObjectPosition}
 import net.minecraft.world.{Explosion, IBlockAccess, World}
 import net.minecraftforge.client.IItemRenderer
+import net.minecraftforge.client.IItemRenderer.ItemRenderType
 import org.lwjgl.opengl.{GL11, GL12}
 import resonant.api.items.ISimpleItemRenderer
 import resonant.lib.content.prefab.TIO
@@ -88,7 +89,7 @@ object SpatialBlock
 
 }
 
-abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVectorWorld
+abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVectorWorld with ISimpleItemRenderer
 {
   /** Name of the block, unlocalized */
   var name = getClass.getSimpleName.replaceFirst("Tile", "").decapitalizeFirst
@@ -476,6 +477,8 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
     world.notifyBlocksOfNeighborChange(xi, yi, zi, block)
   }
 
+  override def world: World = getWorldObj
+
   /**
    * Called when an entity collides with this block.
    */
@@ -623,6 +626,12 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   def hasSpecialRenderer = getSpecialRenderer != null
 
   @SideOnly(Side.CLIENT)
+  override def renderInventoryItem(`type`: ItemRenderType, itemStack: ItemStack, data: AnyRef*)
+  {
+    renderInventory(itemStack)
+  }
+
+  @SideOnly(Side.CLIENT)
   def renderInventory(itemStack: ItemStack)
   {
     val tesr: TileEntitySpecialRenderer = getSpecialRenderer
@@ -653,19 +662,6 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
     }
   }
 
-  @SideOnly(Side.CLIENT)
-  def getSpecialRenderer: TileEntitySpecialRenderer =
-  {
-    val tesr: TileEntitySpecialRenderer = TileEntityRendererDispatcher.instance.getSpecialRendererByClass(getClass)
-
-    if (tesr != null && !tesr.isInstanceOf[RenderTileDummy])
-    {
-      return tesr
-    }
-
-    return null
-  }
-
   /**
    * Render the dynamic, changing faces of this part and other gfx as in a TESR.
    * The Tessellator will need to be started if it is to be used.
@@ -693,6 +689,19 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
       GL11.glPopMatrix()
       GL11.glPopAttrib()
     }
+  }
+
+  @SideOnly(Side.CLIENT)
+  def getSpecialRenderer: TileEntitySpecialRenderer =
+  {
+    val tesr: TileEntitySpecialRenderer = TileEntityRendererDispatcher.instance.getSpecialRendererByClass(getClass)
+
+    if (tesr != null && !tesr.isInstanceOf[RenderTileDummy])
+    {
+      return tesr
+    }
+
+    return null
   }
 
   def metadata: Int = if (access != null) access.getBlockMetadata(xi, yi, zi) else 0
@@ -829,8 +838,6 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   def setMeta(meta: Int)
   { world.setBlockMetadataWithNotify(xi, yi, zi, meta, 3) }
 
-  override def world: World = getWorldObj
-
   override def getBlockMetadata: Int =
   {
     if (world == null)
@@ -862,13 +869,13 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
     return 0
   }
 
-  override def toString: String = "[" + getClass.getSimpleName + " " + x + ", " + y + ", " + z + "]"
-
   override def x: Double = xCoord
 
   override def y: Double = yCoord
 
   override def z: Double = zCoord
+
+  override def toString: String = "[" + getClass.getSimpleName + " " + x + ", " + y + ", " + z + "]"
 
   /** Gets the icon that renders on the sides
     * @param meta - placement data
