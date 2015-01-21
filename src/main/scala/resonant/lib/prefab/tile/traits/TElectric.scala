@@ -4,7 +4,7 @@ import net.minecraft.block.Block
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.tile.INodeProvider
 import resonant.api.tile.node.INode
-import resonant.lib.grid.energy.electric.NodeDC
+import resonant.lib.grid.energy.electric.NodeElectricComponent
 import resonant.lib.prefab.tile.spatial.SpatialTile
 
 /**
@@ -12,7 +12,7 @@ import resonant.lib.prefab.tile.spatial.SpatialTile
  */
 trait TElectric extends SpatialTile with INodeProvider
 {
-  protected var dcNode = new NodeDC(this)
+  protected var dcNode = new NodeElectricComponent(this)
 
   override def start()
   {
@@ -37,7 +37,7 @@ trait TElectric extends SpatialTile with INodeProvider
 
   override def getNode[N <: INode](nodeType: Class[_ <: N], from: ForgeDirection): N =
   {
-    if (classOf[NodeDC].isAssignableFrom(nodeType))
+    if (classOf[NodeElectricComponent].isAssignableFrom(nodeType))
       return dcNode.asInstanceOf[N]
 
     return null.asInstanceOf[N]

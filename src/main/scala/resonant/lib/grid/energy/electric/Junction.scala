@@ -23,12 +23,12 @@ class Junction
   /**
    * The nodes that this junction is connected with.
    */
-  var nodes = Set.empty[NodeDC]
+  var nodes = Set.empty[NodeElectricComponent]
 
   /**
    * The wires that collapsed into this junction
    */
-  var wires = Set.empty[NodeDC]
+  var wires = Set.empty[NodeElectricComponent]
 
   def update(deltaTime: Double)
   {
@@ -50,11 +50,11 @@ class Junction
            */
           if (this == node.junctionA)
           {
-            sourceVoltage -= node.nextVoltage / 2
+            sourceVoltage -= node.nextVoltage / 2 * Math.cos(node.frequency * System.currentTimeMillis() / 1000d)
           }
           else if (this == node.junctionB)
           {
-            sourceVoltage += node.nextVoltage / 2
+            sourceVoltage += node.nextVoltage / 2 * Math.cos(node.frequency * System.currentTimeMillis() / 1000d)
           }
         }
         else

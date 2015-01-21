@@ -12,19 +12,19 @@ import scala.collection.convert.wrapAll._
  *
  * @author Calclavia
  */
-class GridDC extends GridNode[NodeDC] with IUpdate
+class GridElectric extends GridNode[NodeElectricComponent] with IUpdate
 {
   /**
    * There should always at least (node.size - 1) amount of intersections.
    */
   var junctions = Set.empty[Junction]
 
-  nodeClass = classOf[NodeDC]
+  nodeClass = classOf[NodeElectricComponent]
 
   /**
    * Reconstruct must build the links and intersections of the grid
    */
-  override def reconstruct(first: NodeDC)
+  override def reconstruct(first: NodeElectricComponent)
   {
     junctions = Set.empty[Junction]
     super.reconstruct(first)
@@ -41,17 +41,17 @@ class GridDC extends GridNode[NodeDC] with IUpdate
     /**
      * Finds all the wire nodes connected to this one.
      */
-    def recurseFind(wire: NodeDCJunction, result: Set[NodeDCJunction] = Set.empty[NodeDCJunction]): Set[NodeDCJunction] =
+    def recurseFind(wire: NodeElectricJunction, result: Set[NodeElectricJunction] = Set.empty[NodeElectricJunction]): Set[NodeElectricJunction] =
     {
-      val wireConnections = wire.connections.filter(_.isInstanceOf[NodeDCJunction]).map(_.asInstanceOf[NodeDCJunction])
+      val wireConnections = wire.connections.filter(_.isInstanceOf[NodeElectricJunction]).map(_.asInstanceOf[NodeElectricJunction])
       var newResult = result + wire
       newResult ++= wireConnections.filterNot(result.contains).map(n => recurseFind(n, newResult)).flatten
       return newResult
     }
 
-    var recursed = Set.empty[NodeDC]
+    var recursed = Set.empty[NodeElectricComponent]
 
-    val nodes = getNodes.filter(_.isInstanceOf[NodeDCJunction]).map(_.asInstanceOf[NodeDCJunction])
+    val nodes = getNodes.filter(_.isInstanceOf[NodeElectricJunction]).map(_.asInstanceOf[NodeElectricJunction])
 
     for (node <- nodes)
     {
@@ -59,10 +59,10 @@ class GridDC extends GridNode[NodeDC] with IUpdate
       {
         //Create a junction
         val junction = new Junction
-        val foundWires = recurseFind(node).toSet[NodeDC]
+        val foundWires = recurseFind(node).toSet[NodeElectricComponent]
         recursed ++= foundWires
         junction.wires = foundWires
-        junction.nodes = foundWires.map(_.connections).flatten.filterNot(_.isInstanceOf[NodeDCJunction])
+        junction.nodes = foundWires.map(_.connections).flatten.filterNot(_.isInstanceOf[NodeElectricJunction])
         foundWires.foreach(
           w =>
           {
@@ -81,9 +81,9 @@ class GridDC extends GridNode[NodeDC] with IUpdate
    */
   private def solveGraph()
   {
-    var recursed = Set.empty[NodeDC]
+    var recursed = Set.empty[NodeElectricComponent]
 
-    def solveGraph(node: NodeDC, prev: NodeDC = null)
+    def solveGraph(node: NodeElectricComponent, prev: NodeElectricComponent = null)
     {
       //Check if we already traversed through this node and if it is valid. Proceed if we haven't already done so.
       if (!recursed.contains(node))
@@ -146,14 +146,14 @@ class GridDC extends GridNode[NodeDC] with IUpdate
       }
     }
 
-    getNodes.filterNot(_.isInstanceOf[NodeDCJunction]).headOption match
+    getNodes.filterNot(_.isInstanceOf[NodeElectricJunction]).headOption match
     {
       case Some(x) => solveGraph(x)
       case _ =>
     }
   }
 
-  override def deconstruct(first: NodeDC)
+  override def deconstruct(first: NodeElectricComponent)
   {
     super.deconstruct(first)
     UpdateTicker.world.removeUpdater(this)
@@ -168,7 +168,7 @@ class GridDC extends GridNode[NodeDC] with IUpdate
 
   override def updatePeriod: Int = if (getNodes.size > 0) 20 else 0
 
-  override protected def populateNode(node: NodeDC, prev: NodeDC)
+  override protected def populateNode(node: NodeElectricComponent, prev: NodeElectricComponent)
   {
     super.populateNode(node, prev)
     node.junctionA = null

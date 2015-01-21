@@ -20,7 +20,7 @@ import scala.collection.convert.wrapAll._
  *
  * @author Calclavia
  */
-class NodeDC(parent: INodeProvider) extends NodeGrid[NodeDC](parent) with TTileConnector[NodeDC] with IDebugInfo
+class NodeElectricComponent(parent: INodeProvider) extends NodeGrid[NodeElectricComponent](parent) with TTileConnector[NodeElectricComponent] with IDebugInfo
 {
   /**
    * The positive terminals are the directions in which charge can flow out of this DC component.
@@ -41,6 +41,12 @@ class NodeDC(parent: INodeProvider) extends NodeGrid[NodeDC](parent) with TTileC
   var resistance = 1d
 
   /**
+   * The alternating current frequency. When frequency is zero, it is direct current.
+   * The frequency determines how often voltage oscillates per second.
+   */
+  var frequency = 0
+
+  /**
    * Variables to keep voltage source states
    */
   protected[electric] var nextVoltage = 0d
@@ -56,9 +62,9 @@ class NodeDC(parent: INodeProvider) extends NodeGrid[NodeDC](parent) with TTileC
    */
   protected[electric] var junctionB: Junction = null
 
-  def positives: JSet[NodeDC] = directionMap.filter(keyVal => positiveTerminals.contains(keyVal._2)).keySet
+  def positives: JSet[NodeElectricComponent] = directionMap.filter(keyVal => positiveTerminals.contains(keyVal._2)).keySet
 
-  def negatives: JSet[NodeDC] = directionMap.filter(keyVal => negativeTerminals.contains(keyVal._2)).keySet
+  def negatives: JSet[NodeElectricComponent] = directionMap.filter(keyVal => negativeTerminals.contains(keyVal._2)).keySet
 
   /**
    * Retrieves the power of the DC node in Watts.
@@ -137,7 +143,7 @@ class NodeDC(parent: INodeProvider) extends NodeGrid[NodeDC](parent) with TTileC
     nextPower = 0
   }
 
-  override protected def newGrid: GridNode[NodeDC] = new GridDC
+  override protected def newGrid: GridNode[NodeElectricComponent] = new GridElectric
 
   /**
    * The class used to compare when making connections
