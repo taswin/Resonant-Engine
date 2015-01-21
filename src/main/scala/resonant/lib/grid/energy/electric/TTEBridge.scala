@@ -1,13 +1,12 @@
-package resonant.lib.grid.energy
+package resonant.lib.grid.energy.electric
 
 import cofh.api.energy.IEnergyHandler
 import net.minecraftforge.common.util.ForgeDirection
-import resonant.lib.content.prefab.TElectric
 import resonant.lib.mod.compat.energy.Compatibility
-import resonant.lib.prefab.tile.traits.TEnergyProvider
+import resonant.lib.prefab.tile.traits.{TElectric, TEnergyProvider}
 
 /**
- * A temporary energy bridge between TE and UE
+ * An energy bridge between TE and UE
  * @author Calclavia
  */
 trait TTEBridge extends TElectric with TEnergyProvider with IEnergyHandler
@@ -40,6 +39,6 @@ trait TTEBridge extends TElectric with TEnergyProvider with IEnergyHandler
 
   override def canConnectEnergy(from: ForgeDirection): Boolean =
   {
-    return dcNode.canConnect(from)
+    return electricNode.canConnect(from)
   }
 }

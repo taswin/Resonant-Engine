@@ -12,9 +12,9 @@ import scala.beans.BeanProperty
 import scala.collection.convert.wrapAll._
 
 /**
- * Represents a direct current component within a circuit.
+ * Represents an electric component in a circuit.
  *
- * A DC component must be in between two junction nodes in order to function.
+ * An electric component must be in between two junctions in order to function.
  *
  * Flow of current should be positive when current from junction A is flowing to B
  *
@@ -98,7 +98,7 @@ class NodeElectricComponent(parent: INodeProvider) extends NodeGrid[NodeElectric
     voltage = 0
     current = 0
 
-    if (junctionA != null && junctionB != null)
+    if (junctionA != null && junctionB != null && junctionA.nodes.size >= 2 && junctionB.nodes.size >= 2)
     {
       // Calculating potential difference across this link.
       voltage = junctionA.voltage - junctionB.voltage
@@ -110,7 +110,7 @@ class NodeElectricComponent(parent: INodeProvider) extends NodeGrid[NodeElectric
       if (nextVoltage != 0)
       {
         //This is a voltage source. Calculate current based on junction current
-        current = Math.max(Math.max(Math.abs(junctionA.inCurrent), Math.abs(junctionA.outCurrent)), Math.max(Math.abs(junctionB.inCurrent), Math.abs(junctionB.outCurrent))) * Math.signum(voltage)
+        current = Math.max(Math.max(Math.abs(junctionA.currentIn), Math.abs(junctionA.currentOut)), Math.max(Math.abs(junctionB.currentIn), Math.abs(junctionB.currentOut))) * Math.signum(voltage)
       }
       else
       {

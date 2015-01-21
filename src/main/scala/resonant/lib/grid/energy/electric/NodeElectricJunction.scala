@@ -15,8 +15,8 @@ class NodeElectricJunction(parent: INodeProvider) extends NodeElectricComponent(
     if (junctionA != null)
       "DC [" + connections.size() + " Total: " + BigDecimal(junctionA.voltage).setScale(2, BigDecimal.RoundingMode.HALF_UP) +
       "V Source: " + BigDecimal(junctionA.sourceVoltage).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "V " +
-      "In Current: " + BigDecimal(junctionA.inCurrent).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "A " +
-      "Out Current: " + BigDecimal(junctionA.outCurrent).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "A]"
+      "In Current: " + BigDecimal(junctionA.currentIn).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "A " +
+      "Out Current: " + BigDecimal(junctionA.currentOut).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "A]"
     else
       "DC [" + connections.size() + " Null Junction]"
   }

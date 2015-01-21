@@ -16,9 +16,9 @@ class Junction
 
   var sourceVoltage = 0d
 
-  var inCurrent = 0d
+  var currentIn = 0d
 
-  var outCurrent = 0d
+  var currentOut = 0d
 
   /**
    * The nodes that this junction is connected with.
@@ -33,65 +33,78 @@ class Junction
   def update(deltaTime: Double)
   {
     sourceVoltage = 0
-    outCurrent = 0
-    inCurrent = 0
+    currentOut = 0
+    currentIn = 0
 
-    //Loop through every node that is connected to this junction
-    nodes.foreach(
-      node =>
-      {
-        //This is required to propagate voltage
-        node.calculate()
-
-        if (node.nextVoltage != 0)
+    if (nodes.size >= 2)
+    {
+      //Loop through every node that is connected to this junction
+      nodes.foreach(
+        node =>
         {
-          /**
-           * Push generated voltages into this node
-           */
-          if (this == node.junctionA)
+          //This is required to propagate voltage
+          node.calculate()
+
+          if (node.nextVoltage != 0)
           {
-            sourceVoltage -= node.nextVoltage / 2 * Math.cos(node.frequency * System.currentTimeMillis() / 1000d)
+            /**
+             * Push generated voltages into this node
+             */
+            if (this == node.junctionA)
+            {
+              sourceVoltage -= node.nextVoltage / 2 * Math.cos(node.frequency * System.currentTimeMillis() / 1000d)
+            }
+            else if (this == node.junctionB)
+            {
+              sourceVoltage += node.nextVoltage / 2 * Math.cos(node.frequency * System.currentTimeMillis() / 1000d)
+            }
           }
-          else if (this == node.junctionB)
+          else
           {
-            sourceVoltage += node.nextVoltage / 2 * Math.cos(node.frequency * System.currentTimeMillis() / 1000d)
+            /**
+             * Potential difference creates current, which acts to decrease potential difference.
+             * Any system forwards to minimal inner energy, and only equipotential systems have minimal energy.
+             */
+            val delta = node.current * deltaTime
+
+            if (this == node.junctionA)
+            {
+              voltage -= delta
+
+              //This is junction A of the component. Current should be flowing towards this junction if positive.
+              if (node.current > 0)
+                currentIn += node.current
+              else
+                currentOut -= node.current
+            }
+            else if (this == node.junctionB)
+            {
+              voltage += delta
+
+              //This is junction B of the component. This means current should be leaving this junction if positive.
+              if (node.current > 0)
+                currentOut += node.current
+              else
+                currentIn -= node.current
+            }
           }
         }
-        else
-        {
-          /**
-           * Potential difference creates current, which acts to decrease potential difference.
-           * Any system forwards to minimal inner energy, and only equipotential systems have minimal energy.
-           */
-          val delta = node.current * deltaTime
+      )
 
-          if (this == node.junctionA)
-          {
-            voltage -= delta
+      if (sourceVoltage != 0)
+        voltage = sourceVoltage
 
-            //This is junction A of the component. Current should be flowing towards this junction if positive.
-            if (node.current > 0)
-              inCurrent += node.current
-            else
-              outCurrent -= node.current
-          }
-          else if (this == node.junctionB)
-          {
-            voltage += delta
-
-            //This is junction B of the component. This means current should be leaving this junction if positive.
-            if (node.current > 0)
-              outCurrent += node.current
-            else
-              inCurrent -= node.current
-          }
-        }
-      }
-    )
-
-    if (sourceVoltage != 0)
-      voltage = sourceVoltage
-
-    //TODO: By Kirchoff's Law, current coming in should equal to current going out. Attempt to re-balance that.
+      //TODO: By Kirchoff's Law, current coming in should equal to current going out. Attempt to re-balance that.
+    }
   }
+
+  /**
+   * Gets the power loss in this junction due to resistance
+   */
+  def powerLoss = currentIn * currentIn * resistance
+
+  /**
+   * The total resistance of this junction due to wires
+   */
+  def resistance = wires.map(_.resistance).foldLeft(0d)(_ + _)
 }

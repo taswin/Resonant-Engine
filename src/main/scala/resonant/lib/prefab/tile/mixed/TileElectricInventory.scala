@@ -1,8 +1,9 @@
 package resonant.lib.prefab.tile.mixed
 
 import net.minecraft.block.material.Material
-import resonant.lib.content.prefab.{TElectric, TInventory}
+import resonant.lib.content.prefab.TInventory
 import resonant.lib.prefab.tile.spatial.SpatialTile
+import resonant.lib.prefab.tile.traits.TElectric
 
 /**
  * Used for Java class inheritance of Scala traits
