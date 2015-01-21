@@ -3,7 +3,6 @@ package resonant.lib.network.netty;
 import cpw.mods.fml.common.network.FMLIndexedMessageToMessageCodec;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import resonant.lib.network.discriminator.PacketAnnotation;
 import resonant.lib.network.discriminator.PacketEntity;
 import resonant.lib.network.discriminator.PacketPlayerItem;
 import resonant.lib.network.discriminator.PacketTile;
@@ -18,7 +17,6 @@ public class ResonantChannelHandler extends FMLIndexedMessageToMessageCodec<Abst
 	{
 		this.addDiscriminator(0, PacketTile.class);
 		this.addDiscriminator(1, PacketEntity.class);
-		this.addDiscriminator(2, PacketAnnotation.class);
 		this.addDiscriminator(3, PacketPlayerItem.class);
 
 	}

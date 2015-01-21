@@ -2,8 +2,8 @@ package resonant.lib.mod.loadable;
 
 import cpw.mods.fml.common.Loader;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The Object that handles the load calls or submods of the mod
@@ -20,7 +20,7 @@ import java.util.Set;
  */
 public class LoadableHandler
 {
-	private Set<ILoadable> loadables = new HashSet();
+	private List<ILoadable> loadables = new ArrayList();
 	private LoadPhase phase = LoadPhase.PRELAUNCH;
 
 	/**
