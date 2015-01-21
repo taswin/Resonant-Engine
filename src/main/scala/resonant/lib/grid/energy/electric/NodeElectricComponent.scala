@@ -23,12 +23,14 @@ import scala.collection.convert.wrapAll._
 class NodeElectricComponent(parent: INodeProvider) extends NodeGrid[NodeElectricComponent](parent) with TTileConnector[NodeElectricComponent] with IDebugInfo
 {
   /**
-   * The positive terminals are the directions in which charge can flow out of this DC component.
+   * The positive terminals are the directions in which charge can flow out of this electric component.
+   * Positive and negative terminals must be mutually exclusive.
    */
   val positiveTerminals: JSet[ForgeDirection] = new util.HashSet()
 
   /**
-   * The negative terminals are the directions in which charge can flow into this DC component.
+   * The negative terminals are the directions in which charge can flow into this electric component.
+   * Positive and negative terminals must be mutually exclusive.
    */
   val negativeTerminals: JSet[ForgeDirection] = new util.HashSet()
 
@@ -91,7 +93,7 @@ class NodeElectricComponent(parent: INodeProvider) extends NodeGrid[NodeElectric
 
   override def getDebugInfo = List(toString)
 
-  override def toString = "DC [" + connections.size() + " " + BigDecimal(current).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "A " + BigDecimal(voltage).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "V]"
+  override def toString = "Electric [" + connections.size() + " " + BigDecimal(current).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "A " + BigDecimal(voltage).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "V]"
 
   protected[electric] def calculate()
   {

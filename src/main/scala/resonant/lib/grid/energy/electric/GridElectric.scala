@@ -100,15 +100,19 @@ class GridElectric extends GridNode[NodeElectricComponent] with IUpdate
               if (prev == null)
               {
                 /**
-                 * Look through all junctions, see if there is already one that is connected to this junction, but NOT the previous junction
-                 * If the junction does NOT exist, then create a new one
+                 * This is only called in the first recursion loop.
+                 *
+                 * Look through all junctions, see if there is already one that is connected to this node, but NOT the previous junction
+                 * If the junction does NOT exist, then create a new virtual one
                  */
-                junctions.find(j => j.nodes.contains(node) && j.wires.exists(node.negatives.contains)) match
+                junctions.find(j => j.nodes.contains(node) && j.wires.exists(node.positives.contains)) match
                 {
-                  case Some(x) => x
+                  case Some(j) => j //We found another wire to connect to
                   case _ =>
-                    println("Warning: Creating new junction. This should not happen yet.")
-                    new Junction //Rarely should we need to create a new junction
+                    //We create a new virtual junction, because this terminal is not connected to any wires, but another component
+                    val virtual = new VirtualJunction
+                    virtual.nodes += node
+                    virtual
                 }
               }
               else
@@ -117,19 +121,29 @@ class GridElectric extends GridNode[NodeElectricComponent] with IUpdate
               }
             }
 
-          //Create a new junction for intersection B
+          //Create a new junction for junction B
           node.junctionB =
             {
               /**
-               * Look through all junctions, see if there is already one that is connected to this junction, but NOT the previous junction
-               * If the junction does NOT exist, then create a new one
+               * Look through all junctions, see if there is already one that is connected to this node.
+               * If the junction does NOT exist, then create a new virtual one
                */
-              junctions.find(j => j.nodes.contains(node) /* && j.wires.exists(node.positives.contains)*/ && node.junctionA != j) match
+              junctions.find(j => j.nodes.contains(node) && node.junctionA != j) match
               {
-                case Some(x) => x
+                case Some(j) => j //We found another wire to connect to
                 case _ =>
-                  println("Warning: Creating new junction. This should not happen yet.")
-                  new Junction //Rarely should we need to create a new junction
+                  junctions.find(j => j.isInstanceOf[VirtualJunction] && j.nodes.contains(node) && node.junctionA != j) match
+                  {
+                    case Some(j) =>
+                      j.nodes += node
+                      j //We found another virtual junction to connect to
+                    case _ =>
+                      //We create a new virtual junction, because this terminal is not connected to any wires, but another component
+                      val virtual = new VirtualJunction
+                      virtual.nodes += node
+                      virtual.nodes ++= node.connections.filterNot(_.isInstanceOf[NodeElectricJunction])
+                      virtual
+                  }
               }
             }
 
@@ -138,10 +152,6 @@ class GridElectric extends GridNode[NodeElectricComponent] with IUpdate
 
           //Recursively populate for all nodes connected to junction B, because junction A simply goes backwards in the graph. There is no point iterating it.
           node.junctionB.nodes.foreach(next => solveGraph(next, node))
-        }
-        else
-        {
-          println("Found invalid DC Node")
         }
       }
     }
