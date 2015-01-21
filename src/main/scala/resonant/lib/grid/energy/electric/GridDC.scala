@@ -41,9 +41,9 @@ class GridDC extends GridNode[NodeDC] with IUpdate
     /**
      * Finds all the wire nodes connected to this one.
      */
-    def recurseFind(wire: NodeDCWire, result: Set[NodeDCWire] = Set.empty[NodeDCWire]): Set[NodeDCWire] =
+    def recurseFind(wire: NodeDCJunction, result: Set[NodeDCJunction] = Set.empty[NodeDCJunction]): Set[NodeDCJunction] =
     {
-      val wireConnections = wire.connections.filter(_.isInstanceOf[NodeDCWire]).map(_.asInstanceOf[NodeDCWire])
+      val wireConnections = wire.connections.filter(_.isInstanceOf[NodeDCJunction]).map(_.asInstanceOf[NodeDCJunction])
       var newResult = result + wire
       newResult ++= wireConnections.filterNot(result.contains).map(n => recurseFind(n, newResult)).flatten
       return newResult
@@ -51,7 +51,7 @@ class GridDC extends GridNode[NodeDC] with IUpdate
 
     var recursed = Set.empty[NodeDC]
 
-    val nodes = getNodes.filter(_.isInstanceOf[NodeDCWire]).map(_.asInstanceOf[NodeDCWire])
+    val nodes = getNodes.filter(_.isInstanceOf[NodeDCJunction]).map(_.asInstanceOf[NodeDCJunction])
 
     for (node <- nodes)
     {
@@ -62,7 +62,7 @@ class GridDC extends GridNode[NodeDC] with IUpdate
         val foundWires = recurseFind(node).toSet[NodeDC]
         recursed ++= foundWires
         junction.wires = foundWires
-        junction.nodes = foundWires.map(_.connections).flatten.filterNot(_.isInstanceOf[NodeDCWire])
+        junction.nodes = foundWires.map(_.connections).flatten.filterNot(_.isInstanceOf[NodeDCJunction])
         foundWires.foreach(
           w =>
           {
@@ -146,7 +146,7 @@ class GridDC extends GridNode[NodeDC] with IUpdate
       }
     }
 
-    getNodes.filterNot(_.isInstanceOf[NodeDCWire]).headOption match
+    getNodes.filterNot(_.isInstanceOf[NodeDCJunction]).headOption match
     {
       case Some(x) => solveGraph(x)
       case _ =>

@@ -7,7 +7,7 @@ import resonant.api.tile.INodeProvider
  * Wires will be treated as junctions and collapsed.
  * @author Calclavia
  */
-class NodeDCWire(parent: INodeProvider) extends NodeDC(parent)
+class NodeDCJunction(parent: INodeProvider) extends NodeDC(parent)
 {
 
   override def toString: String =
