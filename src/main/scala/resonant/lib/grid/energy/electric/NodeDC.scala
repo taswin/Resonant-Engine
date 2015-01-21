@@ -40,7 +40,11 @@ class NodeDC(parent: INodeProvider) extends NodeGrid[NodeDC](parent) with TTileC
   @BeanProperty
   var resistance = 1d
 
+  /**
+   * Variables to keep voltage source states
+   */
   protected[electric] var nextVoltage = 0d
+  protected[electric] var nextPower = 0d
 
   /**
    * Junction A is always preferably negative
@@ -63,10 +67,20 @@ class NodeDC(parent: INodeProvider) extends NodeGrid[NodeDC](parent) with TTileC
 
   /**
    * Generates a potential difference across the two intersections that go across this node.
+   * @param voltage - The target voltage, in Volts
    */
   def generateVoltage(voltage: Double)
   {
     nextVoltage = voltage
+  }
+
+  /**
+   * Generates power by adjusting varying the voltage until the target power is reached
+   * @param power - The target power, in Watts
+   */
+  def generatePower(power: Double)
+  {
+    nextPower = power
   }
 
   override def getDebugInfo = List(toString)
@@ -87,16 +101,40 @@ class NodeDC(parent: INodeProvider) extends NodeGrid[NodeDC](parent) with TTileC
       if (Math.abs(voltage) < 0.0001d)
         voltage = 0
 
-      // Calculating current based on voltage and resistance.
       if (nextVoltage != 0)
       {
+        //This is a voltage source. Calculate current based on junction current
         current = Math.max(Math.max(Math.abs(junctionA.inCurrent), Math.abs(junctionA.outCurrent)), Math.max(Math.abs(junctionB.inCurrent), Math.abs(junctionB.outCurrent))) * Math.signum(voltage)
       }
       else
       {
+        // Calculating current based on voltage and resistance.
         current = voltage / resistance
       }
+
+      /**
+       * Adjust power and balance iet until the voltage creates the desired power.
+       */
+      if (nextPower > 0)
+      {
+        if (current != 0)
+        {
+          val estimatedResistance = voltage / current
+          nextVoltage = Math.sqrt(estimatedResistance * nextPower)
+        }
+        else
+        {
+          //Generate 1 test volt to determine the resistance of the circuit
+          nextVoltage = 1
+        }
+      }
     }
+  }
+
+  protected[electric] def postUpdate()
+  {
+    nextVoltage = 0
+    nextPower = 0
   }
 
   override protected def newGrid: GridNode[NodeDC] = new GridDC
