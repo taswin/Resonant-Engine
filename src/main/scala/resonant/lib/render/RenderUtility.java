@@ -2,6 +2,7 @@ package resonant.lib.render;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -9,15 +10,19 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
-import resonant.lib.world.WorldUtility;
 import resonant.lib.transform.vector.Vector3;
+import resonant.lib.world.WorldUtility;
 
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -701,5 +706,47 @@ public class RenderUtility
 	public static void bind(ResourceLocation location)
 	{
 		FMLClientHandler.instance().getClient().renderEngine.bindTexture(location);
+	}
+
+	public void renderTags(Vector3 coord, HashMap<String, Integer> tags, float height)
+	{
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+
+		if (player.ridingEntity == null)
+		{
+			MovingObjectPosition objectPosition = player.rayTrace(8, 1);
+
+			if (objectPosition != null)
+			{
+				boolean isLooking = false;
+
+				for (int h = 0; h < height; h++)
+				{
+					if (objectPosition.blockX == coord.xi() && objectPosition.blockY == coord.yi() + h && objectPosition.blockZ == coord.yi())
+					{
+						isLooking = true;
+					}
+				}
+
+				if (isLooking)
+				{
+					Iterator<Map.Entry<String, Integer>> it = tags.entrySet().iterator();
+					int i = 0;
+
+					while (it.hasNext())
+					{
+						Map.Entry<String, Integer> entry = it.next();
+
+						if (entry.getKey() != null)
+						{
+							renderFloatingText(entry.getKey(), new Vector3(0.5, i * 0.25f + height, 0.5f), entry.getValue());
+						}
+
+						i++;
+					}
+				}
+			}
+		}
+
 	}
 }
