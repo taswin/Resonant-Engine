@@ -19,18 +19,6 @@ class Stat[T](implicit n: Numeric[T]) extends Ordered[T] with ISaveObj
     max = newMax
   }
 
-  def value = _value
-
-  def prev = _prevValue
-
-  def value_=(newValue: T)
-  {
-    _prevValue = _value
-    _value = n.min(n.max(newValue, n.zero), max)
-  }
-
-  def setValue(newVal: T) = value = newVal
-
   def max = _max
 
   def max_=(newMax: T)
@@ -39,13 +27,17 @@ class Stat[T](implicit n: Numeric[T]) extends Ordered[T] with ISaveObj
     value = value
   }
 
-  def setMax(newMax: T) = max = newMax
+  def setValue(newVal: T) = value = newVal
 
   def isMax: Boolean = n.gteq(value, max)
 
-  def isMin: Boolean = n.lteq(value, n.zero)
+  def setMax(newMax: T) = max = newMax
 
   def isLastEmpty: Boolean = (prev == 0 && !isMin) || (n.gt(prev, n.zero) && isMin)
+
+  def prev = _prevValue
+
+  def isMin: Boolean = n.lteq(value, n.zero)
 
   /**
    * Returns the difference between the maximum and current value.
@@ -53,6 +45,14 @@ class Stat[T](implicit n: Numeric[T]) extends Ordered[T] with ISaveObj
   def remaining: T = n.min(max, value)
 
   def +(amount: T): T = n.plus(value, amount)
+
+  def value = _value
+
+  def value_=(newValue: T)
+  {
+    _prevValue = _value
+    _value = n.min(n.max(newValue, n.zero), max)
+  }
 
   def -(amount: T): T = n.minus(value, amount)
 
@@ -72,12 +72,14 @@ class Stat[T](implicit n: Numeric[T]) extends Ordered[T] with ISaveObj
 
   override def load(nbt: NBTTagCompound)
   {
-    value = nbt.getDouble("value").asInstanceOf[T]
+    max = nbt.getDouble("statMax").asInstanceOf[T]
+    value = nbt.getDouble("statValue").asInstanceOf[T]
   }
 
   override def save(nbt: NBTTagCompound)
   {
-    nbt.setDouble("value", n.toDouble(value))
+    nbt.setDouble("statMax", n.toDouble(max))
+    nbt.setDouble("statValue", n.toDouble(value))
   }
 
   override def toString: String = getClass.getSimpleName + "[" + value + "/" + max + "]"
