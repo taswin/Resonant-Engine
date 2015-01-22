@@ -1,8 +1,8 @@
-package resonant.engine.content
+package resonant.core.content
 
 import net.minecraft.block.Block
-import resonant.engine.Reference
-import resonant.engine.content.debug.TileCreativeBuilder
+import resonant.core.Reference
+import resonant.core.content.debug.TileCreativeBuilder
 import resonant.lib.mod.content.ContentHolder
 
 /**

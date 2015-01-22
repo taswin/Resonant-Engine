@@ -1,8 +1,8 @@
-package resonant.engine;
+package resonant.core;
 
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
-import resonant.engine.asm.Transformer;
+import resonant.core.asm.Transformer;
 
 import java.util.Map;
 

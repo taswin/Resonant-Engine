@@ -4,7 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import resonant.engine.content.ResonantContent;
+import resonant.core.content.ResonantContent;
 import resonant.lib.prefab.tile.multiblock.reference.IMultiBlock;
 import resonant.lib.transform.vector.Vector3;
 

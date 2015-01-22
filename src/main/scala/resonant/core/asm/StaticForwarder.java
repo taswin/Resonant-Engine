@@ -1,4 +1,4 @@
-package resonant.engine.asm;
+package resonant.core.asm;
 
 import net.minecraft.block.Block;
 import net.minecraft.world.chunk.Chunk;

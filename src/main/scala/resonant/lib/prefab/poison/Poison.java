@@ -8,7 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import resonant.api.armor.IAntiPoisonArmor;
 import resonant.api.tile.IAntiPoisonBlock;
-import resonant.engine.Reference;
+import resonant.core.Reference;
 import resonant.lib.transform.vector.Vector3;
 
 import java.util.EnumSet;

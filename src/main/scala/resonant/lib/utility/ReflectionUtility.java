@@ -3,7 +3,7 @@ package resonant.lib.utility;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import org.apache.logging.log4j.Level;
-import resonant.engine.Reference;
+import resonant.core.Reference;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;

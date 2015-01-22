@@ -6,7 +6,7 @@ import net.minecraft.launchwrapper.LaunchClassLoader;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.commons.Remapper;
 import org.objectweb.asm.tree.*;
-import resonant.engine.Reference;
+import resonant.core.Reference;
 
 import java.io.IOException;
 

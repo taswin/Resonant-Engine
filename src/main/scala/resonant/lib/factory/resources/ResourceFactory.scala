@@ -3,7 +3,7 @@ package resonant.lib.factory.resources
 import net.minecraft.block.Block
 import net.minecraft.item.Item
 import net.minecraftforge.oredict.OreDictionary
-import resonant.engine.content.ResonantContent
+import resonant.core.content.ResonantContent
 import resonant.lib.factory.resources.block.{TBlockResource, TileOre}
 import resonant.lib.factory.resources.item.{ItemIngot, TItemResource}
 import resonant.lib.prefab.tile.spatial.SpatialBlock

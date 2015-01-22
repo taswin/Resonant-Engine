@@ -1,4 +1,4 @@
-package resonant.engine.content;
+package resonant.core.content;
 
 import buildcraft.api.tools.IToolWrench;
 import net.minecraft.creativetab.CreativeTabs;
@@ -6,7 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
-import resonant.engine.content.tool.ToolMode;
+import resonant.core.content.tool.ToolMode;
 import resonant.lib.utility.LanguageUtility;
 import resonant.lib.utility.nbt.NBTUtility;
 

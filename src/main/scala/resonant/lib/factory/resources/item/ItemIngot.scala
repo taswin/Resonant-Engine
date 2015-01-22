@@ -1,7 +1,7 @@
 package resonant.lib.factory.resources.item
 
 import net.minecraft.creativetab.CreativeTabs
-import resonant.engine.Reference
+import resonant.core.Reference
 
 /**
  * @author Calclavia

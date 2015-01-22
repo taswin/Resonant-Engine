@@ -8,7 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import resonant.api.items.ISimpleItemRenderer;
-import resonant.engine.ResonantEngine;
+import resonant.core.ResonantEngine;
 import resonant.lib.prefab.tile.item.ItemBlockMetadata;
 import resonant.lib.prefab.tile.spatial.BlockDummy;
 import resonant.lib.prefab.tile.spatial.SpatialBlock;

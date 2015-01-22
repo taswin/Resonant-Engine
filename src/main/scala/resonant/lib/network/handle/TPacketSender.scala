@@ -3,7 +3,7 @@ package resonant.lib.network.handle
 import io.netty.buffer.ByteBuf
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.tileentity.TileEntity
-import resonant.engine.ResonantEngine
+import resonant.core.ResonantEngine
 import resonant.lib.network.discriminator.PacketTile
 import resonant.lib.network.netty.AbstractPacket
 import resonant.lib.transform.vector.IVectorWorld
@@ -20,20 +20,6 @@ trait TPacketSender extends TileEntity
 {
   override def getDescriptionPacket = ResonantEngine.packetHandler.toMCPacket(getPacket(0))
 
-  /** Sends the desc packet to all players around this tile */
-  def sendDescPacket()
-  {
-    sendPacket(0)
-  }
-
-  def sendPacket(id: Int, distance: Double =64)
-  {
-    if (distance > 0)
-      sendPacket(getPacket(id), distance)
-    else
-      sendPacket(getPacket(id))
-  }
-
   def getPacket(id: Int): PacketTile =
   {
     val packet = new PacketTile(this)
@@ -48,6 +34,20 @@ trait TPacketSender extends TileEntity
   def write(buf: ByteBuf, id: Int)
   {
     buf <<< id
+  }
+
+  /** Sends the desc packet to all players around this tile */
+  def sendDescPacket()
+  {
+    sendPacket(0)
+  }
+
+  def sendPacket(id: Int, distance: Double =64)
+  {
+    if (distance > 0)
+      sendPacket(getPacket(id), distance)
+    else
+      sendPacket(getPacket(id))
   }
 
   /**

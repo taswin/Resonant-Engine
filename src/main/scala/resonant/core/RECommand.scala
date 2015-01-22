@@ -1,4 +1,4 @@
-package resonant.engine
+package resonant.core
 
 import java.util.List
 

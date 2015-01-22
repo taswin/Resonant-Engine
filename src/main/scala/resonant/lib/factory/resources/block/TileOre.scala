@@ -11,7 +11,7 @@ import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.item.{ItemBlock, ItemStack}
 import net.minecraft.util.IIcon
 import org.lwjgl.opengl.GL11
-import resonant.engine.Reference
+import resonant.core.Reference
 import resonant.lib.factory.resources.ResourceFactory
 import resonant.lib.prefab.tile.spatial.SpatialBlock
 import resonant.lib.render.RenderUtility

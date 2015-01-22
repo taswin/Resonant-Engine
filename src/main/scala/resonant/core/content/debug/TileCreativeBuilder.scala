@@ -1,4 +1,4 @@
-package resonant.engine.content.debug
+package resonant.core.content.debug
 
 import java.util
 
@@ -7,7 +7,7 @@ import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
-import resonant.engine.ResonantEngine
+import resonant.core.ResonantEngine
 import resonant.lib.collection.Pair
 import resonant.lib.network.discriminator.{PacketTile, PacketType}
 import resonant.lib.network.handle.{TPacketReceiver, TPacketSender}

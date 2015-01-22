@@ -1,9 +1,9 @@
-package resonant.engine.content;
+package resonant.core.content;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import resonant.engine.Reference;
+import resonant.core.Reference;
 
 import java.util.List;
 

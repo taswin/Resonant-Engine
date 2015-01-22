@@ -1,6 +1,6 @@
 package resonant.lib.world.schematic;
 
-import resonant.engine.Reference;
+import resonant.core.Reference;
 
 import java.util.HashMap;
 

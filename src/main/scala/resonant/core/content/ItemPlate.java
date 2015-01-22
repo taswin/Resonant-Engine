@@ -1,4 +1,4 @@
-package resonant.engine.content;
+package resonant.core.content;
 
 import net.minecraft.creativetab.CreativeTabs;
 

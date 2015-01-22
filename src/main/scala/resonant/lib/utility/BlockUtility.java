@@ -2,7 +2,7 @@ package resonant.lib.utility;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import resonant.engine.Reference;
+import resonant.core.Reference;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;

@@ -11,7 +11,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.ForgeEventFactory;
-import resonant.engine.Reference;
+import resonant.core.Reference;
 import resonant.lib.transform.rotation.Quaternion;
 import resonant.lib.transform.vector.Vector3;
 import resonant.lib.utility.DummyPlayer;

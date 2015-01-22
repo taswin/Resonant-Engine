@@ -1,8 +1,8 @@
-package resonant.engine.content;
+package resonant.core.content;
 
 import net.minecraft.item.Item;
 import net.minecraft.util.IIcon;
-import resonant.engine.Reference;
+import resonant.core.Reference;
 
 /**
  * An Base Item Class for Basic Components. Do not use this! Make your own!

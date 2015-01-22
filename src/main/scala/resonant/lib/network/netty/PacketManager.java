@@ -12,7 +12,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import resonant.engine.Reference;
+import resonant.core.Reference;
 import resonant.lib.mod.loadable.ICompatProxy;
 import resonant.lib.network.discriminator.PacketEntity;
 import resonant.lib.network.discriminator.PacketTile;

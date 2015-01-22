@@ -10,7 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
-import resonant.engine.Reference;
+import resonant.core.Reference;
 import resonant.lib.transform.rotation.Quaternion;
 import resonant.lib.transform.vector.Vector3;
 

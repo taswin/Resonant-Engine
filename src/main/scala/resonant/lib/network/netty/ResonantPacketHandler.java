@@ -7,7 +7,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetHandlerPlayServer;
-import resonant.engine.ResonantEngine;
+import resonant.core.ResonantEngine;
 
 /**
  * @author tgame14

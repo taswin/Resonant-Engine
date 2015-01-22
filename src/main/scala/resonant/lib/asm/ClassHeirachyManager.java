@@ -4,7 +4,7 @@ import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 import org.objectweb.asm.tree.ClassNode;
-import resonant.engine.Reference;
+import resonant.core.Reference;
 
 import java.io.IOException;
 import java.util.ArrayList;

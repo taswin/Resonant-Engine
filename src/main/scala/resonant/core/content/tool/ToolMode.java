@@ -1,4 +1,4 @@
-package resonant.engine.content.tool;
+package resonant.core.content.tool;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

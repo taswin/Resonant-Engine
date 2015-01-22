@@ -1,4 +1,4 @@
-package resonant.engine.asm;
+package resonant.core.asm;
 
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.tree.*;

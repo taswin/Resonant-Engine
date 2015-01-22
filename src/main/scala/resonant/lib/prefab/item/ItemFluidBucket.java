@@ -11,7 +11,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.*;
-import resonant.engine.Reference;
+import resonant.core.Reference;
 
 import java.util.List;
 

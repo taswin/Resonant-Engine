@@ -3,7 +3,7 @@ package resonant.lib.prefab.potion;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
-import resonant.engine.Reference;
+import resonant.core.Reference;
 
 /**
  * @author Calclavia, Darkguardsman

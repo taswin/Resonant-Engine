@@ -1,8 +1,8 @@
-package resonant.engine.content.debug;
+package resonant.core.content.debug;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
-import resonant.engine.ResonantEngine;
+import resonant.core.ResonantEngine;
 import resonant.lib.network.discriminator.PacketTile;
 import resonant.lib.prefab.gui.GuiContainerBase;
 import resonant.lib.utility.LanguageUtility;

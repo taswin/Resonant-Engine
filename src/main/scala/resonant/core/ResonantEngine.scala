@@ -1,4 +1,4 @@
-package resonant.engine
+package resonant.core
 
 import cpw.mods.fml.common.Mod.EventHandler
 import cpw.mods.fml.common.event._
@@ -18,8 +18,8 @@ import net.minecraftforge.oredict.OreDictionary
 import resonant.api.mffs.fortron.FrequencyGridRegistry
 import resonant.api.recipe.{MachineRecipes, RecipeType}
 import resonant.api.tile.IBoilHandler
-import resonant.engine.content.ResonantContent
-import resonant.engine.content.tool.{ToolMode, ToolModeGeneral, ToolModeRotation}
+import resonant.core.content.ResonantContent
+import resonant.core.content.tool.{ToolMode, ToolModeGeneral, ToolModeRotation}
 import resonant.lib.debug.F3Handler
 import resonant.lib.factory.resources.ResourceFactory
 import resonant.lib.grid.core.UpdateTicker

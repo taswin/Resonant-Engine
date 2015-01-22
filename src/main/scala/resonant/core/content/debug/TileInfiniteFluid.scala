@@ -1,4 +1,4 @@
-package resonant.engine.content.debug
+package resonant.core.content.debug
 
 import net.minecraft.block.material.Material
 import net.minecraft.tileentity.TileEntity

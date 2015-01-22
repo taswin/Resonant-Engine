@@ -1,4 +1,4 @@
-package resonant.engine.content.tool;
+package resonant.core.content.tool;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import resonant.engine.content.ItemScrewdriver;
+import resonant.core.content.ItemScrewdriver;
 
 public class ToolModeRotation extends ToolMode
 {

@@ -6,7 +6,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
 import net.minecraft.server.MinecraftServer;
-import resonant.engine.Reference;
+import resonant.core.Reference;
 import resonant.lib.transform.vector.Vector2;
 import resonant.lib.transform.vector.Vector3;
 import resonant.lib.utility.science.units.UnitHelper;

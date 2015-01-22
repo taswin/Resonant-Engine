@@ -1,4 +1,4 @@
-package resonant.engine;
+package resonant.core;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.ClientRegistry;
@@ -11,8 +11,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.AdvancedModelLoader;
-import resonant.engine.content.debug.GuiCreativeBuilder;
-import resonant.engine.content.debug.TileCreativeBuilder;
+import resonant.core.content.debug.GuiCreativeBuilder;
+import resonant.core.content.debug.TileCreativeBuilder;
 import resonant.lib.render.model.FixedTechneModelLoader;
 import resonant.lib.render.wrapper.BlockRenderHandler$;
 import resonant.lib.render.wrapper.RenderTileDummy;

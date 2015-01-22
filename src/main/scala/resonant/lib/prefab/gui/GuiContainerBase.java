@@ -12,7 +12,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
-import resonant.engine.Reference;
+import resonant.core.Reference;
 import resonant.lib.render.RenderUtility;
 import resonant.lib.transform.region.Rectangle;
 import resonant.lib.transform.vector.Vector2;

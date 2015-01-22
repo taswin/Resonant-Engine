@@ -6,7 +6,7 @@ import net.minecraft.block.material.Material
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.network.Packet
 import resonant.api.tile.IPlayerUsing
-import resonant.engine.ResonantEngine
+import resonant.core.ResonantEngine
 import resonant.lib.network.netty.AbstractPacket
 import resonant.lib.prefab.tile.traits.TTicker
 

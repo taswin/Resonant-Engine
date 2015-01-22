@@ -1,6 +1,6 @@
 package resonant.lib.utility.science.units;
 
-import resonant.engine.Reference;
+import resonant.core.Reference;
 import resonant.lib.collection.Pair;
 
 import java.util.ArrayList;

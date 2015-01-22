@@ -1,4 +1,4 @@
-package resonant.engine.content.tool;
+package resonant.core.content.tool;
 
 public class ToolModeGeneral extends ToolMode
 {

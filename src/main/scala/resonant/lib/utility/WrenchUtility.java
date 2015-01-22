@@ -3,8 +3,8 @@ package resonant.lib.utility;
 import buildcraft.api.tools.IToolWrench;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import resonant.engine.Reference;
-import resonant.engine.content.ItemScrewdriver;
+import resonant.core.Reference;
+import resonant.core.content.ItemScrewdriver;
 import resonant.lib.mod.compat.ModEnum;
 
 import java.lang.reflect.InvocationTargetException;
