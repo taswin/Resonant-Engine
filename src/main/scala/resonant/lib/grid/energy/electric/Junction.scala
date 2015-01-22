@@ -43,18 +43,18 @@ class Junction
         //This is required to propagate voltage
         node.calculate()
 
-        if (node.nextVoltage != 0)
+        if (node.bufferVoltage != 0)
         {
           /**
            * Push generated voltages into this node
            */
           if (this == node.junctionA)
           {
-            sourceVoltage -= node.nextVoltage / 2 * Math.cos(node.frequency * System.currentTimeMillis() / 1000d)
+            sourceVoltage -= node.bufferVoltage / 2 * Math.cos(node.frequency * System.currentTimeMillis() / 1000d)
           }
           else if (this == node.junctionB)
           {
-            sourceVoltage += node.nextVoltage / 2 * Math.cos(node.frequency * System.currentTimeMillis() / 1000d)
+            sourceVoltage += node.bufferVoltage / 2 * Math.cos(node.frequency * System.currentTimeMillis() / 1000d)
           }
         }
         else
@@ -93,7 +93,7 @@ class Junction
     nodes.foreach(
       node =>
       {
-        if (node.nextVoltage != 0)
+        if (node.bufferVoltage != 0)
         {
           if (this == node.junctionA)
           {

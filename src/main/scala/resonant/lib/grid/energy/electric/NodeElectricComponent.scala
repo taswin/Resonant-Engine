@@ -51,8 +51,8 @@ class NodeElectricComponent(parent: INodeProvider) extends NodeGrid[NodeElectric
   /**
    * Variables to keep voltage source states
    */
-  protected[electric] var nextVoltage = 0d
-  protected[electric] var nextPower = 0d
+  protected[electric] var bufferVoltage = 0d
+  protected[electric] var bufferPower = 0d
 
   /**
    * Junction A is always preferably negative
@@ -79,7 +79,7 @@ class NodeElectricComponent(parent: INodeProvider) extends NodeGrid[NodeElectric
    */
   def generateVoltage(voltage: Double)
   {
-    nextVoltage = voltage
+    bufferVoltage = voltage
   }
 
   /**
@@ -88,7 +88,7 @@ class NodeElectricComponent(parent: INodeProvider) extends NodeGrid[NodeElectric
    */
   def generatePower(power: Double)
   {
-    nextPower = power
+    bufferPower = power
   }
 
   override def getDebugInfo = List(toString)
@@ -109,7 +109,7 @@ class NodeElectricComponent(parent: INodeProvider) extends NodeGrid[NodeElectric
       if (Math.abs(voltage) < 0.0001d)
         voltage = 0
 
-      if (nextVoltage != 0)
+      if (bufferVoltage != 0)
       {
         //This is a voltage source. Calculate current based on junction current
         current = junctionB.currentOut * Math.signum(voltage)
@@ -123,17 +123,17 @@ class NodeElectricComponent(parent: INodeProvider) extends NodeGrid[NodeElectric
       /**
        * Adjust power and balance iet until the voltage creates the desired power.
        */
-      if (nextPower > 0)
+      if (bufferPower > 0)
       {
         if (current != 0)
         {
           val estimatedResistance = voltage / current
-          nextVoltage = Math.sqrt(estimatedResistance * nextPower)
+          bufferVoltage = Math.sqrt(estimatedResistance * bufferPower)
         }
         else
         {
           //Generate 1 test volt to determine the resistance of the circuit
-          nextVoltage = 1
+          bufferVoltage = 1
         }
       }
     }
@@ -141,8 +141,8 @@ class NodeElectricComponent(parent: INodeProvider) extends NodeGrid[NodeElectric
 
   protected[electric] def postUpdate()
   {
-    nextVoltage = 0
-    nextPower = 0
+    bufferVoltage = 0
+    bufferPower = 0
   }
 
   override protected def newGrid: GridNode[NodeElectricComponent] = new GridElectric
