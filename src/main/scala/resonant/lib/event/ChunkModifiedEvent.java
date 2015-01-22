@@ -5,7 +5,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.world.ChunkEvent;
 
 /**
- * Called when the chunk is modified with set block.
+ * Called when the chunk is modified. More precisely, this event is called when a block is world.setBlock is called.
  *
  * @author Calclavia
  */

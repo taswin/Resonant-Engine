@@ -1,18 +1,18 @@
 package resonant.lib.event;
 
 import cpw.mods.fml.common.eventhandler.Cancelable;
-import resonant.api.TriggerCause;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.WorldEvent;
+import resonant.api.TriggerCause;
 import resonant.lib.transform.vector.VectorWorld;
-import resonant.lib.world.edit.IWorldChangeAction;
 import resonant.lib.world.edit.BlockEdit;
+import resonant.lib.world.edit.IWorldChangeAction;
 
 import java.util.Collection;
 
 /**
  * Prefab for all events triggered by IWorldChangeAction
- * Created by robert on 12/2/2014.
+ * @author Calclavia
  */
 public abstract class WorldChangeActionEvent extends WorldEvent
 {

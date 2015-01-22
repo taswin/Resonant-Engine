@@ -26,7 +26,6 @@ object ResourceFactory
   private var resourceBlocks = Map.empty[String, Class[_ <: SpatialBlock]]
   private var resourceItems = Map.empty[String, Class[_ <: Item]]
 
-  //Map[(Type, Material), Block/Item]]
   private var generatedBlocks = Map.empty[(String, String), Block]
   private var generatedItems = Map.empty[(String, String), Item]
 
