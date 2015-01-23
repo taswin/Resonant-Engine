@@ -43,12 +43,6 @@ class NodeElectricComponent(parent: INodeProvider) extends NodeGrid[NodeElectric
   var resistance = 1d
 
   /**
-   * The alternating current frequency. When frequency is zero, it is direct current.
-   * The frequency determines how often voltage oscillates per second.
-   */
-  var frequency = 0
-
-  /**
    * Variables to keep voltage source states
    */
   protected[electric] var bufferVoltage = 0d
@@ -71,7 +65,15 @@ class NodeElectricComponent(parent: INodeProvider) extends NodeGrid[NodeElectric
   /**
    * Retrieves the power of the DC node in Watts.
    */
-  def power = current * voltage
+  def power: Double =
+  {
+    if (bufferVoltage != 0)
+    {
+      //This is a voltage source. Calculate current based on junction current
+      return Math.abs(junctionB.currentOut * voltage)
+    }
+    return current * voltage
+  }
 
   /**
    * Generates a potential difference across the two intersections that go across this node.
@@ -109,16 +111,8 @@ class NodeElectricComponent(parent: INodeProvider) extends NodeGrid[NodeElectric
       if (Math.abs(voltage) < 0.0001d)
         voltage = 0
 
-      if (bufferVoltage != 0)
-      {
-        //This is a voltage source. Calculate current based on junction current
-        current = junctionB.currentOut * Math.signum(voltage)
-      }
-      else
-      {
-        // Calculating current based on voltage and resistance.
-        current = voltage / resistance
-      }
+      // Calculating current based on voltage and resistance.
+      current = voltage / resistance
 
       /**
        * Adjust power and balance iet until the voltage creates the desired power.

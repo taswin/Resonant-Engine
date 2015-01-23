@@ -50,65 +50,45 @@ class Junction
            */
           if (this == node.junctionA)
           {
-            sourceVoltage -= node.bufferVoltage / 2 * Math.cos(node.frequency * System.currentTimeMillis() / 1000d)
+            sourceVoltage -= node.bufferVoltage / 2
           }
           else if (this == node.junctionB)
           {
-            sourceVoltage += node.bufferVoltage / 2 * Math.cos(node.frequency * System.currentTimeMillis() / 1000d)
+            sourceVoltage += node.bufferVoltage / 2
           }
         }
-        else
+
+        /**
+         * Potential difference creates current, which acts to decrease potential difference.
+         * Any system forwards to minimal inner energy, and only equipotential systems have minimal energy.
+         */
+        val delta = node.current * deltaTime
+
+        if (this == node.junctionA)
         {
-          /**
-           * Potential difference creates current, which acts to decrease potential difference.
-           * Any system forwards to minimal inner energy, and only equipotential systems have minimal energy.
-           */
-          val delta = node.current * deltaTime
+          voltage -= delta
 
-          if (this == node.junctionA)
-          {
-            voltage -= delta
+          //This is junction A of the component. Current should be flowing from this junction if positive.
+          if (node.current > 0)
+            currentOut += node.current
+          else
+            currentIn -= node.current
+        }
+        else if (this == node.junctionB)
+        {
+          voltage += delta
 
-            //This is junction A of the component. Current should be flowing towards this junction if positive.
-            if (node.current > 0)
-              currentIn += node.current
-            else
-              currentOut -= node.current
-          }
-          else if (this == node.junctionB)
-          {
-            voltage += delta
-
-            //This is junction B of the component. This means current should be leaving this junction if positive.
-            if (node.current > 0)
-              currentOut += node.current
-            else
-              currentIn -= node.current
-          }
+          //This is junction B of the component. This means current should be to this junction if positive.
+          if (node.current > 0)
+            currentIn += node.current
+          else
+            currentOut -= node.current
         }
       }
     )
 
-    //TODO: By Kirchoff's Law, current coming in should equal to current going out. Attempt to re-balance that.
-    nodes.foreach(
-      node =>
-      {
-        if (node.bufferVoltage != 0)
-        {
-          if (this == node.junctionA)
-          {
-            currentIn = currentOut
-          }
-          else if (this == node.junctionB)
-          {
-            currentOut = currentIn
-          }
-        }
-      }
-    )
-
-    if (sourceVoltage != 0)
-      voltage = sourceVoltage
+    //By Kirchoff's Law, current coming in should equal to current going out. Attempt to re-balance that.
+    voltage += (sourceVoltage - voltage) * deltaTime
   }
 
   /**
