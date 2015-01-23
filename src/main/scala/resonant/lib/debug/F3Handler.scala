@@ -2,6 +2,7 @@ package resonant.lib.debug
 
 import cpw.mods.fml.common.FMLCommonHandler
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
+import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.Minecraft
 import net.minecraftforge.client.event.RenderGameOverlayEvent
 import resonant.lib.transform.vector.VectorWorld
@@ -10,6 +11,7 @@ import resonant.lib.transform.vector.VectorWorld
  * A handler that allows GUI display on the F3 GUI
  * @author Calclavia
  */
+@SideOnly(Side.CLIENT)
 object F3Handler
 {
   @SubscribeEvent

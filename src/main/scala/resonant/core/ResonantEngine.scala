@@ -20,7 +20,6 @@ import resonant.api.recipe.{MachineRecipes, RecipeType}
 import resonant.api.tile.IBoilHandler
 import resonant.core.content.ResonantContent
 import resonant.core.content.tool.{ToolMode, ToolModeGeneral, ToolModeRotation}
-import resonant.lib.debug.F3Handler
 import resonant.lib.factory.resources.ResourceFactory
 import resonant.lib.grid.core.UpdateTicker
 import resonant.lib.grid.frequency.GridFrequency
@@ -60,7 +59,6 @@ object ResonantEngine
     MinecraftForge.EVENT_BUS.register(this)
     MinecraftForge.EVENT_BUS.register(SaveManager.instance)
     MinecraftForge.EVENT_BUS.register(new PlayerInteractionHandler)
-    MinecraftForge.EVENT_BUS.register(F3Handler)
     ToolMode.REGISTRY.add(new ToolModeGeneral)
     ToolMode.REGISTRY.add(new ToolModeRotation)
     SyntheticMultiblock.instance = new SyntheticMultiblock

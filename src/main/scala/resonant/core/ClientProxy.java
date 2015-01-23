@@ -11,8 +11,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.AdvancedModelLoader;
+import net.minecraftforge.common.MinecraftForge;
 import resonant.core.content.debug.GuiCreativeBuilder;
 import resonant.core.content.debug.TileCreativeBuilder;
+import resonant.lib.debug.F3Handler$;
 import resonant.lib.render.model.FixedTechneModelLoader;
 import resonant.lib.render.wrapper.BlockRenderHandler$;
 import resonant.lib.render.wrapper.RenderTileDummy;
@@ -33,6 +35,7 @@ public class ClientProxy extends CommonProxy
 	public void preInit()
 	{
 		RenderingRegistry.registerBlockHandler(BlockRenderHandler$.MODULE$);
+		MinecraftForge.EVENT_BUS.register(F3Handler$.MODULE$);
 	}
 
     @Override
