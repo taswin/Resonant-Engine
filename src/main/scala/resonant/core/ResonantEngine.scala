@@ -4,7 +4,7 @@ import cpw.mods.fml.common.Mod.EventHandler
 import cpw.mods.fml.common.event._
 import cpw.mods.fml.common.eventhandler.{Event, SubscribeEvent}
 import cpw.mods.fml.common.network.NetworkRegistry
-import cpw.mods.fml.common.{FMLCommonHandler, Mod, ModMetadata, SidedProxy}
+import cpw.mods.fml.common.{FMLCommonHandler, Mod, SidedProxy}
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.init.{Blocks, Items}
@@ -41,12 +41,10 @@ import resonant.lib.utility.{PlayerInteractionHandler, PotionUtility}
 @Mod(modid = Reference.id, name = Reference.name, version = Reference.version, modLanguage = "scala")
 object ResonantEngine
 {
-  val packetHandler: PacketManager = new PacketManager(Reference.channel)
-  private val loadables: LoadableHandler = new LoadableHandler
-  @SidedProxy(clientSide = "resonant.engine.ClientProxy", serverSide = "resonant.engine.CommonProxy")
+  val packetHandler = new PacketManager(Reference.channel)
+  private val loadables = new LoadableHandler
+  @SidedProxy(clientSide = "resonant.core.ClientProxy", serverSide = "resonant.core.CommonProxy")
   var proxy: CommonProxy = null
-  @Mod.Metadata(Reference.id)
-  var metadata: ModMetadata = null
 
   @EventHandler
   def preInit(evt: FMLPreInitializationEvent)
