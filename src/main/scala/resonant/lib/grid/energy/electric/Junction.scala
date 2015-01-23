@@ -57,17 +57,26 @@ class Junction
             sourceVoltage += node.bufferVoltage / 2
           }
         }
+        else
+        {
+          /**
+           * Potential difference creates current, which acts to decrease potential difference.
+           * Any system forwards to minimal inner energy, and only equipotential systems have minimal energy.
+           */
+          val delta = node.current * deltaTime
 
-        /**
-         * Potential difference creates current, which acts to decrease potential difference.
-         * Any system forwards to minimal inner energy, and only equipotential systems have minimal energy.
-         */
-        val delta = node.current * deltaTime
+          if (this == node.junctionA)
+          {
+            voltage -= delta
+          }
+          else if (this == node.junctionB)
+          {
+            voltage += delta
+          }
+        }
 
         if (this == node.junctionA)
         {
-          voltage -= delta
-
           //This is junction A of the component. Current should be flowing from this junction if positive.
           if (node.current > 0)
             currentOut += node.current
@@ -76,8 +85,6 @@ class Junction
         }
         else if (this == node.junctionB)
         {
-          voltage += delta
-
           //This is junction B of the component. This means current should be to this junction if positive.
           if (node.current > 0)
             currentIn += node.current
@@ -88,6 +95,7 @@ class Junction
     )
 
     //By Kirchoff's Law, current coming in should equal to current going out. Attempt to re-balance that.
+    //    if (sourceVoltage != 0)
     voltage += (sourceVoltage - voltage) * deltaTime
   }
 
