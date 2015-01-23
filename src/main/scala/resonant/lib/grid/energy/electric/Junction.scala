@@ -94,9 +94,9 @@ class Junction
       }
     )
 
-    //By Kirchoff's Law, current coming in should equal to current going out. Attempt to re-balance that.
-    //    if (sourceVoltage != 0)
     voltage += (sourceVoltage - voltage) * deltaTime
+
+    //By Kirchoff's Law, current coming in should equal to current going out. Attempt to re-balance that.
   }
 
   /**

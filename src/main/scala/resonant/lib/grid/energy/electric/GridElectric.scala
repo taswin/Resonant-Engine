@@ -172,7 +172,7 @@ class GridElectric extends GridNode[NodeElectricComponent] with IUpdate
   override def update(deltaTime: Double)
   {
     //Calculate all nodes except batteries
-    junctions.foreach(_.update(deltaTime * 10 / 100))
+    junctions.foreach(_.update(deltaTime * 10))
     nodes.foreach(_.postUpdate())
   }
 
