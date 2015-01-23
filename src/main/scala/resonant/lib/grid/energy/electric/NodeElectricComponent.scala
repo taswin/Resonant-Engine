@@ -35,6 +35,11 @@ class NodeElectricComponent(parent: INodeProvider) extends NodeGrid[NodeElectric
   val negativeTerminals: JSet[ForgeDirection] = new util.HashSet()
 
   /**
+   * When dynamic terminal is set to true, then the grid will attempt to swap negative and positive terminals as needed.
+   */
+  var dynamicTerminals = false
+
+  /**
    * The current and voltage values are set are determined by the DC Grid
    */
   var voltage = 0d

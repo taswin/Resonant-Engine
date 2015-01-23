@@ -105,7 +105,7 @@ class GridElectric extends GridNode[NodeElectricComponent] with IUpdate
                  * Look through all junctions, see if there is already one that is connected to this node, but NOT the previous junction
                  * If the junction does NOT exist, then create a new virtual one
                  */
-                junctions.find(j => j.nodes.contains(node) && j.wires.exists(node.positives.contains)) match
+                junctions.find(j => j.nodes.contains(node) && (j.wires.exists(node.positives.contains) || (node.dynamicTerminals && j.wires.exists(node.negatives.contains)))) match
                 {
                   case Some(j) => j //We found another wire to connect to
                   case _ =>
