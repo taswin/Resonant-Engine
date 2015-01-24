@@ -5,8 +5,6 @@ import cpw.mods.fml.common.event._
 import cpw.mods.fml.common.eventhandler.{Event, SubscribeEvent}
 import cpw.mods.fml.common.network.NetworkRegistry
 import cpw.mods.fml.common.{FMLCommonHandler, Mod, SidedProxy}
-import net.minecraft.block.Block
-import net.minecraft.block.material.Material
 import net.minecraft.init.{Blocks, Items}
 import net.minecraft.item.ItemStack
 import net.minecraft.tileentity.TileEntity
@@ -23,12 +21,12 @@ import resonant.core.content.tool.{ToolMode, ToolModeGeneral, ToolModeRotation}
 import resonant.lib.factory.resources.ResourceFactory
 import resonant.lib.grid.core.UpdateTicker
 import resonant.lib.grid.frequency.GridFrequency
-import resonant.lib.grid.thermal.{BoilEvent, EventThermal, ThermalGrid}
+import resonant.lib.grid.thermal.{BoilEvent, ThermalGrid, ThermalPhysics}
 import resonant.lib.mod.config.{ConfigHandler, ConfigScanner}
 import resonant.lib.mod.loadable.LoadableHandler
 import resonant.lib.network.netty.PacketManager
 import resonant.lib.prefab.tile.multiblock.synthetic.SyntheticMultiblock
-import resonant.lib.transform.vector.{Vector3, VectorWorld}
+import resonant.lib.transform.vector.Vector3
 import resonant.lib.utility.nbt.SaveManager
 import resonant.lib.utility.{PlayerInteractionHandler, PotionUtility}
 
@@ -57,6 +55,7 @@ object ResonantEngine
     loadables.applyModule(ResonantContent)
     PotionUtility.resizePotionArray()
     MinecraftForge.EVENT_BUS.register(this)
+    MinecraftForge.EVENT_BUS.register(ThermalPhysics)
     MinecraftForge.EVENT_BUS.register(SaveManager.instance)
     MinecraftForge.EVENT_BUS.register(new PlayerInteractionHandler)
     ToolMode.REGISTRY.add(new ToolModeGeneral)
@@ -106,6 +105,7 @@ object ResonantEngine
   {
     FrequencyGridRegistry.CLIENT_INSTANCE = new GridFrequency
     FrequencyGridRegistry.SERVER_INSTANCE = new GridFrequency
+    ThermalGrid.clear()
   }
 
   @EventHandler
@@ -145,41 +145,4 @@ object ResonantEngine
     evt.setResult(Event.Result.DENY)
   }
 
-  /**
-   * Default handler.
-   */
-  @SubscribeEvent
-  def thermalEventHandler(evt: EventThermal.EventThermalUpdate)
-  {
-    val pos: VectorWorld = evt.position
-    pos.world synchronized
-    {
-      val block: Block = pos.getBlock
-      val mat: Material = pos.getBlock.getMaterial
-      if (mat == Material.air)
-      {
-        evt.heatLoss = 0.15f
-      }
-      if (block == Blocks.flowing_water || block == Blocks.water)
-      {
-        if (evt.temperature >= 373)
-        {
-          if (FluidRegistry.getFluid("steam") != null)
-          {
-            val volume: Int = (FluidContainerRegistry.BUCKET_VOLUME * (evt.temperature / 373)).toInt
-            MinecraftForge.EVENT_BUS.post(new BoilEvent(pos.world, pos, new FluidStack(FluidRegistry.WATER, volume), new FluidStack(FluidRegistry.getFluid("steam"), volume), 2, evt.isReactor))
-          }
-          evt.heatLoss = 0.2f
-        }
-      }
-      if (block == Blocks.ice)
-      {
-        if (evt.temperature >= 273)
-        {
-          UpdateTicker.threaded.enqueue(() => pos.setBlock(Blocks.flowing_water))
-          evt.heatLoss = 0.4f
-        }
-      }
-    }
-  }
 }

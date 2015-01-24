@@ -1,12 +1,12 @@
 package resonant.lib.grid.energy.electric
 
-import java.util
 import java.util.{Set => JSet}
 
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.tile.INodeProvider
 import resonant.lib.debug.IDebugInfo
 import resonant.lib.grid.core.{GridNode, NodeGrid, TTileConnector}
+import resonant.lib.wrapper.BitmaskWrapper._
 
 import scala.beans.BeanProperty
 import scala.collection.convert.wrapAll._
@@ -23,22 +23,9 @@ import scala.collection.convert.wrapAll._
 class NodeElectricComponent(parent: INodeProvider) extends NodeGrid[NodeElectricComponent](parent) with TTileConnector[NodeElectricComponent] with IDebugInfo
 {
   /**
-   * The positive terminals are the directions in which charge can flow out of this electric component.
-   * Positive and negative terminals must be mutually exclusive.
-   */
-  val positiveTerminals: JSet[ForgeDirection] = new util.HashSet()
-
-  /**
-   * The negative terminals are the directions in which charge can flow into this electric component.
-   * Positive and negative terminals must be mutually exclusive.
-   */
-  val negativeTerminals: JSet[ForgeDirection] = new util.HashSet()
-
-  /**
    * When dynamic terminal is set to true, then the grid will attempt to swap negative and positive terminals as needed.
    */
   var dynamicTerminals = false
-
   /**
    * The current and voltage values are set are determined by the DC Grid
    */
@@ -46,26 +33,69 @@ class NodeElectricComponent(parent: INodeProvider) extends NodeGrid[NodeElectric
   var current = 0d
   @BeanProperty
   var resistance = 1d
-
   /**
    * Variables to keep voltage source states
    */
   protected[electric] var bufferVoltage = 0d
   protected[electric] var bufferPower = 0d
-
   /**
    * Junction A is always preferably negative
    */
   protected[electric] var junctionA: Junction = null
-
   /**
    * Junction B is always preferably positive
    */
   protected[electric] var junctionB: Junction = null
+  /**
+   * The positive terminals are the directions in which charge can flow out of this electric component.
+   * Positive and negative terminals must be mutually exclusive.
+   *
+   * The mask is a 6 bit data each storing a specific side value
+   */
+  private var positiveMask = 0
+  /**
+   * The negative terminals are the directions in which charge can flow into this electric component.
+   * Positive and negative terminals must be mutually exclusive.
+   *
+   * The mask is a 6 bit data each storing a specific side value
+   */
+  private var negativeMask = 0
 
-  def positives: JSet[NodeElectricComponent] = directionMap.filter(keyVal => positiveTerminals.contains(keyVal._2)).keySet
+  def positives: JSet[NodeElectricComponent] = directionMap.filter(keyVal => positiveMask.mask(keyVal._2)).keySet
 
-  def negatives: JSet[NodeElectricComponent] = directionMap.filter(keyVal => negativeTerminals.contains(keyVal._2)).keySet
+  def negatives: JSet[NodeElectricComponent] = directionMap.filter(keyVal => negativeMask.mask(keyVal._2)).keySet
+
+  def setPositive(dir: ForgeDirection, open: Boolean = true)
+  {
+    positiveMask = positiveMask.mask(dir, open)
+    negativeMask &= ~positiveMask
+    connectionMask = positiveMask | negativeMask
+  }
+
+  def setPositives(dirs: JSet[ForgeDirection])
+  {
+    positiveMask = 0
+
+    dirs.foreach(dir => positiveMask = positiveMask.mask(dir, true))
+    negativeMask &= ~positiveMask
+    connectionMask = positiveMask | negativeMask
+  }
+
+  def setNegative(dir: ForgeDirection, open: Boolean = true)
+  {
+    negativeMask = negativeMask.mask(dir, open)
+    positiveMask &= ~negativeMask
+    connectionMask = positiveMask | negativeMask
+  }
+
+  def setNegatives(dirs: JSet[ForgeDirection])
+  {
+    negativeMask = 0
+
+    dirs.foreach(dir => negativeMask = negativeMask.mask(dir, true))
+    positiveMask &= ~negativeMask
+    connectionMask = positiveMask | negativeMask
+  }
 
   /**
    * Retrieves the power of the DC node in Watts.

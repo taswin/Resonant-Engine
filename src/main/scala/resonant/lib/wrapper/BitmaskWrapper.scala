@@ -20,20 +20,6 @@ object BitmaskWrapper
   {
     def openMask(i: Int) = mask(i, true)
 
-    /**
-     * Sets the bitmask index to be either open or closed
-     * @param i - Index
-     * @param value - True for open
-     * @return - The new bitmask
-     */
-    def mask(i: Int, value: Boolean): Int =
-    {
-      if (value)
-        return underlying | (1 << i)
-      else
-        return underlying & ~(1 << i)
-    }
-
     def closeMask(i: Int) = mask(i, false)
 
     /**
@@ -48,11 +34,31 @@ object BitmaskWrapper
      */
     def mask(i: Int): Boolean = (underlying & (1 << i)) != 0
 
+    /**
+     * Opens the integer mask at a specific direction
+     * @param dir - The direction
+     * @param value - The value
+     * @return The new value of the mask
+     */
     def mask(dir: ForgeDirection, value: Boolean): Int = mask(dir.ordinal(), value)
 
     def openMask(dir: ForgeDirection) = mask(dir.ordinal(), true)
 
     def closeMask(dir: ForgeDirection) = mask(dir.ordinal(), false)
+
+    /**
+     * Sets the bitmask index to be either open or closed
+     * @param i - Index
+     * @param value - True for open
+     * @return - The new bitmask
+     */
+    def mask(i: Int, value: Boolean): Int =
+    {
+      if (value)
+        return underlying | (1 << i)
+      else
+        return underlying & ~(1 << i)
+    }
 
     def invert(): Int = invert(6)
 

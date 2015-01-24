@@ -1,7 +1,9 @@
 package resonant.lib.grid.thermal
 
+import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.IUpdate
+import resonant.lib.grid.thermal.ThermalEvent.EventThermalUpdate
 import resonant.lib.transform.vector.VectorWorld
 
 /**
@@ -19,16 +21,28 @@ object ThermalGrid extends IUpdate
   /**
    * A map of temperature at every block position relative to its default temperature
    */
-  private var deltaTemperatureMap = Map.empty[VectorWorld, Float].withDefaultValue(0f)
+  private var deltaTemperatureMap = Map.empty[VectorWorld, Int].withDefaultValue(0)
 
-  def getDefaultTemperature(position: VectorWorld): Double = ThermalPhysics.getDefaultTemperature(position.world, position.xi, position.zi)
+  private var markClear = false
 
   override def update(deltaTime: Double)
   {
     heatMap synchronized
     {
+      if (markClear)
+      {
+        heatMap = Map.empty
+        deltaTemperatureMap = Map.empty
+        markClear = false
+      }
+
+      println(heatMap.size)
+
+      if (heatMap.size > 0)
+        println("Min value: " + heatMap.values.min + " vs " + "Max value: " + heatMap.values.max)
+
       //There can't be negative energy, remove all heat values less than zero.
-      heatMap --= heatMap.filter(_._2 <= 0).keys
+      heatMap --= heatMap.filter(_._2 <= 0).keySet
 
       heatMap.foreach
       {
@@ -43,39 +57,55 @@ object ThermalGrid extends IUpdate
            * Therefore:
            * T = Q/mc
            */
-          val specificHeatCapacity = 4200
-          val deltaTemp = (heat / (1 * specificHeatCapacity)).toFloat
-          addTemperature(pos, deltaTemp)
+          val specificHeatCapacity = ThermalPhysics.getSHC(pos.getBlock.getMaterial)
+          val deltaTemperature = (heat / (1 * specificHeatCapacity)).toInt
+          deltaTemperatureMap += pos -> deltaTemperature
+        }
+      }
 
-          /**
-           * Do heat transfer based on thermal conductivity
-           *
-           * Assume transfer by conduction
-           *
-           * Q = k * A * deltaTemp * deltaTime /d
-           * Q = k * deltaTemp * deltaTime
-           *
-           * where k = thermal conductivity, A = 1 m^2, and d = 1 meter (for every block)
-           */
-          val currentTemp = getTemperature(pos)
+      deltaTemperatureMap --= deltaTemperatureMap.filter(_._2 <= 0).keys
 
-          ForgeDirection.VALID_DIRECTIONS
-            .map(pos + _)
-            .foreach(
-              adj =>
-              {
-                //TODO: Based on materials
-                val thermalConductivity = 2.18
-                val adjTemp = getTemperature(adj)
+      heatMap.foreach
+      {
+        case (pos, heat) =>
+        {
+          val event = new EventThermalUpdate(pos, getTemperature(pos))
 
-                if (currentTemp > adjTemp)
+          MinecraftForge.EVENT_BUS.post(event)
+
+          if (!event.isCanceled)
+          {
+            /**
+             * Do heat transfer based on thermal conductivity
+             *
+             * Assume transfer by conduction
+             *
+             * Q = k * A * deltaTemp * deltaTime /d
+             * Q = k * deltaTemp * deltaTime
+             *
+             * where k = thermal conductivity, A = 1 m^2, and d = 1 meter (for every block)
+             */
+            val temperature = getTemperature(pos)
+
+            ForgeDirection.VALID_DIRECTIONS
+              .map(pos + _)
+              .foreach(
+                adj =>
                 {
-                  val heatTransfer = thermalConductivity * (currentTemp - adjTemp) * deltaTime
-                  addHeat(adj, heatTransfer)
-                  removeHeat(pos, heatTransfer)
+                  val adjTemp = getTemperature(adj)
+
+                  if (temperature > adjTemp)
+                  {
+                    //TODO: Based on materials
+                    val thermalConductivity = 100 //2.18
+
+                    val heatTransfer = Math.min(thermalConductivity * (temperature - adjTemp) * deltaTime, heat / 6)
+                    addHeat(adj, heatTransfer)
+                    removeHeat(pos, heatTransfer)
+                  }
                 }
-              }
-            )
+              )
+          }
         }
       }
     }
@@ -95,11 +125,11 @@ object ThermalGrid extends IUpdate
    * Gets the temperature at a specific position
    * @return - Temperature in Kelvin
    */
-  def getTemperature(position: VectorWorld): Float = ThermalPhysics.getDefaultTemperature(position.world, position.xi, position.zi) + deltaTemperatureMap(position)
+  def getTemperature(pos: VectorWorld): Int = ThermalPhysics.getDefaultTemperature(pos) + deltaTemperatureMap(pos)
 
-  private def addTemperature(pos: VectorWorld, temperature: Float): Unit =
+  def clear()
   {
-    deltaTemperatureMap += pos -> (deltaTemperatureMap(pos) + temperature)
+    markClear = true
   }
 
   override def updatePeriod = 50
