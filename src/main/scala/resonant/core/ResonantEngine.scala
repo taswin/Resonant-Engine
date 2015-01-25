@@ -21,7 +21,7 @@ import resonant.core.content.tool.{ToolMode, ToolModeGeneral, ToolModeRotation}
 import resonant.lib.factory.resources.ResourceFactory
 import resonant.lib.grid.core.UpdateTicker
 import resonant.lib.grid.frequency.GridFrequency
-import resonant.lib.grid.thermal.{BoilEvent, ThermalGrid, ThermalPhysics}
+import resonant.lib.grid.thermal.{BoilEvent, GridThermal, ThermalPhysics}
 import resonant.lib.mod.config.{ConfigHandler, ConfigScanner}
 import resonant.lib.mod.loadable.LoadableHandler
 import resonant.lib.network.netty.PacketManager
@@ -75,7 +75,7 @@ object ResonantEngine
   @EventHandler
   def postInit(evt: FMLPostInitializationEvent)
   {
-    UpdateTicker.threaded.addUpdater(ThermalGrid)
+    UpdateTicker.threaded.addUpdater(GridThermal)
 
     if (!UpdateTicker.threaded.isAlive)
     {
@@ -105,7 +105,7 @@ object ResonantEngine
   {
     FrequencyGridRegistry.CLIENT_INSTANCE = new GridFrequency
     FrequencyGridRegistry.SERVER_INSTANCE = new GridFrequency
-    ThermalGrid.clear()
+    GridThermal.clear()
   }
 
   @EventHandler

@@ -11,7 +11,7 @@ import resonant.lib.transform.vector.VectorWorld
  *
  * Heat flows from hot to cold.
  */
-object ThermalGrid extends IUpdate
+object GridThermal extends IUpdate
 {
   /**
    * A map of positions and heat source energy
@@ -35,12 +35,7 @@ object ThermalGrid extends IUpdate
         deltaTemperatureMap = Map.empty
         markClear = false
       }
-
-      println(heatMap.size)
-
-      if (heatMap.size > 0)
-        println("Min value: " + heatMap.values.min + " vs " + "Max value: " + heatMap.values.max)
-
+      
       //There can't be negative energy, remove all heat values less than zero.
       heatMap --= heatMap.filter(_._2 <= 0).keySet
 

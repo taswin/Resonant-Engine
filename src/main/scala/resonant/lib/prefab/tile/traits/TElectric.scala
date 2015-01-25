@@ -10,6 +10,7 @@ import resonant.lib.prefab.tile.spatial.SpatialTile
 /**
  * A trait for all INodeProviders that implement a electric circuit. Nodes must handle energy storage themselves.
  */
+@deprecated
 trait TElectric extends SpatialTile with INodeProvider
 {
   protected var electricNode = new NodeElectricComponent(this)
