@@ -4,7 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import resonantengine.lib.network.handle.TPacketReceiver;
+import resonantengine.prefab.network.TPacketReceiver;
 
 /**
  * @author tgame14

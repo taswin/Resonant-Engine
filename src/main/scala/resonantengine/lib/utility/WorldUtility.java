@@ -1,4 +1,4 @@
-package resonantengine.lib.world;
+package resonantengine.lib.utility;
 
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import net.minecraft.block.Block;

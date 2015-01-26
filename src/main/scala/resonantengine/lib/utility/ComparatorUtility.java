@@ -2,7 +2,7 @@ package resonantengine.lib.utility;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import resonantengine.lib.transform.vector.IVector3;
+import resonantengine.api.transform.vector.IVector3;
 
 import java.util.Comparator;
 

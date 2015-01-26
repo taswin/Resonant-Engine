@@ -3,6 +3,7 @@ package resonantengine.lib.transform.vector
 import net.minecraft.entity.Entity
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.world.World
+import resonantengine.api.transform.vector.IVectorWorld
 
 /**
  * Trait designed to be applied to objects that want to be IVectorWorld

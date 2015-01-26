@@ -2,6 +2,7 @@ package resonantengine.lib.transform.vector
 
 import net.minecraft.entity.Entity
 import net.minecraft.tileentity.TileEntity
+import resonantengine.api.transform.vector.IVector3
 
 /**
  * Trait designed to be applied to objects that want to be IVector3

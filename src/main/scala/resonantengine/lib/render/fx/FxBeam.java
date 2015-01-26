@@ -14,7 +14,7 @@ import resonantengine.lib.render.RenderUtility;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import resonantengine.lib.transform.vector.IVector3;
+import resonantengine.api.transform.vector.IVector3;
 import resonantengine.lib.transform.vector.Vector3;
 
 import java.awt.*;

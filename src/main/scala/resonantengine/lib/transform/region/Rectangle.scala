@@ -4,7 +4,8 @@ import java.math.{BigDecimal, MathContext, RoundingMode}
 
 import io.netty.buffer.ByteBuf
 import net.minecraft.nbt.NBTTagCompound
-import resonantengine.lib.transform.vector.{IVector2, Vector2}
+import resonantengine.api.transform.vector.IVector2
+import resonantengine.lib.transform.vector.Vector2
 
 class Rectangle(var min: Vector2, var max: Vector2) extends Shape[Rectangle]
 {

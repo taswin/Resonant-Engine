@@ -4,6 +4,7 @@ import java.lang.Double.doubleToLongBits
 
 import io.netty.buffer.ByteBuf
 import net.minecraft.nbt.NBTTagCompound
+import resonantengine.api.transform.vector.IVector2
 import resonantengine.lib.transform.AbstractVector
 
 /**

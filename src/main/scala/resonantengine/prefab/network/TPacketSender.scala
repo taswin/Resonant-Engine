@@ -1,12 +1,12 @@
-package resonantengine.lib.network.handle
+package resonantengine.prefab.network
 
 import io.netty.buffer.ByteBuf
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.tileentity.TileEntity
+import resonantengine.api.transform.vector.IVectorWorld
 import resonantengine.core.ResonantEngine
 import resonantengine.lib.network.discriminator.PacketTile
 import resonantengine.lib.network.netty.AbstractPacket
-import resonantengine.lib.transform.vector.IVectorWorld
 import resonantengine.lib.wrapper.ByteBufWrapper._
 
 /**

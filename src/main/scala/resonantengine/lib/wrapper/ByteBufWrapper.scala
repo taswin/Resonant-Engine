@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.fluids.FluidTank
 import resonantengine.api.misc.ISave
-import resonantengine.lib.network.netty.IByteBufObject
+import resonantengine.api.network.IByteBuf
 import resonantengine.lib.transform.vector.{Vector2, Vector3}
 
 /**
@@ -31,7 +31,7 @@ object ByteBufWrapper
         case x: String => buf.readString()
         case x: Short => buf.readShort()
         case x: Long => buf.readLong()
-        case x: IByteBufObject => x.readBytes(buf)
+        case x: IByteBuf => x.readBytes(buf)
         case x: Vector3 => new Vector3(buf)
         case x: Vector2 => new Vector2(buf)
         case x: NBTTagCompound => buf.readTag()
@@ -89,7 +89,7 @@ object ByteBufWrapper
           case x: String => buf <<< x
           case x: Short => buf <<< x
           case x: Long => buf <<< x
-          case x: IByteBufObject => x.writeBytes(buf)
+          case x: IByteBuf => x.writeBytes(buf)
           case x: Vector3 => x.writeByteBuf(buf)
           case x: Vector2 => x.writeByteBuf(buf)
           case x: NBTTagCompound => buf <<< x

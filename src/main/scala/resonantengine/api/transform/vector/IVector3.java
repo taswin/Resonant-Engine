@@ -1,4 +1,4 @@
-package resonantengine.lib.transform.vector;
+package resonantengine.api.transform.vector;
 
 /**
  * Useful interface to define that an object has a 3D location.

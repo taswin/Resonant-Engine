@@ -6,7 +6,7 @@ import io.netty.channel.ChannelHandlerContext;
 import net.minecraft.tileentity.TileEntity;
 import resonantengine.api.graph.node.INode;
 import resonantengine.api.graph.INodeProvider;
-import resonantengine.lib.transform.vector.IVector3;
+import resonantengine.api.transform.vector.IVector3;
 
 /**
  * Version of PacketTile designed to be used by nodes. Doesn't function any different than the tile packet. However, serves as a way to sort normal tile packets from node generated ones.

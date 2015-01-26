@@ -6,9 +6,9 @@ import org.junit.Assert
 import resonantengine.lib.transform.vector.Vector3
 
 /**
- * Created by robert on 10/27/2014.
+ * @author Calclavia
  */
-class Vector3ScalaOperatorTest extends TestCase
+class Vector3OperationTest extends TestCase
 {
 
     ////////////////////////////////////////////

@@ -9,6 +9,7 @@ import net.minecraft.util.{MovingObjectPosition, Vec3}
 import net.minecraft.world.World
 import net.minecraftforge.common.DimensionManager
 import net.minecraftforge.common.util.ForgeDirection
+import resonantengine.api.transform.vector.{IVectorWorld, IVector3}
 
 class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) extends Vector3(newX, newY, newZ)
 {

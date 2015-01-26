@@ -6,8 +6,8 @@ import resonantengine.core.ResonantEngine;
 import resonantengine.lib.network.discriminator.PacketTile;
 import resonantengine.lib.prefab.gui.GuiContainerBase;
 import resonantengine.lib.utility.LanguageUtility;
-import resonantengine.lib.world.schematic.Schematic;
-import resonantengine.lib.world.schematic.SchematicRegistry;
+import resonantengine.lib.schematic.Schematic;
+import resonantengine.lib.schematic.SchematicRegistry;
 
 public class GuiCreativeBuilder extends GuiContainerBase
 {

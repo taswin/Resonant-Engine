@@ -3,8 +3,8 @@ package resonantengine.lib.transform.region
 import io.netty.buffer.ByteBuf
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.Vec3
+import resonantengine.api.transform.vector.{IVector2, IVector3}
 import resonantengine.lib.transform.AbstractOperation
-import resonantengine.lib.transform.vector.{IVector2, IVector3}
 import resonantengine.lib.wrapper.ByteBufWrapper._
 
 /** Prefab for 2D shapes, assumes that if the shape is placed into the world that
@@ -16,7 +16,7 @@ import resonantengine.lib.wrapper.ByteBufWrapper._
 abstract class Shape[T <: Shape[T]] extends AbstractOperation[T]
 {
   /** Rotation around the Y */
-  var yaw: Double = 0;
+  var yaw: Double = 0
 
   /** Distance the shape takes in the X axis */
   def getSizeX: Double

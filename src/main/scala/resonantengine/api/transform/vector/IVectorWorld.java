@@ -1,4 +1,4 @@
-package resonantengine.lib.transform.vector;
+package resonantengine.api.transform.vector;
 
 import net.minecraft.world.World;
 

@@ -2,8 +2,9 @@ package resonantengine.lib.transform.region
 
 import io.netty.buffer.ByteBuf
 import net.minecraft.nbt.NBTTagCompound
+import resonantengine.api.transform.vector.{IVector3, IVector2}
 import resonantengine.lib.transform.rotation.IRotation
-import resonantengine.lib.transform.vector.{Vector3, IVector2, IVector3, TVector3}
+import resonantengine.lib.transform.vector.{Vector3, TVector3}
 import resonantengine.lib.wrapper.ByteBufWrapper._
 
 /** Prefab for any 3D shape, any 2D shape that is used with this prefab will switch y for z as it

@@ -1,4 +1,4 @@
-package resonantengine.lib.network.netty;
+package resonantengine.api.network;
 
 import io.netty.buffer.ByteBuf;
 
@@ -8,7 +8,7 @@ import io.netty.buffer.ByteBuf;
  * @author tgame14
  * @since 26/05/14
  */
-public interface IByteBufObject
+public interface IByteBuf
 {
 	/**
 	 * @param buf a {@link io.netty.buffer.ByteBuf} to write to.

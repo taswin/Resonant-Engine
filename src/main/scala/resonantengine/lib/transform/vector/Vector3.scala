@@ -11,6 +11,7 @@ import net.minecraft.tileentity.TileEntity
 import net.minecraft.util._
 import net.minecraft.world.{IBlockAccess, World}
 import net.minecraftforge.common.util.ForgeDirection
+import resonantengine.api.transform.vector.IVector3
 import resonantengine.lib.transform.ITransform
 import resonantengine.lib.transform.rotation.EulerAngle
 

@@ -1,4 +1,4 @@
-package resonantengine.lib.network.handle;
+package resonantengine.api.network;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;

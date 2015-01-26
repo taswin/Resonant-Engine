@@ -12,7 +12,7 @@ import net.minecraft.world.IBlockAccess;
 import resonantengine.core.ResonantEngine;
 import resonantengine.lib.network.discriminator.PacketTile;
 import resonantengine.lib.network.discriminator.PacketType;
-import resonantengine.lib.network.handle.IPacketReceiver;
+import resonantengine.api.network.IPacketReceiver;
 import resonantengine.lib.prefab.tile.multiblock.reference.IMultiBlock;
 import resonantengine.lib.prefab.tile.spatial.ResonantBlock;
 import resonantengine.lib.prefab.tile.spatial.ResonantTile;

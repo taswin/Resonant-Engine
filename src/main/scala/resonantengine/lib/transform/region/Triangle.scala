@@ -1,9 +1,10 @@
 package resonantengine.lib.transform.region
 
 import io.netty.buffer.ByteBuf
+import resonantengine.api.transform.vector.IVector2
 import resonantengine.lib.wrapper.ByteBufWrapper._
 import net.minecraft.nbt.{NBTTagList, NBTTagCompound}
-import resonantengine.lib.transform.vector.{Vector2, IVector2}
+import resonantengine.lib.transform.vector.Vector2
 
 /** Triangle shape. Assumes that connections go
   * a -> b -> c -> a forming a triangle shape

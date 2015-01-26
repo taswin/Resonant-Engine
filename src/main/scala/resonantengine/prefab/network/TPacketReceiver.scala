@@ -1,7 +1,8 @@
-package resonantengine.lib.network.handle
+package resonantengine.prefab.network
 
 import io.netty.buffer.ByteBuf
 import net.minecraft.entity.player.EntityPlayer
+import resonantengine.api.network.IPacketReceiver
 import resonantengine.lib.network.discriminator.PacketType
 
 /**

@@ -30,7 +30,6 @@ public class ItemScrewdriver extends ItemBase implements IToolWrench
 	@Override
 	public void wrenchUsed(EntityPlayer entityPlayer, int x, int y, int z)
 	{
-
 	}
 
 	@Override

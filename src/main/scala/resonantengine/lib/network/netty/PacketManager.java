@@ -17,9 +17,9 @@ import resonantengine.lib.mod.loadable.ICompatProxy;
 import resonantengine.lib.network.discriminator.PacketEntity;
 import resonantengine.lib.network.discriminator.PacketTile;
 import resonantengine.lib.network.discriminator.PacketType;
-import resonantengine.lib.network.handle.TPacketSender;
-import resonantengine.lib.transform.vector.IVector3;
-import resonantengine.lib.transform.vector.IVectorWorld;
+import resonantengine.prefab.network.TPacketSender;
+import resonantengine.api.transform.vector.IVector3;
+import resonantengine.api.transform.vector.IVectorWorld;
 import resonantengine.lib.transform.vector.Vector3;
 import resonantengine.lib.wrapper.ByteBufWrapper;
 

@@ -1,4 +1,4 @@
-package resonantengine.lib.world.schematic
+package resonantengine.lib.schematic
 
 import java.util.HashMap
 

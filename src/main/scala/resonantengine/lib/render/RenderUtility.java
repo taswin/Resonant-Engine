@@ -18,7 +18,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 import resonantengine.lib.transform.vector.Vector3;
-import resonantengine.lib.world.WorldUtility;
+import resonantengine.lib.utility.WorldUtility;
 
 import java.util.HashMap;
 import java.util.Iterator;

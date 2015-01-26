@@ -7,7 +7,8 @@ import net.minecraft.entity.Entity
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.MathHelper
 import net.minecraft.world.World
-import resonantengine.lib.transform.vector.{IVector3, Vector3}
+import resonantengine.api.transform.vector.IVector3
+import resonantengine.lib.transform.vector.Vector3
 import resonantengine.lib.wrapper.ByteBufWrapper._
 
 /** 3D Ball shaped region in the world.
