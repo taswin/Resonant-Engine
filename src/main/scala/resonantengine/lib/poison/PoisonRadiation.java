@@ -1,14 +1,14 @@
-package resonantengine.lib.prefab.poison;
+package resonantengine.lib.poison;
 
 import net.minecraft.entity.EntityLivingBase;
-import resonantengine.lib.prefab.damage.CustomDamageSource;
+import net.minecraft.util.DamageSource;
 import resonantengine.lib.prefab.potion.CustomPotionEffect;
 import resonantengine.lib.transform.vector.Vector3;
 
 public class PoisonRadiation extends Poison
 {
 	public static final Poison INSTANCE = new PoisonRadiation("radiation");
-	public static final CustomDamageSource damageSource = new CustomDamageSource("radiation").setDamageBypassesArmor();
+	public static final DamageSource damageSource = new DamageSource("radiation").setDamageBypassesArmor();
 	public static boolean disabled = false;
 
 	public PoisonRadiation(String name)

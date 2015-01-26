@@ -1,4 +1,4 @@
-package resonantengine.lib.prefab;
+package resonantengine.prefab.misc;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;

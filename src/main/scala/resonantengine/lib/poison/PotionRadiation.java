@@ -1,4 +1,4 @@
-package resonantengine.lib.prefab.poison;
+package resonantengine.lib.poison;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;

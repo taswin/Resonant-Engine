@@ -1,4 +1,4 @@
-package resonantengine.lib.prefab.poison;
+package resonantengine.lib.poison;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
