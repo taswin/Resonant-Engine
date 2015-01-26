@@ -1,8 +1,7 @@
-package resonantengine.lib.poison;
+package resonantengine.lib.potion;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import resonantengine.lib.prefab.potion.CustomPotion;
 
 public class PotionRadiation extends CustomPotion
 {

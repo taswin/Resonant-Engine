@@ -1,4 +1,4 @@
-package resonantengine.lib.prefab.potion;
+package resonantengine.lib.potion;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;

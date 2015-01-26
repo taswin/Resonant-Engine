@@ -1,4 +1,4 @@
-package resonantengine.lib.prefab.potion;
+package resonantengine.lib.potion;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;

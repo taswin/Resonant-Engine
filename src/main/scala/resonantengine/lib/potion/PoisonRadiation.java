@@ -1,8 +1,7 @@
-package resonantengine.lib.poison;
+package resonantengine.lib.potion;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
-import resonantengine.lib.prefab.potion.CustomPotionEffect;
 import resonantengine.lib.transform.vector.Vector3;
 
 public class PoisonRadiation extends Poison
