@@ -2,15 +2,18 @@ package resonant.lib.grid.energy.electric
 
 import cofh.api.energy.IEnergyHandler
 import net.minecraftforge.common.util.ForgeDirection
+import resonant.lib.grid.core.TBlockNodeProvider
 import resonant.lib.mod.compat.energy.Compatibility
-import resonant.lib.prefab.tile.traits.{TElectric, TEnergyProvider}
+import resonant.lib.prefab.tile.traits.TEnergyProvider
 
 /**
  * An energy bridge between TE and UE
  * @author Calclavia
  */
-trait TTEBridge extends TElectric with TEnergyProvider with IEnergyHandler
+trait TTEBridge extends TBlockNodeProvider with TEnergyProvider with IEnergyHandler
 {
+  val electricNode = new NodeElectricComponent(this)
+
   override def receiveEnergy(from: ForgeDirection, maxReceive: Int, simulate: Boolean): Int =
   {
     if (simulate)
