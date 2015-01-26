@@ -1,4 +1,4 @@
-package resonantengine.prefab.block.multiblock.reference;
+package resonantengine.prefab.block.multiblock;
 
 import resonantengine.lib.transform.vector.Vector3;
 

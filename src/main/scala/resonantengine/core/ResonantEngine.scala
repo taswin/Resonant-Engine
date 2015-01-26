@@ -28,7 +28,6 @@ import resonantengine.lib.mod.loadable.LoadableHandler
 import resonantengine.lib.transform.vector.Vector3
 import resonantengine.lib.utility.nbt.SaveManager
 import resonantengine.lib.utility.{PlayerInteractionHandler, PotionUtility}
-import resonantengine.prefab.block.multiblock.synthetic.SyntheticMultiblock
 
 /**
  * Mob class for Resonant Engine that handles common loading
@@ -60,7 +59,6 @@ object ResonantEngine
     MinecraftForge.EVENT_BUS.register(new PlayerInteractionHandler)
     ToolMode.REGISTRY.add(new ToolModeGeneral)
     ToolMode.REGISTRY.add(new ToolModeRotation)
-    SyntheticMultiblock.instance = new SyntheticMultiblock
     ResourceFactory.preInit()
     loadables.preInit()
   }

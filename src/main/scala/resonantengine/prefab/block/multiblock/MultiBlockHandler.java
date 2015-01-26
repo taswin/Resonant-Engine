@@ -1,4 +1,4 @@
-package resonantengine.prefab.block.multiblock.reference;
+package resonantengine.prefab.block.multiblock;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
