@@ -6,7 +6,7 @@ import net.minecraftforge.oredict.OreDictionary
 import resonantengine.core.content.ResonantContent
 import resonantengine.lib.factory.resources.block.{TBlockResource, TileOre}
 import resonantengine.lib.factory.resources.item.{ItemIngot, TItemResource}
-import resonantengine.lib.prefab.tile.spatial.ResonantBlock
+import resonantengine.lib.modcontent.block.ResonantBlock
 import resonantengine.lib.wrapper.StringWrapper._
 
 /**

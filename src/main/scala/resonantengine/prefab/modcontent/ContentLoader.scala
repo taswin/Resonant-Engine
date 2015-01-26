@@ -3,8 +3,8 @@ package resonantengine.prefab.modcontent
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.item.Item
-import resonantengine.api.modcontent.{ContentManager, ExplicitContentName}
-import resonantengine.lib.prefab.tile.spatial.ResonantBlock
+import resonantengine.lib.modcontent.block.ResonantBlock
+import resonantengine.lib.modcontent.{ContentManager, ExplicitContentName}
 import resonantengine.lib.wrapper.StringWrapper._
 /**
  * Automatic content registration for all fields extending this trait.

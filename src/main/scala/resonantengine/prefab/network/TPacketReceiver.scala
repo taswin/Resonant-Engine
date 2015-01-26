@@ -3,7 +3,7 @@ package resonantengine.prefab.network
 import io.netty.buffer.ByteBuf
 import net.minecraft.entity.player.EntityPlayer
 import resonantengine.api.network.IPacketReceiver
-import resonantengine.lib.network.discriminator.PacketType
+import resonantengine.core.network.discriminator.PacketType
 
 /**
  * A trait that is applied to packet receivers

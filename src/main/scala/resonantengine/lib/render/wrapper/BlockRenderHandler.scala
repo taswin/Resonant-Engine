@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.world.IBlockAccess
 import org.lwjgl.opengl.GL11._
 import org.lwjgl.opengl.GL12._
-import resonantengine.lib.prefab.tile.spatial.{BlockDummy, ResonantBlock}
+import resonantengine.lib.modcontent.block.{BlockDummy, ResonantBlock}
 import resonantengine.lib.transform.vector.Vector3
 
 object BlockRenderHandler extends ISimpleBlockRenderingHandler

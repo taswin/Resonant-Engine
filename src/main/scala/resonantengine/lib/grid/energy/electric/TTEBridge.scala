@@ -4,7 +4,7 @@ import cofh.api.energy.IEnergyHandler
 import net.minecraftforge.common.util.ForgeDirection
 import resonantengine.lib.grid.core.TBlockNodeProvider
 import resonantengine.lib.mod.compat.energy.Compatibility
-import resonantengine.lib.prefab.tile.traits.TEnergyProvider
+import resonantengine.prefab.block.traits.TEnergyProvider
 
 /**
  * An energy bridge between TE and UE

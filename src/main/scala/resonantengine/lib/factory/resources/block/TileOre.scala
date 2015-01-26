@@ -13,7 +13,7 @@ import net.minecraft.util.IIcon
 import org.lwjgl.opengl.GL11
 import resonantengine.core.Reference
 import resonantengine.lib.factory.resources.ResourceFactory
-import resonantengine.lib.prefab.tile.spatial.ResonantBlock
+import resonantengine.lib.modcontent.block.ResonantBlock
 import resonantengine.lib.render.RenderUtility
 import resonantengine.lib.transform.vector.Vector3
 

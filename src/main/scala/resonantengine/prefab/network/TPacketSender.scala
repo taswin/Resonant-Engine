@@ -5,8 +5,8 @@ import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.tileentity.TileEntity
 import resonantengine.api.transform.vector.IVectorWorld
 import resonantengine.core.ResonantEngine
-import resonantengine.lib.network.discriminator.PacketTile
-import resonantengine.lib.network.netty.AbstractPacket
+import resonantengine.core.network.discriminator.PacketTile
+import resonantengine.core.network.netty.AbstractPacket
 import resonantengine.lib.wrapper.ByteBufWrapper._
 
 /**
@@ -19,6 +19,20 @@ import resonantengine.lib.wrapper.ByteBufWrapper._
 trait TPacketSender extends TileEntity
 {
   override def getDescriptionPacket = ResonantEngine.packetHandler.toMCPacket(getPacket(0))
+
+  /** Sends the desc packet to all players around this tile */
+  def sendDescPacket()
+  {
+    sendPacket(0)
+  }
+
+  def sendPacket(id: Int, distance: Double = 64)
+  {
+    if (distance > 0)
+      sendPacket(getPacket(id), distance)
+    else
+      sendPacket(getPacket(id))
+  }
 
   def getPacket(id: Int): PacketTile =
   {
@@ -34,20 +48,6 @@ trait TPacketSender extends TileEntity
   def write(buf: ByteBuf, id: Int)
   {
     buf <<< id
-  }
-
-  /** Sends the desc packet to all players around this tile */
-  def sendDescPacket()
-  {
-    sendPacket(0)
-  }
-
-  def sendPacket(id: Int, distance: Double =64)
-  {
-    if (distance > 0)
-      sendPacket(getPacket(id), distance)
-    else
-      sendPacket(getPacket(id))
   }
 
   /**

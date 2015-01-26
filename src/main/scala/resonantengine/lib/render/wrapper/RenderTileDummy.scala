@@ -3,7 +3,7 @@ package resonantengine.lib.render.wrapper
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
 import net.minecraft.tileentity.TileEntity
-import resonantengine.lib.prefab.tile.spatial.ResonantBlock
+import resonantengine.lib.modcontent.block.ResonantBlock
 import resonantengine.lib.transform.vector.Vector3
 
 /**

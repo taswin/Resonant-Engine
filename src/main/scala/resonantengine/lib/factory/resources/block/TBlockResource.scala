@@ -2,7 +2,7 @@ package resonantengine.lib.factory.resources.block
 
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import resonantengine.lib.factory.resources.ResourceFactory
-import resonantengine.lib.prefab.tile.spatial.ResonantBlock
+import resonantengine.lib.modcontent.block.ResonantBlock
 
 /**
  * @author Calclavia

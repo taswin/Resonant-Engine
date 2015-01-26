@@ -2,7 +2,7 @@ package resonantengine.api.network;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
-import resonantengine.lib.network.discriminator.PacketType;
+import resonantengine.core.network.discriminator.PacketType;
 
 /**
  * Created by robert on 8/5/2014.

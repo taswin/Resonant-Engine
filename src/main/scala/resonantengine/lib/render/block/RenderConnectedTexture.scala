@@ -4,7 +4,7 @@ import net.minecraft.client.renderer.RenderBlocks
 import net.minecraft.item.ItemStack
 import net.minecraftforge.common.util.ForgeDirection
 import org.lwjgl.opengl.GL11._
-import resonantengine.lib.prefab.tile.spatial.ResonantBlock
+import resonantengine.lib.modcontent.block.ResonantBlock
 import resonantengine.lib.render.{RenderBlockUtility, RenderUtility}
 import resonantengine.lib.transform.vector.Vector3
 import resonantengine.lib.wrapper.BitmaskWrapper._

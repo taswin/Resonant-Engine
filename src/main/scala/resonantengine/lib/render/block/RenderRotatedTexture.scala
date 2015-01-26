@@ -4,7 +4,7 @@ import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.renderer.RenderBlocks
 import net.minecraftforge.common.util.ForgeDirection
 import resonantengine.api.tile.IRotatable
-import resonantengine.lib.prefab.tile.spatial.ResonantBlock
+import resonantengine.lib.modcontent.block.ResonantBlock
 import resonantengine.lib.render.{RenderBlockAdvanced, RenderUtility}
 import resonantengine.lib.transform.vector.Vector3
 import resonantengine.lib.utility.RotationUtility

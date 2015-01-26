@@ -8,13 +8,13 @@ import net.minecraft.block.material.Material
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
 import resonantengine.core.ResonantEngine
+import resonantengine.core.network.discriminator.{PacketTile, PacketType}
 import resonantengine.lib.collection.Pair
-import resonantengine.lib.network.discriminator.{PacketTile, PacketType}
-import resonantengine.prefab.network.{TPacketReceiver, TPacketSender}
-import resonantengine.lib.prefab.tile.spatial.ResonantTile
-import resonantengine.lib.prefab.tile.traits.TRotatable
-import resonantengine.lib.transform.vector.Vector3
+import resonantengine.lib.modcontent.block.ResonantTile
 import resonantengine.lib.schematic.SchematicRegistry
+import resonantengine.lib.transform.vector.Vector3
+import resonantengine.prefab.block.traits.TRotatable
+import resonantengine.prefab.network.{TPacketReceiver, TPacketSender}
 
 import scala.collection.JavaConversions._
 

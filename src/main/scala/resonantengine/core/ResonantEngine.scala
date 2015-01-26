@@ -13,22 +13,22 @@ import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.{FluidContainerRegistry, FluidRegistry, FluidStack}
 import net.minecraftforge.oredict.OreDictionary
-import resonantengine.api.mffs.fortron.FrequencyGridRegistry
 import resonantengine.api.edx.recipe.{MachineRecipes, RecipeType}
+import resonantengine.api.mffs.fortron.FrequencyGridRegistry
 import resonantengine.api.tile.IBoilHandler
 import resonantengine.core.content.ResonantContent
 import resonantengine.core.content.tool.{ToolMode, ToolModeGeneral, ToolModeRotation}
+import resonantengine.core.network.netty.PacketManager
 import resonantengine.lib.factory.resources.ResourceFactory
 import resonantengine.lib.grid.core.UpdateTicker
 import resonantengine.lib.grid.frequency.GridFrequency
 import resonantengine.lib.grid.thermal.{BoilEvent, GridThermal, ThermalPhysics}
 import resonantengine.lib.mod.config.{ConfigHandler, ConfigScanner}
 import resonantengine.lib.mod.loadable.LoadableHandler
-import resonantengine.lib.network.netty.PacketManager
-import resonantengine.lib.prefab.tile.multiblock.synthetic.SyntheticMultiblock
 import resonantengine.lib.transform.vector.Vector3
 import resonantengine.lib.utility.nbt.SaveManager
 import resonantengine.lib.utility.{PlayerInteractionHandler, PotionUtility}
+import resonantengine.prefab.block.multiblock.synthetic.SyntheticMultiblock
 
 /**
  * Mob class for Resonant Engine that handles common loading

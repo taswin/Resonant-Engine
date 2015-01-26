@@ -4,7 +4,7 @@ import net.minecraft.block.material.Material
 import net.minecraft.tileentity.TileEntity
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids._
-import resonantengine.lib.prefab.tile.mixed.TileIO
+import resonantengine.prefab.block.mixed.TileIO
 
 /**
  * Designed to debug fluid devices by draining everything that comes in at one time
