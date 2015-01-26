@@ -7,7 +7,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.ForgeDirection;
 import resonantengine.api.tile.IInventoryProvider;
-import resonantengine.api.tile.node.IExternalInventory;
+import resonantengine.api.graph.node.IExternalInventory;
 
 public class ExternalInventory implements IExternalInventory
 {

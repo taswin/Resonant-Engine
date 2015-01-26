@@ -1,6 +1,6 @@
 package resonantengine.lib.grid.core
 
-import resonantengine.api.tile.INodeProvider
+import resonantengine.api.graph.INodeProvider
 
 import scala.collection.convert.wrapAll._
 /**

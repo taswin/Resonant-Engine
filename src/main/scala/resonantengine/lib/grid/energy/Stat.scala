@@ -1,7 +1,7 @@
 package resonantengine.lib.grid.energy
 
 import net.minecraft.nbt.NBTTagCompound
-import resonantengine.api.ISave
+import resonantengine.api.misc.ISave
 
 /**
  * A stat is a type of positive numerical value that has a maximum value

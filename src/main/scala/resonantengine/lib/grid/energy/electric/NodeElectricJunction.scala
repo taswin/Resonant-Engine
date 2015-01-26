@@ -1,6 +1,6 @@
 package resonantengine.lib.grid.energy.electric
 
-import resonantengine.api.tile.INodeProvider
+import resonantengine.api.graph.INodeProvider
 
 /**
  * Wires are nodes in the grid that will not have different terminals, but instead can connect omni-directionally.

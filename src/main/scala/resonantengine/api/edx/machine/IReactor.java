@@ -1,4 +1,4 @@
-package resonantengine.api.tile;
+package resonantengine.api.edx.machine;
 
 import net.minecraft.world.World;
 

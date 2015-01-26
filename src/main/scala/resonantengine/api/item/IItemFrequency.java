@@ -1,4 +1,4 @@
-package resonantengine.api.items;
+package resonantengine.api.item;
 
 import net.minecraft.item.ItemStack;
 

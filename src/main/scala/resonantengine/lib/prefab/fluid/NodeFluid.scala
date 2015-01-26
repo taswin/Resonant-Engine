@@ -3,9 +3,9 @@ package resonantengine.lib.prefab.fluid
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids._
-import resonantengine.api.ISave
-import resonantengine.api.tile.INodeProvider
-import resonantengine.api.tile.node.INode
+import resonantengine.api.graph.INodeProvider
+import resonantengine.api.graph.node.INode
+import resonantengine.api.misc.ISave
 import resonantengine.lib.grid.core.{NodeConnector, TTileConnector}
 
 /**

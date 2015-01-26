@@ -1,9 +1,9 @@
-package resonantengine.core.debug;
+package resonantengine.api.tile;
 
 import java.util.List;
 
 /**
- * Applied to TileEntities that will display information in the F3 panel for debug
+ * Applied to Tiles that will display information in the F3 panel for debug
  *
  * @author Calclavia
  */

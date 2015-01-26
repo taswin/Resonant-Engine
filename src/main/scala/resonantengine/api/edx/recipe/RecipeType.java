@@ -1,4 +1,4 @@
-package resonantengine.api.recipe;
+package resonantengine.api.edx.recipe;
 
 /**
  * The type of recipe for a specific type of machinery

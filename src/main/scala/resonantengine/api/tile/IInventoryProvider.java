@@ -2,7 +2,7 @@ package resonantengine.api.tile;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.ForgeDirection;
-import resonantengine.api.tile.node.IExternalInventory;
+import resonantengine.api.graph.node.IExternalInventory;
 
 /** Used with IExternalInventory to move the inventory functionality
  * outside of the tile class. Designed to make it easier to abstract inventory

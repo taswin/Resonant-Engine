@@ -4,9 +4,9 @@ import java.util
 import java.util.{List => JList}
 
 import net.minecraftforge.common.util.ForgeDirection
-import resonantengine.api.tile.INodeProvider
-import resonantengine.api.tile.node.INode
-import resonantengine.core.debug.IDebugInfo
+import resonantengine.api.graph.INodeProvider
+import resonantengine.api.graph.node.INode
+import resonantengine.api.tile.IDebugInfo
 
 import scala.collection.convert.wrapAll._
 

@@ -5,7 +5,7 @@ import io.netty.buffer.ByteBuf
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.fluids.FluidTank
-import resonantengine.api.ISave
+import resonantengine.api.misc.ISave
 import resonantengine.lib.network.netty.IByteBufObject
 import resonantengine.lib.transform.vector.{Vector2, Vector3}
 

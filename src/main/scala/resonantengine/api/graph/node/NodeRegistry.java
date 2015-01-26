@@ -1,6 +1,6 @@
-package resonantengine.api.tile.node;
+package resonantengine.api.graph.node;
 
-import resonantengine.api.tile.INodeProvider;
+import resonantengine.api.graph.INodeProvider;
 
 import java.util.HashMap;
 

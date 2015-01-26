@@ -6,7 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import resonantengine.api.items.IEnergyItem;
+import resonantengine.api.item.IEnergyItem;
 import resonantengine.lib.mod.compat.energy.Compatibility;
 import resonantengine.lib.utility.science.UnitDisplay;
 import resonantengine.lib.utility.science.UnitDisplay.Unit;

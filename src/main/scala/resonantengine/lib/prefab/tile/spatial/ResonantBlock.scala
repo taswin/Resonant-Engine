@@ -21,7 +21,7 @@ import net.minecraft.world.{Explosion, IBlockAccess, World}
 import net.minecraftforge.client.IItemRenderer
 import net.minecraftforge.client.IItemRenderer.ItemRenderType
 import org.lwjgl.opengl.{GL11, GL12}
-import resonantengine.api.items.ISimpleItemRenderer
+import resonantengine.api.item.ISimpleItemRenderer
 import resonantengine.lib.content.prefab.TIO
 import resonantengine.lib.prefab.tile.item.ItemBlockTooltip
 import resonantengine.lib.prefab.tile.traits.TRotatable
@@ -616,6 +616,7 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with TVec
   }
 
   @SideOnly(Side.CLIENT)
+  @deprecated
   def renderInventory(itemStack: ItemStack)
   {
     val tesr: TileEntitySpecialRenderer = getSpecialRenderer

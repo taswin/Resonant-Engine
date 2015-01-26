@@ -4,7 +4,7 @@ import java.util.{List => JList}
 
 import net.minecraft.block.Block
 import net.minecraft.nbt.NBTTagCompound
-import resonantengine.api.ISave
+import resonantengine.api.misc.ISave
 import resonantengine.lib.prefab.tile.spatial.ResonantTile
 import resonantengine.lib.transform.vector.Vector3
 

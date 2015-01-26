@@ -2,7 +2,7 @@ package resonantengine.lib.grid.thermal
 
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.common.util.ForgeDirection
-import resonantengine.api.IUpdate
+import resonantengine.api.graph.IUpdate
 import resonantengine.lib.grid.thermal.ThermalEvent.EventThermalUpdate
 import resonantengine.lib.transform.vector.VectorWorld
 

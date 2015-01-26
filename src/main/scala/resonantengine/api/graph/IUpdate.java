@@ -1,4 +1,4 @@
-package resonantengine.api;
+package resonantengine.api.graph;
 
 /**
  * Applies to objects that can receive update tick calls.

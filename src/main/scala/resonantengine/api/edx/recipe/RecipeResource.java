@@ -1,4 +1,4 @@
-package resonantengine.api.recipe;
+package resonantengine.api.edx.recipe;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;

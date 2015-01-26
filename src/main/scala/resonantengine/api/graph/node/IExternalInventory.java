@@ -1,8 +1,8 @@
-package resonantengine.api.tile.node;
+package resonantengine.api.graph.node;
 
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
-import resonantengine.api.ISave;
+import resonantengine.api.misc.ISave;
 
 /**
  * @author DarkGuardsman

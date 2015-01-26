@@ -1,6 +1,6 @@
-package resonantengine.api.tile.node;
+package resonantengine.api.graph.node;
 
-import resonantengine.api.tile.INodeProvider;
+import resonantengine.api.graph.INodeProvider;
 
 /** Simple point in a grid that can link to or represent a tile/multipart/entity/block */
 public interface INode

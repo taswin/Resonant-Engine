@@ -14,7 +14,7 @@ import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids.{FluidContainerRegistry, FluidRegistry, FluidStack}
 import net.minecraftforge.oredict.OreDictionary
 import resonantengine.api.mffs.fortron.FrequencyGridRegistry
-import resonantengine.api.recipe.{MachineRecipes, RecipeType}
+import resonantengine.api.edx.recipe.{MachineRecipes, RecipeType}
 import resonantengine.api.tile.IBoilHandler
 import resonantengine.core.content.ResonantContent
 import resonantengine.core.content.tool.{ToolMode, ToolModeGeneral, ToolModeRotation}
@@ -40,7 +40,7 @@ object ResonantEngine
 {
   val packetHandler = new PacketManager(Reference.channel)
   private val loadables = new LoadableHandler
-  @SidedProxy(clientSide = "resonant.core.ClientProxy", serverSide = "resonant.core.CommonProxy")
+  @SidedProxy(clientSide = "resonantengine.core.ClientProxy", serverSide = "resonantengine.core.CommonProxy")
   var proxy: CommonProxy = null
 
   @EventHandler

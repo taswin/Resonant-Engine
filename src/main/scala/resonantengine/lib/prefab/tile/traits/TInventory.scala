@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.ForgeDirection
 import resonantengine.api.tile.IInventoryProvider
-import resonantengine.api.tile.node.IExternalInventory
+import resonantengine.api.graph.node.IExternalInventory
 import resonantengine.lib.prefab.tile.spatial.ResonantBlock
 import resonantengine.lib.transform.vector.Vector3
 import resonantengine.lib.utility.inventory.{ExternalInventory, InventoryUtility}

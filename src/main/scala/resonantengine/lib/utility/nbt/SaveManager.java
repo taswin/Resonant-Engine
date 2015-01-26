@@ -7,7 +7,7 @@ import cpw.mods.fml.relauncher.Side;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.world.WorldEvent;
 import org.apache.logging.log4j.Level;
-import resonantengine.api.ISave;
+import resonantengine.api.misc.ISave;
 import resonantengine.core.Reference;
 import resonantengine.lib.utility.ReflectionUtility;
 

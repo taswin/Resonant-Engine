@@ -1,4 +1,4 @@
-package resonantengine.api.tile.node;
+package resonantengine.api.graph.node;
 
 import net.minecraftforge.common.util.ForgeDirection;
 

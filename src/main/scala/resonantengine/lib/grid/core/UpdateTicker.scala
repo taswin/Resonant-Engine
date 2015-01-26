@@ -6,7 +6,7 @@ import cpw.mods.fml.common.eventhandler.{Event, SubscribeEvent}
 import cpw.mods.fml.common.gameevent.TickEvent
 import cpw.mods.fml.common.gameevent.TickEvent.Phase
 import net.minecraftforge.common.MinecraftForge
-import resonantengine.api.IUpdate
+import resonantengine.api.graph.IUpdate
 
 import scala.collection.convert.wrapAll._
 import scala.collection.mutable

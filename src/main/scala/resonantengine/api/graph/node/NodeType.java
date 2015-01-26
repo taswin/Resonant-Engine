@@ -1,4 +1,4 @@
-package resonantengine.api.tile.node;
+package resonantengine.api.graph.node;
 
 /**
  * Basic set of Simulator types used by a few interfaces to define the return that should be given.

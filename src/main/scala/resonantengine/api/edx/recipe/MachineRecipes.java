@@ -1,12 +1,12 @@
-package resonantengine.api.recipe;
+package resonantengine.api.edx.recipe;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
-import resonantengine.api.recipe.RecipeResource.FluidStackResource;
-import resonantengine.api.recipe.RecipeResource.ItemStackResource;
-import resonantengine.api.recipe.RecipeResource.OreDictResource;
+import resonantengine.api.edx.recipe.RecipeResource.FluidStackResource;
+import resonantengine.api.edx.recipe.RecipeResource.ItemStackResource;
+import resonantengine.api.edx.recipe.RecipeResource.OreDictResource;
 
 import java.util.*;
 import java.util.Map.Entry;

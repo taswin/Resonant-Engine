@@ -3,8 +3,8 @@ package resonantengine.lib.grid.energy.electric
 import java.util.{Set => JSet}
 
 import net.minecraftforge.common.util.ForgeDirection
-import resonantengine.api.tile.INodeProvider
-import resonantengine.core.debug.IDebugInfo
+import resonantengine.api.graph.INodeProvider
+import resonantengine.api.tile.IDebugInfo
 import resonantengine.lib.grid.core.{GridNode, NodeGrid, TTileConnector}
 import resonantengine.lib.wrapper.BitmaskWrapper._
 

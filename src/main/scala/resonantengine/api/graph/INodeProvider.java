@@ -1,7 +1,7 @@
-package resonantengine.api.tile;
+package resonantengine.api.graph;
 
 import net.minecraftforge.common.util.ForgeDirection;
-import resonantengine.api.tile.node.INode;
+import resonantengine.api.graph.node.INode;
 
 /**
  * @author Calclavia

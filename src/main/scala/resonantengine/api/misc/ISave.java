@@ -1,4 +1,4 @@
-package resonantengine.api;
+package resonantengine.api.misc;
 
 import net.minecraft.nbt.NBTTagCompound;
 

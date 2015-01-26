@@ -1,6 +1,6 @@
 package resonantengine.lib.utility.nbt;
 
-import resonantengine.api.ISave;
+import resonantengine.api.misc.ISave;
 
 import java.io.File;
 

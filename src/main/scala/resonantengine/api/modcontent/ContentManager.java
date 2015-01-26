@@ -7,7 +7,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import resonantengine.api.items.ISimpleItemRenderer;
+import resonantengine.api.item.ISimpleItemRenderer;
 import resonantengine.core.ResonantEngine;
 import resonantengine.lib.prefab.tile.item.ItemBlockMetadata;
 import resonantengine.lib.prefab.tile.spatial.BlockDummy;

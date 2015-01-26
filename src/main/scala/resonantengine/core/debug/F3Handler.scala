@@ -5,6 +5,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.Minecraft
 import net.minecraftforge.client.event.RenderGameOverlayEvent
+import resonantengine.api.tile.IDebugInfo
 import resonantengine.lib.transform.vector.VectorWorld
 
 /**
