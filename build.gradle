@@ -110,7 +110,7 @@ jar {
     classifier = 'core'
 	
 	manifest {
-        attributes FMLCorePlugin: "resonant.engine.ResonantPluginLoader",
+        attributes FMLCorePlugin: "resonantengine.core.ResonantPlugin",
 				   FMLCorePluginContainsFMLMod: "true"
     }
 	
@@ -120,7 +120,7 @@ jar {
 task apiZip(type: Zip) {
     classifier = 'api'
     from sourceSets*.allSource
-    include 'resonant/api/**'
+    include 'resonantengine/api/**'
     destinationDir = file 'output'
 }
 
