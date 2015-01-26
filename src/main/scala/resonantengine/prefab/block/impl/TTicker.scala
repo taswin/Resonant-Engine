@@ -1,4 +1,4 @@
-package resonantengine.prefab.block.traits
+package resonantengine.prefab.block.impl
 
 /**
  * An object that can handle ticks.

@@ -2,9 +2,8 @@ package resonantengine.lib.grid.energy.electric
 
 import cofh.api.energy.IEnergyHandler
 import net.minecraftforge.common.util.ForgeDirection
-import resonantengine.lib.grid.core.TBlockNodeProvider
 import resonantengine.lib.mod.compat.energy.Compatibility
-import resonantengine.prefab.block.traits.TEnergyProvider
+import resonantengine.prefab.block.impl.{TBlockNodeProvider, TEnergyProvider}
 
 /**
  * An energy bridge between TE and UE

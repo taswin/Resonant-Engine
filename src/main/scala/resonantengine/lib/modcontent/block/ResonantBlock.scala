@@ -30,8 +30,8 @@ import resonantengine.lib.transform.vector.{TVectorWorld, Vector2, Vector3, Vect
 import resonantengine.lib.utility.WrenchUtility
 import resonantengine.lib.wrapper.CollectionWrapper._
 import resonantengine.lib.wrapper.StringWrapper._
+import resonantengine.prefab.block.impl.TRotatable
 import resonantengine.prefab.block.itemblock.ItemBlockTooltip
-import resonantengine.prefab.block.traits.TRotatable
 
 import scala.beans.BeanProperty
 import scala.collection.convert.wrapAll._
@@ -552,20 +552,6 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with TVec
     return icon
   }
 
-  @SideOnly(Side.CLIENT)
-  protected def getTextureName: String =
-  {
-    if (textureName == null)
-      return "MISSING_ICON_TILE_" + Block.getIdFromBlock(block) + "_" + name
-    else
-      return block.dummyTile.domain + textureName
-  }
-
-  def setTextureName(value: String)
-  {
-    textureName = value
-  }
-
   /** Gets the icon that renders on the bottom
     * @param meta - placement data
     * @return icon that will render on bottom */
@@ -573,19 +559,6 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with TVec
   protected def getBottomIcon(meta: Int): IIcon =
   {
     var icon = ResonantBlock.icon.get(getTextureName + "_bottom")
-    if (icon == null)
-      icon = ResonantBlock.icon.get(getTextureName)
-    return icon
-  }
-
-  /** Gets the icon that renders on the sides
-    * @param meta - placement data
-    * @param side - side of the icon
-    * @return icon that will render on sides */
-  @SideOnly(Side.CLIENT)
-  protected def getSideIcon(meta: Int, side: Int): IIcon =
-  {
-    var icon = ResonantBlock.icon.get(getTextureName + "_side")
     if (icon == null)
       icon = ResonantBlock.icon.get(getTextureName)
     return icon
@@ -844,8 +817,6 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with TVec
   /** Is the world server side */
   def server: Boolean = !world.isRemote
 
-  override def world: World = getWorldObj
-
   /** Is the world client side */
   def client: Boolean = world.isRemote
 
@@ -897,6 +868,33 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with TVec
   @SideOnly(Side.CLIENT)
   protected def getSideIcon(meta: Int): IIcon = getSideIcon(meta, 0)
 
+  /** Gets the icon that renders on the sides
+    * @param meta - placement data
+    * @param side - side of the icon
+    * @return icon that will render on sides */
+  @SideOnly(Side.CLIENT)
+  protected def getSideIcon(meta: Int, side: Int): IIcon =
+  {
+    var icon = ResonantBlock.icon.get(getTextureName + "_side")
+    if (icon == null)
+      icon = ResonantBlock.icon.get(getTextureName)
+    return icon
+  }
+
+  @SideOnly(Side.CLIENT)
+  protected def getTextureName: String =
+  {
+    if (textureName == null)
+      return "MISSING_ICON_TILE_" + Block.getIdFromBlock(block) + "_" + name
+    else
+      return block.dummyTile.domain + textureName
+  }
+
+  def setTextureName(value: String)
+  {
+    textureName = value
+  }
+
   protected def markRender()
   {
     world.func_147479_m(xi, yi, zi)
@@ -906,6 +904,8 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with TVec
   {
     world.markBlockForUpdate(xi, yi, zi)
   }
+
+  override def world: World = getWorldObj
 
   protected def updateLight()
   {

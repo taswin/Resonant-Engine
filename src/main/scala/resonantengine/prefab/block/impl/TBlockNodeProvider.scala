@@ -1,6 +1,4 @@
-package resonantengine.lib.grid.core
-
-import java.util.{List => JList}
+package resonantengine.prefab.block.impl
 
 import net.minecraft.block.Block
 import net.minecraft.nbt.NBTTagCompound

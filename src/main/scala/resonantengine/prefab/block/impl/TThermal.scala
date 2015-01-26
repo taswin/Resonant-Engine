@@ -1,4 +1,4 @@
-package resonantengine.prefab.block.traits
+package resonantengine.prefab.block.impl
 
 import net.minecraft.nbt.NBTTagCompound
 import resonantengine.lib.modcontent.block.ResonantBlock

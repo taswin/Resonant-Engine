@@ -13,7 +13,7 @@ import resonantengine.lib.collection.Pair
 import resonantengine.lib.modcontent.block.ResonantTile
 import resonantengine.lib.schematic.SchematicRegistry
 import resonantengine.lib.transform.vector.Vector3
-import resonantengine.prefab.block.traits.TRotatable
+import resonantengine.prefab.block.impl.TRotatable
 import resonantengine.prefab.network.{TPacketReceiver, TPacketSender}
 
 import scala.collection.JavaConversions._

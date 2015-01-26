@@ -1,4 +1,4 @@
-package resonantengine.lib.grid.core
+package resonantengine.prefab.block.impl
 
 import java.util
 import java.util.{List => JList}
@@ -7,6 +7,7 @@ import net.minecraftforge.common.util.ForgeDirection
 import resonantengine.api.graph.INodeProvider
 import resonantengine.api.graph.node.INode
 import resonantengine.api.tile.IDebugInfo
+import resonantengine.lib.grid.core.Node
 
 import scala.collection.convert.wrapAll._
 

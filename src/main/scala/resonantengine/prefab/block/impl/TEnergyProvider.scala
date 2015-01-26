@@ -1,4 +1,4 @@
-package resonantengine.prefab.block.traits
+package resonantengine.prefab.block.impl
 
 import net.minecraftforge.common.util.ForgeDirection
 import resonantengine.lib.grid.energy.EnergyStorage

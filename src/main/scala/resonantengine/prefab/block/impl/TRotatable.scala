@@ -1,4 +1,4 @@
-package resonantengine.prefab.block.traits
+package resonantengine.prefab.block.impl
 
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.util.MathHelper

@@ -8,7 +8,7 @@ import net.minecraft.network.Packet
 import resonantengine.api.tile.IPlayerUsing
 import resonantengine.core.ResonantEngine
 import resonantengine.core.network.netty.AbstractPacket
-import resonantengine.prefab.block.traits.TTicker
+import resonantengine.prefab.block.impl.TTicker
 
 /**
  * All tiles inherit this class.

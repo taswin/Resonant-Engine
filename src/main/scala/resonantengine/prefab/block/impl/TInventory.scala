@@ -37,9 +37,21 @@ trait TInventory extends ResonantBlock with IInventoryProvider with ISidedInvent
     markDirty()
   }
 
-  override def getStackInSlotOnClosing(index: Int): ItemStack = this.getInventory().getStackInSlotOnClosing(index)
+  override def getStackInSlot(index: Int): ItemStack = this.getInventory().getStackInSlot(index)
 
-  override def getInventory: IExternalInventory = inventory
+  override def setInventorySlotContents(index: Int, stack: ItemStack)
+  {
+    this.getInventory().setInventorySlotContents(index, stack)
+    onInventoryChanged()
+  }
+
+  /** Called each time the inventory changes */
+  def onInventoryChanged()
+  {
+
+  }
+
+  override def getStackInSlotOnClosing(index: Int): ItemStack = this.getInventory().getStackInSlotOnClosing(index)
 
   override def getInventoryName: String = getBlockType.getLocalizedName
 
@@ -58,6 +70,8 @@ trait TInventory extends ResonantBlock with IInventoryProvider with ISidedInvent
   def getAccessibleSlotsFromSide(var1: Int): Array[Int] = this.getInventory.getAccessibleSlotsFromSide(var1)
 
   def canInsertItem(i: Int, itemStack: ItemStack, j: Int): Boolean = this.getInventory.canInsertItem(i, itemStack, j)
+
+  override def getInventory: IExternalInventory = inventory
 
   def canExtractItem(i: Int, itemStack: ItemStack, j: Int): Boolean = this.getInventory.canExtractItem(i, itemStack, j)
 
@@ -179,20 +193,6 @@ trait TInventory extends ResonantBlock with IInventoryProvider with ISidedInvent
     }
     onInventoryChanged()
     markDirty()
-  }
-
-  override def getStackInSlot(index: Int): ItemStack = this.getInventory().getStackInSlot(index)
-
-  override def setInventorySlotContents(index: Int, stack: ItemStack)
-  {
-    this.getInventory().setInventorySlotContents(index, stack)
-    onInventoryChanged()
-  }
-
-  /** Called each time the inventory changes */
-  def onInventoryChanged()
-  {
-
   }
 
   override def readFromNBT(nbt: NBTTagCompound)
