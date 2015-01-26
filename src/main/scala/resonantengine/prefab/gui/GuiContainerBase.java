@@ -1,4 +1,4 @@
-package resonantengine.lib.prefab.gui;
+package resonantengine.prefab.gui;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;

@@ -2,6 +2,9 @@ package resonantengine.api.item;
 
 import net.minecraft.item.ItemStack;
 
+/**
+ * An interface for items that store energy in joules.
+ */
 public interface IEnergyItem
 {
 	/**
@@ -29,16 +32,15 @@ public interface IEnergyItem
 	/**
 	 * Get the amount of energy currently stored in the item.
 	 */
-	public double getEnergy(ItemStack theItem);
+	public double getEnergy(ItemStack itemStack);
 
 	/**
 	 * Get the max amount of energy that can be stored in the item.
 	 */
-	public double getEnergyCapacity(ItemStack theItem);
+	public double getEnergyCapacity(ItemStack itemStack);
 
 	/**
-	 * Sets the amount of energy in the ItemStack. Use recharge or discharge instead of calling this
-	 * to be safer!
+	 * Sets the amount of energy in the ItemStack.
 	 *
 	 * @param itemStack - the ItemStack.
 	 * @param energy    - Amount of electrical energy.

@@ -1,7 +1,7 @@
 /**
  *
  */
-package resonantengine.lib.prefab.item
+package resonantengine.prefab.item
 
 import java.util
 
@@ -18,7 +18,8 @@ import resonantengine.lib.wrapper.CollectionWrapper._
  */
 abstract class ItemCoordLink extends ItemTooltip
 {
-  @SideOnly(Side.CLIENT) override def addInformation(itemstack: ItemStack, entityplayer: EntityPlayer, list: util.List[_], flag: Boolean)
+  @SideOnly(Side.CLIENT)
+  override def addInformation(itemstack: ItemStack, entityplayer: EntityPlayer, list: util.List[_], flag: Boolean)
   {
     super.addInformation(itemstack, entityplayer, list, flag)
 

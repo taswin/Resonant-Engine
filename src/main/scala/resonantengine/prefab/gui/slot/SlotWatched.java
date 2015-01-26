@@ -1,4 +1,4 @@
-package resonantengine.lib.prefab.gui.slot;
+package resonantengine.prefab.gui.slot;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;

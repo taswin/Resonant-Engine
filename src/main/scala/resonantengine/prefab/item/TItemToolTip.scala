@@ -1,4 +1,4 @@
-package resonantengine.lib.prefab.item
+package resonantengine.prefab.item
 
 import java.util
 

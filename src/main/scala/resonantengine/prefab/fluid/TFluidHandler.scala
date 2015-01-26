@@ -1,4 +1,4 @@
-package resonantengine.lib.prefab.fluid
+package resonantengine.prefab.fluid
 
 import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids._
@@ -11,15 +11,15 @@ trait TFluidHandler extends IFluidHandler with TTankProvider
 {
   override def fill(from: ForgeDirection, resource: FluidStack, doFill: Boolean): Int =
   {
-    if (getPrimaryTank != null)
-      return getPrimaryTank.fill(resource, doFill)
+    if (getTank != null)
+      return getTank.fill(resource, doFill)
     else
       return 0
   }
 
   override def drain(from: ForgeDirection, resource: FluidStack, doDrain: Boolean): FluidStack =
   {
-    if (getPrimaryTank != null && resource != null && resource.isFluidEqual(getPrimaryTank.getFluid))
+    if (getTank != null && resource != null && resource.isFluidEqual(getTank.getFluid))
     {
       return drain(from, resource.amount, doDrain)
     }
@@ -28,8 +28,8 @@ trait TFluidHandler extends IFluidHandler with TTankProvider
 
   override def drain(from: ForgeDirection, maxDrain: Int, doDrain: Boolean): FluidStack =
   {
-    if (getPrimaryTank != null)
-      return getPrimaryTank.drain(maxDrain, doDrain)
+    if (getTank != null)
+      return getTank.drain(maxDrain, doDrain)
     else
       return null
   }
@@ -40,9 +40,9 @@ trait TFluidHandler extends IFluidHandler with TTankProvider
 
   override def getTankInfo(from: ForgeDirection): Array[FluidTankInfo] =
   {
-    if (getPrimaryTank != null)
+    if (getTank != null)
     {
-      return Array[FluidTankInfo](getPrimaryTank.getInfo)
+      return Array[FluidTankInfo](getTank.getInfo)
     }
     else
     {

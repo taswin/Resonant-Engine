@@ -4,10 +4,10 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import resonantengine.core.ResonantEngine;
 import resonantengine.core.network.discriminator.PacketTile;
-import resonantengine.lib.prefab.gui.GuiContainerBase;
 import resonantengine.lib.schematic.Schematic;
 import resonantengine.lib.schematic.SchematicRegistry;
 import resonantengine.lib.utility.LanguageUtility;
+import resonantengine.prefab.gui.GuiContainerBase;
 
 public class GuiCreativeBuilder extends GuiContainerBase
 {

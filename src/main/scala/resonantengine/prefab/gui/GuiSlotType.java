@@ -1,4 +1,4 @@
-package resonantengine.lib.prefab.gui;
+package resonantengine.prefab.gui;
 
 public enum GuiSlotType
 {

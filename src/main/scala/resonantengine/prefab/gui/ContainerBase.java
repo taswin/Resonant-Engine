@@ -1,4 +1,4 @@
-package resonantengine.lib.prefab.gui;
+package resonantengine.prefab.gui;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
