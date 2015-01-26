@@ -3,7 +3,6 @@ package resonant.lib.mod.content
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.item.Item
-import resonant.lib.prefab.tile.spatial.SpatialBlock
 import resonant.lib.wrapper.StringWrapper._
 
 /**
@@ -79,9 +78,9 @@ trait ContentLoader
   /**
    * Creates a dummy block temporarily until the preInit stage is passed
    */
-  implicit protected def wrapSpatialToBlock(spatial: SpatialBlock): Block = new DummySpatialBlock(spatial)
+  implicit protected def wrapSpatialToBlock(spatial: ResonantBlock): Block = new DummySpatialBlock(spatial)
 
-  protected class DummySpatialBlock(val spatial: SpatialBlock) extends Block(Material.air)
+  protected class DummySpatialBlock(val spatial: ResonantBlock) extends Block(Material.air)
   {
 
   }

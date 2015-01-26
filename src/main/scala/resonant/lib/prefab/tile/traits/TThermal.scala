@@ -1,13 +1,12 @@
 package resonant.lib.prefab.tile.traits
 
 import net.minecraft.nbt.NBTTagCompound
-import resonant.lib.prefab.tile.spatial.SpatialBlock
 
 /**
  * Applied to spatials that interact with heat change.
  * @author - Calclavia
  */
-trait TThermal extends SpatialBlock
+trait TThermal extends ResonantBlock
 {
   private var temperature = 273f + 20f
 

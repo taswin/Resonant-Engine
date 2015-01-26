@@ -18,7 +18,7 @@ import resonant.lib.transform.vector.Vector3
 import resonant.lib.utility.inventory.InventoryUtility
 import resonant.lib.wrapper.CollectionWrapper._
 
-class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyTile: SpatialBlock) extends Block(dummyTile.material) with ITileEntityProvider
+class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyTile: ResonantBlock) extends Block(dummyTile.material) with ITileEntityProvider
 {
   dummyTile.domain = modPrefix
   setBlockName(modPrefix + dummyTile.name)
@@ -128,6 +128,47 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
     super.breakBlock(world, x, y, z, block, par6)
   }
 
+  /**
+   * Injects and ejects data from the TileEntity.
+   */
+  def inject(access: IBlockAccess, x: Int, y: Int, z: Int)
+  {
+    if (access.isInstanceOf[World])
+    {
+      dummyTile.world(access.asInstanceOf[World])
+    }
+
+    dummyTile._access = access
+    dummyTile.xCoord = x
+    dummyTile.yCoord = y
+    dummyTile.zCoord = z
+
+    val tile: TileEntity = access.getTileEntity(x, y, z)
+
+    if (tile.isInstanceOf[ResonantBlock])
+    {
+      (tile.asInstanceOf[ResonantBlock]).block = this
+    }
+  }
+
+  def eject()
+  {
+    dummyTile.world(null)
+    dummyTile.xCoord = 0
+    dummyTile.yCoord = 0
+    dummyTile.zCoord = 0
+  }
+
+  def getTile(world: IBlockAccess, x: Int, y: Int, z: Int): ResonantBlock =
+  {
+    val tile: TileEntity = world.getTileEntity(x, y, z)
+    if (tile.isInstanceOf[ResonantBlock])
+    {
+      return tile.asInstanceOf[ResonantBlock]
+    }
+    return dummyTile
+  }
+
   override def quantityDropped(meta: Int, fortune: Int, random: Random): Int =
   {
     return dummyTile.quantityDropped(meta, fortune)
@@ -160,47 +201,6 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
     inject(world, x, y, z)
     getTile(world, x, y, z).blockUpdate()
     eject
-  }
-
-  /**
-   * Injects and ejects data from the TileEntity.
-   */
-  def inject(access: IBlockAccess, x: Int, y: Int, z: Int)
-  {
-    if (access.isInstanceOf[World])
-    {
-      dummyTile.world(access.asInstanceOf[World])
-    }
-
-    dummyTile._access = access
-    dummyTile.xCoord = x
-    dummyTile.yCoord = y
-    dummyTile.zCoord = z
-
-    val tile: TileEntity = access.getTileEntity(x, y, z)
-
-    if (tile.isInstanceOf[SpatialBlock])
-    {
-      (tile.asInstanceOf[SpatialBlock]).block = this
-    }
-  }
-
-  def eject()
-  {
-    dummyTile.world(null)
-    dummyTile.xCoord = 0
-    dummyTile.yCoord = 0
-    dummyTile.zCoord = 0
-  }
-
-  def getTile(world: IBlockAccess, x: Int, y: Int, z: Int): SpatialBlock =
-  {
-    val tile: TileEntity = world.getTileEntity(x, y, z)
-    if (tile.isInstanceOf[SpatialBlock])
-    {
-      return tile.asInstanceOf[SpatialBlock]
-    }
-    return dummyTile
   }
 
   @SideOnly(Side.CLIENT)
@@ -277,7 +277,7 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
     return value
   }
 
-  override def hasComparatorInputOverride: Boolean = dummyTile.isInstanceOf[SpatialBlock.IComparatorInputOverride]
+  override def hasComparatorInputOverride: Boolean = dummyTile.isInstanceOf[ResonantBlock.IComparatorInputOverride]
 
   override def isOpaqueCube: Boolean = dummyTile == null || dummyTile.isOpaqueCube
 

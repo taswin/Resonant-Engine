@@ -5,7 +5,7 @@ import java.util.{List => JList}
 import net.minecraft.block.Block
 import net.minecraft.nbt.NBTTagCompound
 import resonant.api.ISave
-import resonant.lib.prefab.tile.spatial.SpatialTile
+import resonant.lib.prefab.tile.spatial.ResonantTile
 import resonant.lib.transform.vector.Vector3
 
 import scala.collection.convert.wrapAll._
@@ -14,7 +14,7 @@ import scala.collection.convert.wrapAll._
  * A node trait that can be mixed into any Tile. Mixing this trait will cause nodes to reconstruct/deconstruct as needed.
  * @author Calclavia
  */
-trait TBlockNodeProvider extends SpatialTile with TNodeProvider
+trait TBlockNodeProvider extends ResonantTile with TNodeProvider
 {
   override def start()
   {

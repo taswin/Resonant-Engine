@@ -15,7 +15,7 @@ import resonant.lib.prefab.tile.traits.TTicker
  *
  * @author Calclavia
  */
-class SpatialTile(material: Material) extends SpatialBlock(material) with IPlayerUsing with TTicker
+class ResonantTile(material: Material) extends ResonantBlock(material) with IPlayerUsing with TTicker
 {
   /**
    * The players to send packets to for machine update info.
@@ -34,7 +34,7 @@ class SpatialTile(material: Material) extends SpatialBlock(material) with IPlaye
 
   def getDescPacket: AbstractPacket = null
 
-  override def tile: SpatialTile = this
+  override def tile: ResonantTile = this
 
   override def getPlayersUsing: JSet[EntityPlayer] = playersUsing
 }

@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.world.IBlockAccess
 import org.lwjgl.opengl.GL11._
 import org.lwjgl.opengl.GL12._
-import resonant.lib.prefab.tile.spatial.{BlockDummy, SpatialBlock}
+import resonant.lib.prefab.tile.spatial.BlockDummy
 import resonant.lib.transform.vector.Vector3
 
 object BlockRenderHandler extends ISimpleBlockRenderingHandler
@@ -31,16 +31,16 @@ object BlockRenderHandler extends ISimpleBlockRenderingHandler
 
   override def renderWorldBlock(access: IBlockAccess, x: Int, y: Int, z: Int, block: Block, modelId: Int, renderBlocks: RenderBlocks): Boolean =
   {
-    var renderer: SpatialBlock = null
+    var renderer: ResonantBlock = null
 
     /**
      * Try TileEntity rendering
      */
     val tile = access.getTileEntity(x, y, z)
 
-    if (tile.isInstanceOf[SpatialBlock])
+    if (tile.isInstanceOf[ResonantBlock])
     {
-      val spatial = tile.asInstanceOf[SpatialBlock]
+      val spatial = tile.asInstanceOf[ResonantBlock]
       renderer = spatial.tile
     }
 

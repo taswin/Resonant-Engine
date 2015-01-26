@@ -8,7 +8,6 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.tile.IInventoryProvider
 import resonant.api.tile.node.IExternalInventory
-import resonant.lib.prefab.tile.spatial.SpatialBlock
 import resonant.lib.transform.vector.Vector3
 import resonant.lib.utility.inventory.{ExternalInventory, InventoryUtility}
 import resonant.lib.wrapper.ItemWrapper._
@@ -16,7 +15,7 @@ import resonant.lib.wrapper.ItemWrapper._
 /**
  * A trait applied to inventory objects.
  */
-trait TInventory extends SpatialBlock with IInventoryProvider with ISidedInventory
+trait TInventory extends ResonantBlock with IInventoryProvider with ISidedInventory
 {
   protected lazy val inventory = new ExternalInventory(this, getSizeInventory())
 
@@ -37,21 +36,9 @@ trait TInventory extends SpatialBlock with IInventoryProvider with ISidedInvento
     markDirty()
   }
 
-  override def getStackInSlot(index: Int): ItemStack = this.getInventory().getStackInSlot(index)
-
-  override def setInventorySlotContents(index: Int, stack: ItemStack)
-  {
-    this.getInventory().setInventorySlotContents(index, stack)
-    onInventoryChanged()
-  }
-
-  /** Called each time the inventory changes */
-  def onInventoryChanged()
-  {
-
-  }
-
   override def getStackInSlotOnClosing(index: Int): ItemStack = this.getInventory().getStackInSlotOnClosing(index)
+
+  override def getInventory: IExternalInventory = inventory
 
   override def getInventoryName: String = getBlockType.getLocalizedName
 
@@ -60,8 +47,6 @@ trait TInventory extends SpatialBlock with IInventoryProvider with ISidedInvento
   override def getInventoryStackLimit = getInventory.getInventoryStackLimit
 
   override def isUseableByPlayer(entityplayer: EntityPlayer) = getInventory.isUseableByPlayer(entityplayer)
-
-  override def getInventory: IExternalInventory = inventory
 
   override def openInventory() = getInventory.openInventory()
 
@@ -193,6 +178,20 @@ trait TInventory extends SpatialBlock with IInventoryProvider with ISidedInvento
     }
     onInventoryChanged()
     markDirty()
+  }
+
+  override def getStackInSlot(index: Int): ItemStack = this.getInventory().getStackInSlot(index)
+
+  override def setInventorySlotContents(index: Int, stack: ItemStack)
+  {
+    this.getInventory().setInventorySlotContents(index, stack)
+    onInventoryChanged()
+  }
+
+  /** Called each time the inventory changes */
+  def onInventoryChanged()
+  {
+
   }
 
   override def readFromNBT(nbt: NBTTagCompound)

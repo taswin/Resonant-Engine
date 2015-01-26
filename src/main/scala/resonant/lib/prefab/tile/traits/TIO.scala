@@ -7,7 +7,7 @@ import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.ChatComponentText
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.tile.IIO
-import resonant.lib.prefab.tile.spatial.SpatialTile
+import resonant.lib.prefab.tile.spatial.ResonantTile
 
 import scala.collection.convert.wrapAll._
 
@@ -16,7 +16,7 @@ import scala.collection.convert.wrapAll._
  *
  * @author Calclavia
  */
-trait TIO extends SpatialTile with IIO
+trait TIO extends ResonantTile with IIO
 {
   /**
    * IO METHODS.
@@ -52,6 +52,23 @@ trait TIO extends SpatialTile with IIO
     val str: StringBuilder = new StringBuilder(currentIO)
     str.setCharAt(dir.ordinal, Integer.toString(ioType).charAt(0))
     ioMap = Integer.parseInt(str.toString, 3)
+  }
+
+  override def getIO(dir: ForgeDirection): Int =
+  {
+    val currentIO: String = getIOMapBase3
+    return Integer.parseInt("" + currentIO.charAt(dir.ordinal))
+  }
+
+  def getIOMapBase3: String =
+  {
+    var currentIO: String = Integer.toString(ioMap, 3)
+    while (currentIO.length < 6)
+    {
+      currentIO = "0" + currentIO
+    }
+    return currentIO
+
   }
 
   /**
@@ -93,23 +110,6 @@ trait TIO extends SpatialTile with IIO
     }
 
     return dirs
-  }
-
-  override def getIO(dir: ForgeDirection): Int =
-  {
-    val currentIO: String = getIOMapBase3
-    return Integer.parseInt("" + currentIO.charAt(dir.ordinal))
-  }
-
-  def getIOMapBase3: String =
-  {
-    var currentIO: String = Integer.toString(ioMap, 3)
-    while (currentIO.length < 6)
-    {
-      currentIO = "0" + currentIO
-    }
-    return currentIO
-
   }
 
   override def readFromNBT(nbt: NBTTagCompound)

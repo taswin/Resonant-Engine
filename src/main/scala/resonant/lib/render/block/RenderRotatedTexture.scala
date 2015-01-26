@@ -4,7 +4,6 @@ import cpw.mods.fml.relauncher.{Side, SideOnly}
 import net.minecraft.client.renderer.RenderBlocks
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.tile.IRotatable
-import resonant.lib.prefab.tile.spatial.SpatialBlock
 import resonant.lib.render.{RenderBlockAdvanced, RenderUtility}
 import resonant.lib.transform.vector.Vector3
 import resonant.lib.utility.RotationUtility
@@ -14,7 +13,7 @@ import resonant.lib.utility.RotationUtility
  * @author Calclavia
  */
 @SideOnly(Side.CLIENT)
-trait RenderRotatedTexture extends SpatialBlock with IRotatable
+trait RenderRotatedTexture extends ResonantBlock with IRotatable
 {
   @SideOnly(Side.CLIENT)
   var renderBlocks: RenderBlockAdvanced = null

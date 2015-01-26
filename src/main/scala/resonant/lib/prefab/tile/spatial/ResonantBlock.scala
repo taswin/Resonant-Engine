@@ -45,7 +45,7 @@ import scala.collection.immutable
  *
  * @author - Calclavia
  */
-object SpatialBlock
+object ResonantBlock
 {
   val icon = new util.HashMap[String, IIcon]
   val inventoryTileEntities: java.util.Map[Block, TileEntity] = Maps.newIdentityHashMap()
@@ -73,7 +73,7 @@ object SpatialBlock
 
   def getTileEntityForBlock(block: Block): TileEntity =
   {
-    var te: TileEntity = inventoryTileEntities.get(block);
+    var te: TileEntity = inventoryTileEntities.get(block)
     if (te == null && Minecraft.getMinecraft().thePlayer != null)
     {
       te = block.createTileEntity(Minecraft.getMinecraft().thePlayer.getEntityWorld(), 0);
@@ -89,7 +89,7 @@ object SpatialBlock
 
 }
 
-abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVectorWorld with ISimpleItemRenderer
+abstract class ResonantBlock(newMaterial: Material) extends TileEntity with TVectorWorld with ISimpleItemRenderer
 {
   /** Name of the block, unlocalized */
   var name = getClass.getSimpleName.replaceFirst("Tile", "").decapitalizeFirst
@@ -150,13 +150,13 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   /** Use update() instead */
   final override def updateEntity() = update()
 
-  def blockUpdate() = update()
-
   /** Called each tick */
   def update()
   {
 
   }
+
+  def blockUpdate() = update()
 
   def randomDisplayTick()
   {
@@ -477,8 +477,6 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
     world.notifyBlocksOfNeighborChange(xi, yi, zi, block)
   }
 
-  override def world: World = getWorldObj
-
   /**
    * Called when an entity collides with this block.
    */
@@ -540,7 +538,7 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   }
 
   @SideOnly(Side.CLIENT)
-  def getIcon: IIcon = SpatialBlock.icon.get(getTextureName)
+  def getIcon: IIcon = ResonantBlock.icon.get(getTextureName)
 
   /** Gets the icon that renders on the top
     * @param meta - placement data
@@ -548,9 +546,9 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   @SideOnly(Side.CLIENT)
   protected def getTopIcon(meta: Int): IIcon =
   {
-    var icon = SpatialBlock.icon.get(getTextureName + "_top")
+    var icon = ResonantBlock.icon.get(getTextureName + "_top")
     if (icon == null)
-      icon = SpatialBlock.icon.get(getTextureName)
+      icon = ResonantBlock.icon.get(getTextureName)
     return icon
   }
 
@@ -560,9 +558,9 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   @SideOnly(Side.CLIENT)
   protected def getBottomIcon(meta: Int): IIcon =
   {
-    var icon = SpatialBlock.icon.get(getTextureName + "_bottom")
+    var icon = ResonantBlock.icon.get(getTextureName + "_bottom")
     if (icon == null)
-      icon = SpatialBlock.icon.get(getTextureName)
+      icon = ResonantBlock.icon.get(getTextureName)
     return icon
   }
 
@@ -575,7 +573,7 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
     }
     else
     {
-      SpatialBlock.icon.put(getTextureName, iconRegister.registerIcon(getTextureName))
+      ResonantBlock.icon.put(getTextureName, iconRegister.registerIcon(getTextureName))
     }
   }
 
@@ -586,23 +584,9 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   @SideOnly(Side.CLIENT)
   def registerSideTextureSet(iconRegister: IIconRegister)
   {
-    SpatialBlock.icon.put(getTextureName, iconRegister.registerIcon(getTextureName + "_top"))
-    SpatialBlock.icon.put(getTextureName, iconRegister.registerIcon(getTextureName + "_side"))
-    SpatialBlock.icon.put(getTextureName, iconRegister.registerIcon(getTextureName + "_bottom"))
-  }
-
-  @SideOnly(Side.CLIENT)
-  protected def getTextureName: String =
-  {
-    if (textureName == null)
-      return "MISSING_ICON_TILE_" + Block.getIdFromBlock(block) + "_" + name
-    else
-      return block.dummyTile.domain + textureName
-  }
-
-  def setTextureName(value: String)
-  {
-    textureName = value
+    ResonantBlock.icon.put(getTextureName, iconRegister.registerIcon(getTextureName + "_top"))
+    ResonantBlock.icon.put(getTextureName, iconRegister.registerIcon(getTextureName + "_side"))
+    ResonantBlock.icon.put(getTextureName, iconRegister.registerIcon(getTextureName + "_bottom"))
   }
 
   @SideOnly(Side.CLIENT)
@@ -782,7 +766,7 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   /** Used to detect if the block is a tile or data object for creating blocks
     * @return Normally you want to return this class
     */
-  def tile: SpatialBlock = null
+  def tile: ResonantBlock = null
 
   /**
    * Gets the explosive resistance of this block.
@@ -869,13 +853,13 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
     return 0
   }
 
+  override def toString: String = "[" + getClass.getSimpleName + " " + x + ", " + y + ", " + z + "]"
+
   override def x: Double = xCoord
 
   override def y: Double = yCoord
 
   override def z: Double = zCoord
-
-  override def toString: String = "[" + getClass.getSimpleName + " " + x + ", " + y + ", " + z + "]"
 
   /** Gets the icon that renders on the sides
     * @param meta - placement data
@@ -890,10 +874,24 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   @SideOnly(Side.CLIENT)
   protected def getSideIcon(meta: Int, side: Int): IIcon =
   {
-    var icon = SpatialBlock.icon.get(getTextureName + "_side")
+    var icon = ResonantBlock.icon.get(getTextureName + "_side")
     if (icon == null)
-      icon = SpatialBlock.icon.get(getTextureName)
+      icon = ResonantBlock.icon.get(getTextureName)
     return icon
+  }
+
+  @SideOnly(Side.CLIENT)
+  protected def getTextureName: String =
+  {
+    if (textureName == null)
+      return "MISSING_ICON_TILE_" + Block.getIdFromBlock(block) + "_" + name
+    else
+      return block.dummyTile.domain + textureName
+  }
+
+  def setTextureName(value: String)
+  {
+    textureName = value
   }
 
   protected def markRender()
@@ -905,6 +903,8 @@ abstract class SpatialBlock(newMaterial: Material) extends TileEntity with TVect
   {
     world.markBlockForUpdate(xi, yi, zi)
   }
+
+  override def world: World = getWorldObj
 
   protected def updateLight()
   {

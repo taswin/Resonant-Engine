@@ -11,7 +11,7 @@ import resonant.api.items.ISimpleItemRenderer;
 import resonant.core.ResonantEngine;
 import resonant.lib.prefab.tile.item.ItemBlockMetadata;
 import resonant.lib.prefab.tile.spatial.BlockDummy;
-import resonant.lib.prefab.tile.spatial.SpatialBlock;
+import resonant.lib.prefab.tile.spatial.ResonantBlock;
 import resonant.lib.render.wrapper.ItemRenderHandler;
 import resonant.lib.utility.LanguageUtility;
 
@@ -59,11 +59,11 @@ public class ModManager
 	 * @param spatialClass - class that will provide all the data to be used when creating the block.
 	 * @param args         - arguments needed to create a new instance of the spatial class
 	 */
-	public BlockDummy newBlock(Class<? extends SpatialBlock> spatialClass, Object... args)
+	public BlockDummy newBlock(Class<? extends ResonantBlock> spatialClass, Object... args)
 	{
 		try
 		{
-			SpatialBlock spatial;
+			ResonantBlock spatial;
 
 			if (args != null && args.length > 0)
 			{
@@ -97,7 +97,7 @@ public class ModManager
 	 *
 	 * @param spatial - instance of the spatial block used to provide all the data for the block
 	 */
-	public BlockDummy newBlock(SpatialBlock spatial)
+	public BlockDummy newBlock(ResonantBlock spatial)
 	{
 		return newBlock(spatial.name(), spatial);
 	}
@@ -111,7 +111,7 @@ public class ModManager
 	 * @param spatial - instance of the spatial block used to provide all the data for the block
 	 * @param name    - name the block will use for look up map, registry, texture, etc
 	 */
-	public BlockDummy newBlock(String name, SpatialBlock spatial)
+	public BlockDummy newBlock(String name, ResonantBlock spatial)
 	{
 		BlockDummy block = new BlockDummy(modPrefix, defaultTab, spatial);
 		spatial.setBlock(block);

@@ -4,7 +4,6 @@ import net.minecraft.client.renderer.RenderBlocks
 import net.minecraft.item.ItemStack
 import net.minecraftforge.common.util.ForgeDirection
 import org.lwjgl.opengl.GL11._
-import resonant.lib.prefab.tile.spatial.SpatialBlock
 import resonant.lib.render.{RenderBlockUtility, RenderUtility}
 import resonant.lib.transform.vector.Vector3
 import resonant.lib.wrapper.BitmaskWrapper._
@@ -13,7 +12,7 @@ import resonant.lib.wrapper.BitmaskWrapper._
  * A generic TileEntity connected texture renderer.
  * Created by Calclavia on 3/22/2014.
  */
-trait RenderConnectedTexture extends SpatialBlock
+trait RenderConnectedTexture extends ResonantBlock
 {
   var faceTexture: String = null
   var edgeTexture: String = null

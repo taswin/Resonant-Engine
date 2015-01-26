@@ -4,10 +4,9 @@ import net.minecraft.entity.EntityLivingBase
 import net.minecraft.util.MathHelper
 import net.minecraftforge.common.util.ForgeDirection
 import resonant.api.tile.IRotatable
-import resonant.lib.prefab.tile.spatial.SpatialBlock
 import resonant.lib.transform.vector.Vector3
 
-trait TRotatable extends SpatialBlock with IRotatable
+trait TRotatable extends ResonantBlock with IRotatable
 {
   var rotationMask = 0x3C
   var isFlipPlacement = false

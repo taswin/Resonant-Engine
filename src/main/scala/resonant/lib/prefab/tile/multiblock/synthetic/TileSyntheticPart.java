@@ -14,8 +14,8 @@ import resonant.lib.network.discriminator.PacketTile;
 import resonant.lib.network.discriminator.PacketType;
 import resonant.lib.network.handle.IPacketReceiver;
 import resonant.lib.prefab.tile.multiblock.reference.IMultiBlock;
-import resonant.lib.prefab.tile.spatial.SpatialBlock;
-import resonant.lib.prefab.tile.spatial.SpatialTile;
+import resonant.lib.prefab.tile.spatial.ResonantBlock;
+import resonant.lib.prefab.tile.spatial.ResonantTile;
 import resonant.lib.transform.vector.Vector3;
 
 /**
@@ -23,7 +23,7 @@ import resonant.lib.transform.vector.Vector3;
  *
  * @author Calclavia
  */
-public class TileSyntheticPart extends SpatialTile implements IPacketReceiver
+public class TileSyntheticPart extends ResonantTile implements IPacketReceiver
 {
 	// The the position of the main block. Relative to this block's position.
 	private Vector3 mainBlockPosition;
@@ -104,9 +104,9 @@ public class TileSyntheticPart extends SpatialTile implements IPacketReceiver
 		{
 			TileEntity tileEntity = this.getMainBlock().getTileEntity(this.worldObj);
 
-			if (tileEntity instanceof SpatialBlock)
+			if (tileEntity instanceof ResonantBlock)
 			{
-				return ((SpatialBlock) tileEntity).activate(player, side, hit);
+				return ((ResonantBlock) tileEntity).activate(player, side, hit);
 			}
 		}
 

@@ -6,7 +6,6 @@ import net.minecraftforge.oredict.OreDictionary
 import resonant.core.content.ResonantContent
 import resonant.lib.factory.resources.block.{TBlockResource, TileOre}
 import resonant.lib.factory.resources.item.{ItemIngot, TItemResource}
-import resonant.lib.prefab.tile.spatial.SpatialBlock
 import resonant.lib.wrapper.StringWrapper._
 
 /**
@@ -23,7 +22,7 @@ object ResourceFactory
    */
   private var materials = Set.empty[String]
   private var materialColorCache = Map.empty[String, Integer]
-  private var resourceBlocks = Map.empty[String, Class[_ <: SpatialBlock]]
+  private var resourceBlocks = Map.empty[String, Class[_ <: ResonantBlock]]
   private var resourceItems = Map.empty[String, Class[_ <: Item]]
 
   private var generatedBlocks = Map.empty[(String, String), Block]
@@ -101,7 +100,7 @@ object ResourceFactory
     registerResourceItem("ingot", classOf[ItemIngot])
   }
 
-  def registerResourceBlock(name: String, clazz: Class[_ <: SpatialBlock])
+  def registerResourceBlock(name: String, clazz: Class[_ <: ResonantBlock])
   {
     resourceBlocks += name -> clazz
   }

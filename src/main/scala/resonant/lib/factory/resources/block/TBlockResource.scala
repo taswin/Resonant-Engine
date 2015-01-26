@@ -2,12 +2,11 @@ package resonant.lib.factory.resources.block
 
 import cpw.mods.fml.relauncher.{Side, SideOnly}
 import resonant.lib.factory.resources.ResourceFactory
-import resonant.lib.prefab.tile.spatial.SpatialBlock
 
 /**
  * @author Calclavia
  */
-trait TBlockResource extends SpatialBlock
+trait TBlockResource extends ResonantBlock
 {
   var resourceMaterial: String = ""
 
