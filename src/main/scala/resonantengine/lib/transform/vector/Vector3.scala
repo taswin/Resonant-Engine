@@ -21,60 +21,6 @@ import scala.collection.convert.wrapAll._
  */
 object Vector3
 {
-  def getLook(entity: Entity, distance: Double): Vector3 =
-  {
-    var f1 = 0D
-    var f2 = 0D
-    var f3 = 0D
-    var f4 = 0D
-
-    if (distance == 1.0F)
-    {
-      f1 = Math.cos(-entity.rotationYaw * 0.017453292F - Math.PI)
-      f2 = Math.sin(-entity.rotationYaw * 0.017453292F - Math.PI)
-      f3 = -Math.cos(-entity.rotationPitch * 0.017453292F)
-      f4 = Math.sin(-entity.rotationPitch * 0.017453292F)
-      return new Vector3((f2 * f3), f4, (f1 * f3))
-    }
-    else
-    {
-      f1 = entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * distance
-      f2 = entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * distance
-      f3 = Math.cos(-f2 * 0.017453292F - Math.PI)
-      f4 = Math.sin(-f2 * 0.017453292F - Math.PI)
-      val f5 = -Math.cos(-f1 * 0.017453292F)
-      val f6 = Math.sin(-f1 * 0.017453292F)
-      return new Vector3((f4 * f5), f6, (f3 * f5))
-    }
-  }
-
-  def getLook(yaw: Double, pitch: Double, distance: Double): Vector3 =
-  {
-    var f1 = 0D
-    var f2 = 0D
-    var f3 = 0D
-    var f4 = 0D
-
-    if (distance == 1.0F)
-    {
-      f1 = Math.cos(-yaw * 0.017453292F - Math.PI.asInstanceOf[Float])
-      f2 = Math.sin(-yaw * 0.017453292F - Math.PI.asInstanceOf[Float])
-      f3 = -Math.cos(-pitch * 0.017453292F)
-      f4 = Math.sin(-pitch * 0.017453292F)
-      return new Vector3((f2 * f3), f4, (f1 * f3))
-    }
-    else
-    {
-      f1 = pitch * distance
-      f2 = yaw * distance
-      f3 = Math.cos(-f2 * 0.017453292F - Math.PI.asInstanceOf[Float])
-      f4 = Math.sin(-f2 * 0.017453292F - Math.PI.asInstanceOf[Float])
-      val f5 = -Math.cos(-f1 * 0.017453292F)
-      val f6 = Math.sin(-f1 * 0.017453292F)
-      return new Vector3((f4 * f5), f6, (f3 * f5))
-    }
-  }
-
   def zero = new Vector3()
 
   def up = new Vector3(ForgeDirection.UP)
@@ -90,6 +36,7 @@ object Vector3
   def west = new Vector3(ForgeDirection.WEST)
 }
 
+@deprecated
 class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends AbstractVector[Vector3] with Ordered[Vector3] with Cloneable
 {
   def this() = this(0, 0, 0)
@@ -242,13 +189,21 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends A
 
   def subEquals(x: Double, y: Double, z: Double): Vector3 = this -=(x, y, z)
 
-  def -=(x: Double, y: Double, z: Double): Vector3 = set(new Vector3(this.x - x, this.y - y, this.z - z))
-
   def subtractEquals(x: Double, y: Double, z: Double): Vector3 = this -=(x, y, z)
+
+  def -=(x: Double, y: Double, z: Double): Vector3 = set(new Vector3(this.x - x, this.y - y, this.z - z))
 
   //=========================
   //==Double Handling========
   //=========================
+
+  override def set(other: Vector3): Vector3 =
+  {
+    x = other.x
+    y = other.y
+    z = other.z
+    return this
+  }
 
   def +(amount: Double): Vector3 = new Vector3(x + amount, y + amount, z + amount)
 
@@ -288,6 +243,10 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends A
 
   def addEquals(amount: Vec3): Vector3 = this += amount
 
+  //====================
+  // Vec3 handling
+  //====================
+
   def +=(amount: Vec3): Vector3 =
   {
     x = amount.xCoord + x
@@ -296,11 +255,9 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends A
     return this
   }
 
-  //====================
-  // Vec3 handling
-  //====================
-
   def multiply(amount: Vec3): Vector3 = this * amount
+
+  def *(amount: Vec3): Vector3 = new Vector3(x * amount.xCoord, y * amount.yCoord, z * amount.zCoord)
 
   def multiplyEquals(amount: Vec3): Vector3 = this *= amount
 
@@ -313,8 +270,6 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends A
   }
 
   def divide(amount: Vec3): Vector3 = this * amount
-
-  def *(amount: Vec3): Vector3 = new Vector3(x * amount.xCoord, y * amount.yCoord, z * amount.zCoord)
 
   def /(amount: Vec3): Vector3 = new Vector3(x / amount.xCoord, y / amount.yCoord, z / amount.zCoord)
 
@@ -351,14 +306,6 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends A
 
   def +=(amount: ForgeDirection): Vector3 = set(this + new Vector3(amount))
 
-  override def set(other: Vector3): Vector3 =
-  {
-    x = other.x
-    y = other.y
-    z = other.z
-    return this
-  }
-
   def subtract(amount: ForgeDirection): Vector3 = this - amount
 
   def -(amount: ForgeDirection): Vector3 = this - new Vector3(amount)
@@ -378,11 +325,11 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends A
 
   def +=(amount: EnumFacing): Vector3 = set(this + new Vector3(amount))
 
+  def this(dir: EnumFacing) = this(dir.getFrontOffsetX, dir.getFrontOffsetY, dir.getFrontOffsetZ)
+
   def subtract(amount: EnumFacing): Vector3 = this - amount
 
   def -(amount: EnumFacing): Vector3 = this - new Vector3(amount)
-
-  def this(dir: EnumFacing) = this(dir.getFrontOffsetX, dir.getFrontOffsetY, dir.getFrontOffsetZ)
 
   def subEquals(amount: EnumFacing): Vector3 = this -= amount
 
@@ -414,9 +361,9 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends A
 
   def this(vec: Vector3) = this(vec.x, vec.y, vec.z)
 
-  override def $(other: Vector3): Double = x * other.x + y * other.y + z * other.z
-
   def anglePreNorm(other: Vector3) = Math.acos(this $ other)
+
+  override def $(other: Vector3): Double = x * other.x + y * other.y + z * other.z
 
   def getAround(world: World, side: ForgeDirection, range: Int): java.util.List[Vector3] =
   {
@@ -453,12 +400,6 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends A
     }
     return list
   }
-
-  def xi = x.toInt
-
-  def yi = y.toInt
-
-  def zi = z.toInt
 
   def rayTrace(world: World, dir: Vector3, dist: Double): MovingObjectPosition = rayTrace(world, this + (dir * dist))
 
@@ -567,6 +508,12 @@ class Vector3(var x: Double = 0, var y: Double = 0, var z: Double = 0) extends A
   def getBlock(world: IBlockAccess): Block = if (world != null) world.getBlock(xi, yi, zi) else null
 
   def getBlockMetadata(world: IBlockAccess) = if (world != null) world.getBlockMetadata(xi, yi, zi) else 0
+
+  def xi = x.toInt
+
+  def yi = y.toInt
+
+  def zi = z.toInt
 
   def getTileEntity(world: IBlockAccess) = if (world != null) world.getTileEntity(xi, yi, zi) else null
 
