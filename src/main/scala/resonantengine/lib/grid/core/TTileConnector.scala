@@ -19,7 +19,7 @@ trait TTileConnector[A <: AnyRef] extends NodeConnector[A]
     {
       if (canConnect(toDir))
       {
-        val tile = (toVectorWorld + toDir).getTileEntity
+        val tile = (position + toDir).getTileEntity
 
         if (tile != null)
         {

@@ -28,7 +28,7 @@ class TileInfiniteFluid extends TileIO(Material.iron) with IFluidHandler
       ForgeDirection.VALID_DIRECTIONS.filter(getOutputDirections.contains(_)).foreach(
         direction =>
         {
-          val tile: TileEntity = (toVectorWorld + direction).getTileEntity
+          val tile: TileEntity = (position + direction).getTileEntity
 
           if (tile.isInstanceOf[IFluidHandler])
           {

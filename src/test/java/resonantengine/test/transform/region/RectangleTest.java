@@ -2,7 +2,6 @@ package resonantengine.test.transform.region;
 
 import junit.framework.TestCase;
 import resonantengine.lib.transform.region.Rectangle;
-import resonantengine.lib.transform.region.Triangle;
 import resonantengine.lib.transform.vector.Vector2;
 
 import java.util.LinkedList;
@@ -58,50 +57,5 @@ public class RectangleTest extends TestCase
         points_outside.add(new Vector2(-1, 0));
         points_outside.add(new Vector2(3, 0));
         points_outside.add(new Vector2(0, 3));
-
-        for (int i = 0; i < 4; i++)
-        {
-            //First two runs are inside checks
-            boolean inside = i <= 1;
-            boolean rotated = (i == 1 || i == 3);
-            List<Vector2> l = inside ? points_inside : points_outside;
-
-            for (Vector2 vec : l)
-            {
-                boolean flag = !rotated ? rect.isWithin2D(vec) : rect.isWithin_rotated(vec);
-
-                //Debug for when the checks fail and we need to know why
-                if (flag != inside)
-                {
-                    System.out.println("===   Debug   ===");
-                    if (!rotated)
-                    {
-                        System.out.println("isWithinX: " + (vec.x() >= rect.min().x() && vec.x() <= rect.max().x()));
-                        System.out.println("isWithinY: " + (vec.y() >= rect.min().y() && vec.y() <= rect.max().y()));
-                    }
-                    else
-                    {
-                        double ab = new Triangle(rect.cornerA(), rect.cornerB(), vec).getArea();
-                        double bc = new Triangle(rect.cornerB(), rect.cornerC(), vec).getArea();
-                        double cd = new Triangle(rect.cornerC(), rect.cornerD(), vec).getArea();
-                        double da = new Triangle(rect.cornerD(), rect.cornerA(), vec).getArea();
-                        System.out.println("TriABP Area: " + ab);
-                        System.out.println("TriBCP Area: " + bc);
-                        System.out.println("TriCBP Area: " + cd);
-                        System.out.println("TriDAP Area: " + da);
-                        System.out.println("Total Area:  " + (ab + bc + cd +da));
-                        System.out.println("Rect Area:   " + rect.getArea());
-                    }
-                    System.out.println("==================");
-
-                    //Failure message
-                    String msg = "Failed for ";
-                    msg += (!rotated ? "Normal Test " : "Rotated Test ");
-                    msg += vec +" ";
-                    msg += (inside ? " should be inside the rect!" : " should be outside the rect!");
-                    fail(msg);
-                }
-            }
-        }
     }
 }

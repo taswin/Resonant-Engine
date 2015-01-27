@@ -41,7 +41,7 @@ trait TIO extends ResonantTile with IIO
         entityPlayer.addChatMessage(new ChatComponentText("Side changed to: " + (if (newIO == 0) "None" else (if (newIO == 1) "Input" else "Output"))))
       }
 
-      world.notifyBlocksOfNeighborChange(xi, yi, zi, block)
+      world.notifyBlocksOfNeighborChange(x, y, z, block)
     }
     return true
   }
@@ -52,23 +52,6 @@ trait TIO extends ResonantTile with IIO
     val str: StringBuilder = new StringBuilder(currentIO)
     str.setCharAt(dir.ordinal, Integer.toString(ioType).charAt(0))
     ioMap = Integer.parseInt(str.toString, 3)
-  }
-
-  def getIOMapBase3: String =
-  {
-    var currentIO: String = Integer.toString(ioMap, 3)
-    while (currentIO.length < 6)
-    {
-      currentIO = "0" + currentIO
-    }
-    return currentIO
-
-  }
-
-  override def getIO(dir: ForgeDirection): Int =
-  {
-    val currentIO: String = getIOMapBase3
-    return Integer.parseInt("" + currentIO.charAt(dir.ordinal))
   }
 
   /**
@@ -89,6 +72,23 @@ trait TIO extends ResonantTile with IIO
       }
     }
     return dirs
+  }
+
+  override def getIO(dir: ForgeDirection): Int =
+  {
+    val currentIO: String = getIOMapBase3
+    return Integer.parseInt("" + currentIO.charAt(dir.ordinal))
+  }
+
+  def getIOMapBase3: String =
+  {
+    var currentIO: String = Integer.toString(ioMap, 3)
+    while (currentIO.length < 6)
+    {
+      currentIO = "0" + currentIO
+    }
+    return currentIO
+
   }
 
   /**

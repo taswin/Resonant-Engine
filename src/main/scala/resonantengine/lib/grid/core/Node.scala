@@ -3,16 +3,15 @@ package resonantengine.lib.grid.core
 import net.minecraft.entity.Entity
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.world.World
-import net.minecraftforge.common.util.ForgeDirection
 import resonantengine.api.graph.INodeProvider
 import resonantengine.api.graph.node.INode
-import resonantengine.lib.transform.vector.TVectorWorld
+import resonantengine.lib.transform.vector.VectorWorld
 
 /**
  * A node is any single part of a grid.
  * @author Calclavia
  */
-abstract class Node(var parent: INodeProvider) extends INode with TVectorWorld
+abstract class Node(var parent: INodeProvider) extends INode
 {
   override def reconstruct()
   {
@@ -24,7 +23,9 @@ abstract class Node(var parent: INodeProvider) extends INode with TVectorWorld
 
   override def getParent: INodeProvider = parent
 
-  override def x: Double =
+  def position = new VectorWorld(world, x, y, z)
+
+  def x: Double =
   {
     return parent match
     {
@@ -34,7 +35,7 @@ abstract class Node(var parent: INodeProvider) extends INode with TVectorWorld
     }
   }
 
-  override def y: Double =
+  def y: Double =
   {
     return parent match
     {
@@ -44,7 +45,7 @@ abstract class Node(var parent: INodeProvider) extends INode with TVectorWorld
     }
   }
 
-  override def z: Double =
+  def z: Double =
   {
     return parent match
     {
@@ -54,7 +55,7 @@ abstract class Node(var parent: INodeProvider) extends INode with TVectorWorld
     }
   }
 
-  override def world: World =
+  def world: World =
   {
     return parent match
     {
@@ -62,23 +63,6 @@ abstract class Node(var parent: INodeProvider) extends INode with TVectorWorld
       case x: Entity => x.worldObj
       case _ => null
     }
-  }
-
-  /**
-   * Helper method to gets a node on the side
-   * @param nodeType - class of the node
-   * @param dir - side of the tile
-   * @tparam N - generic to force the return to equal the nodeType
-   * @return the node, or null if no node
-   */
-  def getNode[N <: INode](nodeType : Class[_ <: N], dir: ForgeDirection) : N =
-  {
-    val tile = (toVectorWorld + dir).getTileEntity
-    if (tile != null && tile.isInstanceOf[INodeProvider])
-    {
-      return tile.asInstanceOf[INodeProvider].getNode(nodeType, dir.getOpposite)
-    }
-    return null.asInstanceOf[N]
   }
 
   override def toString: String = getClass.getSimpleName + "[" + hashCode + "]"

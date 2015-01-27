@@ -16,7 +16,7 @@ trait TRotatable extends ResonantBlock with IRotatable
 
   def determineRotation(entityLiving: EntityLivingBase): ForgeDirection =
   {
-    if (MathHelper.abs(entityLiving.posX.asInstanceOf[Float] - xi) < 2.0F && MathHelper.abs(entityLiving.posZ.asInstanceOf[Float] - zi) < 2.0F)
+    if (MathHelper.abs(entityLiving.posX.asInstanceOf[Float] - x) < 2.0F && MathHelper.abs(entityLiving.posZ.asInstanceOf[Float] - z) < 2.0F)
     {
       val d0: Double = entityLiving.posY + 1.82D - entityLiving.yOffset
       if (canRotate(1) && d0 - y > 2.0D)
@@ -58,7 +58,7 @@ trait TRotatable extends ResonantBlock with IRotatable
     return false
   }
 
-  override def setDirection(direction: ForgeDirection) = world.setBlockMetadataWithNotify(xi, yi, zi, direction.ordinal, 3)
+  override def setDirection(direction: ForgeDirection) = world.setBlockMetadataWithNotify(x, y, z, direction.ordinal, 3)
 
   /**
    * @author Based of Greg (GregTech)

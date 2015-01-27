@@ -12,14 +12,13 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import resonantengine.api.transform.vector.IVector3;
-import resonantengine.api.transform.vector.IVectorWorld;
 import resonantengine.core.Reference;
 import resonantengine.core.network.discriminator.PacketEntity;
 import resonantengine.core.network.discriminator.PacketTile;
 import resonantengine.core.network.discriminator.PacketType;
 import resonantengine.lib.mod.loadable.ICompatProxy;
 import resonantengine.lib.transform.vector.Vector3;
+import resonantengine.lib.transform.vector.VectorWorld;
 import resonantengine.lib.wrapper.ByteBufWrapper;
 import resonantengine.prefab.network.TPacketSender;
 
@@ -154,14 +153,9 @@ public class PacketManager implements ICompatProxy
 		this.channelEnumMap.get(Side.SERVER).writeAndFlush(message);
 	}
 
-	public void sendToAllAround(AbstractPacket message, IVectorWorld point, double range)
+	public void sendToAllAround(AbstractPacket message, VectorWorld point, double range)
 	{
 		sendToAllAround(message, point.world(), point, range);
-	}
-
-	public void sendToAllAround(AbstractPacket message, World world, IVector3 point, double range)
-	{
-		sendToAllAround(message, world, point.x(), point.y(), point.z(), range);
 	}
 
 	public void sendToAllAround(AbstractPacket message, World world, Vector3 point, double range)

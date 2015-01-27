@@ -12,7 +12,7 @@ import java.util.Map;
  * @author Calclavia
  */
 
-@TransformerExclusions({ "resonant.engine.asm" })
+@TransformerExclusions({ "resonantengine.core.asm" })
 public class ResonantPlugin implements IFMLLoadingPlugin
 {
 	@Override

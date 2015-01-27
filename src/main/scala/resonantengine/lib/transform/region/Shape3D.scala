@@ -2,21 +2,20 @@ package resonantengine.lib.transform.region
 
 import io.netty.buffer.ByteBuf
 import net.minecraft.nbt.NBTTagCompound
-import resonantengine.api.transform.vector.{IVector3, IVector2}
 import resonantengine.lib.transform.rotation.IRotation
-import resonantengine.lib.transform.vector.{Vector3, TVector3}
+import resonantengine.lib.transform.vector.{Vector2, Vector3}
 import resonantengine.lib.wrapper.ByteBufWrapper._
 
 /** Prefab for any 3D shape, any 2D shape that is used with this prefab will switch y for z as it
   * assumes the 2D shape horizontal with the world. This also means the y will be replaced with the
   * 3D shape's y. Meaning the 2D shape will be on the center origin of the 3D shape.
   *
- * Created by robert on 12/18/2014.
- */
-abstract class Shape3D[T <: Shape3D[T]](var center: IVector3) extends Shape[T] with TVector3 with IRotation
+  * Created by robert on 12/18/2014.
+  */
+abstract class Shape3D[T <: Shape3D[T]](var center: Vector3) extends Shape[T] with IRotation
 {
-  var pitch: Double = 0;
-  var roll: Double = 0;
+  var pitch: Double = 0
+  var roll: Double = 0
 
   def this(nbt: NBTTagCompound) =
   {
@@ -50,9 +49,9 @@ abstract class Shape3D[T <: Shape3D[T]](var center: IVector3) extends Shape[T] w
   def getSize: Double =
   {
     var r = getSizeX;
-    if(getSizeY > r)
+    if (getSizeY > r)
       r = getSizeY
-    if(getSizeZ > r)
+    if (getSizeZ > r)
       r = getSizeZ
     return r
   }
@@ -69,22 +68,22 @@ abstract class Shape3D[T <: Shape3D[T]](var center: IVector3) extends Shape[T] w
   def isWithin(x: Double, y: Double, z: Double): Boolean
 
   /** Center of the 3D shape */
-  def getCenter: IVector3 = center
+  def getCenter: Vector3 = center
 
   /** Is the vector(x, z) inside the shape */
   override def isWithin(x: Double, z: Double): Boolean = isWithin(x, this.y, z)
 
   /** Is the vector(x, z) inside the shape */
-  override def isWithin2D(vec: IVector2): Boolean = isWithin(vec.x, this.y, vec.y)
+  override def isWithin2D(vec: Vector2): Boolean = isWithin(vec.x, this.y, vec.y)
 
   /** Is the vector(x, y, z) inside the shape */
-  override def isWithin(vec: IVector3): Boolean = isWithin(vec.x, vec.y, vec.z)
+  override def isWithin(vec: Vector3): Boolean = isWithin(vec.x, vec.y, vec.z)
 
-  override def x: Double = getCenter.x()
+  def x: Double = center.x
 
-  override def y: Double = getCenter.y()
+  def y: Double = center.y
 
-  override def z: Double = getCenter.z()
+  def z: Double = center.z
 
   override def writeByteBuf(data: ByteBuf): ByteBuf =
   {

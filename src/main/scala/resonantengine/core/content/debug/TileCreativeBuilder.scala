@@ -42,7 +42,7 @@ class TileCreativeBuilder extends ResonantTile(Material.iron) with TRotatable wi
       {
         for (entry <- buildMap.entrySet())
         {
-          val placement = this.toVectorWorld + entry.getKey
+          val placement = position + entry.getKey
           placement.setBlock(entry.getValue.left, entry.getValue.right)
         }
         doBuild = false

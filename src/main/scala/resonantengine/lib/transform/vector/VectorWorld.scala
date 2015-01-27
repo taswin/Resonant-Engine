@@ -9,7 +9,6 @@ import net.minecraft.util.{MovingObjectPosition, Vec3}
 import net.minecraft.world.World
 import net.minecraftforge.common.DimensionManager
 import net.minecraftforge.common.util.ForgeDirection
-import resonantengine.api.transform.vector.{IVectorWorld, IVector3}
 
 class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) extends Vector3(newX, newY, newZ)
 {
@@ -21,11 +20,7 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
 
   def this(tile: TileEntity) = this(tile.getWorldObj, tile.xCoord, tile.yCoord, tile.zCoord)
 
-  def this(vec: IVectorWorld) = this(vec.world, vec.x, vec.y, vec.z)
-
   def this(world: World, vector: Vector3) = this(world, vector.x, vector.y, vector.z)
-
-  def this(world: World, vector: IVector3) = this(world, vector.x, vector.y, vector.z)
 
   def this(world: World, vec: Vec3) = this(world, vec.xCoord, vec.yCoord, vec.zCoord)
 
@@ -67,7 +62,7 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
 
   override def +=(x: Double, y: Double, z: Double): VectorWorld = set(new VectorWorld(world, this.x + x, this.y + y, this.z + z))
 
-  override def set(vec: IVector3): VectorWorld =
+  override def set(vec: Vector3): VectorWorld =
   {
     if (vec.isInstanceOf[VectorWorld])
       world = vec.asInstanceOf[VectorWorld].world
@@ -85,7 +80,7 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
 
   override def +=(amount: ForgeDirection): VectorWorld = set(this + new Vector3(amount))
 
-  override def /(amount: IVector3): VectorWorld = new VectorWorld(world, x / amount.x, y / amount.y, z / amount.z)
+  override def /(amount: Vector3): VectorWorld = new VectorWorld(world, x / amount.x, y / amount.y, z / amount.z)
 
   /**
    * "Generated" Alias Operation Methods override
@@ -97,9 +92,9 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
    */
   override def +(amount: Double): VectorWorld = new VectorWorld(world, x + amount, y + amount, z + amount)
 
-  override def add(amount: IVector3): VectorWorld = this + amount
+  override def add(amount: Vector3): VectorWorld = this + amount
 
-  override def +(amount: IVector3): VectorWorld = new VectorWorld(world, x + amount.x, y + amount.y, z + amount.z)
+  override def +(amount: Vector3): VectorWorld = new VectorWorld(world, x + amount.x, y + amount.y, z + amount.z)
 
   override def subtract(amount: Double): VectorWorld = this - amount
 
@@ -108,21 +103,21 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
    */
   override def -(amount: Double): VectorWorld = new VectorWorld(world, x - amount, y - amount, z - amount)
 
-  override def subtract(amount: IVector3): VectorWorld = this - amount
+  override def subtract(amount: Vector3): VectorWorld = this - amount
 
-  override def -(amount: IVector3): VectorWorld = new VectorWorld(world, x - amount.x, y - amount.y, z - amount.z)
+  override def -(amount: Vector3): VectorWorld = new VectorWorld(world, x - amount.x, y - amount.y, z - amount.z)
 
   override def multiply(amount: Double): VectorWorld = this * amount
 
-  override def multiply(amount: IVector3): VectorWorld = this * amount
+  override def *(amount: Double): VectorWorld = new VectorWorld(world, x * amount, y * amount, z * amount)
 
-  override def *(amount: IVector3): VectorWorld = new VectorWorld(world, x * amount.x, y * amount.y, z * amount.z)
+  override def multiply(amount: Vector3): VectorWorld = this * amount
+
+  override def *(amount: Vector3): VectorWorld = new VectorWorld(world, x * amount.x, y * amount.y, z * amount.z)
 
   override def divide(amount: Double): VectorWorld = this / amount
 
   override def /(amount: Double): VectorWorld = this * (1 / amount)
-
-  override def *(amount: Double): VectorWorld = new VectorWorld(world, x * amount, y * amount, z * amount)
 
   override def addEquals(amount: Double): VectorWorld = this += amount
 
@@ -134,9 +129,9 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
     return this
   }
 
-  override def addEquals(amount: IVector3): VectorWorld = this += amount
+  override def addEquals(amount: Vector3): VectorWorld = this += amount
 
-  override def +=(amount: IVector3): VectorWorld =
+  override def +=(amount: Vector3): VectorWorld =
   {
     x += amount.x
     y += amount.y
@@ -148,9 +143,9 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
 
   override def -=(amount: Double): VectorWorld = this += -amount
 
-  override def subtractEquals(amount: IVector3): VectorWorld = this -= amount
+  override def subtractEquals(amount: Vector3): VectorWorld = this -= amount
 
-  override def -=(amount: IVector3): VectorWorld =
+  override def -=(amount: Vector3): VectorWorld =
   {
     x -= amount.x
     y -= amount.y
@@ -160,17 +155,9 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
 
   override def multiplyEquals(amount: Double): VectorWorld = this *= amount
 
-  override def *=(amount: Double): VectorWorld =
-  {
-    x *= amount
-    y *= amount
-    z *= amount
-    return this
-  }
+  override def multiplyEquals(amount: Vector3): VectorWorld = this *= amount
 
-  override def multiplyEquals(amount: IVector3): VectorWorld = this *= amount
-
-  override def *=(amount: IVector3): VectorWorld =
+  override def *=(amount: Vector3): VectorWorld =
   {
     x *= amount.x
     y *= amount.y
@@ -182,9 +169,17 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
 
   override def /=(amount: Double): VectorWorld = this *= (1 / amount)
 
-  override def divideEquals(amount: IVector3): VectorWorld = this /= amount
+  override def *=(amount: Double): VectorWorld =
+  {
+    x *= amount
+    y *= amount
+    z *= amount
+    return this
+  }
 
-  override def /=(amount: IVector3): VectorWorld =
+  override def divideEquals(amount: Vector3): VectorWorld = this /= amount
+
+  override def /=(amount: Vector3): VectorWorld =
   {
     x *= amount.x
     y *= amount.y
@@ -228,11 +223,6 @@ class VectorWorld(var world: World, newX: Double, newY: Double, newZ: Double) ex
 
   override def equals(o: Any): Boolean =
   {
-    if (o.isInstanceOf[IVectorWorld])
-    {
-      return super.equals(o) && this.world == o.asInstanceOf[IVectorWorld].world
-    }
-
     if (o.isInstanceOf[VectorWorld])
     {
       return super.equals(o) && this.world == o.asInstanceOf[VectorWorld].world

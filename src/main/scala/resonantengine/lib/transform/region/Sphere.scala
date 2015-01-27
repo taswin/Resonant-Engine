@@ -7,7 +7,6 @@ import net.minecraft.entity.Entity
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.MathHelper
 import net.minecraft.world.World
-import resonantengine.api.transform.vector.IVector3
 import resonantengine.lib.transform.vector.Vector3
 import resonantengine.lib.wrapper.ByteBufWrapper._
 
@@ -16,7 +15,7 @@ import resonantengine.lib.wrapper.ByteBufWrapper._
   *
   * Created by robert on 12/18/2014.
   */
-class Sphere(c: IVector3, var r: Double) extends Shape3D[Sphere](c)
+class Sphere(c: Vector3, var r: Double) extends Shape3D[Sphere](c)
 {
   override def set(other: Sphere): Sphere =
   {
@@ -27,11 +26,11 @@ class Sphere(c: IVector3, var r: Double) extends Shape3D[Sphere](c)
 
   override def +(amount: Double): Sphere = new Sphere(center, r + amount)
 
-  override def +(amount: Sphere): Sphere = new Sphere(new Vector3(center).midPoint(amount.center), r + amount.r)
+  override def +(amount: Sphere): Sphere = new Sphere(new Vector3(center).midpoint(amount.center), r + amount.r)
 
   override def *(amount: Double): Sphere = new Sphere(center, r * amount)
 
-  override def *(amount: Sphere): Sphere = new Sphere(new Vector3(center).midPoint(amount.center), r * amount.r)
+  override def *(amount: Sphere): Sphere = new Sphere(new Vector3(center).midpoint(amount.center), r * amount.r)
 
   override def writeByteBuf(data: ByteBuf): ByteBuf =
   {
@@ -89,7 +88,7 @@ class Sphere(c: IVector3, var r: Double) extends Shape3D[Sphere](c)
             {
               val entity = list1.get(l).asInstanceOf[Entity];
 
-              if (clazz.isAssignableFrom(entity.getClass()) && distance3D(new Vector3(entity)) <= r)
+              if (clazz.isAssignableFrom(entity.getClass()) && new Vector3(entity).magnitude <= r)
               {
                 list.add(entity.asInstanceOf[E]);
               }

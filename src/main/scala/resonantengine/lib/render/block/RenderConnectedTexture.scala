@@ -36,7 +36,7 @@ trait RenderConnectedTexture extends ResonantBlock
 
     for (dir <- ForgeDirection.VALID_DIRECTIONS)
     {
-      val check = toVectorWorld + dir
+      val check = position + dir
       val checkTile = check.getTileEntity
 
       if (checkTile != null && checkTile.getClass == tile.getClass && check.getBlockMetadata(world) == tile.getBlockMetadata)

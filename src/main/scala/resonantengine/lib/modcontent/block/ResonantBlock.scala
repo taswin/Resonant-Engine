@@ -26,7 +26,7 @@ import resonantengine.lib.content.prefab.TIO
 import resonantengine.lib.render.RenderUtility
 import resonantengine.lib.render.wrapper.RenderTileDummy
 import resonantengine.lib.transform.region.Cuboid
-import resonantengine.lib.transform.vector.{TVectorWorld, Vector2, Vector3, VectorWorld}
+import resonantengine.lib.transform.vector.{Vector2, Vector3, VectorWorld}
 import resonantengine.lib.utility.WrenchUtility
 import resonantengine.lib.wrapper.CollectionWrapper._
 import resonantengine.lib.wrapper.StringWrapper._
@@ -89,7 +89,7 @@ object ResonantBlock
 
 }
 
-abstract class ResonantBlock(newMaterial: Material) extends TileEntity with TVectorWorld with ISimpleItemRenderer
+abstract class ResonantBlock(newMaterial: Material) extends TileEntity with ISimpleItemRenderer
 {
   /** Name of the block, unlocalized */
   var name = getClass.getSimpleName.replaceFirst("Tile", "").decapitalizeFirst
@@ -197,18 +197,6 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with TVec
     bounds = cuboid
   }
 
-  /** Bounds for the block */
-  def bounds = _bounds
-
-  /** Sets the block bounds */
-  def bounds_=(cuboid: Cuboid)
-  {
-    _bounds = cuboid
-
-    if (block != null)
-      block.setBlockBounds(_bounds.min.xf, _bounds.min.yf, _bounds.min.zf, _bounds.max.xf, _bounds.max.yf, _bounds.max.zf)
-  }
-
   /** Sets the dummy block class uses by this spatial block */
   def setBlock(block: BlockDummy)
   {
@@ -231,7 +219,7 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with TVec
   }
 
   /** World location of the block, centered */
-  def center: VectorWorld = toVectorWorld + 0.5
+  def center: VectorWorld = position + 0.5
 
   /**
    * Gets all ItemStacks dropped by this machine when it is destroyed. This is called AFTER the block is destroyed!
@@ -274,7 +262,7 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with TVec
   {
     if (access != null)
     {
-      val b: Block = access.getBlock(xi, yi, zi)
+      val b: Block = access.getBlock(x, y, z)
       if (b == null)
       {
         return block
@@ -282,6 +270,16 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with TVec
       return b
     }
     return block
+  }
+
+  def access: IBlockAccess =
+  {
+    if (world != null)
+    {
+      return world
+    }
+
+    return _access
   }
 
   /**
@@ -327,6 +325,8 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with TVec
    */
   def getPickBlock(target: MovingObjectPosition): ItemStack = new ItemStack(block, 1, metadataDropped(metadata, 0))
 
+  def metadata: Int = if (access != null) access.getBlockMetadata(x, y, z) else 0
+
   /**
    * Gets the light value of the block
    * @param access - Simple version of the world, though don't assume it is
@@ -352,11 +352,11 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with TVec
    */
   def activate(player: EntityPlayer, side: Int, hit: Vector3): Boolean =
   {
-    if (WrenchUtility.isUsableWrench(player, player.inventory.getCurrentItem, xi, yi, zi))
+    if (WrenchUtility.isUsableWrench(player, player.inventory.getCurrentItem, x, y, z))
     {
       if (configure(player, side, hit))
       {
-        WrenchUtility.damageWrench(player, player.inventory.getCurrentItem, xi, yi, zi)
+        WrenchUtility.damageWrench(player, player.inventory.getCurrentItem, x, y, z)
         return true
       }
       return false
@@ -474,7 +474,7 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with TVec
 
   def notifyChange()
   {
-    world.notifyBlocksOfNeighborChange(xi, yi, zi, block)
+    world.notifyBlocksOfNeighborChange(x, y, z, block)
   }
 
   /**
@@ -503,10 +503,24 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with TVec
 
   def getCollisionBoxes: java.lang.Iterable[Cuboid] = immutable.List[Cuboid](bounds)
 
+  /** Bounds for the block */
+  def bounds = _bounds
+
+  /** Sets the block bounds */
+  def bounds_=(cuboid: Cuboid)
+  {
+    _bounds = cuboid
+
+    if (block != null)
+      block.setBlockBounds(_bounds.min.xf, _bounds.min.yf, _bounds.min.zf, _bounds.max.xf, _bounds.max.yf, _bounds.max.zf)
+  }
+
   def getSelectBounds: Cuboid = bounds
 
   @SideOnly(Side.CLIENT)
-  override def getRenderBoundingBox: AxisAlignedBB = (getCollisionBounds + toVectorWorld).toAABB
+  override def getRenderBoundingBox: AxisAlignedBB = (getCollisionBounds + position).toAABB
+
+  def position: VectorWorld = new VectorWorld(world, x, y, z)
 
   def getCollisionBounds: Cuboid = bounds
 
@@ -514,7 +528,7 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with TVec
    * Called in the world.
    */
   @SideOnly(Side.CLIENT)
-  def getIcon(access: IBlockAccess, side: Int): IIcon = getIcon(side, access.getBlockMetadata(xi, yi, zi))
+  def getIcon(access: IBlockAccess, side: Int): IIcon = getIcon(side, access.getBlockMetadata(x, y, z))
 
   /**
    * Called either by an item, or in a world.
@@ -610,6 +624,19 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with TVec
   def hasSpecialRenderer = getSpecialRenderer != null
 
   @SideOnly(Side.CLIENT)
+  def getSpecialRenderer: TileEntitySpecialRenderer =
+  {
+    val tesr: TileEntitySpecialRenderer = TileEntityRendererDispatcher.instance.getSpecialRendererByClass(getClass)
+
+    if (tesr != null && !tesr.isInstanceOf[RenderTileDummy])
+    {
+      return tesr
+    }
+
+    return null
+  }
+
+  @SideOnly(Side.CLIENT)
   override def renderInventoryItem(`type`: ItemRenderType, itemStack: ItemStack, data: AnyRef*)
   {
     renderInventory(itemStack)
@@ -676,31 +703,6 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with TVec
     }
   }
 
-  def metadata: Int = if (access != null) access.getBlockMetadata(xi, yi, zi) else 0
-
-  def access: IBlockAccess =
-  {
-    if (world != null)
-    {
-      return world
-    }
-
-    return _access
-  }
-
-  @SideOnly(Side.CLIENT)
-  def getSpecialRenderer: TileEntitySpecialRenderer =
-  {
-    val tesr: TileEntitySpecialRenderer = TileEntityRendererDispatcher.instance.getSpecialRendererByClass(getClass)
-
-    if (tesr != null && !tesr.isInstanceOf[RenderTileDummy])
-    {
-      return tesr
-    }
-
-    return null
-  }
-
   /**
    * Is the player looking at this block?
    * @return True if the player is looking at this block.
@@ -711,7 +713,7 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with TVec
 
     if (objectPosition != null)
     {
-      return objectPosition.blockX == xi && objectPosition.blockY == yi && objectPosition.blockZ == zi
+      return objectPosition.blockX == x && objectPosition.blockY == y && objectPosition.blockZ == z
     }
 
     return false
@@ -729,10 +731,10 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with TVec
   }
 
   /** Is this block being indirectly being powered */
-  def isIndirectlyPowered: Boolean = world.isBlockIndirectlyGettingPowered(xi, yi, zi)
+  def isIndirectlyPowered: Boolean = world.isBlockIndirectlyGettingPowered(x, y, z)
 
   /** Gets the level of power provide to this block */
-  def getStrongestIndirectPower: Int = world.getStrongestIndirectPower(xi, yi, zi)
+  def getStrongestIndirectPower: Int = world.getStrongestIndirectPower(x, y, z)
 
   /** Gets the level of power being provided by this block */
   def getWeakRedstonePower(access: IBlockAccess, side: Int): Int = getStrongRedstonePower(access, side)
@@ -811,7 +813,7 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with TVec
   def openGui(player: EntityPlayer, gui: Int, mod: AnyRef)
   {
     if (server)
-      player.openGui(mod, gui, world, xi, yi, zi)
+      player.openGui(mod, gui, world, x, y, z)
   }
 
   /** Is the world server side */
@@ -821,7 +823,7 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with TVec
   def client: Boolean = world.isRemote
 
   def setMeta(meta: Int)
-  { world.setBlockMetadataWithNotify(xi, yi, zi, meta, 3) }
+  { world.setBlockMetadataWithNotify(x, y, z, meta, 3) }
 
   override def getBlockMetadata: Int =
   {
@@ -855,12 +857,6 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with TVec
   }
 
   override def toString: String = "[" + getClass.getSimpleName + " " + x + ", " + y + ", " + z + "]"
-
-  override def x: Double = xCoord
-
-  override def y: Double = yCoord
-
-  override def z: Double = zCoord
 
   /** Gets the icon that renders on the sides
     * @param meta - placement data
@@ -897,23 +893,29 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with TVec
 
   protected def markRender()
   {
-    world.func_147479_m(xi, yi, zi)
+    world.func_147479_m(x, y, z)
   }
+
+  def x = xCoord
+
+  def y = yCoord
+
+  def z = zCoord
+
+  def world: World = getWorldObj
 
   protected def markUpdate()
   {
-    world.markBlockForUpdate(xi, yi, zi)
+    world.markBlockForUpdate(x, y, z)
   }
-
-  override def world: World = getWorldObj
 
   protected def updateLight()
   {
-    world.func_147451_t(xi, yi, zi)
+    world.func_147451_t(x, y, z)
   }
 
   protected def scheduleTick(delay: Int)
   {
-    world.scheduleBlockUpdate(xi, yi, zi, block, delay)
+    world.scheduleBlockUpdate(x, y, z, block, delay)
   }
 }

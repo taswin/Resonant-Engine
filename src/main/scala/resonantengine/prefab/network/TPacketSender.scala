@@ -3,7 +3,6 @@ package resonantengine.prefab.network
 import io.netty.buffer.ByteBuf
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.tileentity.TileEntity
-import resonantengine.api.transform.vector.IVectorWorld
 import resonantengine.core.ResonantEngine
 import resonantengine.core.network.discriminator.PacketTile
 import resonantengine.core.network.netty.AbstractPacket
@@ -20,20 +19,6 @@ trait TPacketSender extends TileEntity
 {
   override def getDescriptionPacket = ResonantEngine.packetHandler.toMCPacket(getPacket(0))
 
-  /** Sends the desc packet to all players around this tile */
-  def sendDescPacket()
-  {
-    sendPacket(0)
-  }
-
-  def sendPacket(id: Int, distance: Double = 64)
-  {
-    if (distance > 0)
-      sendPacket(getPacket(id), distance)
-    else
-      sendPacket(getPacket(id))
-  }
-
   def getPacket(id: Int): PacketTile =
   {
     val packet = new PacketTile(this)
@@ -48,6 +33,20 @@ trait TPacketSender extends TileEntity
   def write(buf: ByteBuf, id: Int)
   {
     buf <<< id
+  }
+
+  /** Sends the desc packet to all players around this tile */
+  def sendDescPacket()
+  {
+    sendPacket(0)
+  }
+
+  def sendPacket(id: Int, distance: Double = 64)
+  {
+    if (distance > 0)
+      sendPacket(getPacket(id), distance)
+    else
+      sendPacket(getPacket(id))
   }
 
   /**
@@ -69,7 +68,7 @@ trait TPacketSender extends TileEntity
   def sendPacket(packet: AbstractPacket, distance: Double)
   {
     if (!getWorldObj.isRemote)
-      ResonantEngine.packetHandler.sendToAllAround(packet, this.asInstanceOf[IVectorWorld], distance)
+      ResonantEngine.packetHandler.sendToAllAround(packet, this, distance)
     else
       throw new RuntimeException("[TPacketReceiver] Trying to send a packet to clients from client side.")
   }

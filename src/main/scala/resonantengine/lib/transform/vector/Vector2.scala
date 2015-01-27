@@ -4,7 +4,6 @@ import java.lang.Double.doubleToLongBits
 
 import io.netty.buffer.ByteBuf
 import net.minecraft.nbt.NBTTagCompound
-import resonantengine.api.transform.vector.IVector2
 import resonantengine.lib.transform.AbstractVector
 
 /**
@@ -12,7 +11,7 @@ import resonantengine.lib.transform.AbstractVector
  *
  * @author Calclavia
  */
-class Vector2(var x: Double = 0, var y: Double =0 ) extends AbstractVector[Vector2] with Ordered[Vector2] with Cloneable with IVector2
+class Vector2(var x: Double = 0, var y: Double = 0) extends AbstractVector[Vector2] with Ordered[Vector2] with Cloneable
 {
   def this() = this(0, 0)
 
@@ -28,13 +27,6 @@ class Vector2(var x: Double = 0, var y: Double =0 ) extends AbstractVector[Vecto
   def y(amount: Double)
   {
     y = amount
-  }
-
-  override def set(vec: Vector2): Vector2 =
-  {
-    x = vec.x
-    y = vec.y
-    return this
   }
 
   /**
@@ -83,13 +75,20 @@ class Vector2(var x: Double = 0, var y: Double =0 ) extends AbstractVector[Vecto
 
   override def +(amount: Vector2): Vector2 = new Vector2(x + amount.x, y + amount.y)
 
+  def add(x: Double, y: Double): Vector2 = this +(x, y)
+
   def +(x: Double, y: Double): Vector2 = new Vector2(this.x + x, this.y + y)
+
+  def addEquals(x: Double, y: Double): Vector2 = this +=(x, y)
 
   def +=(x: Double, y: Double): Vector2 = set(new Vector2(this.x + x, this.y + y))
 
-  def add(x: Double, y: Double): Vector2 = this +(x, y)
-
-  def addEquals(x: Double, y: Double): Vector2 = this +=(x, y)
+  override def set(vec: Vector2): Vector2 =
+  {
+    x = vec.x
+    y = vec.y
+    return this
+  }
 
   override def *(amount: Double): Vector2 = new Vector2(x * amount, y * amount)
 
