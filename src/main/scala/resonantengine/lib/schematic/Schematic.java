@@ -2,8 +2,8 @@ package resonantengine.lib.schematic;
 
 import net.minecraft.block.Block;
 import net.minecraftforge.common.util.ForgeDirection;
+import nova.core.util.collection.Pair;
 import nova.core.util.transform.Vector3d;
-import resonantengine.lib.collection.Pair;
 
 import java.util.HashMap;
 

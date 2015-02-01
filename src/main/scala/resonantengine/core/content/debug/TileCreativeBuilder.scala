@@ -2,9 +2,9 @@ package resonantengine.core.content.debug
 
 import java.util
 
+import nova.core.util.collection.Pair
 import nova.core.util.transform.Vector3d
 import resonantengine.core.ResonantEngine
-import resonantengine.lib.collection.Pair
 import resonantengine.lib.modcontent.block.ResonantTile
 import resonantengine.lib.schematic.SchematicRegistry
 import resonantengine.prefab.block.impl.TRotatable

@@ -12,7 +12,7 @@ import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-import resonantengine.lib.collection.Pair;
+import nova.core.util.collection.Pair;
 import resonantengine.lib.utility.recipe.Recipes;
 
 import java.util.ArrayList;

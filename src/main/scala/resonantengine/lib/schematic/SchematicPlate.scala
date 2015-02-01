@@ -2,8 +2,8 @@ package resonantengine.lib.schematic
 
 import java.util.HashMap
 
+import nova.core.util.collection.Pair
 import nova.core.util.transform.Vector3d
-import resonantengine.lib.collection.Pair
 
 /**
  * Creates a flat box shaped world gen

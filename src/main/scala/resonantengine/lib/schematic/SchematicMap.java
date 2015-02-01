@@ -8,9 +8,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.ForgeDirection;
+import nova.core.util.collection.Pair;
 import nova.core.util.transform.Vector3d;
 import resonantengine.api.misc.ISave;
-import resonantengine.lib.collection.Pair;
 import resonantengine.lib.transform.vector.VectorWorld;
 import resonantengine.lib.utility.nbt.NBTUtility;
 
