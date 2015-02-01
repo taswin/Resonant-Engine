@@ -1,12 +1,8 @@
 package resonantengine.lib.render.block
 
-import net.minecraft.client.renderer.RenderBlocks
-import net.minecraft.item.ItemStack
-import net.minecraftforge.common.util.ForgeDirection
-import org.lwjgl.opengl.GL11._
+import nova.core.util.transform.Vector3d
 import resonantengine.lib.modcontent.block.ResonantBlock
 import resonantengine.lib.render.{RenderBlockUtility, RenderUtility}
-import resonantengine.lib.transform.vector.Vector3
 import resonantengine.lib.wrapper.BitmaskWrapper._
 
 /**
@@ -30,7 +26,7 @@ trait RenderConnectedTexture extends ResonantBlock
    * The Tessellator is already drawing.
    * @return true if vertices were added to the tessellator
    */
-  override def renderStatic(renderer: RenderBlocks, pos: Vector3, pass: Int): Boolean =
+  override def renderStatic(renderer: RenderBlocks, pos: Vector3d, pass: Int): Boolean =
   {
     var sideMap = 0
 

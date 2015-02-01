@@ -3,8 +3,8 @@ package resonantengine.lib.schematic;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import nova.core.util.transform.Vector3d;
 import resonantengine.lib.collection.Pair;
-import resonantengine.lib.transform.vector.Vector3;
 
 import java.util.HashMap;
 
@@ -104,10 +104,9 @@ public class StringSchematic extends Schematic
     }
 
     @Override
-    public HashMap<Vector3, Pair<Block, Integer>> getStructure(ForgeDirection dir, int size)
-    {
-        HashMap<Vector3, Pair<Block, Integer>> map = new HashMap();
-        for (int y = 0; y < mapToBuild.length; y++)
+	public HashMap<Vector3d, Pair<Block, Integer>> getStructure(ForgeDirection dir, int size) {
+		HashMap<Vector3d, Pair<Block, Integer>> map = new HashMap();
+		for (int y = 0; y < mapToBuild.length; y++)
         {
             for (int z = 0; z < mapToBuild[y].length; z++)
             {
@@ -116,8 +115,8 @@ public class StringSchematic extends Schematic
                 {
                     if (charMap.containsKey(chars[x]))
                     {
-                        map.put(new Vector3(x, y, z), charMap.get(chars[x]));
-                    }
+						map.put(new Vector3d(x, y, z), charMap.get(chars[x]));
+					}
                 }
             }
         }

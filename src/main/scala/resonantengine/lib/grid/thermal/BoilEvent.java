@@ -4,7 +4,7 @@ import cpw.mods.fml.common.eventhandler.Event;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fluids.FluidStack;
-import resonantengine.lib.transform.vector.Vector3;
+import nova.core.util.transform.Vector3d;
 import resonantengine.lib.transform.vector.VectorWorld;
 
 @Event.HasResult
@@ -16,8 +16,7 @@ public class BoilEvent extends WorldEvent
 	public final boolean isReactor;
 
     @Deprecated /** Use the VectorWorld version instead */
-    public BoilEvent(World world, Vector3 position, FluidStack source, FluidStack result, int maxSpread)
-    {
+	public BoilEvent(World world, Vector3d position, FluidStack source, FluidStack result, int maxSpread) {
         this(world, new VectorWorld(world, position), source, result, maxSpread, false);
     }
 

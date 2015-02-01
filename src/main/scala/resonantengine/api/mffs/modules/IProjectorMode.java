@@ -1,8 +1,8 @@
 package resonantengine.api.mffs.modules;
 
+import nova.core.util.transform.Vector3d;
 import resonantengine.api.mffs.machine.IFieldMatrix;
 import resonantengine.api.mffs.machine.IProjector;
-import resonantengine.lib.transform.vector.Vector3;
 
 import java.util.Set;
 
@@ -15,17 +15,17 @@ public interface IProjectorMode extends IFortronCost
 	 * @return The blocks actually making up the force field. This array of blocks are
 	 * NOT affected by rotation or translation, and is relative to the center of the projector.
 	 */
-	public Set<Vector3> getExteriorPoints(IFieldMatrix projector);
+	public Set<Vector3d> getExteriorPoints(IFieldMatrix projector);
 
 	/**
 	 * @return Gets all interior points. Not translated or rotated.
 	 */
-	public Set<Vector3> getInteriorPoints(IFieldMatrix projector);
+	public Set<Vector3d> getInteriorPoints(IFieldMatrix projector);
 
 	/**
 	 * @return Is this specific position inside of this force field?
 	 */
-	public boolean isInField(IFieldMatrix projector, Vector3 position);
+	public boolean isInField(IFieldMatrix projector, Vector3d position);
 
 	/**
 	 * Called to render an object in front of the projection.

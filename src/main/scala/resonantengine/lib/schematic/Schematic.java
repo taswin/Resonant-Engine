@@ -2,8 +2,8 @@ package resonantengine.lib.schematic;
 
 import net.minecraft.block.Block;
 import net.minecraftforge.common.util.ForgeDirection;
+import nova.core.util.transform.Vector3d;
 import resonantengine.lib.collection.Pair;
-import resonantengine.lib.transform.vector.Vector3;
 
 import java.util.HashMap;
 
@@ -45,7 +45,7 @@ public abstract class Schematic
      * @param size - requested size, optional
      * @return map of locations to placement data
      */
-	public abstract HashMap<Vector3, Pair<Block, Integer>> getStructure(ForgeDirection dir, int size);
+	public abstract HashMap<Vector3d, Pair<Block, Integer>> getStructure(ForgeDirection dir, int size);
 
 	///////////////////////////////////////////////////////////////////
 	///             Helper methods for generating schematics        ///
@@ -62,12 +62,12 @@ public abstract class Schematic
 	 * @param length - length of the line
 	 * @return HashMap of vectors to placement data
 	 */
-	public HashMap<Vector3, Pair<Block, Integer>> getLine(final Vector3 start, ForgeDirection dir, Block block, int meta, int length)
+	public HashMap<Vector3d, Pair<Block, Integer>> getLine(final Vector3d start, ForgeDirection dir, Block block, int meta, int length)
 	{
-		HashMap<Vector3, Pair<Block, Integer>> returnMap = new HashMap();
+		HashMap<Vector3d, Pair<Block, Integer>> returnMap = new HashMap();
 		for (int i = 0; i < length; i++)
 		{
-			returnMap.put(new Vector3(dir).multiply(i).add(start), new Pair<Block, Integer>(block, meta));
+			returnMap.put(new Vector3d(dir).multiply(i).add(start), new Pair<Block, Integer>(block, meta));
 		}
 		return returnMap;
 	}
@@ -81,7 +81,7 @@ public abstract class Schematic
 	 * @param size   - size from the center to the edge, half of the side
 	 * @return hash map of vectors to placement data
 	 */
-	public HashMap<Vector3, Pair<Block, Integer>> getBox(final Vector3 center, Block block, int meta, int size)
+	public HashMap<Vector3d, Pair<Block, Integer>> getBox(final Vector3d center, Block block, int meta, int size)
 	{
 		return getBox(center, block, meta, size, size);
 	}
@@ -96,25 +96,25 @@ public abstract class Schematic
 	 * @param sizeZ  - size from the center to the edge, half of the side
 	 * @return hash map of vectors to placement data
 	 */
-	public HashMap<Vector3, Pair<Block, Integer>> getBox(final Vector3 center, Block block, int meta, int sizeX, int sizeZ)
+	public HashMap<Vector3d, Pair<Block, Integer>> getBox(final Vector3d center, Block block, int meta, int sizeX, int sizeZ)
 	{
-		HashMap<Vector3, Pair<Block, Integer>> returnMap = new HashMap();
+		HashMap<Vector3d, Pair<Block, Integer>> returnMap = new HashMap();
 		//zero zero corner of the square
-		Vector3 start = new Vector3(-sizeX, 0, -sizeZ).add(center);
+		Vector3d start = new Vector3d(-sizeX, 0, -sizeZ).add(center);
 
 		if (sizeX != sizeZ)
 		{
 			// X sides
 			for (int x = 0; x <= sizeX * 2; x++)
 			{
-				returnMap.put(new Vector3(x, 0, 0).add(start), new Pair<Block, Integer>(block, meta));
-				returnMap.put(new Vector3(x, 0, sizeZ * 2).add(start), new Pair<Block, Integer>(block, meta));
+				returnMap.put(new Vector3d(x, 0, 0).add(start), new Pair<Block, Integer>(block, meta));
+				returnMap.put(new Vector3d(x, 0, sizeZ * 2).add(start), new Pair<Block, Integer>(block, meta));
 			}
 			// Z sides
 			for (int z = 0; z <= sizeZ * 2; z++)
 			{
-				returnMap.put(new Vector3(0, 0, z).add(start), new Pair<Block, Integer>(block, meta));
-				returnMap.put(new Vector3(sizeX * 2, 0, z).add(start), new Pair<Block, Integer>(block, meta));
+				returnMap.put(new Vector3d(0, 0, z).add(start), new Pair<Block, Integer>(block, meta));
+				returnMap.put(new Vector3d(sizeX * 2, 0, z).add(start), new Pair<Block, Integer>(block, meta));
 			}
 		}
 		else
@@ -122,10 +122,10 @@ public abstract class Schematic
 			// All sides, used verses the other way as it cuts the time in half
 			for (int s = 0; s <= sizeX * 2; s++)
 			{
-				returnMap.put(new Vector3(s, 0, 0).add(start), new Pair<Block, Integer>(block, meta));
-				returnMap.put(new Vector3(s, 0, sizeZ * 2).add(start), new Pair<Block, Integer>(block, meta));
-				returnMap.put(new Vector3(0, 0, s).add(start), new Pair<Block, Integer>(block, meta));
-				returnMap.put(new Vector3(sizeZ * 2, 0, s).add(start), new Pair<Block, Integer>(block, meta));
+				returnMap.put(new Vector3d(s, 0, 0).add(start), new Pair<Block, Integer>(block, meta));
+				returnMap.put(new Vector3d(s, 0, sizeZ * 2).add(start), new Pair<Block, Integer>(block, meta));
+				returnMap.put(new Vector3d(0, 0, s).add(start), new Pair<Block, Integer>(block, meta));
+				returnMap.put(new Vector3d(sizeZ * 2, 0, s).add(start), new Pair<Block, Integer>(block, meta));
 			}
 		}
 		return returnMap;

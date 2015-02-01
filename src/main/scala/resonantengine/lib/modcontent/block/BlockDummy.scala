@@ -2,21 +2,9 @@ package resonantengine.lib.modcontent.block
 
 import java.util.{ArrayList, List, Random}
 
-import cpw.mods.fml.relauncher.{Side, SideOnly}
-import net.minecraft.block.{Block, ITileEntityProvider}
-import net.minecraft.client.renderer.texture.IIconRegister
-import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.entity.{Entity, EntityLivingBase}
-import net.minecraft.item.{Item, ItemStack}
-import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{AxisAlignedBB, IIcon, MovingObjectPosition}
-import net.minecraft.world.{Explosion, IBlockAccess, World}
+import nova.core.util.transform.{Cuboid, Vector3d}
 import resonantengine.lib.render.wrapper.BlockRenderHandler
-import resonantengine.lib.transform.region.Cuboid
-import resonantengine.lib.transform.vector.Vector3
 import resonantengine.lib.utility.inventory.InventoryUtility
-import resonantengine.lib.wrapper.CollectionWrapper._
 
 class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyTile: ResonantBlock) extends Block(dummyTile.material) with ITileEntityProvider
 {
@@ -76,10 +64,51 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
   override def getExplosionResistance(entity: Entity, world: World, x: Int, y: Int, z: Int, explosionX: Double, explosionY: Double, explosionZ: Double): Float =
   {
     inject(world, x, y, z)
-    val resistance = getTile(world, x, y, z).getExplosionResistance(entity, new Vector3(explosionX, explosionY, explosionZ))
+    val resistance = getTile(world, x, y, z).getExplosionResistance(entity, new Vector3d(explosionX, explosionY, explosionZ))
     eject
 
     return resistance
+  }
+
+  /**
+   * Injects and ejects data from the TileEntity.
+   */
+  def inject(access: IBlockAccess, x: Int, y: Int, z: Int)
+  {
+    if (access.isInstanceOf[World])
+    {
+      dummyTile.world(access.asInstanceOf[World])
+    }
+
+    dummyTile._access = access
+    dummyTile.xCoord = x
+    dummyTile.yCoord = y
+    dummyTile.zCoord = z
+
+    val tile: TileEntity = access.getTileEntity(x, y, z)
+
+    if (tile.isInstanceOf[ResonantBlock])
+    {
+      (tile.asInstanceOf[ResonantBlock]).block = this
+    }
+  }
+
+  def eject()
+  {
+    dummyTile.world(null)
+    dummyTile.xCoord = 0
+    dummyTile.yCoord = 0
+    dummyTile.zCoord = 0
+  }
+
+  def getTile(world: IBlockAccess, x: Int, y: Int, z: Int): ResonantBlock =
+  {
+    val tile: TileEntity = world.getTileEntity(x, y, z)
+    if (tile.isInstanceOf[ResonantBlock])
+    {
+      return tile.asInstanceOf[ResonantBlock]
+    }
+    return dummyTile
   }
 
   override def onBlockClicked(world: World, x: Int, y: Int, z: Int, player: EntityPlayer)
@@ -128,47 +157,6 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
     super.breakBlock(world, x, y, z, block, par6)
   }
 
-  /**
-   * Injects and ejects data from the TileEntity.
-   */
-  def inject(access: IBlockAccess, x: Int, y: Int, z: Int)
-  {
-    if (access.isInstanceOf[World])
-    {
-      dummyTile.world(access.asInstanceOf[World])
-    }
-
-    dummyTile._access = access
-    dummyTile.xCoord = x
-    dummyTile.yCoord = y
-    dummyTile.zCoord = z
-
-    val tile: TileEntity = access.getTileEntity(x, y, z)
-
-    if (tile.isInstanceOf[ResonantBlock])
-    {
-      (tile.asInstanceOf[ResonantBlock]).block = this
-    }
-  }
-
-  def eject()
-  {
-    dummyTile.world(null)
-    dummyTile.xCoord = 0
-    dummyTile.yCoord = 0
-    dummyTile.zCoord = 0
-  }
-
-  def getTile(world: IBlockAccess, x: Int, y: Int, z: Int): ResonantBlock =
-  {
-    val tile: TileEntity = world.getTileEntity(x, y, z)
-    if (tile.isInstanceOf[ResonantBlock])
-    {
-      return tile.asInstanceOf[ResonantBlock]
-    }
-    return dummyTile
-  }
-
   override def quantityDropped(meta: Int, fortune: Int, random: Random): Int =
   {
     return dummyTile.quantityDropped(meta, fortune)
@@ -184,14 +172,14 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
   override def onNeighborChange(world: IBlockAccess, x: Int, y: Int, z: Int, tileX: Int, tileY: Int, tileZ: Int)
   {
     inject(world, x, y, z)
-    getTile(world, x, y, z).onNeighborChanged(new Vector3(tileX, tileY, tileZ))
+    getTile(world, x, y, z).onNeighborChanged(new Vector3d(tileX, tileY, tileZ))
     eject
   }
 
   override def onBlockActivated(world: World, x: Int, y: Int, z: Int, player: EntityPlayer, side: Int, hitX: Float, hitY: Float, hitZ: Float): Boolean =
   {
     inject(world, x, y, z)
-    val value: Boolean = getTile(world, x, y, z).activate(player, side, new Vector3(hitX, hitY, hitZ))
+    val value: Boolean = getTile(world, x, y, z).activate(player, side, new Vector3d(hitX, hitY, hitZ))
     eject
     return value
   }
@@ -222,13 +210,13 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
   {
     inject(world, x, y, z)
 
-    val bounds: Iterable[Cuboid] = getTile(world, x, y, z).getCollisionBoxes(if (aabb != null) (new Cuboid(aabb) - new Vector3(x, y, z)) else null, entity)
+    val bounds: Iterable[Cuboid] = getTile(world, x, y, z).getCollisionBoxes(if (aabb != null) (new Cuboid(aabb) - new Vector3d(x, y, z)) else null, entity)
 
     if (bounds != null)
     {
       for (cuboid <- bounds)
       {
-        list.add((cuboid + new Vector3(x, y, z)).toAABB)
+        list.add((cuboid + new Vector3d(x, y, z)).toAABB)
       }
     }
 
@@ -239,7 +227,7 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
   override def getSelectedBoundingBoxFromPool(world: World, x: Int, y: Int, z: Int): AxisAlignedBB =
   {
     inject(world, x, y, z)
-    val value = getTile(world, x, y, z).getSelectBounds + new Vector3(x, y, z)
+    val value = getTile(world, x, y, z).getSelectBounds + new Vector3d(x, y, z)
     eject
     return value.toAABB
   }
@@ -247,7 +235,7 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
   override def getCollisionBoundingBoxFromPool(world: World, x: Int, y: Int, z: Int): AxisAlignedBB =
   {
     inject(world, x, y, z)
-    val value = getTile(world, x, y, z).getCollisionBounds + new Vector3(x, y, z)
+    val value = getTile(world, x, y, z).getCollisionBounds + new Vector3d(x, y, z)
     eject
     return value.toAABB
   }
@@ -375,7 +363,7 @@ class BlockDummy(val modPrefix: String, val defaultTab: CreativeTabs, val dummyT
   {
     if (!world.isRemote && world.getGameRules.getGameRuleBooleanValue("doTileDrops"))
     {
-      InventoryUtility.dropItemStack(world, new Vector3(x, y, z) + 0.5, itemStack)
+      InventoryUtility.dropItemStack(world, new Vector3d(x, y, z) + 0.5, itemStack)
     }
   }
 }

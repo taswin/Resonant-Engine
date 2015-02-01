@@ -1,12 +1,6 @@
 package resonantengine.prefab.block.itemblock
 
-import net.minecraft.block.Block
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.tileentity.TileEntity
-import net.minecraft.world.World
-import resonantengine.lib.transform.vector.Vector3
+import nova.core.util.transform.Vector3d
 import resonantengine.lib.utility.inventory.InventoryUtility
 import resonantengine.lib.utility.nbt.NBTUtility
 
@@ -25,7 +19,7 @@ object ItemBlockSaved
       val itemStack: ItemStack = getItemStackWithNBT(block, world, x, y, z)
       if (itemStack != null)
       {
-        InventoryUtility.dropItemStack(world, new Vector3(x, y, z), itemStack)
+		  InventoryUtility.dropItemStack(world, new Vector3d(x, y, z), itemStack)
       }
     }
   }

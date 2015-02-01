@@ -1,11 +1,6 @@
 package resonantengine.lib.transform.region
 
-import io.netty.buffer.ByteBuf
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.Vec3
 import resonantengine.lib.transform.AbstractOperation
-import resonantengine.lib.transform.vector.{Vector2, Vector3}
-import resonantengine.lib.wrapper.ByteBufWrapper._
 
 /** Prefab for 2D shapes, assumes that if the shape is placed into the world that
   * the shape is on the horizontal. In order to change this the shape will need
@@ -35,7 +30,7 @@ abstract class Shape[T <: Shape[T]] extends AbstractOperation[T]
   def isWithin2D(vec: Vector2): Boolean = isWithin(vec.x, vec.y)
 
   /** Checks if the point is inside the shape */
-  def isWithin(vec: Vector3): Boolean = isWithin(vec.x, vec.y, vec.z)
+  def isWithin(vec: Vector3d): Boolean = isWithin(vec.x, vec.y, vec.z)
 
   /** Checks if the point is inside the shape */
   def isWithin(vec: Vec3): Boolean = isWithin(vec.xCoord, vec.yCoord, vec.zCoord)

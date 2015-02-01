@@ -4,11 +4,10 @@ import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.*;
 import net.minecraft.server.MinecraftServer;
+import nova.core.util.transform.Vector3d;
 import resonantengine.core.Reference;
 import resonantengine.lib.transform.vector.Vector2;
-import resonantengine.lib.transform.vector.Vector3;
 import resonantengine.lib.utility.science.units.UnitHelper;
 
 import java.io.File;
@@ -220,10 +219,9 @@ public class NBTUtility
 		else if (value instanceof Vector2)
 		{
 			tag.setString(key, "NBT:SAVE:VECTOR:2:" + ((Vector2) value).x() + ":" + ((Vector2) value).y());
-		}
-		else if (value instanceof Vector3)
+		} else if (value instanceof Vector3d)
 		{
-			tag.setString(key, "NBT:SAVE:VECTOR:3:" + ((Vector3) value).x() + ":" + ((Vector3) value).y() + ":" + ((Vector3) value).z());
+			tag.setString(key, "NBT:SAVE:VECTOR:3:" + ((Vector3d) value).x() + ":" + ((Vector3d) value).y() + ":" + ((Vector3d) value).z());
 		}
 		return tag;
 
@@ -291,7 +289,7 @@ public class NBTUtility
 						}
 						if (UnitHelper.tryToParseDouble(nums[0]) == 3)
 						{
-							return new Vector3(UnitHelper.tryToParseDouble(nums[1]), UnitHelper.tryToParseDouble(nums[2]), UnitHelper.tryToParseDouble(nums[3]));
+							return new Vector3d(UnitHelper.tryToParseDouble(nums[1]), UnitHelper.tryToParseDouble(nums[2]), UnitHelper.tryToParseDouble(nums[3]));
 						}
 					}
 					return null;

@@ -1,15 +1,9 @@
 package resonantengine.lib.content.prefab
 
-import net.minecraft.block.Block
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.inventory.{IInventory, ISidedInventory}
-import net.minecraft.item.ItemStack
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraftforge.common.util.ForgeDirection
+import nova.core.util.transform.Vector3d
 import resonantengine.api.graph.node.IExternalInventory
 import resonantengine.api.tile.IInventoryProvider
 import resonantengine.lib.modcontent.block.ResonantBlock
-import resonantengine.lib.transform.vector.Vector3
 import resonantengine.lib.utility.inventory.{ExternalInventory, InventoryUtility}
 import resonantengine.lib.wrapper.ItemWrapper._
 
@@ -45,12 +39,6 @@ trait TInventory extends ResonantBlock with IInventoryProvider with ISidedInvent
     onInventoryChanged()
   }
 
-  /** Called each time the inventory changes */
-  def onInventoryChanged()
-  {
-
-  }
-
   override def getStackInSlotOnClosing(index: Int): ItemStack = this.getInventory().getStackInSlotOnClosing(index)
 
   override def getInventoryName: String = getBlockType.getLocalizedName
@@ -58,6 +46,8 @@ trait TInventory extends ResonantBlock with IInventoryProvider with ISidedInvent
   override def hasCustomInventoryName: Boolean = inventory.hasCustomInventoryName()
 
   override def getInventoryStackLimit = getInventory.getInventoryStackLimit
+
+  override def getInventory: IExternalInventory = inventory
 
   override def isUseableByPlayer(entityplayer: EntityPlayer) = getInventory.isUseableByPlayer(entityplayer)
 
@@ -70,8 +60,6 @@ trait TInventory extends ResonantBlock with IInventoryProvider with ISidedInvent
   def getAccessibleSlotsFromSide(var1: Int): Array[Int] = this.getInventory.getAccessibleSlotsFromSide(var1)
 
   def canInsertItem(i: Int, itemStack: ItemStack, j: Int): Boolean = this.getInventory.canInsertItem(i, itemStack, j)
-
-  override def getInventory: IExternalInventory = inventory
 
   def canExtractItem(i: Int, itemStack: ItemStack, j: Int): Boolean = this.getInventory.canExtractItem(i, itemStack, j)
 
@@ -147,6 +135,12 @@ trait TInventory extends ResonantBlock with IInventoryProvider with ISidedInvent
     return false
   }
 
+  /** Called each time the inventory changes */
+  def onInventoryChanged()
+  {
+
+  }
+
   def extractItem(inventory: IInventory, slotID: Int, player: EntityPlayer): Boolean =
   {
     var stackInInventory: ItemStack = inventory.getStackInSlot(slotID)
@@ -154,11 +148,11 @@ trait TInventory extends ResonantBlock with IInventoryProvider with ISidedInvent
     {
       if (isControlDown(player))
       {
-        InventoryUtility.dropItemStack(player.worldObj, new Vector3(player), stackInInventory.splitStack(1), 0)
+        InventoryUtility.dropItemStack(player.worldObj, new Vector3d(player), stackInInventory.splitStack(1), 0)
       }
       else
       {
-        InventoryUtility.dropItemStack(player.worldObj, new Vector3(player), stackInInventory, 0)
+        InventoryUtility.dropItemStack(player.worldObj, new Vector3d(player), stackInInventory, 0)
         stackInInventory = null
       }
       if (stackInInventory == null || stackInInventory.stackSize <= 0)

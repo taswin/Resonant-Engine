@@ -8,8 +8,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import nova.core.util.transform.Vector3d;
 import resonantengine.api.tile.IExtendedStorage;
-import resonantengine.lib.transform.vector.Vector3;
 import resonantengine.lib.transform.vector.VectorWorld;
 
 import java.util.HashSet;
@@ -23,11 +23,11 @@ import java.util.Set;
 public class InternalInventoryHandler
 {
 	public World world;
-	Vector3 location;
+	Vector3d location;
 	Set<ItemStack> filteredItems;
 	boolean inverted;
 
-	public InternalInventoryHandler(World world, Vector3 location, Set<ItemStack> filters, boolean inverted)
+	public InternalInventoryHandler(World world, Vector3d location, Set<ItemStack> filters, boolean inverted)
 	{
 		this.world = world;
 		this.location = location;
@@ -68,7 +68,7 @@ public class InternalInventoryHandler
 	 * @param outputPosition
 	 * @param items
 	 */
-	public void throwItem(Vector3 outputPosition, ItemStack items)
+	public void throwItem(Vector3d outputPosition, ItemStack items)
 	{
 		if (!world.isRemote)
 		{
@@ -100,7 +100,7 @@ public class InternalInventoryHandler
 	 *
 	 * @return The ItemStack remained after place attempt
 	 */
-	public ItemStack tryPlaceInPosition(ItemStack itemStack, Vector3 position, ForgeDirection dir)
+	public ItemStack tryPlaceInPosition(ItemStack itemStack, Vector3d position, ForgeDirection dir)
 	{
 		TileEntity tileEntity = position.getTileEntity(world);
 		ForgeDirection direction = dir.getOpposite();
@@ -115,7 +115,7 @@ public class InternalInventoryHandler
 				for (int i = 2; i < 6; i++)
 				{
 					ForgeDirection searchDirection = ForgeDirection.getOrientation(i);
-					Vector3 searchPosition = position.clone();
+					Vector3d searchPosition = position.clone();
 					searchPosition.add(searchDirection);
 
 					if (searchPosition.getTileEntity(world) != null)
@@ -229,7 +229,7 @@ public class InternalInventoryHandler
 	 * @param ammount  - amount up to one stack to grab
 	 * @return the grabbed item stack
 	 */
-	public ItemStack tryGrabFromPosition(Vector3 position, ForgeDirection dir, int ammount)
+	public ItemStack tryGrabFromPosition(Vector3d position, ForgeDirection dir, int ammount)
 	{
 		ItemStack returnStack = null;
 		TileEntity tileEntity = position.getTileEntity(world);
@@ -245,7 +245,7 @@ public class InternalInventoryHandler
 				for (int i = 2; i < 6; i++)
 				{
 					ForgeDirection searchDirection = ForgeDirection.getOrientation(i);
-					Vector3 searchPosition = position.clone();
+					Vector3d searchPosition = position.clone();
 					searchPosition.add(searchDirection);
 
 					if (searchPosition.getTileEntity(world) != null)

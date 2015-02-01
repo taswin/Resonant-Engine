@@ -2,20 +2,11 @@ package resonantengine.lib.factory.resources.block
 
 import java.awt.Color
 
-import cpw.mods.fml.relauncher.{Side, SideOnly}
-import net.minecraft.block.material.Material
-import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.RenderBlocks
-import net.minecraft.client.renderer.texture.IIconRegister
-import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.item.{ItemBlock, ItemStack}
-import net.minecraft.util.IIcon
-import org.lwjgl.opengl.GL11
+import nova.core.util.transform.Vector3d
 import resonantengine.core.Reference
 import resonantengine.lib.factory.resources.ResourceFactory
 import resonantengine.lib.modcontent.block.ResonantBlock
 import resonantengine.lib.render.RenderUtility
-import resonantengine.lib.transform.vector.Vector3
 
 /**
  * A generic ore block that is automatically colored/textured based on a color multiplier.
@@ -64,7 +55,7 @@ class TileOre extends ResonantBlock(Material.rock) with TBlockResource
   }
 
   @SideOnly(Side.CLIENT)
-  override def renderStatic(renderer: RenderBlocks, pos: Vector3, pass: Int): Boolean =
+  override def renderStatic(renderer: RenderBlocks, pos: Vector3d, pass: Int): Boolean =
   {
     renderingForeground = false
     //Render background

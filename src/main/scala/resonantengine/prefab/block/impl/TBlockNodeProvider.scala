@@ -1,10 +1,8 @@
 package resonantengine.prefab.block.impl
 
-import net.minecraft.block.Block
-import net.minecraft.nbt.NBTTagCompound
+import nova.core.util.transform.Vector3d
 import resonantengine.api.misc.ISave
 import resonantengine.lib.modcontent.block.ResonantTile
-import resonantengine.lib.transform.vector.Vector3
 
 import scala.collection.convert.wrapAll._
 
@@ -34,7 +32,7 @@ trait TBlockNodeProvider extends ResonantTile with TNodeProvider
       nodes.foreach(_.reconstruct())
   }
 
-  override def onNeighborChanged(pos: Vector3)
+  override def onNeighborChanged(pos: Vector3d)
   {
     if (!world.isRemote)
       nodes.foreach(_.reconstruct())

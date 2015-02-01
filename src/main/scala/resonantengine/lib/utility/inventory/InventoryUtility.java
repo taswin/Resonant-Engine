@@ -13,7 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import resonantengine.lib.transform.vector.Vector3;
+import nova.core.util.transform.Vector3d;
 import resonantengine.lib.transform.vector.VectorWorld;
 import resonantengine.lib.utility.DummyPlayer;
 
@@ -284,7 +284,7 @@ public class InventoryUtility
 		return null;
 	}
 
-	public static void dropBlockAsItem(World world, Vector3 position)
+	public static void dropBlockAsItem(World world, Vector3d position)
 	{
 		dropBlockAsItem(world, position.xi(), position.yi(), position.zi(), false);
 	}
@@ -302,7 +302,7 @@ public class InventoryUtility
 
 				for (ItemStack itemStack : items)
 				{
-					dropItemStack(world, new Vector3(x, y, z), itemStack, 10);
+					dropItemStack(world, new Vector3d(x, y, z), itemStack, 10);
 				}
 			}
 			if (destroy)
@@ -320,17 +320,17 @@ public class InventoryUtility
 	/**
 	 * Drops an item stack on the floor.
 	 */
-	public static void dropItemStack(World world, Vector3 position, ItemStack itemStack)
+	public static void dropItemStack(World world, Vector3d position, ItemStack itemStack)
 	{
 		dropItemStack(world, position, itemStack, 10);
 	}
 
-	public static void dropItemStack(World world, Vector3 position, ItemStack itemStack, int delay)
+	public static void dropItemStack(World world, Vector3d position, ItemStack itemStack, int delay)
 	{
 		dropItemStack(world, position, itemStack, delay, 0f);
 	}
 
-	public static void dropItemStack(World world, Vector3 position, ItemStack itemStack, int delay, float randomAmount)
+	public static void dropItemStack(World world, Vector3d position, ItemStack itemStack, int delay, float randomAmount)
 	{
 		dropItemStack(world, position.x(), position.y(), position.z(), itemStack, delay, randomAmount);
 	}
@@ -391,7 +391,7 @@ public class InventoryUtility
 		{
 			try
 			{
-				Vector3 rightClickPos = new Vector3(x, y, z);
+				Vector3d rightClickPos = new Vector3d(x, y, z);
 
 				if (world.isAirBlock(x, y, z))
 				{

@@ -1,14 +1,7 @@
 package resonantengine.lib.render.wrapper
 
-import cpw.mods.fml.client.registry.{ISimpleBlockRenderingHandler, RenderingRegistry}
-import net.minecraft.block.Block
-import net.minecraft.client.renderer.RenderBlocks
-import net.minecraft.item.ItemStack
-import net.minecraft.world.IBlockAccess
-import org.lwjgl.opengl.GL11._
-import org.lwjgl.opengl.GL12._
+import nova.core.util.transform.Vector3d
 import resonantengine.lib.modcontent.block.{BlockDummy, ResonantBlock}
-import resonantengine.lib.transform.vector.Vector3
 
 object BlockRenderHandler extends ISimpleBlockRenderingHandler
 {
@@ -56,7 +49,7 @@ object BlockRenderHandler extends ISimpleBlockRenderingHandler
 
     if (renderer != null)
     {
-      return renderer.renderStatic(renderBlocks, new Vector3(x, y, z), 0)
+		return renderer.renderStatic(renderBlocks, new Vector3d(x, y, z), 0)
     }
 
     return false

@@ -3,9 +3,9 @@ package resonantengine.api.mffs.modules;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import nova.core.util.transform.Vector3d;
 import resonantengine.api.mffs.machine.IFieldMatrix;
 import resonantengine.api.mffs.machine.IProjector;
-import resonantengine.lib.transform.vector.Vector3;
 
 import java.util.Set;
 
@@ -20,16 +20,16 @@ public interface IModule extends IFortronCost
 	 * @param projector
 	 * @return True to stop projecting.
 	 */
-	boolean onProject(IProjector projector, Set<Vector3> field);
+	boolean onProject(IProjector projector, Set<Vector3d> field);
 
-	boolean onDestroy(IProjector projector, Set<Vector3> field);
+	boolean onDestroy(IProjector projector, Set<Vector3d> field);
 
 	/**
 	 * Called right before the projector creates a force field block.
 	 *
 	 * @return 0 - Do nothing; 1 - Skip this block and continue; 2 - Cancel rest of projection;
 	 */
-	public int onProject(IProjector projector, Vector3 position);
+	public int onProject(IProjector projector, Vector3d position);
 
 	/**
 	 * Called when an entity collides with a force field block.
@@ -44,14 +44,14 @@ public interface IModule extends IFortronCost
 	 *
 	 * @return False if to prevent this position from being added to the projection que.
 	 */
-	public void onPreCalculate(IFieldMatrix projector, Set<Vector3> calculatedField);
+	public void onPreCalculate(IFieldMatrix projector, Set<Vector3d> calculatedField);
 
 	/**
 	 * Called in this module when after being calculated by the projector.
 	 *
 	 * @return False if to prevent this position from being added to the projection que.
 	 */
-	public void onPostCalculate(IFieldMatrix projector, Set<Vector3> fieldDefinition);
+	public void onPostCalculate(IFieldMatrix projector, Set<Vector3d> fieldDefinition);
 
 	/**
 	 * @param moduleStack

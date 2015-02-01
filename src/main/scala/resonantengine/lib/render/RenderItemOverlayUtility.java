@@ -17,9 +17,9 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.common.util.ForgeDirection;
+import nova.core.util.transform.Vector3d;
 import org.lwjgl.opengl.GL11;
 import resonantengine.lib.transform.rotation.Quaternion;
-import resonantengine.lib.transform.vector.Vector3;
 import resonantengine.lib.utility.LanguageUtility;
 import resonantengine.lib.utility.WorldUtility;
 
@@ -57,7 +57,7 @@ public class RenderItemOverlayUtility
 		{
 			if (inventory[i] != null)
 			{
-				Vector3 translation = new Vector3((double) (i / matrixX) / ((double) matrixX) + (0.5 / (matrixX)), 1.1, (double) (i % matrixZ) / ((double) matrixZ) + (0.5 / (matrixZ))).add(-0.5);
+				Vector3d translation = new Vector3d((double) (i / matrixX) / ((double) matrixX) + (0.5 / (matrixX)), 1.1, (double) (i % matrixZ) / ((double) matrixZ) + (0.5 / (matrixZ))).add(-0.5);
 				translation.multiply(0.85);
 				GL11.glPushMatrix();
 				GL11.glTranslated(x + 0.5f, y + 0.5f, z + 0.5f);
@@ -69,7 +69,7 @@ public class RenderItemOverlayUtility
 
 				GL11.glTranslated(translation.x(), translation.y(), translation.z());
 				GL11.glScalef(scale, scale, scale);
-				renderItem(tileEntity.getWorldObj(), inventory[i], new Vector3(0, 0, 0), 0, 1);
+				renderItem(tileEntity.getWorldObj(), inventory[i], new Vector3d(0, 0, 0), 0, 1);
 				GL11.glPopMatrix();
 
 				if (isLooking)
@@ -77,7 +77,7 @@ public class RenderItemOverlayUtility
 					GL11.glPushMatrix();
 					GL11.glTranslated(x, y, z);
 					int angle = dir != null ? WorldUtility.getAngleFromForgeDirection(WorldUtility.invertX(dir)) : 0;
-					RenderUtility.renderFloatingText("" + inventory[i].stackSize, translation.transform(new Quaternion(angle, Vector3.up())).add(0.5).add(new Vector3(0, 0.5, 0)));
+					RenderUtility.renderFloatingText("" + inventory[i].stackSize, translation.transform(new Quaternion(angle, Vector3d.up())).add(0.5).add(new Vector3d(0, 0.5, 0)));
 					GL11.glPopMatrix();
 				}
 			}
@@ -231,7 +231,7 @@ public class RenderItemOverlayUtility
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, var11 * scale, var12 * scale);
 	}
 
-	public static void renderItem(World world, ItemStack itemStack, Vector3 position, float rotationYaw, int angle)
+	public static void renderItem(World world, ItemStack itemStack, Vector3d position, float rotationYaw, int angle)
 	{
 		if (itemStack != null)
 		{

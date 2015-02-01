@@ -2,8 +2,8 @@ package resonantengine.prefab.block.multiblock;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import nova.core.util.transform.Vector3d;
 import resonantengine.api.misc.ISave;
-import resonantengine.lib.transform.vector.Vector3;
 
 import java.lang.ref.WeakReference;
 import java.util.LinkedHashSet;
@@ -26,7 +26,7 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISave
 	/**
 	 * The relative primary block position to be loaded in once the tile is initiated.
 	 */
-	protected Vector3 newPrimary = null;
+	protected Vector3d newPrimary = null;
 	protected Class<? extends W> wrapperClass;
 
 	public MultiBlockHandler(W wrapper)
@@ -76,9 +76,9 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISave
 	public Set<W> getStructure()
 	{
 		Set<W> structure = new LinkedHashSet<W>();
-		Iterable<Vector3> vectors = tile.getMultiBlockVectors();
+		Iterable<Vector3d> vectors = tile.getMultiBlockVectors();
 
-		for (Vector3 vector : vectors)
+		for (Vector3d vector : vectors)
 		{
 			W checkWrapper = getWrapperAt(vector.add(tile.getPosition()));
 
@@ -166,7 +166,7 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISave
 		return false;
 	}
 
-	public W getWrapperAt(Vector3 position)
+	public W getWrapperAt(Vector3d position)
 	{
 		TileEntity tile = position.getTileEntity(this.tile.getWorld());
 
@@ -206,7 +206,7 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISave
 	{
 		if (nbt.hasKey("primaryMultiBlock"))
 		{
-			newPrimary = new Vector3(nbt.getCompoundTag("primaryMultiBlock"));
+			newPrimary = new Vector3d(nbt.getCompoundTag("primaryMultiBlock"));
 			update();
 		}
 		else

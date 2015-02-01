@@ -1,6 +1,6 @@
 package resonantengine.lib.utility.path;
 
-import resonantengine.lib.transform.vector.Vector3;
+import nova.core.util.transform.Vector3d;
 
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -23,14 +23,14 @@ public class Pathfinder
 	/**
 	 * A list of permissions that the pathfinder already went through.
 	 */
-	public Set<Vector3> closedSet;
+	public Set<Vector3d> closedSet;
 
 	/**
 	 * The resulted path found by the pathfinder. Could be null if no path was found.
 	 */
-	public List<Vector3> results;
+	public List<Vector3d> results;
 
-	private Vector3 start;
+	private Vector3d start;
 
 	public Pathfinder(IPathCallBack callBack)
 	{
@@ -41,7 +41,7 @@ public class Pathfinder
 	/**
 	 * @return True on success finding, false on failure.
 	 */
-	public boolean findNodes(Vector3 currentNode)
+	public boolean findNodes(Vector3d currentNode)
 	{
 		if (this.start == null)
 		{
@@ -55,7 +55,7 @@ public class Pathfinder
 			return false;
 		}
 
-		for (Vector3 node : this.callBackCheck.getConnectedNodes(this, currentNode))
+		for (Vector3d node : this.callBackCheck.getConnectedNodes(this, currentNode))
 		{
 			if (!this.closedSet.contains(node))
 			{
@@ -72,7 +72,7 @@ public class Pathfinder
 	/**
 	 * Called to execute the pathfinding operation.
 	 */
-	public Pathfinder init(Vector3 startNode)
+	public Pathfinder init(Vector3d startNode)
 	{
 		this.findNodes(startNode);
 		return this;
@@ -80,8 +80,8 @@ public class Pathfinder
 
 	public Pathfinder reset()
 	{
-		this.closedSet = new LinkedHashSet<Vector3>();
-		this.results = new LinkedList<Vector3>();
+		this.closedSet = new LinkedHashSet<Vector3d>();
+		this.results = new LinkedList<Vector3d>();
 		return this;
 	}
 }

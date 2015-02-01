@@ -1,9 +1,13 @@
 package resonantengine.lib.utility.path;
 
 import net.minecraftforge.common.util.ForgeDirection;
-import resonantengine.lib.transform.vector.Vector3;
+import nova.core.util.transform.Vector3d;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * An advanced version of pathfinding to find the shortest path between two points. Uses the A*
@@ -16,33 +20,33 @@ public class PathfinderAStar extends Pathfinder
 	/**
 	 * The set of tentative permissions to be evaluated, initially containing the start node
 	 */
-	public Set<Vector3> openSet;
+	public Set<Vector3d> openSet;
 
 	/**
 	 * The map of navigated permissions storing the data of which position came from which in the format
 	 * of: X came from Y.
 	 */
-	public HashMap<Vector3, Vector3> navigationMap;
+	public HashMap<Vector3d, Vector3d> navigationMap;
 
 	/**
 	 * Score values, used to determine the score for a path to evaluate how optimal the path is.
 	 * G-Score is the cost along the best known path while F-Score is the total cost.
 	 */
-	public HashMap<Vector3, Double> gScore, fScore;
+	public HashMap<Vector3d, Double> gScore, fScore;
 
 	/**
 	 * The node in which the pathfinder is trying to reach.
 	 */
-	public Vector3 goal;
+	public Vector3d goal;
 
-	public PathfinderAStar(IPathCallBack callBack, Vector3 goal)
+	public PathfinderAStar(IPathCallBack callBack, Vector3d goal)
 	{
 		super(callBack);
 		this.goal = goal;
 	}
 
 	@Override
-	public boolean findNodes(Vector3 start)
+	public boolean findNodes(Vector3d start)
 	{
 		this.reset();
 		this.openSet.add(start);
@@ -52,11 +56,11 @@ public class PathfinderAStar extends Pathfinder
 		while (!this.openSet.isEmpty())
 		{
 			// Current is the node in openset having the lowest f_score[] value
-			Vector3 currentNode = null;
+			Vector3d currentNode = null;
 
 			double lowestFScore = 0;
 
-			for (Vector3 node : this.openSet)
+			for (Vector3d node : this.openSet)
 			{
 				if (currentNode == null || this.fScore.get(node) < lowestFScore)
 				{
@@ -84,7 +88,7 @@ public class PathfinderAStar extends Pathfinder
 			this.openSet.remove(currentNode);
 			this.closedSet.add(currentNode);
 
-			for (Vector3 neighbor : getNeighborNodes(currentNode))
+			for (Vector3d neighbor : getNeighborNodes(currentNode))
 			{
 				double tentativeGScore = this.gScore.get(currentNode) + currentNode.distance(neighbor);
 
@@ -112,19 +116,19 @@ public class PathfinderAStar extends Pathfinder
 	@Override
 	public Pathfinder reset()
 	{
-		this.openSet = new HashSet<Vector3>();
-		this.navigationMap = new HashMap<Vector3, Vector3>();
-		this.gScore = new HashMap<Vector3, Double>();
-		this.fScore = new HashMap<Vector3, Double>();
+		this.openSet = new HashSet<Vector3d>();
+		this.navigationMap = new HashMap<Vector3d, Vector3d>();
+		this.gScore = new HashMap<Vector3d, Double>();
+		this.fScore = new HashMap<Vector3d, Double>();
 		return super.reset();
 	}
 
 	/**
 	 * A recursive function to back track and find the path in which we have analyzed.
 	 */
-	public List<Vector3> reconstructPath(HashMap<Vector3, Vector3> nagivationMap, Vector3 current_node)
+	public List<Vector3d> reconstructPath(HashMap<Vector3d, Vector3d> nagivationMap, Vector3d current_node)
 	{
-		List<Vector3> path = new LinkedList<Vector3>();
+		List<Vector3d> path = new LinkedList<Vector3d>();
 		path.add(current_node);
 
 		if (nagivationMap.containsKey(current_node))
@@ -141,15 +145,15 @@ public class PathfinderAStar extends Pathfinder
 	/**
 	 * @return An estimated cost between two points.
 	 */
-	public double getHeuristicEstimatedCost(Vector3 start, Vector3 goal)
+	public double getHeuristicEstimatedCost(Vector3d start, Vector3d goal)
 	{
 		return start.distance(goal);
 	}
 
 	/**
-	 * @return A Set of neighboring Vector3 positions.
+	 * @return A Set of neighboring Vector3d positions.
 	 */
-	public Set<Vector3> getNeighborNodes(Vector3 vector)
+	public Set<Vector3d> getNeighborNodes(Vector3d vector)
 	{
 		if (this.callBackCheck != null)
 		{
@@ -157,7 +161,7 @@ public class PathfinderAStar extends Pathfinder
 		}
 		else
 		{
-			Set<Vector3> neighbors = new HashSet<Vector3>();
+			Set<Vector3d> neighbors = new HashSet<Vector3d>();
 
 			for (int i = 0; i < 6; i++)
 			{

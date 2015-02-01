@@ -1,31 +1,17 @@
 package resonantengine.core
 
-import cpw.mods.fml.common.Mod.EventHandler
-import cpw.mods.fml.common.event._
-import cpw.mods.fml.common.eventhandler.{Event, SubscribeEvent}
-import cpw.mods.fml.common.network.NetworkRegistry
-import cpw.mods.fml.common.{FMLCommonHandler, Mod, SidedProxy}
-import net.minecraft.init.{Blocks, Items}
-import net.minecraft.item.ItemStack
-import net.minecraft.tileentity.TileEntity
-import net.minecraft.world.World
-import net.minecraftforge.common.MinecraftForge
-import net.minecraftforge.common.util.ForgeDirection
-import net.minecraftforge.fluids.{FluidContainerRegistry, FluidRegistry, FluidStack}
-import net.minecraftforge.oredict.OreDictionary
+import nova.core.util.transform.Vector3d
 import resonantengine.api.edx.recipe.{MachineRecipes, RecipeType}
 import resonantengine.api.mffs.fortron.FrequencyGridRegistry
 import resonantengine.api.tile.IBoilHandler
 import resonantengine.core.content.ResonantContent
 import resonantengine.core.content.tool.{ToolMode, ToolModeGeneral, ToolModeRotation}
-import resonantengine.core.network.netty.PacketManager
 import resonantengine.lib.factory.resources.ResourceFactory
 import resonantengine.lib.grid.core.UpdateTicker
 import resonantengine.lib.grid.frequency.GridFrequency
 import resonantengine.lib.grid.thermal.{BoilEvent, GridThermal, ThermalPhysics}
 import resonantengine.lib.mod.config.{ConfigHandler, ConfigScanner}
 import resonantengine.lib.mod.loadable.LoadableHandler
-import resonantengine.lib.transform.vector.Vector3
 import resonantengine.lib.utility.nbt.SaveManager
 import resonantengine.lib.utility.{PlayerInteractionHandler, PotionUtility}
 
@@ -119,7 +105,7 @@ object ResonantEngine
   def boilEventHandler(evt: BoilEvent)
   {
     val world: World = evt.world
-    val position: Vector3 = evt.position
+	  val position: Vector3d = evt.position
 
     for (height <- 1 until evt.maxSpread)
     {

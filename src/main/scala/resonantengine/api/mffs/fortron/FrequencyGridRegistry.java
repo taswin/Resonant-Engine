@@ -1,9 +1,9 @@
 package resonantengine.api.mffs.fortron;
 
 import net.minecraft.world.World;
+import nova.core.util.transform.Cuboid;
+import nova.core.util.transform.Vector3d;
 import resonantengine.api.tile.IBlockFrequency;
-import resonantengine.lib.transform.region.Cuboid;
-import resonantengine.lib.transform.vector.Vector3;
 
 import java.util.Set;
 
@@ -50,9 +50,9 @@ public class FrequencyGridRegistry
 		/**
 		 * Gets a list of TileEntities that has a specific frequency, within a radius around a position.
 		 */
-		Set<IBlockFrequency> getNodes(World world, Vector3 position, int radius, int frequency);
+		Set<IBlockFrequency> getNodes(World world, Vector3d position, int radius, int frequency);
 
-		<C extends IBlockFrequency> Set<C> getNodes(Class<C> clazz, World world, Vector3 position, int radius, int frequency);
+		<C extends IBlockFrequency> Set<C> getNodes(Class<C> clazz, World world, Vector3d position, int radius, int frequency);
 
 		Set<IBlockFrequency> getNodes(World world, Cuboid region, int frequency);
 

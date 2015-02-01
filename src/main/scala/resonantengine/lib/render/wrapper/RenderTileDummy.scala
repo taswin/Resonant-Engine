@@ -1,10 +1,7 @@
 package resonantengine.lib.render.wrapper
 
-import cpw.mods.fml.relauncher.{Side, SideOnly}
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
-import net.minecraft.tileentity.TileEntity
+import nova.core.util.transform.Vector3d
 import resonantengine.lib.modcontent.block.ResonantBlock
-import resonantengine.lib.transform.vector.Vector3
 
 /**
  * @author Calclavia
@@ -17,7 +14,7 @@ class RenderTileDummy extends TileEntitySpecialRenderer
     if (tile.isInstanceOf[ResonantBlock])
     {
       val spatial = tile.asInstanceOf[ResonantBlock]
-      spatial.renderDynamic(new Vector3(x, y, z), f, 0)
+      spatial.renderDynamic(new Vector3d(x, y, z), f, 0)
     }
   }
 }

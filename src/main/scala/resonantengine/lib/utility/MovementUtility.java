@@ -6,7 +6,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
-import resonantengine.lib.transform.vector.Vector3;
+import nova.core.util.transform.Vector3d;
 
 import java.lang.reflect.Method;
 
@@ -27,12 +27,12 @@ public class MovementUtility
 	/**
 	 * Sets a block in a sneaky way to bypass some restraints.
 	 */
-	public static void setBlockSneaky(World world, Vector3 position, Block block, int metadata, TileEntity tileEntity)
+	public static void setBlockSneaky(World world, Vector3d position, Block block, int metadata, TileEntity tileEntity)
 	{
 		if (block != null && world != null)
 		{
 			Chunk chunk = world.getChunkFromChunkCoords(position.xi() >> 4, position.zi() >> 4);
-			Vector3 chunkPosition = new Vector3(position.xi() & 0xF, position.yi() & 0xF, position.zi() & 0xF);
+			Vector3d chunkPosition = new Vector3d(position.xi() & 0xF, position.yi() & 0xF, position.zi() & 0xF);
 
 			int heightMapIndex = chunkPosition.zi() << 4 | chunkPosition.xi();
 
@@ -68,7 +68,7 @@ public class MovementUtility
 				{
 					if (position.yi() >= heightMapValue)
 					{
-						relightBlock(chunk, chunkPosition.clone().add(new Vector3(0, 1, 0)));
+						relightBlock(chunk, chunkPosition.clone().add(new Vector3d(0, 1, 0)));
 					}
 				}
 				else if (position.yi() == heightMapValue - 1)
@@ -98,7 +98,7 @@ public class MovementUtility
 	 * @param chunk
 	 * @param position
 	 */
-	public static void relightBlock(Chunk chunk, Vector3 position)
+	public static void relightBlock(Chunk chunk, Vector3d position)
 	{
 		try
 		{
@@ -117,7 +117,7 @@ public class MovementUtility
 	 * @param chunk
 	 * @param position
 	 */
-	public static void propagateSkylightOcclusion(Chunk chunk, Vector3 position)
+	public static void propagateSkylightOcclusion(Chunk chunk, Vector3d position)
 	{
 		try
 		{

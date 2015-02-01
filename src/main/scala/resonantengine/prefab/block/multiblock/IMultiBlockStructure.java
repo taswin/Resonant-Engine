@@ -1,7 +1,7 @@
 package resonantengine.prefab.block.multiblock;
 
 import net.minecraft.world.World;
-import resonantengine.lib.transform.vector.Vector3;
+import nova.core.util.transform.Vector3d;
 
 public interface IMultiBlockStructure<W extends IMultiBlockStructure> extends IMultiBlock
 {
@@ -9,7 +9,7 @@ public interface IMultiBlockStructure<W extends IMultiBlockStructure> extends IM
 
 	public void onMultiBlockChanged();
 
-	public Vector3 getPosition();
+	public Vector3d getPosition();
 
 	public MultiBlockHandler<W> getMultiBlock();
 }

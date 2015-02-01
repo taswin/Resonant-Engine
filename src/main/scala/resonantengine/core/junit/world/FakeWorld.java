@@ -10,8 +10,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.storage.WorldInfo;
+import nova.core.util.transform.Vector3d;
 import resonantengine.core.junit.TestRegistry;
-import resonantengine.lib.transform.vector.Vector3;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -121,8 +121,8 @@ public class FakeWorld extends World
         }
         else
         {
-            throw new RuntimeException("Something Attempted to place a block out side of the test area " + new Vector3(x, y, z));
-        }
+			throw new RuntimeException("Something Attempted to place a block out side of the test area " + new Vector3d(x, y, z));
+		}
     }
 
     public int getBlockMetadata(int x, int y, int z)

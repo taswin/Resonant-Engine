@@ -12,10 +12,14 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.Action;
+import nova.core.util.transform.Vector3d;
 import resonantengine.api.tile.IRemovable;
-import resonantengine.api.tile.IRemovable.*;
+import resonantengine.api.tile.IRemovable.ICustomRemoval;
+import resonantengine.api.tile.IRemovable.IPickup;
+import resonantengine.api.tile.IRemovable.ISneakPickup;
+import resonantengine.api.tile.IRemovable.ISneakWrenchable;
+import resonantengine.api.tile.IRemovable.IWrenchable;
 import resonantengine.core.Reference;
-import resonantengine.lib.transform.vector.Vector3;
 import resonantengine.lib.transform.vector.VectorWorld;
 import resonantengine.lib.utility.inventory.InventoryUtility;
 
@@ -97,11 +101,11 @@ public class PlayerInteractionHandler
      */
     public static MovingObjectPosition getMouseOver(EntityLivingBase entity, double distance)
     {
-        Vector3 start = new Vector3(entity);
+		Vector3d start = new Vector3d(entity);
 
-        Vector3 aim = new Vector3(entity.getLook(1));
-        Vector3 extended = aim.multiply(distance);
-        aim.addEquals(start);
+		Vector3d aim = new Vector3d(entity.getLook(1));
+		Vector3d extended = aim.multiply(distance);
+		aim.addEquals(start);
         extended.addEquals(start);
 
         return aim.rayTrace(entity.worldObj, extended);

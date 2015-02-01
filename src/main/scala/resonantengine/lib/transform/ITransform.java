@@ -1,6 +1,6 @@
 package resonantengine.lib.transform;
 
-import resonantengine.lib.transform.vector.Vector3;
+import nova.core.util.transform.Vector3d;
 
 /**
  * Applied to objects that can transform vectors
@@ -9,5 +9,5 @@ import resonantengine.lib.transform.vector.Vector3;
  */
 public interface ITransform
 {
-	public Vector3 transform(Vector3 vector);
+	public Vector3d transform(Vector3d vector);
 }

@@ -2,17 +2,11 @@ package resonantengine.core.content.debug
 
 import java.util
 
-import io.netty.buffer.ByteBuf
-import net.minecraft.block.Block
-import net.minecraft.block.material.Material
-import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.entity.player.EntityPlayer
+import nova.core.util.transform.Vector3d
 import resonantengine.core.ResonantEngine
-import resonantengine.core.network.discriminator.{PacketTile, PacketType}
 import resonantengine.lib.collection.Pair
 import resonantengine.lib.modcontent.block.ResonantTile
 import resonantengine.lib.schematic.SchematicRegistry
-import resonantengine.lib.transform.vector.Vector3
 import resonantengine.prefab.block.impl.TRotatable
 import resonantengine.prefab.network.{TPacketReceiver, TPacketSender}
 
@@ -22,7 +16,7 @@ class TileCreativeBuilder extends ResonantTile(Material.iron) with TRotatable wi
 {
   //Current build task vars
   var doBuild: Boolean = false
-  var buildMap: util.HashMap[Vector3, Pair[Block, Integer]] = null
+  var buildMap: util.HashMap[Vector3d, Pair[Block, Integer]] = null
   var buildLimit = 20
   //Gui vars
   var schematicID = -1
@@ -62,7 +56,7 @@ class TileCreativeBuilder extends ResonantTile(Material.iron) with TRotatable wi
   /**
    * Called when the block is right clicked by the player
    */
-  override def activate(player: EntityPlayer, side: Int, hit: Vector3): Boolean =
+  override def activate(player: EntityPlayer, side: Int, hit: Vector3d): Boolean =
   {
     player.openGui(ResonantEngine, -1, world, x.toInt, y.toInt, z.toInt)
     return true

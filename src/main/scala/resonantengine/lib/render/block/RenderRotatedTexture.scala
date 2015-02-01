@@ -1,12 +1,9 @@
 package resonantengine.lib.render.block
 
-import cpw.mods.fml.relauncher.{Side, SideOnly}
-import net.minecraft.client.renderer.RenderBlocks
-import net.minecraftforge.common.util.ForgeDirection
+import nova.core.util.transform.Vector3d
 import resonantengine.api.tile.IRotatable
 import resonantengine.lib.modcontent.block.ResonantBlock
 import resonantengine.lib.render.{RenderBlockAdvanced, RenderUtility}
-import resonantengine.lib.transform.vector.Vector3
 import resonantengine.lib.utility.RotationUtility
 
 /**
@@ -20,7 +17,7 @@ trait RenderRotatedTexture extends ResonantBlock with IRotatable
   var renderBlocks: RenderBlockAdvanced = null
 
   @SideOnly(Side.CLIENT)
-  override def renderStatic(renderer: RenderBlocks, pos: Vector3, pass: Int): Boolean =
+  override def renderStatic(renderer: RenderBlocks, pos: Vector3d, pass: Int): Boolean =
   {
     if (renderBlocks == null)
       renderBlocks = new RenderBlockAdvanced()

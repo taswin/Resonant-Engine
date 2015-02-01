@@ -1,12 +1,7 @@
 package resonantengine.lib.utility.inventory
 
-import net.minecraft.entity.item.EntityItem
-import net.minecraft.inventory.IInventory
-import net.minecraft.item.ItemStack
-import net.minecraft.tileentity.TileEntity
-import net.minecraftforge.common.util.ForgeDirection
+import nova.core.util.transform.Vector3d
 import resonantengine.api.tile.IInventoryProvider
-import resonantengine.lib.transform.vector.Vector3
 
 /**
  * Some extra inventory prefab methods.
@@ -65,7 +60,7 @@ trait TPrefabInventory extends TileEntity with IInventoryProvider
       {
         if (returnStack != null)
         {
-          returnStack = tryPlaceInPosition(returnStack, new Vector3(this) + direction, direction)
+          returnStack = tryPlaceInPosition(returnStack, new Vector3d(this) + direction, direction)
         }
       }
 
@@ -82,7 +77,7 @@ trait TPrefabInventory extends TileEntity with IInventoryProvider
    *
    * @return The ItemStack remained after place attempt
    */
-  def tryPlaceInPosition(itemStack: ItemStack, position: Vector3, dir: ForgeDirection): ItemStack =
+  def tryPlaceInPosition(itemStack: ItemStack, position: Vector3d, dir: ForgeDirection): ItemStack =
   {
     val tileEntity = position.getTileEntity(getWorldObj())
 

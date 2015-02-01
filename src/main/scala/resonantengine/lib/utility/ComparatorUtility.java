@@ -2,7 +2,7 @@ package resonantengine.lib.utility;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import resonantengine.lib.transform.vector.Vector3;
+import nova.core.util.transform.Vector3d;
 
 import java.util.Comparator;
 
@@ -36,37 +36,36 @@ public class ComparatorUtility
 			else if (arg1 instanceof Entity)
 			{
 				y2 = ((Entity) arg1).posY;
-			}
-			else if (arg1 instanceof Vector3)
+			} else if (arg1 instanceof Vector3d)
 			{
-				y2 = ((Vector3) arg1).y();
+				y2 = ((Vector3d) arg1).y();
 			}
 			return Double.compare(y, y2);
 		}
 	}
 
-	public static class VectorYCoordSorter implements Comparator<Vector3>
+	public static class VectorYCoordSorter implements Comparator<Vector3d>
 	{
 		@Override
-		public int compare(Vector3 arg0, Vector3 arg1)
+		public int compare(Vector3d arg0, Vector3d arg1)
 		{
 			return Double.compare(arg0.y(), arg1.y());
 		}
 	}
 
-	public static class VectorXCoordSorter implements Comparator<Vector3>
+	public static class VectorXCoordSorter implements Comparator<Vector3d>
 	{
 		@Override
-		public int compare(Vector3 arg0, Vector3 arg1)
+		public int compare(Vector3d arg0, Vector3d arg1)
 		{
 			return Double.compare(arg0.x(), arg1.x());
 		}
 	}
 
-	public static class VectorZCoordSorter implements Comparator<Vector3>
+	public static class VectorZCoordSorter implements Comparator<Vector3d>
 	{
 		@Override
-		public int compare(Vector3 arg0, Vector3 arg1)
+		public int compare(Vector3d arg0, Vector3d arg1)
 		{
 			return Double.compare(arg0.z(), arg1.z());
 		}

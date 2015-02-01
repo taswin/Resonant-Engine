@@ -1,6 +1,6 @@
 package resonantengine.lib.utility.path;
 
-import resonantengine.lib.transform.vector.Vector3;
+import nova.core.util.transform.Vector3d;
 
 import java.util.Set;
 
@@ -12,7 +12,7 @@ public interface IPathCallBack
 	 * @return A set of permissions connected to the currentNode. Essentially one should return a set of
 	 * neighboring permissions.
 	 */
-	public Set<Vector3> getConnectedNodes(Pathfinder finder, Vector3 currentNode);
+	public Set<Vector3d> getConnectedNodes(Pathfinder finder, Vector3d currentNode);
 
 	/**
 	 * Called when looping through permissions.
@@ -22,5 +22,5 @@ public interface IPathCallBack
 	 * @param currentNode - The node being searched.
 	 * @return True to stop the path finding operation.
 	 */
-	public boolean onSearch(Pathfinder finder, Vector3 start, Vector3 currentNode);
+	public boolean onSearch(Pathfinder finder, Vector3d start, Vector3d currentNode);
 }

@@ -16,8 +16,8 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
+import nova.core.util.transform.Vector3d;
 import org.lwjgl.opengl.GL11;
-import resonantengine.lib.transform.vector.Vector3;
 import resonantengine.lib.utility.WorldUtility;
 
 import java.util.HashMap;
@@ -165,7 +165,7 @@ public class RenderUtility
 		glTranslatef(0.5F, 0.5F, 0.5F);
 	}
 
-	public static void renderFloatingText(String text, Vector3 position)
+	public static void renderFloatingText(String text, Vector3d position)
 	{
 		renderFloatingText(text, position, 0xFFFFFF);
 	}
@@ -175,7 +175,7 @@ public class RenderUtility
 	 *
 	 * @author Briman0094
 	 */
-	public static void renderFloatingText(String text, Vector3 position, int color)
+	public static void renderFloatingText(String text, Vector3d position, int color)
 	{
 		renderFloatingText(text, position.x(), position.y(), position.z(), color);
 	}
@@ -708,7 +708,7 @@ public class RenderUtility
 		FMLClientHandler.instance().getClient().renderEngine.bindTexture(location);
 	}
 
-	public void renderTags(Vector3 coord, HashMap<String, Integer> tags, float height)
+	public void renderTags(Vector3d coord, HashMap<String, Integer> tags, float height)
 	{
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 
@@ -739,7 +739,7 @@ public class RenderUtility
 
 						if (entry.getKey() != null)
 						{
-							renderFloatingText(entry.getKey(), new Vector3(0.5, i * 0.25f + height, 0.5f), entry.getValue());
+							renderFloatingText(entry.getKey(), new Vector3d(0.5, i * 0.25f + height, 0.5f), entry.getValue());
 						}
 
 						i++;

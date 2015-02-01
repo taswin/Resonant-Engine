@@ -2,20 +2,14 @@ package resonantengine.lib.transform.region
 
 import java.util
 
-import io.netty.buffer.ByteBuf
-import net.minecraft.entity.Entity
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.MathHelper
-import net.minecraft.world.World
-import resonantengine.lib.transform.vector.Vector3
-import resonantengine.lib.wrapper.ByteBufWrapper._
+import nova.core.util.transform.Vector3d
 
 /** 3D Ball shaped region in the world.
   * Can be used for collision boxes, and entity detection
   *
   * Created by robert on 12/18/2014.
   */
-class Sphere(c: Vector3, var r: Double) extends Shape3D[Sphere](c)
+class Sphere(c: Vector3d, var r: Double) extends Shape3D[Sphere](c)
 {
   override def set(other: Sphere): Sphere =
   {
@@ -26,11 +20,11 @@ class Sphere(c: Vector3, var r: Double) extends Shape3D[Sphere](c)
 
   override def +(amount: Double): Sphere = new Sphere(center, r + amount)
 
-  override def +(amount: Sphere): Sphere = new Sphere(new Vector3(center).midpoint(amount.center), r + amount.r)
+	override def +(amount: Sphere): Sphere = new Sphere(new Vector3d(center).midpoint(amount.center), r + amount.r)
 
   override def *(amount: Double): Sphere = new Sphere(center, r * amount)
 
-  override def *(amount: Sphere): Sphere = new Sphere(new Vector3(center).midpoint(amount.center), r * amount.r)
+	override def *(amount: Sphere): Sphere = new Sphere(new Vector3d(center).midpoint(amount.center), r * amount.r)
 
   override def writeByteBuf(data: ByteBuf): ByteBuf =
   {
@@ -56,7 +50,7 @@ class Sphere(c: Vector3, var r: Double) extends Shape3D[Sphere](c)
 
   override def getVolume: Double = (4 * Math.PI * (r * r * r)) / 3
 
-  override def isWithin(x: Double, y: Double, z: Double): Boolean = new Vector3(x, y, z).subtract(x, y, z).magnitude <= this.r
+	override def isWithin(x: Double, y: Double, z: Double): Boolean = new Vector3d(x, y, z).subtract(x, y, z).magnitude <= this.r
 
   def getEntities[E <: Entity](world: World, clazz: Class[E]): java.util.List[E] =
   {
@@ -88,7 +82,7 @@ class Sphere(c: Vector3, var r: Double) extends Shape3D[Sphere](c)
             {
               val entity = list1.get(l).asInstanceOf[Entity];
 
-              if (clazz.isAssignableFrom(entity.getClass()) && new Vector3(entity).magnitude <= r)
+				if (clazz.isAssignableFrom(entity.getClass()) && new Vector3d(entity).magnitude <= r)
               {
                 list.add(entity.asInstanceOf[E]);
               }

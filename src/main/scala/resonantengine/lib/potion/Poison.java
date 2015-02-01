@@ -6,10 +6,10 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import nova.core.util.transform.Vector3d;
 import resonantengine.api.armor.IAntiPoisonArmor;
 import resonantengine.api.tile.IAntiPoisonBlock;
 import resonantengine.core.Reference;
-import resonantengine.lib.transform.vector.Vector3;
 
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -78,7 +78,7 @@ public abstract class Poison
 	 * @amiplifier - The amplification value.
 	 * @armorRequired - The amount of pieces of armor required to be protected.
 	 */
-	public void poisonEntity(Vector3 emitPosition, EntityLivingBase entity, int amplifier)
+	public void poisonEntity(Vector3d emitPosition, EntityLivingBase entity, int amplifier)
 	{
 		if (!isEntityProtected(emitPosition, entity, amplifier))
 		{
@@ -86,12 +86,12 @@ public abstract class Poison
 		}
 	}
 
-	public void poisonEntity(Vector3 emitPosition, EntityLivingBase entity)
+	public void poisonEntity(Vector3d emitPosition, EntityLivingBase entity)
 	{
 		this.poisonEntity(emitPosition, entity, 0);
 	}
 
-	public boolean isEntityProtected(Vector3 emitPosition, EntityLivingBase entity, int amplifier)
+	public boolean isEntityProtected(Vector3d emitPosition, EntityLivingBase entity, int amplifier)
 	{
 		EnumSet<ArmorType> armorWorn = EnumSet.noneOf(ArmorType.class);
 
@@ -121,10 +121,10 @@ public abstract class Poison
 		return armorWorn.containsAll(this.armorRequired);
 	}
 
-	public int getAntiPoisonBlockCount(World world, Vector3 startingPosition, Vector3 endingPosition)
+	public int getAntiPoisonBlockCount(World world, Vector3d startingPosition, Vector3d endingPosition)
 	{
-		Vector3 delta = endingPosition.clone().subtract(startingPosition).normalize();
-		Vector3 targetPosition = startingPosition.clone();
+		Vector3d delta = endingPosition.clone().subtract(startingPosition).normalize();
+		Vector3d targetPosition = startingPosition.clone();
 		double totalDistance = startingPosition.distance(endingPosition);
 
 		int count = 0;
@@ -151,7 +151,7 @@ public abstract class Poison
 		return count;
 	}
 
-	protected abstract void doPoisonEntity(Vector3 emitPosition, EntityLivingBase entity, int amplifier);
+	protected abstract void doPoisonEntity(Vector3d emitPosition, EntityLivingBase entity, int amplifier);
 
 	public enum ArmorType
 	{

@@ -1,11 +1,8 @@
 package resonantengine.prefab.block.impl
 
-import net.minecraft.entity.EntityLivingBase
-import net.minecraft.util.MathHelper
-import net.minecraftforge.common.util.ForgeDirection
+import nova.core.util.transform.Vector3d
 import resonantengine.api.tile.IRotatable
 import resonantengine.lib.modcontent.block.ResonantBlock
-import resonantengine.lib.transform.vector.Vector3
 
 trait TRotatable extends ResonantBlock with IRotatable
 {
@@ -13,6 +10,8 @@ trait TRotatable extends ResonantBlock with IRotatable
   var isFlipPlacement = false
 
   override def getDirection: ForgeDirection = ForgeDirection.getOrientation(getBlockMetadata)
+
+	override def setDirection(direction: ForgeDirection) = world.setBlockMetadataWithNotify(x, y, z, direction.ordinal, 3)
 
   def determineRotation(entityLiving: EntityLivingBase): ForgeDirection =
   {
@@ -40,12 +39,10 @@ trait TRotatable extends ResonantBlock with IRotatable
     return ForgeDirection.getOrientation(returnSide)
   }
 
-  def canRotate(ord: Int): Boolean = (rotationMask & (1 << ord)) != 0
-
   /**
    * Rotatable Block
    */
-  def rotate(side: Int, hit: Vector3): Boolean =
+  def rotate(side: Int, hit: Vector3d): Boolean =
   {
     val result = getSideToRotate(side.asInstanceOf[Byte], hit.x, hit.y, hit.z)
 
@@ -57,8 +54,6 @@ trait TRotatable extends ResonantBlock with IRotatable
 
     return false
   }
-
-  override def setDirection(direction: ForgeDirection) = world.setBlockMetadataWithNotify(x, y, z, direction.ordinal, 3)
 
   /**
    * @author Based of Greg (GregTech)
@@ -257,4 +252,6 @@ trait TRotatable extends ResonantBlock with IRotatable
     }
     return -1
   }
+
+	def canRotate(ord: Int): Boolean = (rotationMask & (1 << ord)) != 0
 }

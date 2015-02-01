@@ -3,32 +3,12 @@ package resonantengine.lib.modcontent.block
 import _root_.java.lang.reflect.Method
 import java.util
 
-import com.google.common.collect.Maps
-import cpw.mods.fml.relauncher.{Side, SideOnly}
-import net.minecraft.block.Block
-import net.minecraft.block.material.Material
-import net.minecraft.client.Minecraft
-import net.minecraft.client.renderer.RenderBlocks
-import net.minecraft.client.renderer.texture.IIconRegister
-import net.minecraft.client.renderer.tileentity.{TileEntityRendererDispatcher, TileEntitySpecialRenderer}
-import net.minecraft.creativetab.CreativeTabs
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.entity.{Entity, EntityLivingBase}
-import net.minecraft.item.{Item, ItemBlock, ItemStack}
-import net.minecraft.tileentity.TileEntity
-import net.minecraft.util.{AxisAlignedBB, IIcon, MathHelper, MovingObjectPosition}
-import net.minecraft.world.{Explosion, IBlockAccess, World}
-import net.minecraftforge.client.IItemRenderer
-import net.minecraftforge.client.IItemRenderer.ItemRenderType
-import org.lwjgl.opengl.{GL11, GL12}
+import nova.core.util.transform.Cuboid
 import resonantengine.api.item.ISimpleItemRenderer
 import resonantengine.lib.content.prefab.TIO
 import resonantengine.lib.render.RenderUtility
 import resonantengine.lib.render.wrapper.RenderTileDummy
-import resonantengine.lib.transform.region.Cuboid
-import resonantengine.lib.transform.vector.{Vector2, Vector3, VectorWorld}
 import resonantengine.lib.utility.WrenchUtility
-import resonantengine.lib.wrapper.CollectionWrapper._
 import resonantengine.lib.wrapper.StringWrapper._
 import resonantengine.prefab.block.impl.TRotatable
 import resonantengine.prefab.block.itemblock.ItemBlockTooltip
@@ -247,16 +227,6 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with ISim
    */
   def quantityDropped(meta: Int, fortune: Int): Int = 1
 
-  /**
-   * Gets the meta value when this block is dropped.
-   * This method is used by the default implementation of getDrops
-   *
-   * @param meta - meta value of the block
-   * @param fortune - bonus of the tool mining it
-   * @return meta value, shouldn't be less then 0
-   */
-  def metadataDropped(meta: Int, fortune: Int): Int = 0
-
   /** Block object that goes to this tile */
   override def getBlockType: Block =
   {
@@ -270,16 +240,6 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with ISim
       return b
     }
     return block
-  }
-
-  def access: IBlockAccess =
-  {
-    if (world != null)
-    {
-      return world
-    }
-
-    return _access
   }
 
   /**
@@ -325,7 +285,15 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with ISim
    */
   def getPickBlock(target: MovingObjectPosition): ItemStack = new ItemStack(block, 1, metadataDropped(metadata, 0))
 
-  def metadata: Int = if (access != null) access.getBlockMetadata(x, y, z) else 0
+  /**
+   * Gets the meta value when this block is dropped.
+   * This method is used by the default implementation of getDrops
+   *
+   * @param meta - meta value of the block
+   * @param fortune - bonus of the tool mining it
+   * @return meta value, shouldn't be less then 0
+   */
+  def metadataDropped(meta: Int, fortune: Int): Int = 0
 
   /**
    * Gets the light value of the block
@@ -347,10 +315,10 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with ISim
    *
    * @param player - player who clicked the block
    * @param side - side of the block clicked as an int(0-5)
-   * @param hit - Vector3 location of the spot hit on the block
+   * @param hit - Vector3d location of the spot hit on the block
    * @return true if the click event was used
    */
-  def activate(player: EntityPlayer, side: Int, hit: Vector3): Boolean =
+  def activate(player: EntityPlayer, side: Int, hit: Vector3d): Boolean =
   {
     if (WrenchUtility.isUsableWrench(player, player.inventory.getCurrentItem, x, y, z))
     {
@@ -368,20 +336,20 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with ISim
    * Called when the player has clicked a block with something other than a wrench
    * @param player - player who clicked the block, don't assume EntityPlayerMP as it can be a fake player
    * @param side - side of the block clicked as an int(0-5)
-   * @param hit - Vector3 location of the spot hit on the block
+   * @param hit - Vector3d location of the spot hit on the block
    * @return true if the click event was used
    */
-  protected def use(player: EntityPlayer, side: Int, hit: Vector3): Boolean = false
+  protected def use(player: EntityPlayer, side: Int, hit: Vector3d): Boolean = false
 
   /**
    * Called when the player uses a supported wrench on the block
    *
    * @param player - player who clicked the block, don't assume EntityPlayerMP as it can be a fake player
    * @param side - side of the block clicked as an int(0-5)
-   * @param hit - Vector3 location of the spot hit on the block
+   * @param hit - Vector3d location of the spot hit on the block
    * @return true if the click event was used
    */
-  protected def configure(player: EntityPlayer, side: Int, hit: Vector3): Boolean =
+  protected def configure(player: EntityPlayer, side: Int, hit: Vector3d): Boolean =
   {
     val both = this.isInstanceOf[TIO] && this.isInstanceOf[TRotatable]
 
@@ -468,7 +436,7 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with ISim
    * Called when a neighbor tile changes
    * @param pos
    */
-  def onNeighborChanged(pos: Vector3)
+  def onNeighborChanged(pos: Vector3d)
   {
   }
 
@@ -503,6 +471,23 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with ISim
 
   def getCollisionBoxes: java.lang.Iterable[Cuboid] = immutable.List[Cuboid](bounds)
 
+  def getSelectBounds: Cuboid = bounds
+
+  @SideOnly(Side.CLIENT)
+  override def getRenderBoundingBox: AxisAlignedBB = (getCollisionBounds + position).toAABB
+
+  def position: VectorWorld = new VectorWorld(world, x, y, z)
+
+  def x = xCoord
+
+  def y = yCoord
+
+  def z = zCoord
+
+  def world: World = getWorldObj
+
+  def getCollisionBounds: Cuboid = bounds
+
   /** Bounds for the block */
   def bounds = _bounds
 
@@ -514,15 +499,6 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with ISim
     if (block != null)
       block.setBlockBounds(_bounds.min.xf, _bounds.min.yf, _bounds.min.zf, _bounds.max.xf, _bounds.max.yf, _bounds.max.zf)
   }
-
-  def getSelectBounds: Cuboid = bounds
-
-  @SideOnly(Side.CLIENT)
-  override def getRenderBoundingBox: AxisAlignedBB = (getCollisionBounds + position).toAABB
-
-  def position: VectorWorld = new VectorWorld(world, x, y, z)
-
-  def getCollisionBounds: Cuboid = bounds
 
   /**
    * Called in the world.
@@ -612,7 +588,7 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with ISim
    * @return true if vertices were added to the tessellator
    */
   @SideOnly(Side.CLIENT)
-  def renderStatic(renderer: RenderBlocks, pos: Vector3, pass: Int): Boolean =
+  def renderStatic(renderer: RenderBlocks, pos: Vector3d, pass: Int): Boolean =
   {
     if (renderStaticBlock)
       return renderer.renderStandardBlock(block, pos.xi, pos.yi, pos.zi)
@@ -622,19 +598,6 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with ISim
 
   @SideOnly(Side.CLIENT)
   def hasSpecialRenderer = getSpecialRenderer != null
-
-  @SideOnly(Side.CLIENT)
-  def getSpecialRenderer: TileEntitySpecialRenderer =
-  {
-    val tesr: TileEntitySpecialRenderer = TileEntityRendererDispatcher.instance.getSpecialRendererByClass(getClass)
-
-    if (tesr != null && !tesr.isInstanceOf[RenderTileDummy])
-    {
-      return tesr
-    }
-
-    return null
-  }
 
   @SideOnly(Side.CLIENT)
   override def renderInventoryItem(`type`: ItemRenderType, itemStack: ItemStack, data: AnyRef*)
@@ -660,7 +623,7 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with ISim
     {
       try
       {
-        renderDynamic(new Vector3(-0.5, -0.5, -0.5), 0, 0)
+        renderDynamic(new Vector3d(-0.5, -0.5, -0.5), 0, 0)
       }
       catch
         {
@@ -682,7 +645,7 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with ISim
    * @param pass The render pass, 1 or 0
    */
   @SideOnly(Side.CLIENT)
-  def renderDynamic(pos: Vector3, frame: Float, pass: Int)
+  def renderDynamic(pos: Vector3d, frame: Float, pass: Int)
   {
     if (forceItemToRenderAsBlock)
     {
@@ -701,6 +664,31 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with ISim
       GL11.glPopMatrix()
       GL11.glPopAttrib()
     }
+  }
+
+  def metadata: Int = if (access != null) access.getBlockMetadata(x, y, z) else 0
+
+  def access: IBlockAccess =
+  {
+    if (world != null)
+    {
+      return world
+    }
+
+    return _access
+  }
+
+  @SideOnly(Side.CLIENT)
+  def getSpecialRenderer: TileEntitySpecialRenderer =
+  {
+    val tesr: TileEntitySpecialRenderer = TileEntityRendererDispatcher.instance.getSpecialRendererByClass(getClass)
+
+    if (tesr != null && !tesr.isInstanceOf[RenderTileDummy])
+    {
+      return tesr
+    }
+
+    return null
   }
 
   /**
@@ -777,7 +765,7 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with ISim
    * @param explosionPosition - The position in which the explosion is ocurring at
    * @return A value representing the explosive resistance
    */
-  def getExplosionResistance(entity: Entity, explosionPosition: Vector3): Float = getExplosionResistance(entity)
+  def getExplosionResistance(entity: Entity, explosionPosition: Vector3d): Float = getExplosionResistance(entity)
 
   /**
    * Gets the explosive resistance of this block.
@@ -895,14 +883,6 @@ abstract class ResonantBlock(newMaterial: Material) extends TileEntity with ISim
   {
     world.func_147479_m(x, y, z)
   }
-
-  def x = xCoord
-
-  def y = yCoord
-
-  def z = zCoord
-
-  def world: World = getWorldObj
 
   protected def markUpdate()
   {

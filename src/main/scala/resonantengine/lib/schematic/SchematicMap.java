@@ -8,10 +8,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.ForgeDirection;
-import resonantengine.lib.collection.Pair;
-import resonantengine.lib.transform.vector.Vector3;
-import resonantengine.lib.transform.vector.VectorWorld;
+import nova.core.util.transform.Vector3d;
 import resonantengine.api.misc.ISave;
+import resonantengine.lib.collection.Pair;
+import resonantengine.lib.transform.vector.VectorWorld;
 import resonantengine.lib.utility.nbt.NBTUtility;
 
 import java.io.File;
@@ -34,9 +34,9 @@ public class SchematicMap extends Schematic implements ISave
 
 	private static final LinkedHashMap<String, Block> BLOCK_SAVE_MAP = new LinkedHashMap<String, Block>();
 	private static final LinkedHashMap<Block, String> BLOCK_SAVE_MAP_REV = new LinkedHashMap<Block, String>();
-	public Vector3 schematicSize;
-	public Vector3 schematicCenter;
-	public LinkedHashMap<Vector3, Pair<Block, Integer>> block_map = new LinkedHashMap<Vector3, Pair<Block, Integer>>();
+	public Vector3d schematicSize;
+	public Vector3d schematicCenter;
+	public LinkedHashMap<Vector3d, Pair<Block, Integer>> block_map = new LinkedHashMap<Vector3d, Pair<Block, Integer>>();
 	public boolean init = false;
 	protected String name;
 
@@ -54,7 +54,7 @@ public class SchematicMap extends Schematic implements ISave
 		if (this.schematicSize != null)
 		{
 			this.init = true;
-			this.schematicCenter = new Vector3();
+			this.schematicCenter = new Vector3d();
 			this.schematicCenter.x(this.schematicSize.x() / 2);
 			// this.schematicCenter.y = this.schematicSize.y() / 2;
 			this.schematicCenter.z(this.schematicSize.z() / 2);
@@ -65,9 +65,9 @@ public class SchematicMap extends Schematic implements ISave
 	{
 		if (this.block_map != null)
 		{
-			HashMap<Vector3, ItemStack> blocksToPlace = new HashMap<Vector3, ItemStack>();
+			HashMap<Vector3d, ItemStack> blocksToPlace = new HashMap<Vector3d, ItemStack>();
 			this.getBlocksToPlace(spot, blocksToPlace, doWorldCheck, doWorldCheck);
-			for (Entry<Vector3, ItemStack> entry : blocksToPlace.entrySet())
+			for (Entry<Vector3d, ItemStack> entry : blocksToPlace.entrySet())
 			{
 				entry.getKey().setBlock(spot.world(), Block.getBlockFromItem(entry.getValue().getItem()), entry.getValue().getItemDamage());
 			}
@@ -85,11 +85,11 @@ public class SchematicMap extends Schematic implements ISave
 	 *                             true will not load the area and is designed to prevent wasting blocks when generating
 	 *                             buildings using actual blocks
 	 */
-	public void getBlocksToPlace(VectorWorld spot, HashMap<Vector3, ItemStack> blockMap, boolean checkWorld, boolean checkIfWorldIsLoaded)
+	public void getBlocksToPlace(VectorWorld spot, HashMap<Vector3d, ItemStack> blockMap, boolean checkWorld, boolean checkIfWorldIsLoaded)
 	{
 		if (this.block_map != null)
 		{
-			for (Entry<Vector3, Pair<Block, Integer>> entry : this.block_map.entrySet())
+			for (Entry<Vector3d, Pair<Block, Integer>> entry : this.block_map.entrySet())
 			{
 				Block block = entry.getValue().left();
 				int meta = entry.getValue().right();
@@ -104,7 +104,7 @@ public class SchematicMap extends Schematic implements ISave
 					{
 						meta = 0;
 					}
-					Vector3 setPos = spot.clone().subtract(this.schematicCenter).add(entry.getKey());
+					Vector3d setPos = spot.clone().subtract(this.schematicCenter).add(entry.getKey());
 					if (checkWorld)
 					{
 						if (checkIfWorldIsLoaded)
@@ -151,7 +151,7 @@ public class SchematicMap extends Schematic implements ISave
 		}
 		int i = 0;
 
-		for (Entry<Vector3, Pair<Block, Integer>> entry : block_map.entrySet())
+		for (Entry<Vector3d, Pair<Block, Integer>> entry : block_map.entrySet())
 		{
 			String output = "";
 			Block block = entry.getValue().left();
@@ -176,8 +176,8 @@ public class SchematicMap extends Schematic implements ISave
 	@Override
 	public void load(NBTTagCompound nbt)
 	{
-		schematicSize = new Vector3(nbt.getInteger("sizeX"), nbt.getInteger("sizeY"), nbt.getInteger("sizeZ"));
-		schematicCenter = new Vector3(nbt.getInteger("centerX"), nbt.getInteger("centerY"), nbt.getInteger("centerZ"));
+		schematicSize = new Vector3d(nbt.getInteger("sizeX"), nbt.getInteger("sizeY"), nbt.getInteger("sizeZ"));
+		schematicCenter = new Vector3d(nbt.getInteger("centerX"), nbt.getInteger("centerY"), nbt.getInteger("centerZ"));
 		NBTTagCompound blockDataSave = nbt.getCompoundTag(BLOCK_LIST_SAVE_NAME);
 
 		for (int blockCount = 0; blockCount < blockDataSave.getInteger("count"); blockCount++)
@@ -187,7 +187,7 @@ public class SchematicMap extends Schematic implements ISave
 			//int blockID = 0;
 			Block block = null;
 			int blockMeta = 0;
-			Vector3 blockPostion = new Vector3();
+			Vector3d blockPostion = new Vector3d();
 			if (blockData != null)
 			{
 				try
@@ -264,10 +264,10 @@ public class SchematicMap extends Schematic implements ISave
 		}
 	}
 
-	public SchematicMap loadWorldSelection(World world, Vector3 pos, Vector3 pos2)
+	public SchematicMap loadWorldSelection(World world, Vector3d pos, Vector3d pos2)
 	{
 		int deltaX, deltaY, deltaZ;
-		Vector3 start = new Vector3(pos.x() > pos2.x() ? pos2.x() : pos.x(), pos.y() > pos2.y() ? pos2.y() : pos.y(), pos.z() > pos2.z() ? pos2.z() : pos.z());
+		Vector3d start = new Vector3d(pos.x() > pos2.x() ? pos2.x() : pos.x(), pos.y() > pos2.y() ? pos2.y() : pos.y(), pos.z() > pos2.z() ? pos2.z() : pos.z());
 
 		SchematicMap sch = new SchematicMap();
 		if (pos.x() < pos2.x())
@@ -294,7 +294,7 @@ public class SchematicMap extends Schematic implements ISave
 		{
 			deltaZ = (int) (pos.z() - pos2.z() + 1);
 		}
-		sch.schematicSize = new Vector3(deltaX, deltaY, deltaZ);
+		sch.schematicSize = new Vector3d(deltaX, deltaY, deltaZ);
 		for (int x = 0; x < deltaX; ++x)
 		{
 			for (int y = 0; y < deltaY; ++y)
@@ -303,7 +303,7 @@ public class SchematicMap extends Schematic implements ISave
 				{
 					Block block = world.getBlock((int) start.x() + x, (int) start.y() + y, (int) start.z() + z);
 					int blockMeta = world.getBlockMetadata((int) start.x() + x, (int) start.y() + y, (int) start.z() + z);
-					sch.block_map.put(new Vector3(x, y, z), new Pair<Block, Integer>(block, blockMeta));
+					sch.block_map.put(new Vector3d(x, y, z), new Pair<Block, Integer>(block, blockMeta));
 				}
 			}
 		}
@@ -317,7 +317,7 @@ public class SchematicMap extends Schematic implements ISave
 	}
 
 	@Override
-	public HashMap<Vector3, Pair<Block, Integer>> getStructure(ForgeDirection dir, int size)
+	public HashMap<Vector3d, Pair<Block, Integer>> getStructure(ForgeDirection dir, int size)
 	{
 		return this.block_map;
 	}

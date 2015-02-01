@@ -2,7 +2,7 @@ package resonantengine.lib.potion;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
-import resonantengine.lib.transform.vector.Vector3;
+import nova.core.util.transform.Vector3d;
 
 public class PoisonRadiation extends Poison
 {
@@ -16,13 +16,14 @@ public class PoisonRadiation extends Poison
 	}
 
 	@Override
-	public boolean isEntityProtected(Vector3 emitPosition, EntityLivingBase entity, int amplifier)
+	public boolean isEntityProtected(Vector3d emitPosition, EntityLivingBase entity, int amplifier)
 	{
-		return (emitPosition != null ? this.getAntiPoisonBlockCount(entity.worldObj, emitPosition, new Vector3(entity)) <= amplifier : false) && super.isEntityProtected(emitPosition, entity, amplifier);
+		return (emitPosition != null ? this.getAntiPoisonBlockCount(entity.worldObj, emitPosition, new Vector3d(entity)) <= amplifier :
+			false) && super.isEntityProtected(emitPosition, entity, amplifier);
 	}
 
 	@Override
-	protected void doPoisonEntity(Vector3 emitPosition, EntityLivingBase entity, int amplifier)
+	protected void doPoisonEntity(Vector3d emitPosition, EntityLivingBase entity, int amplifier)
 	{
 		if (!PoisonRadiation.disabled)
 		{
