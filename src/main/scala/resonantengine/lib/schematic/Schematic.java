@@ -1,10 +1,9 @@
 package resonantengine.lib.schematic;
 
 import net.minecraft.block.Block;
-import net.minecraftforge.common.util.ForgeDirection;
 import nova.core.util.collection.Pair;
-import nova.core.util.transform.Vector3d;
 
+import javax.vecmath.Vector3d;
 import java.util.HashMap;
 
 /**
@@ -12,39 +11,36 @@ import java.util.HashMap;
  *
  * @author Calclavia, Darkguardsman
  */
-public abstract class Schematic
-{
+public abstract class Schematic {
 	/**
-	 * Registry and unlocalized name "schematic.name-OF-SCHEMATIC.name"
+	 * Registry and unlocalized name "schematic name"
 	 */
 	private String schematicName;
 
-    public Schematic()
-    {
+	public Schematic() {
 
-    }
+	}
 
-    public Schematic(String name)
-    {
-        this.schematicName = name;
-    }
+	public Schematic(String name) {
+		this.schematicName = name;
+	}
+
 	/**
 	 * The name of the schematic that is unlocalized.
 	 *
 	 * @return "schematic.name-OF-SCHEMATIC.name"
 	 */
-	public String getName()
-    {
-        return schematicName;
-    }
+	public String getName() {
+		return schematicName;
+	}
 
-
-    /** Generates generic placement data to be iterated threw to create the actual object in the world.
-     *
-     * @param dir - facing direction, optional
-     * @param size - requested size, optional
-     * @return map of locations to placement data
-     */
+	/**
+	 * Generates generic placement data to be iterated threw to create the actual object in the world.
+	 *
+	 * @param dir - facing direction, optional
+	 * @param size - requested size, optional
+	 * @return map of locations to placement data
+	 */
 	public abstract HashMap<Vector3d, Pair<Block, Integer>> getStructure(ForgeDirection dir, int size);
 
 	///////////////////////////////////////////////////////////////////
@@ -55,18 +51,16 @@ public abstract class Schematic
 	/**
 	 * Creates a map of vectors in the shape of a line
 	 *
-	 * @param start  - starting point of the line
-	 * @param dir    - direction to create it in
-	 * @param block  - block to make the line out of
-	 * @param meta   - - meta value of the block for placement
+	 * @param start - starting point of the line
+	 * @param dir - direction to create it in
+	 * @param block - block to make the line out of
+	 * @param meta - - meta value of the block for placement
 	 * @param length - length of the line
 	 * @return HashMap of vectors to placement data
 	 */
-	public HashMap<Vector3d, Pair<Block, Integer>> getLine(final Vector3d start, ForgeDirection dir, Block block, int meta, int length)
-	{
+	public HashMap<Vector3d, Pair<Block, Integer>> getLine(final Vector3d start, ForgeDirection dir, Block block, int meta, int length) {
 		HashMap<Vector3d, Pair<Block, Integer>> returnMap = new HashMap();
-		for (int i = 0; i < length; i++)
-		{
+		for (int i = 0; i < length; i++) {
 			returnMap.put(new Vector3d(dir).multiply(i).add(start), new Pair<Block, Integer>(block, meta));
 		}
 		return returnMap;
@@ -76,13 +70,12 @@ public abstract class Schematic
 	 * Creates a map of vectors in the shape of a square
 	 *
 	 * @param center - center to create the box around, controls offset for later if needed
-	 * @param block  - block to make the box out of
-	 * @param meta   - meta value of the block for placement
-	 * @param size   - size from the center to the edge, half of the side
+	 * @param block - block to make the box out of
+	 * @param meta - meta value of the block for placement
+	 * @param size - size from the center to the edge, half of the side
 	 * @return hash map of vectors to placement data
 	 */
-	public HashMap<Vector3d, Pair<Block, Integer>> getBox(final Vector3d center, Block block, int meta, int size)
-	{
+	public HashMap<Vector3d, Pair<Block, Integer>> getBox(final Vector3d center, Block block, int meta, int size) {
 		return getBox(center, block, meta, size, size);
 	}
 
@@ -90,38 +83,31 @@ public abstract class Schematic
 	 * Creates a map of vectors in the shape of a square
 	 *
 	 * @param center - center to create the box around, controls offset for later if needed
-	 * @param block  - block to make the box out of
-	 * @param meta   - meta value of the block for placement
-	 * @param sizeX  - size from the center to the edge, half of the side
-	 * @param sizeZ  - size from the center to the edge, half of the side
+	 * @param block - block to make the box out of
+	 * @param meta - meta value of the block for placement
+	 * @param sizeX - size from the center to the edge, half of the side
+	 * @param sizeZ - size from the center to the edge, half of the side
 	 * @return hash map of vectors to placement data
 	 */
-	public HashMap<Vector3d, Pair<Block, Integer>> getBox(final Vector3d center, Block block, int meta, int sizeX, int sizeZ)
-	{
+	public HashMap<Vector3d, Pair<Block, Integer>> getBox(final Vector3d center, Block block, int meta, int sizeX, int sizeZ) {
 		HashMap<Vector3d, Pair<Block, Integer>> returnMap = new HashMap();
 		//zero zero corner of the square
 		Vector3d start = new Vector3d(-sizeX, 0, -sizeZ).add(center);
 
-		if (sizeX != sizeZ)
-		{
+		if (sizeX != sizeZ) {
 			// X sides
-			for (int x = 0; x <= sizeX * 2; x++)
-			{
+			for (int x = 0; x <= sizeX * 2; x++) {
 				returnMap.put(new Vector3d(x, 0, 0).add(start), new Pair<Block, Integer>(block, meta));
 				returnMap.put(new Vector3d(x, 0, sizeZ * 2).add(start), new Pair<Block, Integer>(block, meta));
 			}
 			// Z sides
-			for (int z = 0; z <= sizeZ * 2; z++)
-			{
+			for (int z = 0; z <= sizeZ * 2; z++) {
 				returnMap.put(new Vector3d(0, 0, z).add(start), new Pair<Block, Integer>(block, meta));
 				returnMap.put(new Vector3d(sizeX * 2, 0, z).add(start), new Pair<Block, Integer>(block, meta));
 			}
-		}
-		else
-		{
+		} else {
 			// All sides, used verses the other way as it cuts the time in half
-			for (int s = 0; s <= sizeX * 2; s++)
-			{
+			for (int s = 0; s <= sizeX * 2; s++) {
 				returnMap.put(new Vector3d(s, 0, 0).add(start), new Pair<Block, Integer>(block, meta));
 				returnMap.put(new Vector3d(s, 0, sizeZ * 2).add(start), new Pair<Block, Integer>(block, meta));
 				returnMap.put(new Vector3d(0, 0, s).add(start), new Pair<Block, Integer>(block, meta));

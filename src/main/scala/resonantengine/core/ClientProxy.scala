@@ -3,7 +3,7 @@ package resonantengine.core
 import javax.swing._
 
 import cpw.mods.fml.client.FMLClientHandler
-import cpw.mods.fml.client.registry.{ClientRegistry, RenderingRegistry}
+import cpw.mods.fml.client.registry.ClientRegistry
 import cpw.mods.fml.common.Loader
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
@@ -11,12 +11,9 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.world.World
-import net.minecraftforge.client.model.AdvancedModelLoader
 import net.minecraftforge.common.MinecraftForge
 import resonantengine.core.content.debug.{GuiCreativeBuilder, TileCreativeBuilder}
 import resonantengine.core.debug.F3Handler
-import resonantengine.lib.render.model.FixedTechneModelLoader
-import resonantengine.lib.render.wrapper.{BlockRenderHandler, RenderTileDummy}
 
 /**
  * The Resonant Engine client proxy
@@ -25,8 +22,6 @@ class ClientProxy extends CommonProxy
 {
   override def preInit()
   {
-    AdvancedModelLoader.registerModelHandler(new FixedTechneModelLoader)
-    RenderingRegistry.registerBlockHandler(BlockRenderHandler)
     MinecraftForge.EVENT_BUS.register(F3Handler)
   }
 
