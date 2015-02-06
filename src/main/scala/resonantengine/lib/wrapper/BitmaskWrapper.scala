@@ -1,6 +1,6 @@
 package resonantengine.lib.wrapper
 
-import net.minecraftforge.common.util.ForgeDirection
+import nova.core.util.Direction
 
 /**
  * Wraps bytes/short/integers to be used for masks
@@ -12,9 +12,9 @@ object BitmaskWrapper
   /**
    * Java forwarding
    */
-  def mask(sideMap: Int, direction: ForgeDirection): Boolean = sideMap.mask(direction)
+  def mask(sideMap: Int, direction: Direction): Boolean = sideMap.mask(direction)
 
-  def mask(sideMap: Int, direction: ForgeDirection, doEnable: Boolean): Int = sideMap.mask(direction, doEnable)
+	def mask(sideMap: Int, direction: Direction, doEnable: Boolean): Int = sideMap.mask(direction, doEnable)
 
   implicit class BitmaskInt(val underlying: Int) extends AnyVal
   {
@@ -25,7 +25,7 @@ object BitmaskWrapper
     /**
      * Forge Direction Alternatives
      */
-    def mask(dir: ForgeDirection): Boolean = mask(dir.ordinal())
+	def mask(dir: Direction): Boolean = mask(dir.ordinal())
 
     /**
      * Checks if the bitmask is open
@@ -40,11 +40,9 @@ object BitmaskWrapper
      * @param value - The value
      * @return The new value of the mask
      */
-    def mask(dir: ForgeDirection, value: Boolean): Int = mask(dir.ordinal(), value)
+	def mask(dir: Direction, value: Boolean): Int = mask(dir.ordinal(), value)
 
-    def openMask(dir: ForgeDirection) = mask(dir.ordinal(), true)
-
-    def closeMask(dir: ForgeDirection) = mask(dir.ordinal(), false)
+	  def openMask(dir: Direction) = mask(dir.ordinal(), true)
 
     /**
      * Sets the bitmask index to be either open or closed
@@ -59,6 +57,8 @@ object BitmaskWrapper
       else
         return underlying & ~(1 << i)
     }
+
+	  def closeMask(dir: Direction) = mask(dir.ordinal(), false)
 
     def invert(): Int = invert(6)
 

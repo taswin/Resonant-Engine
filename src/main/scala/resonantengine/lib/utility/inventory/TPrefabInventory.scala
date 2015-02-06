@@ -56,7 +56,7 @@ trait TPrefabInventory extends TileEntity with IInventoryProvider
 
     if (!getWorldObj().isRemote)
     {
-      for (direction <- ForgeDirection.VALID_DIRECTIONS)
+		for (direction <- Direction.VALID_DIRECTIONS)
       {
         if (returnStack != null)
         {
@@ -77,7 +77,7 @@ trait TPrefabInventory extends TileEntity with IInventoryProvider
    *
    * @return The ItemStack remained after place attempt
    */
-  def tryPlaceInPosition(itemStack: ItemStack, position: Vector3d, dir: ForgeDirection): ItemStack =
+  def tryPlaceInPosition(itemStack: ItemStack, position: Vector3d, dir: Direction): ItemStack =
   {
     val tileEntity = position.getTileEntity(getWorldObj())
 

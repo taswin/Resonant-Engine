@@ -1,6 +1,6 @@
 package resonantengine.api.graph.node;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import nova.core.util.Direction;
 
 /**
  * Applied to any object that wants to restrict the rate by which the input flows into the machine.
@@ -17,5 +17,5 @@ public interface IFlow
      * @return neg numbers are ignored as flow rate is bi-directional.
      * Zero will result in no flow rate on this side, and any pos will result in a restricted flow rate.
      */
-    public double getFlow(NodeType type, ForgeDirection side);
+	public double getFlow(NodeType type, Direction side);
 }

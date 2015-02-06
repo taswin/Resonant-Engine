@@ -1,6 +1,6 @@
 package resonantengine.api.tile;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import nova.core.util.Direction;
 
 /**
  * Applied to any object that has a facing direction.
@@ -10,14 +10,14 @@ import net.minecraftforge.common.util.ForgeDirection;
 public interface IRotatable
 {
 	/**
-	 * Sets the facing direction, is not supported by all machines
-	 */
-	public void setDirection(ForgeDirection direction);
-
-	/**
 	 * Gets the facing direction of the TileEntity
 	 *
 	 * @return Front of the tile
 	 */
-	public ForgeDirection getDirection();
+	public Direction getDirection();
+
+	/**
+	 * Sets the facing direction, is not supported by all machines
+	 */
+	public void setDirection(Direction direction);
 }

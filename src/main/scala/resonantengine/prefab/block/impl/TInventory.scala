@@ -5,7 +5,6 @@ import resonantengine.api.graph.node.IExternalInventory
 import resonantengine.api.tile.IInventoryProvider
 import resonantengine.lib.modcontent.block.ResonantBlock
 import resonantengine.lib.utility.inventory.{ExternalInventory, InventoryUtility}
-import resonantengine.lib.wrapper.ItemWrapper._
 
 /**
  * A trait applied to inventory objects.
@@ -47,8 +46,6 @@ trait TInventory extends ResonantBlock with IInventoryProvider with ISidedInvent
 
   override def getInventoryStackLimit = getInventory.getInventoryStackLimit
 
-  override def getInventory: IExternalInventory = inventory
-
   override def isUseableByPlayer(entityplayer: EntityPlayer) = getInventory.isUseableByPlayer(entityplayer)
 
   override def openInventory() = getInventory.openInventory()
@@ -63,9 +60,9 @@ trait TInventory extends ResonantBlock with IInventoryProvider with ISidedInvent
 
   def canExtractItem(i: Int, itemStack: ItemStack, j: Int): Boolean = this.getInventory.canExtractItem(i, itemStack, j)
 
-  def canStore(stack: ItemStack, slot: Int, side: ForgeDirection): Boolean = false
+	def canStore(stack: ItemStack, slot: Int, side: Direction): Boolean = false
 
-  def canRemove(stack: ItemStack, slot: Int, side: ForgeDirection): Boolean = true
+	def canRemove(stack: ItemStack, slot: Int, side: Direction): Boolean = true
 
   /**
    * Player-Inventory interaction methods.
@@ -135,12 +132,6 @@ trait TInventory extends ResonantBlock with IInventoryProvider with ISidedInvent
     return false
   }
 
-  /** Called each time the inventory changes */
-  def onInventoryChanged()
-  {
-
-  }
-
   def extractItem(inventory: IInventory, slotID: Int, player: EntityPlayer): Boolean =
   {
     var stackInInventory: ItemStack = inventory.getStackInSlot(slotID)
@@ -164,6 +155,11 @@ trait TInventory extends ResonantBlock with IInventoryProvider with ISidedInvent
     }
     return false
   }
+
+	/** Called each time the inventory changes */
+	def onInventoryChanged() {
+
+	}
 
   override def onRemove(block: Block, metadata: Int)
   {
@@ -200,4 +196,6 @@ trait TInventory extends ResonantBlock with IInventoryProvider with ISidedInvent
     super.writeToNBT(nbt)
     getInventory.save(nbt)
   }
+
+	override def getInventory: IExternalInventory = inventory
 }

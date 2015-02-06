@@ -1,7 +1,7 @@
 package resonantengine.api.mffs.machine;
 
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.util.ForgeDirection;
+import nova.core.util.Direction;
 import nova.core.util.transform.Vector3d;
 import resonantengine.api.mffs.modules.IModule;
 import resonantengine.api.mffs.modules.IModuleProvider;
@@ -21,7 +21,7 @@ public interface IFieldMatrix extends IModuleProvider, IActivatable, IPermission
 	/**
 	 * Gets the slot IDs based on the direction given.
 	 */
-	public int[] getDirectionSlots(ForgeDirection direction);
+	public int[] getDirectionSlots(Direction direction);
 
 	/**
 	 * Gets the unspecified, direction-unspecific module slots on the left side of the GUI.
@@ -33,7 +33,7 @@ public interface IFieldMatrix extends IModuleProvider, IActivatable, IPermission
 	 * @param direction - The direction facing.
 	 * @return Gets the amount of modules based on the side.
 	 */
-	public int getSidedModuleCount(IModule module, ForgeDirection... direction);
+	public int getSidedModuleCount(IModule module, Direction... direction);
 
 	/**
 	 * Transformation information functions. Returns CACHED information unless the cache is cleared.
@@ -64,6 +64,6 @@ public interface IFieldMatrix extends IModuleProvider, IActivatable, IPermission
 	/**
 	 * @return Gets the facing direction. Always returns the front side of the block.
 	 */
-	public ForgeDirection getDirection();
+	public Direction getDirection();
 
 }

@@ -16,7 +16,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
-import net.minecraftforge.common.util.ForgeDirection;
+import nova.core.util.Direction;
 import nova.core.util.transform.Vector3d;
 import org.lwjgl.opengl.GL11;
 import resonantengine.lib.transform.rotation.Quaternion;
@@ -28,17 +28,17 @@ import java.util.EnumSet;
 @SideOnly(Side.CLIENT)
 public class RenderItemOverlayUtility
 {
-	public static final ForgeDirection[] forge_sides = { ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.WEST, ForgeDirection.EAST };
+	public static final Direction[] forge_sides = { Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST };
 
 	public static RenderBlocks renderBlocks = new RenderBlocks();
 	public static RenderItem renderItem = ((RenderItem) RenderManager.instance.getEntityClassRenderObject(EntityItem.class));
 
-	public static void renderTopOverlay(TileEntity tileEntity, ItemStack[] inventory, ForgeDirection dir, double x, double y, double z)
+	public static void renderTopOverlay(TileEntity tileEntity, ItemStack[] inventory, Direction dir, double x, double y, double z)
 	{
 		renderTopOverlay(tileEntity, inventory, dir, 3, 3, x, y, z, 0.7f);
 	}
 
-	public static void renderTopOverlay(TileEntity tileEntity, ItemStack[] inventory, ForgeDirection dir, int matrixX, int matrixZ, double x, double y, double z, float scale)
+	public static void renderTopOverlay(TileEntity tileEntity, ItemStack[] inventory, Direction dir, int matrixX, int matrixZ, double x, double y, double z, float scale)
 	{
 		GL11.glPushMatrix();
 
@@ -76,7 +76,7 @@ public class RenderItemOverlayUtility
 				{
 					GL11.glPushMatrix();
 					GL11.glTranslated(x, y, z);
-					int angle = dir != null ? WorldUtility.getAngleFromForgeDirection(WorldUtility.invertX(dir)) : 0;
+					int angle = dir != null ? WorldUtility.getAngleFromDirection(WorldUtility.invertX(dir)) : 0;
 					RenderUtility.renderFloatingText("" + inventory[i].stackSize, translation.transform(new Quaternion(angle, Vector3d.up())).add(0.5).add(new Vector3d(0, 0.5, 0)));
 					GL11.glPopMatrix();
 				}
@@ -93,11 +93,11 @@ public class RenderItemOverlayUtility
 
 	public static void renderItemOnSides(TileEntity tile, ItemStack itemStack, double x, double y, double z, String renderText)
 	{
-		renderItemOnSides(tile, itemStack, x, y, z, renderText, EnumSet.of(ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.EAST, ForgeDirection.WEST));
+		renderItemOnSides(tile, itemStack, x, y, z, renderText, EnumSet.of(Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST));
 	}
 
 	//TODO replace tile param with world to reduce errors and increases uses of this method
-	public static void renderItemOnSides(TileEntity tile, ItemStack itemStack, double x, double y, double z, String renderText, EnumSet<ForgeDirection> sides)
+	public static void renderItemOnSides(TileEntity tile, ItemStack itemStack, double x, double y, double z, String renderText, EnumSet<Direction> sides)
 	{
 		if (tile != null && tile.getWorldObj() != null)
 		{
@@ -110,9 +110,9 @@ public class RenderItemOverlayUtility
 				amount = Integer.toString(itemStack.stackSize);
 			}
 
-			for (ForgeDirection direction : sides)
+			for (Direction direction : sides)
 			{
-				if (direction != ForgeDirection.UNKNOWN)
+				if (direction != Direction.UNKNOWN)
 				{
 					if (tile.getBlockType().isSideSolid(tile.getWorldObj(), tile.xCoord + direction.offsetX, tile.yCoord, tile.zCoord + direction.offsetZ, direction.getOpposite()))
 					{
@@ -134,7 +134,7 @@ public class RenderItemOverlayUtility
 		}
 	}
 
-	protected static void renderItemSingleSide(TileEntity tile, double x, double y, double z, ItemStack itemStack, ForgeDirection direction, String renderText)
+	protected static void renderItemSingleSide(TileEntity tile, double x, double y, double z, ItemStack itemStack, Direction direction, String renderText)
 	{
 		if (!tile.getBlockType().isSideSolid(tile.getWorldObj(), tile.xCoord + direction.offsetX, tile.yCoord, tile.zCoord + direction.offsetZ, direction.getOpposite()))
 		{
@@ -160,7 +160,7 @@ public class RenderItemOverlayUtility
 	}
 
 	@SuppressWarnings("incomplete-switch")
-	protected static void renderItemOnSide(TileEntity tile, ItemStack itemStack, ForgeDirection direction, double x, double y, double z, String renderText, String amount)
+	protected static void renderItemOnSide(TileEntity tile, ItemStack itemStack, Direction direction, double x, double y, double z, String renderText, String amount)
 	{
 		if (itemStack != null)
 		{

@@ -1,10 +1,9 @@
 package resonantengine.lib.grid.thermal
 
 import net.minecraftforge.common.MinecraftForge
-import net.minecraftforge.common.util.ForgeDirection
+import nova.core.util.Direction
 import resonantengine.api.graph.IUpdate
 import resonantengine.lib.grid.thermal.ThermalEvent.EventThermalUpdate
-import resonantengine.lib.transform.vector.VectorWorld
 
 /**
  * A grid managing the flow of thermal energy.
@@ -82,7 +81,7 @@ object GridThermal extends IUpdate
              */
             val temperature = getTemperature(pos)
 
-            ForgeDirection.VALID_DIRECTIONS
+			  Direction.VALID_DIRECTIONS
               .map(pos + _)
               .foreach(
                 adj =>

@@ -117,9 +117,9 @@ object ResonantEngine
           val fluid: FluidStack = evt.getRemainForSpread(height)
           if (fluid.amount > 0)
           {
-            if (handler.canFill(ForgeDirection.DOWN, fluid.getFluid))
+			  if (handler.canFill(Direction.DOWN, fluid.getFluid))
             {
-              fluid.amount -= handler.fill(ForgeDirection.DOWN, fluid, true)
+				fluid.amount -= handler.fill(Direction.DOWN, fluid, true)
             }
           }
         }

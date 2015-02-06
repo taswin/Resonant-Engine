@@ -2,7 +2,7 @@ package resonantengine.lib.mod.compat.energy;
 
 import cpw.mods.fml.common.Loader;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.util.ForgeDirection;
+import nova.core.util.Direction;
 
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -31,7 +31,7 @@ public class Compatibility
 		loadedModules.add(module);
 	}
 
-	public static CompatibilityModule getHandler(Object handler, ForgeDirection dir)
+	public static CompatibilityModule getHandler(Object handler, Direction dir)
 	{
 		if (isHandler(handler, dir))
 		{
@@ -46,7 +46,7 @@ public class Compatibility
 	 *
 	 * @return True if the handler can store energy. This can be for items and blocks.
 	 */
-	public static boolean isHandler(Object handler, ForgeDirection dir)
+	public static boolean isHandler(Object handler, Direction dir)
 	{
 		if (handler != null)
 		{
@@ -109,8 +109,7 @@ public class Compatibility
 		return false;
 	}
 
-    public static boolean canConnect(Object obj, ForgeDirection direction, Object source)
-    {
+	public static boolean canConnect(Object obj, Direction direction, Object source) {
         CompatibilityModule module = getHandler(obj, direction);
         return module != null && module.canConnect(obj, direction, source);
     }
@@ -123,8 +122,7 @@ public class Compatibility
      * @param doReceive - true will actually give the energy, false will test
      * @return amount of energy received
      */
-    public static double fill(Object handler, ForgeDirection direction, double energy, boolean doReceive)
-    {
+	public static double fill(Object handler, Direction direction, double energy, boolean doReceive) {
         return receiveEnergy(handler, direction, energy, doReceive);
     }
 
@@ -136,8 +134,7 @@ public class Compatibility
      * @param doReceive - true will actually give the energy, false will test
      * @return amount of energy received
      */
-    public static double receiveEnergy(Object handler, ForgeDirection direction, double energy, boolean doReceive)
-    {
+	public static double receiveEnergy(Object handler, Direction direction, double energy, boolean doReceive) {
         CompatibilityModule module = getHandler(handler, direction);
         if(module != null)
         {
@@ -146,8 +143,7 @@ public class Compatibility
         return 0;
     }
 
-    public static double drain(Object handler, ForgeDirection direction, double energy, boolean doExtract)
-    {
+	public static double drain(Object handler, Direction direction, double energy, boolean doExtract) {
         return extractEnergy(handler, direction, energy, doExtract);
     }
 
@@ -159,8 +155,7 @@ public class Compatibility
      * @param doExtract - true will actually take the energy, false will test
      * @return amount of energy taken
      */
-    public static double extractEnergy(Object handler, ForgeDirection direction, double energy, boolean doExtract)
-    {
+	public static double extractEnergy(Object handler, Direction direction, double energy, boolean doExtract) {
         CompatibilityModule module = getHandler(handler, direction);
         if(module != null)
         {
@@ -238,8 +233,7 @@ public class Compatibility
         return itemStack;
     }
 
-    public static double getEnergy(Object obj, ForgeDirection direction)
-    {
+	public static double getEnergy(Object obj, Direction direction) {
         CompatibilityModule module = getHandler(obj, direction);
         if(module != null)
         {
@@ -248,8 +242,7 @@ public class Compatibility
         return 0;
     }
 
-    public static double getMaxEnergy(Object handler, ForgeDirection direction)
-    {
+	public static double getMaxEnergy(Object handler, Direction direction) {
         CompatibilityModule module = getHandler(handler, direction);
         if(module != null)
         {
@@ -314,9 +307,9 @@ public class Compatibility
 			return Loader.isModLoaded(this.modID);
 		}
 
-		public abstract double receiveEnergy(Object handler, ForgeDirection direction, double energy, boolean doReceive);
+		public abstract double receiveEnergy(Object handler, Direction direction, double energy, boolean doReceive);
 
-		public abstract double extractEnergy(Object handler, ForgeDirection direction, double energy, boolean doExtract);
+		public abstract double extractEnergy(Object handler, Direction direction, double energy, boolean doExtract);
 
 		/**
 		 * Charges an item with the given energy
@@ -338,17 +331,17 @@ public class Compatibility
 		 */
 		public abstract double dischargeItem(ItemStack itemStack, double joules, boolean doDischarge);
 
-		public abstract boolean doIsHandler(Object obj, ForgeDirection dir);
+		public abstract boolean doIsHandler(Object obj, Direction dir);
 
 		public abstract boolean doIsEnergyContainer(Object obj);
 
-		public abstract boolean canConnect(Object obj, ForgeDirection direction, Object source);
+		public abstract boolean canConnect(Object obj, Direction direction, Object source);
 
 		public abstract ItemStack getItemWithCharge(ItemStack itemStack, double energy);
 
-        public abstract double getEnergy(Object obj, ForgeDirection direction);
+		public abstract double getEnergy(Object obj, Direction direction);
 
-		public abstract double getMaxEnergy(Object handler, ForgeDirection direction);
+		public abstract double getMaxEnergy(Object handler, Direction direction);
 
 		public abstract double getEnergyItem(ItemStack is);
 

@@ -15,7 +15,7 @@ class SchematicPlate(name: String, block: Block) extends Schematic
 {
   override def getName: String = name
 
-  def getStructure(dir: ForgeDirection, size: Int): HashMap[Vector3d, Pair[Block, Integer]] =
+	def getStructure(dir: Direction, size: Int): HashMap[Vector3d, Pair[Block, Integer]] =
   {
     val returnMap = new HashMap[Vector3d, Pair[Block, Integer]]
 

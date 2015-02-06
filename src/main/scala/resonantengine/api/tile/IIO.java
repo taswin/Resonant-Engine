@@ -1,6 +1,6 @@
 package resonantengine.api.tile;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import nova.core.util.Direction;
 
 import java.util.Set;
 
@@ -9,11 +9,11 @@ import java.util.Set;
  */
 public interface IIO
 {
-	public Set<ForgeDirection> getInputDirections();
+	public Set<Direction> getInputDirections();
 
-	public Set<ForgeDirection> getOutputDirections();
+	public Set<Direction> getOutputDirections();
 
-	public void setIO(ForgeDirection dir, int type);
+	public void setIO(Direction dir, int type);
 
-	public int getIO(ForgeDirection dir);
+	public int getIO(Direction dir);
 }

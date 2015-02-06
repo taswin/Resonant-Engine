@@ -3,17 +3,17 @@ package resonantengine.lib.wrapper
 import nova.core.util.transform.Vector3d
 
 /**
- * Wraps ForgeDirection an adds some extension methods
+ * Wraps Direction an adds some extension methods
  * @author Calclavia
  */
-object ForgeDirectionWrapper
+object DirectionWrapper
 {
 
-  implicit def ForgeDirectionEnumFacingWrapper(enumFacing : EnumFacing) : ForgeDirection= ForgeDirection.getOrientation(enumFacing.ordinal)
+	implicit def DirectionEnumFacingWrapper(enumFacing: EnumFacing): Direction = Direction.getOrientation(enumFacing.ordinal)
 
-  implicit def EnumFacingForgeDirectionWrapper(forgeDir : ForgeDirection) : EnumFacing = EnumFacing.getFront(forgeDir.ordinal)
+	implicit def EnumFacingDirectionWrapper(forgeDir: Direction): EnumFacing = EnumFacing.getFront(forgeDir.ordinal)
 
-	implicit class ForgeDirectionWrap(val underlying: ForgeDirection) {
+	implicit class DirectionWrap(val underlying: Direction) {
 		def offset: Vector3d = new Vector3d(underlying.offsetX, underlying.offsetY, underlying.offsetZ)
 	}
 }

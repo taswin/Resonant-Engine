@@ -4,7 +4,7 @@ import net.minecraft.block.Block
 import net.minecraft.client.renderer.{OpenGlHelper, RenderBlocks, Tessellator}
 import net.minecraft.util.IIcon
 import net.minecraft.world.{IBlockAccess, World}
-import net.minecraftforge.common.util.ForgeDirection
+import nova.core.util.Direction
 import org.lwjgl.opengl.GL11
 import resonantengine.lib.utility.RotationUtility
 import resonantengine.lib.wrapper.BitmaskWrapper._
@@ -45,11 +45,11 @@ object RenderBlockUtility
     renderBlocks.setRenderBoundsFromBlock(block)
     renderBlocks.renderStandardBlock(block, x, y, z)
 
-    for (dir <- ForgeDirection.VALID_DIRECTIONS; r <- 0 until 4)
+	  for (dir <- Direction.VALID_DIRECTIONS; r <- 0 until 4)
     {
       if (!sideMap.mask(dir))
       {
-        val absDir = ForgeDirection.getOrientation(RotationUtility.rotateSide(dir.ordinal, r))
+		  val absDir = Direction.getOrientation(RotationUtility.rotateSide(dir.ordinal, r))
 
         if (!sideMap.mask(absDir))
         {
@@ -115,9 +115,9 @@ object RenderBlockUtility
     GL11.glPopMatrix()
     GL11.glTranslated(-0.5, -0.5, -0.5)
 
-    for (dir <- ForgeDirection.VALID_DIRECTIONS; r <- 0 until 4)
+	  for (dir <- Direction.VALID_DIRECTIONS; r <- 0 until 4)
     {
-      val absDir = ForgeDirection.getOrientation(RotationUtility.rotateSide(dir.ordinal, r))
+		val absDir = Direction.getOrientation(RotationUtility.rotateSide(dir.ordinal, r))
       RenderUtility.rotateFacesOnRenderer(absDir, renderBlocks, true)
       tessellateFace(renderBlocks, block, edgeOverride, dir.ordinal)
       RenderUtility.resetFacesOnRenderer(renderBlocks)

@@ -1,6 +1,6 @@
 package resonantengine.api.graph.node;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import nova.core.util.Direction;
 
 import java.util.Map;
 import java.util.Set;
@@ -21,7 +21,7 @@ public interface INodeConnector<A> extends INode
      * @param from - Side of the node this connection is connecting from
      * @return True if and only if the connection is allowed
      */
-    public <B extends A> boolean canConnect(B other, ForgeDirection from);
+	public <B extends A> boolean canConnect(B other, Direction from);
 
     /**
      * @deprecated - return an empty list and use directionMap
@@ -30,5 +30,5 @@ public interface INodeConnector<A> extends INode
     @Deprecated
 	public Set<A> connections();
 
-	public Map<A, ForgeDirection> directionMap();
+	public Map<A, Direction> directionMap();
 }

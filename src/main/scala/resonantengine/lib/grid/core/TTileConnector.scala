@@ -1,7 +1,7 @@
 package resonantengine.lib.grid.core
 
 import net.minecraft.tileentity.TileEntity
-import net.minecraftforge.common.util.ForgeDirection
+import nova.core.util.Direction
 import resonantengine.api.graph.INodeProvider
 import resonantengine.api.graph.node.INode
 
@@ -15,7 +15,7 @@ trait TTileConnector[A <: AnyRef] extends NodeConnector[A]
   {
     super.rebuild()
 
-    ForgeDirection.VALID_DIRECTIONS.foreach(toDir =>
+	  Direction.VALID_DIRECTIONS.foreach(toDir =>
     {
       if (canConnect(toDir))
       {
@@ -38,7 +38,7 @@ trait TTileConnector[A <: AnyRef] extends NodeConnector[A]
     })
   }
 
-  protected def getNodeFrom(tile: TileEntity, from: ForgeDirection): INode =
+	protected def getNodeFrom(tile: TileEntity, from: Direction): INode =
   {
     if (tile.isInstanceOf[INodeProvider])
     {

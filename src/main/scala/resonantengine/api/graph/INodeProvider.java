@@ -1,6 +1,6 @@
 package resonantengine.api.graph;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import nova.core.util.Direction;
 import resonantengine.api.graph.node.INode;
 
 /**
@@ -13,5 +13,5 @@ public interface INodeProvider
 	 * @param from     - The direction.
 	 * @return Returns the node object.
 	 */
-	public <N extends INode> N getNode(Class<? extends N> nodeType, ForgeDirection from);
+	public <N extends INode> N getNode(Class<? extends N> nodeType, Direction from);
 }

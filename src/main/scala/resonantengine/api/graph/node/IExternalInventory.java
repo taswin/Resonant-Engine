@@ -10,7 +10,7 @@ import resonantengine.api.misc.ISave;
 public interface IExternalInventory extends ISidedInventory, ISave
 {
 	/**
-	 * Gets the inventory array. ForgeDirection.UNKOWN must return all sides
+	 * Gets the inventory array. Direction.UNKOWN must return all sides
 	 */
 	public ItemStack[] getContainedItems();
 

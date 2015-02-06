@@ -1,6 +1,6 @@
 package resonantengine.api.graph.node;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import nova.core.util.Direction;
 
 /**
  * Applied to any object that provides a pressure to control movement of input.
@@ -20,5 +20,5 @@ public interface IPressure
      * pos will say the side is an output,
      * zero will say the side has no effect on default pressure, but will still receive pressure if connections exist
      */
-    public double getPressure(NodeType type, ForgeDirection side);
+	public double getPressure(NodeType type, Direction side);
 }

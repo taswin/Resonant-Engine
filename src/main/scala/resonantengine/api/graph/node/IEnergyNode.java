@@ -1,6 +1,6 @@
 package resonantengine.api.graph.node;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import nova.core.util.Direction;
 /// Calclavia, Do not deprecate this class as its not just for usage by the grids. From, DarkGuardsman
 
 /**  Simple interface that allows adding and removing energy from a node.
@@ -9,14 +9,14 @@ import net.minecraftforge.common.util.ForgeDirection;
 public interface IEnergyNode extends INode
 {
     /** Adds energy to the node returns energy added */
-    public double addEnergy(ForgeDirection from, double wattage, boolean doAdd);
+	public double addEnergy(Direction from, double wattage, boolean doAdd);
 
     /** Removes energy from the node returns energy removed */
-    public double removeEnergy(ForgeDirection from, double wattage, boolean doRemove);
+	public double removeEnergy(Direction from, double wattage, boolean doRemove);
 
 	/** Current energy stored in UE joules */
-	public double getEnergy(ForgeDirection from);
+	public double getEnergy(Direction from);
 
     /** Max limit on energy stored */
-    public double getEnergyCapacity(ForgeDirection from);
+	public double getEnergyCapacity(Direction from);
 }

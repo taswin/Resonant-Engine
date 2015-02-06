@@ -5,9 +5,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
-import resonantengine.api.tile.IInventoryProvider;
+import nova.core.util.Direction;
 import resonantengine.api.graph.node.IExternalInventory;
+import resonantengine.api.tile.IInventoryProvider;
 
 public class ExternalInventory implements IExternalInventory
 {
@@ -166,13 +166,13 @@ public class ExternalInventory implements IExternalInventory
 	@Override
 	public boolean canInsertItem(int i, ItemStack itemstack, int j)
 	{
-		return this.isItemValidForSlot(i, itemstack) && host.canStore(itemstack, i, ForgeDirection.getOrientation(j));
+		return this.isItemValidForSlot(i, itemstack) && host.canStore(itemstack, i, Direction.getOrientation(j));
 	}
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j)
 	{
-		return host.canRemove(itemstack, i, ForgeDirection.getOrientation(j));
+		return host.canRemove(itemstack, i, Direction.getOrientation(j));
 	}
 
 	@Override

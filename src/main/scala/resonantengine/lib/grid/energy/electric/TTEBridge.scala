@@ -1,7 +1,7 @@
 package resonantengine.lib.grid.energy.electric
 
 import cofh.api.energy.IEnergyHandler
-import net.minecraftforge.common.util.ForgeDirection
+import nova.core.util.Direction
 import resonantengine.lib.mod.compat.energy.Compatibility
 import resonantengine.prefab.block.impl.{TBlockNodeProvider, TEnergyProvider}
 
@@ -13,7 +13,7 @@ trait TTEBridge extends TBlockNodeProvider with TEnergyProvider with IEnergyHand
 {
   val electricNode = new NodeElectricComponent(this)
 
-  override def receiveEnergy(from: ForgeDirection, maxReceive: Int, simulate: Boolean): Int =
+	override def receiveEnergy(from: Direction, maxReceive: Int, simulate: Boolean): Int =
   {
     if (simulate)
       return (energy + (maxReceive / Compatibility.redstoneFluxRatio) * Compatibility.redstoneFluxRatio).asInstanceOf[Int]
@@ -21,7 +21,7 @@ trait TTEBridge extends TBlockNodeProvider with TEnergyProvider with IEnergyHand
       return (energy += (maxReceive / Compatibility.redstoneFluxRatio) * Compatibility.redstoneFluxRatio).asInstanceOf[Int]
   }
 
-  override def extractEnergy(from: ForgeDirection, maxExtract: Int, simulate: Boolean): Int =
+	override def extractEnergy(from: Direction, maxExtract: Int, simulate: Boolean): Int =
   {
     if (simulate)
       return (energy + (maxExtract / Compatibility.redstoneFluxRatio) * Compatibility.redstoneFluxRatio).asInstanceOf[Int]
@@ -29,17 +29,17 @@ trait TTEBridge extends TBlockNodeProvider with TEnergyProvider with IEnergyHand
       return (energy += (maxExtract / Compatibility.redstoneFluxRatio) * Compatibility.redstoneFluxRatio).asInstanceOf[Int]
   }
 
-  override def getEnergyStored(from: ForgeDirection): Int =
+	override def getEnergyStored(from: Direction): Int =
   {
     return (energy.value / Compatibility.redstoneFluxRatio).asInstanceOf[Int]
   }
 
-  override def getMaxEnergyStored(from: ForgeDirection): Int =
+	override def getMaxEnergyStored(from: Direction): Int =
   {
     return (energy.value / Compatibility.redstoneFluxRatio).asInstanceOf[Int]
   }
 
-  override def canConnectEnergy(from: ForgeDirection): Boolean =
+	override def canConnectEnergy(from: Direction): Boolean =
   {
     return electricNode.canConnect(from)
   }

@@ -1,6 +1,6 @@
 package resonantengine.lib.utility.path;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import nova.core.util.Direction;
 import nova.core.util.transform.Vector3d;
 
 import java.util.HashMap;
@@ -165,7 +165,7 @@ public class PathfinderAStar extends Pathfinder
 
 			for (int i = 0; i < 6; i++)
 			{
-				neighbors.add(vector.clone().add(ForgeDirection.getOrientation(i)));
+				neighbors.add(vector.clone().add(Direction.getOrientation(i)));
 			}
 
 			return neighbors;

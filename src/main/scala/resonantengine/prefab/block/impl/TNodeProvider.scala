@@ -3,7 +3,7 @@ package resonantengine.prefab.block.impl
 import java.util
 import java.util.{List => JList}
 
-import net.minecraftforge.common.util.ForgeDirection
+import nova.core.util.Direction
 import resonantengine.api.graph.INodeProvider
 import resonantengine.api.graph.node.INode
 import resonantengine.api.tile.IDebugInfo
@@ -18,7 +18,7 @@ trait TNodeProvider extends INodeProvider with IDebugInfo
 {
   protected val nodes = new util.HashSet[Node]
 
-  override def getNode[N <: INode](nodeType: Class[_ <: N], from: ForgeDirection): N =
+	override def getNode[N <: INode](nodeType: Class[_ <: N], from: Direction): N =
   {
     return nodes.filter(node => nodeType.isAssignableFrom(node.getClass)).headOption.getOrElse(null).asInstanceOf[N]
   }

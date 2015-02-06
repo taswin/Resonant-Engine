@@ -1,7 +1,7 @@
 package resonantengine.prefab.fluid
 
-import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids._
+import nova.core.util.Direction
 
 /**
  * Prefab Trait for IFluidHandler
@@ -9,7 +9,7 @@ import net.minecraftforge.fluids._
  */
 trait TFluidHandler extends IFluidHandler with TTankProvider
 {
-  override def fill(from: ForgeDirection, resource: FluidStack, doFill: Boolean): Int =
+	override def fill(from: Direction, resource: FluidStack, doFill: Boolean): Int =
   {
     if (getTank != null)
       return getTank.fill(resource, doFill)
@@ -17,7 +17,7 @@ trait TFluidHandler extends IFluidHandler with TTankProvider
       return 0
   }
 
-  override def drain(from: ForgeDirection, resource: FluidStack, doDrain: Boolean): FluidStack =
+	override def drain(from: Direction, resource: FluidStack, doDrain: Boolean): FluidStack =
   {
     if (getTank != null && resource != null && resource.isFluidEqual(getTank.getFluid))
     {
@@ -26,7 +26,7 @@ trait TFluidHandler extends IFluidHandler with TTankProvider
     return null
   }
 
-  override def drain(from: ForgeDirection, maxDrain: Int, doDrain: Boolean): FluidStack =
+	override def drain(from: Direction, maxDrain: Int, doDrain: Boolean): FluidStack =
   {
     if (getTank != null)
       return getTank.drain(maxDrain, doDrain)
@@ -34,11 +34,11 @@ trait TFluidHandler extends IFluidHandler with TTankProvider
       return null
   }
 
-  override def canFill(from: ForgeDirection, fluid: Fluid): Boolean = true
+	override def canFill(from: Direction, fluid: Fluid): Boolean = true
 
-  override def canDrain(from: ForgeDirection, fluid: Fluid): Boolean = true
+	override def canDrain(from: Direction, fluid: Fluid): Boolean = true
 
-  override def getTankInfo(from: ForgeDirection): Array[FluidTankInfo] =
+	override def getTankInfo(from: Direction): Array[FluidTankInfo] =
   {
     if (getTank != null)
     {

@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.common.util.ForgeDirection;
+import nova.core.util.Direction;
 import resonantengine.lib.transform.vector.VectorWorld;
 
 import java.util.LinkedHashMap;
@@ -48,8 +48,7 @@ public class DummyPlayer extends FakePlayer
         return FAKE_PLAYERS.get(world);
     }
 
-    public static boolean useItemAt(ItemStack itemStack, VectorWorld location, ForgeDirection direction)
-    {
+	public static boolean useItemAt(ItemStack itemStack, VectorWorld location, Direction direction) {
         return useItemAt(itemStack, location.world(), location.xi(), location.yi(), location.zi(), direction.ordinal(), 0, 0, 0);
     }
 

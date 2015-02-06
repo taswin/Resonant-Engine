@@ -7,7 +7,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import nova.core.util.Direction;
 import nova.core.util.collection.Pair;
 import nova.core.util.transform.Vector3d;
 import resonantengine.lib.transform.vector.VectorWorld;
@@ -89,7 +89,7 @@ public class FluidUtility
 		return null;
 	}
 
-	public static FluidTankInfo[] getTankInfo(World world, Vector3d posiiton, ForgeDirection from)
+	public static FluidTankInfo[] getTankInfo(World world, Vector3d posiiton, Direction from)
 	{
 		TileEntity tile = posiiton.getTileEntity(world);
 
@@ -126,12 +126,12 @@ public class FluidUtility
 		return 0;
 	}
 
-	public static double getAveragePercentageFilledForSides(Class classMask, double defaultFill, World world, Vector3d position, ForgeDirection... sides)
+	public static double getAveragePercentageFilledForSides(Class classMask, double defaultFill, World world, Vector3d position, Direction... sides)
 	{
 		double fullness = defaultFill;
 		int count = 1;
 
-		for (ForgeDirection side : sides)
+		for (Direction side : sides)
 		{
 			TileEntity tile = position.clone().add(side).getTileEntity(world);
 
@@ -247,7 +247,7 @@ public class FluidUtility
 			{
 				if (doDrain)
 				{
-					Vector3d vec = position.clone().add(ForgeDirection.UP);
+					Vector3d vec = position.clone().add(Direction.UP);
 
 					if (vec.getBlock(world) == Blocks.water)
 					{
@@ -342,7 +342,7 @@ public class FluidUtility
 				Block block = node.getBlock(world);
 				int meta = node.getBlockMetadata(world);
 
-				Vector3d vec = node.clone().add(ForgeDirection.UP);
+				Vector3d vec = node.clone().add(Direction.UP);
 
 				if (block != null)
 				{
@@ -369,14 +369,14 @@ public class FluidUtility
 	 *
 	 * @param stack  - FluidStack that will be filled into the tanks
 	 * @param doFill - Actually perform the action or simulate action
-	 * @param ignore - ForgeDirections to ignore
+	 * @param ignore - Directions to ignore
 	 * @return amount of fluid that was used from the stack
 	 */
-	public static int fillTanksAllSides(World world, Vector3d origin, FluidStack stack, boolean doFill, ForgeDirection... ignore)
+	public static int fillTanksAllSides(World world, Vector3d origin, FluidStack stack, boolean doFill, Direction... ignore)
 	{
 		int filled = 0;
 		FluidStack fillStack = stack != null ? stack.copy() : null;
-		for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
+		for (Direction direction : Direction.VALID_DIRECTIONS)
 		{
 			if (fillStack == null || fillStack.amount <= 0)
 			{
@@ -407,7 +407,7 @@ public class FluidUtility
 	 * @param direction - direction to fill in from the origin
 	 * @return amount of fluid that was used from the stack
 	 */
-	public static int fillTankSide(World world, Vector3d origin, FluidStack stack, boolean doFill, ForgeDirection direction)
+	public static int fillTankSide(World world, Vector3d origin, FluidStack stack, boolean doFill, Direction direction)
 	{
 		TileEntity entity = origin.clone().add(direction).getTileEntity(world);
 		if (entity instanceof IFluidHandler && ((IFluidHandler) entity).canFill(direction.getOpposite(), stack.getFluid()))
@@ -485,9 +485,9 @@ public class FluidUtility
 
 			if (fluid != null)
 			{
-				if (tank.fill(ForgeDirection.getOrientation(side), fluid.copy(), false) == fluid.amount)
+				if (tank.fill(Direction.getOrientation(side), fluid.copy(), false) == fluid.amount)
 				{
-					tank.fill(ForgeDirection.getOrientation(side), fluid.copy(), true);
+					tank.fill(Direction.getOrientation(side), fluid.copy(), true);
 					if (!entityplayer.capabilities.isCreativeMode)
 					{
 						InventoryUtility.consumeHeldItem(entityplayer);
@@ -497,7 +497,7 @@ public class FluidUtility
 			}
 			else
 			{
-				FluidStack available = tank.drain(ForgeDirection.getOrientation(side), Integer.MAX_VALUE, false);
+				FluidStack available = tank.drain(Direction.getOrientation(side), Integer.MAX_VALUE, false);
 
 				if (available != null)
 				{
@@ -518,7 +518,7 @@ public class FluidUtility
 								InventoryUtility.dropItemStack(new VectorWorld(entityplayer), filled);
 							}
 						}
-						tank.drain(ForgeDirection.UNKNOWN, fluid.amount, true);
+						tank.drain(Direction.UNKNOWN, fluid.amount, true);
 						return true;
 					}
 				}
@@ -599,7 +599,7 @@ public class FluidUtility
 	 * @return Item stack that would be returned if the item was drain of its fluid. Water bucket ->
 	 * empty bucket
 	 */
-	public static ItemStack drainItem(ItemStack stack, IFluidHandler tank, ForgeDirection side)
+	public static ItemStack drainItem(ItemStack stack, IFluidHandler tank, Direction side)
 	{
 		if (stack != null && tank != null)
 		{
@@ -623,7 +623,7 @@ public class FluidUtility
 	 * @return Item stack that would be returned if the item was filled with fluid. empty bucket ->
 	 * water bucket
 	 */
-	public static ItemStack fillItem(ItemStack stack, IFluidHandler tank, ForgeDirection side)
+	public static ItemStack fillItem(ItemStack stack, IFluidHandler tank, Direction side)
 	{
 		if (stack != null && tank != null)
 		{

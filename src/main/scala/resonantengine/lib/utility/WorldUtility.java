@@ -9,8 +9,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.ForgeEventFactory;
+import nova.core.util.Direction;
 import nova.core.util.transform.Vector3d;
 import resonantengine.core.Reference;
 import resonantengine.lib.transform.rotation.Quaternion;
@@ -27,7 +27,7 @@ import java.util.Map;
  */
 public class WorldUtility
 {
-	public static void rotateVectorFromDirection(Vector3d vec, ForgeDirection dir)
+	public static void rotateVectorFromDirection(Vector3d vec, Direction dir)
 	{
 		switch (dir)
 		{
@@ -51,7 +51,7 @@ public class WorldUtility
 		}
 	}
 
-	public static int getAngleFromForgeDirection(ForgeDirection dir)
+	public static int getAngleFromDirection(Direction dir)
 	{
 		switch (dir)
 		{
@@ -71,42 +71,42 @@ public class WorldUtility
 	}
 
 	@SuppressWarnings("incomplete-switch")
-	public static ForgeDirection invertX(ForgeDirection dir)
+	public static Direction invertX(Direction dir)
 	{
 		switch (dir)
 		{
 			case NORTH:
-				return ForgeDirection.SOUTH;
+				return Direction.SOUTH;
 			case SOUTH:
-				return ForgeDirection.NORTH;
+				return Direction.NORTH;
 		}
 
 		return dir;
 	}
 
 	@SuppressWarnings("incomplete-switch")
-	public static ForgeDirection invertY(ForgeDirection dir)
+	public static Direction invertY(Direction dir)
 	{
 		switch (dir)
 		{
 			case UP:
-				return ForgeDirection.DOWN;
+				return Direction.DOWN;
 			case DOWN:
-				return ForgeDirection.UP;
+				return Direction.UP;
 		}
 
 		return dir;
 	}
 
 	@SuppressWarnings("incomplete-switch")
-	public static ForgeDirection invertZ(ForgeDirection dir)
+	public static Direction invertZ(Direction dir)
 	{
 		switch (dir)
 		{
 			case WEST:
-				return ForgeDirection.EAST;
+				return Direction.EAST;
 			case EAST:
-				return ForgeDirection.WEST;
+				return Direction.WEST;
 		}
 
 		return dir;
@@ -131,7 +131,7 @@ public class WorldUtility
 	public static TileEntity[] getSurroundingTileEntities(World world, int x, int y, int z)
 	{
 		TileEntity[] list = new TileEntity[6];
-		for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS)
+		for (Direction direction : Direction.VALID_DIRECTIONS)
 		{
 			list[direction.ordinal()] = world.getTileEntity(x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ);
 		}
@@ -145,10 +145,10 @@ public class WorldUtility
 	public static int corner(TileEntity entity)
 	{
 		TileEntity[] en = getSurroundingTileEntities(entity.getWorldObj(), entity.xCoord, entity.yCoord, entity.zCoord);
-		TileEntity north = en[ForgeDirection.NORTH.ordinal()];
-		TileEntity south = en[ForgeDirection.SOUTH.ordinal()];
-		TileEntity east = en[ForgeDirection.EAST.ordinal()];
-		TileEntity west = en[ForgeDirection.WEST.ordinal()];
+		TileEntity north = en[Direction.NORTH.ordinal()];
+		TileEntity south = en[Direction.SOUTH.ordinal()];
+		TileEntity east = en[Direction.EAST.ordinal()];
+		TileEntity west = en[Direction.WEST.ordinal()];
 
 		if (west != null && north != null && east == null && south == null)
 		{
@@ -178,7 +178,7 @@ public class WorldUtility
 		return world.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(start.x(), start.y(), start.z(), end.x(), end.y(), end.z()));
 	}
 
-	public static List<EntityItem> getEntitiesInDirection(World world, Vector3d center, ForgeDirection dir)
+	public static List<EntityItem> getEntitiesInDirection(World world, Vector3d center, Direction dir)
 	{
 		List<EntityItem> list = world.selectEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(center.x() + dir.offsetX, center.y() + dir.offsetY, center.z() + dir.offsetZ, center.x() + dir.offsetX + 1, center.y() + dir.offsetY + 1, center.z() + dir.offsetZ + 1), IEntitySelector.selectAnything);
 		return list.size() > 0 ? list : null;
@@ -296,13 +296,13 @@ public class WorldUtility
 	 * @return True if so.
 	 */
 	@Deprecated
-	public static boolean isEnabledSide(int sideMap, ForgeDirection direction)
+	public static boolean isEnabledSide(int sideMap, Direction direction)
 	{
 		return BitmaskWrapper.mask(sideMap, direction);
 	}
 
 	@Deprecated
-	public static int setEnableSide(int sideMap, ForgeDirection direction, boolean doEnable)
+	public static int setEnableSide(int sideMap, Direction direction, boolean doEnable)
 	{
 		return BitmaskWrapper.mask(sideMap, direction, doEnable);
 	}

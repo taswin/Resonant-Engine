@@ -9,22 +9,22 @@ trait TRotatable extends ResonantBlock with IRotatable
   var rotationMask = 0x3C
   var isFlipPlacement = false
 
-  override def getDirection: ForgeDirection = ForgeDirection.getOrientation(getBlockMetadata)
+	override def getDirection: Direction = Direction.getOrientation(getBlockMetadata)
 
-	override def setDirection(direction: ForgeDirection) = world.setBlockMetadataWithNotify(x, y, z, direction.ordinal, 3)
+	override def setDirection(direction: Direction) = world.setBlockMetadataWithNotify(x, y, z, direction.ordinal, 3)
 
-  def determineRotation(entityLiving: EntityLivingBase): ForgeDirection =
+	def determineRotation(entityLiving: EntityLivingBase): Direction =
   {
     if (MathHelper.abs(entityLiving.posX.asInstanceOf[Float] - x) < 2.0F && MathHelper.abs(entityLiving.posZ.asInstanceOf[Float] - z) < 2.0F)
     {
       val d0: Double = entityLiving.posY + 1.82D - entityLiving.yOffset
       if (canRotate(1) && d0 - y > 2.0D)
       {
-        return ForgeDirection.UP
+		  return Direction.UP
       }
       if (canRotate(0) && y - d0 > 0.0D)
       {
-        return ForgeDirection.DOWN
+		  return Direction.DOWN
       }
     }
 
@@ -33,10 +33,10 @@ trait TRotatable extends ResonantBlock with IRotatable
 
     if (isFlipPlacement)
     {
-      return ForgeDirection.getOrientation(returnSide).getOpposite
+		return Direction.getOrientation(returnSide).getOpposite
     }
 
-    return ForgeDirection.getOrientation(returnSide)
+	  return Direction.getOrientation(returnSide)
   }
 
   /**
@@ -48,7 +48,7 @@ trait TRotatable extends ResonantBlock with IRotatable
 
     if (result != -1)
     {
-      setDirection(ForgeDirection.getOrientation(result))
+		setDirection(Direction.getOrientation(result))
       return true
     }
 

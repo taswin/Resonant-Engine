@@ -7,7 +7,7 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.common.util.ForgeDirection;
+import nova.core.util.Direction;
 import nova.core.util.collection.Pair;
 import nova.core.util.transform.Vector3d;
 import resonantengine.api.misc.ISave;
@@ -317,7 +317,7 @@ public class SchematicMap extends Schematic implements ISave
 	}
 
 	@Override
-	public HashMap<Vector3d, Pair<Block, Integer>> getStructure(ForgeDirection dir, int size)
+	public HashMap<Vector3d, Pair<Block, Integer>> getStructure(Direction dir, int size)
 	{
 		return this.block_map;
 	}

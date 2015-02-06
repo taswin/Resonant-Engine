@@ -2,8 +2,8 @@ package resonantengine.core.content.debug
 
 import net.minecraft.block.material.Material
 import net.minecraft.tileentity.TileEntity
-import net.minecraftforge.common.util.ForgeDirection
 import net.minecraftforge.fluids._
+import nova.core.util.Direction
 import resonantengine.prefab.block.mixed.TileIO
 
 /**
@@ -25,7 +25,7 @@ class TileInfiniteFluid extends TileIO(Material.iron) with IFluidHandler
 
     if (active)
     {
-      ForgeDirection.VALID_DIRECTIONS.filter(getOutputDirections.contains(_)).foreach(
+		Direction.VALID_DIRECTIONS.filter(getOutputDirections.contains(_)).foreach(
         direction =>
         {
           val tile: TileEntity = (position + direction).getTileEntity
@@ -39,12 +39,12 @@ class TileInfiniteFluid extends TileIO(Material.iron) with IFluidHandler
     }
   }
 
-  override def getTankInfo(from: ForgeDirection): Array[FluidTankInfo] =
+	override def getTankInfo(from: Direction): Array[FluidTankInfo] =
   {
     return Array[FluidTankInfo](this.tank.getInfo)
   }
 
-  override def fill(from: ForgeDirection, resource: FluidStack, doFill: Boolean): Int =
+	override def fill(from: Direction, resource: FluidStack, doFill: Boolean): Int =
   {
     if (getInputDirections.contains(from))
     {
@@ -53,7 +53,7 @@ class TileInfiniteFluid extends TileIO(Material.iron) with IFluidHandler
     return 0
   }
 
-  override def drain(from: ForgeDirection, resource: FluidStack, doDrain: Boolean): FluidStack =
+	override def drain(from: Direction, resource: FluidStack, doDrain: Boolean): FluidStack =
   {
     if (getOutputDirections.contains(from))
     {
@@ -62,7 +62,7 @@ class TileInfiniteFluid extends TileIO(Material.iron) with IFluidHandler
     return null
   }
 
-  override def drain(from: ForgeDirection, maxDrain: Int, doDrain: Boolean): FluidStack =
+	override def drain(from: Direction, maxDrain: Int, doDrain: Boolean): FluidStack =
   {
     if (getOutputDirections.contains(from))
     {
@@ -71,9 +71,9 @@ class TileInfiniteFluid extends TileIO(Material.iron) with IFluidHandler
     return null
   }
 
-  override def canFill(from: ForgeDirection, fluid: Fluid): Boolean = getInputDirections.contains(from)
+	override def canFill(from: Direction, fluid: Fluid): Boolean = getInputDirections.contains(from)
 
-  override def canDrain(from: ForgeDirection, fluid: Fluid): Boolean = getOutputDirections.contains(from)
+	override def canDrain(from: Direction, fluid: Fluid): Boolean = getOutputDirections.contains(from)
 
   /*
     def onActivated(entityPlayer: EntityPlayer): Boolean =

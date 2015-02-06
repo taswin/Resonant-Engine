@@ -2,7 +2,7 @@ package resonantengine.lib.grid.energy.electric
 
 import java.util.{Set => JSet}
 
-import net.minecraftforge.common.util.ForgeDirection
+import nova.core.util.Direction
 import resonantengine.api.graph.INodeProvider
 import resonantengine.api.tile.IDebugInfo
 import resonantengine.lib.grid.core.{GridNode, NodeGrid, TTileConnector}
@@ -65,14 +65,14 @@ class NodeElectricComponent(parent: INodeProvider) extends NodeGrid[NodeElectric
 
   def negatives: JSet[NodeElectricComponent] = directionMap.filter(keyVal => negativeMask.mask(keyVal._2)).keySet
 
-  def setPositive(dir: ForgeDirection, open: Boolean = true)
+	def setPositive(dir: Direction, open: Boolean = true)
   {
     positiveMask = positiveMask.mask(dir, open)
     negativeMask &= ~positiveMask
     connectionMask = positiveMask | negativeMask
   }
 
-  def setPositives(dirs: JSet[ForgeDirection])
+	def setPositives(dirs: JSet[Direction])
   {
     positiveMask = 0
 
@@ -81,14 +81,14 @@ class NodeElectricComponent(parent: INodeProvider) extends NodeGrid[NodeElectric
     connectionMask = positiveMask | negativeMask
   }
 
-  def setNegative(dir: ForgeDirection, open: Boolean = true)
+	def setNegative(dir: Direction, open: Boolean = true)
   {
     negativeMask = negativeMask.mask(dir, open)
     positiveMask &= ~negativeMask
     connectionMask = positiveMask | negativeMask
   }
 
-  def setNegatives(dirs: JSet[ForgeDirection])
+	def setNegatives(dirs: JSet[Direction])
   {
     negativeMask = 0
 

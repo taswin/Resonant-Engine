@@ -1,6 +1,6 @@
 package resonantengine.prefab.block.impl
 
-import net.minecraftforge.common.util.ForgeDirection
+import nova.core.util.Direction
 import resonantengine.lib.grid.energy.EnergyStorage
 
 import scala.beans.BeanProperty
@@ -14,7 +14,7 @@ trait TEnergyProvider
   @BeanProperty
   var energy = new EnergyStorage
 
-  def getEnergyStorage(from: ForgeDirection): EnergyStorage =
+	def getEnergyStorage(from: Direction): EnergyStorage =
   {
     return energy
   }

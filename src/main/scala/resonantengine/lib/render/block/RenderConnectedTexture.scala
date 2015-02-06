@@ -30,7 +30,7 @@ trait RenderConnectedTexture extends ResonantBlock
   {
     var sideMap = 0
 
-    for (dir <- ForgeDirection.VALID_DIRECTIONS)
+	  for (dir <- Direction.VALID_DIRECTIONS)
     {
       val check = position + dir
       val checkTile = check.getTileEntity

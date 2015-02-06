@@ -2,7 +2,7 @@ package resonantengine.lib.grid.core
 
 import java.util.{Map => JMap, Set => JSet}
 
-import net.minecraftforge.common.util.ForgeDirection
+import nova.core.util.Direction
 import resonantengine.api.graph.INodeProvider
 import resonantengine.api.graph.node.INodeConnector
 import resonantengine.lib.wrapper.BitmaskWrapper._
@@ -22,7 +22,7 @@ abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(pa
   /**
    * Connections to other nodes specifically.
    */
-  private val connectionMap = mutable.WeakHashMap.empty[A, ForgeDirection]
+  private val connectionMap = mutable.WeakHashMap.empty[A, Direction]
   /** The bitmask containing sides that this node may connect to */
   var connectionMask = 0x3F
   /** Functional event handler when the connection changes */
@@ -37,14 +37,14 @@ abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(pa
    * @param from - Direction of connection
    * @return True connection is allowed
    */
-  override def canConnect[B <: A](other: B, from: ForgeDirection): Boolean = isValidConnection(other) && canConnect(from)
+  override def canConnect[B <: A](other: B, from: Direction): Boolean = isValidConnection(other) && canConnect(from)
 
-  def canConnect(from: ForgeDirection): Boolean = connectionMask.mask(from) || from == ForgeDirection.UNKNOWN
+	def canConnect(from: Direction): Boolean = connectionMask.mask(from) || from == Direction.UNKNOWN
 
   //TODO: This getClass.isAssignableFrom has issues.
   def isValidConnection(other: AnyRef): Boolean = other != null //&& other.getClass.isAssignableFrom(getClass)
 
-  def connect[B <: A](obj: B, dir: ForgeDirection)
+	def connect[B <: A](obj: B, dir: Direction)
   {
     connectionMap.put(obj, dir)
     _connectedMask = _connectedMask.openMask(dir)
@@ -59,7 +59,7 @@ abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(pa
     }
   }
 
-  def disconnect(dir: ForgeDirection)
+	def disconnect(dir: Direction)
   {
     if (connectionMap.removeAll(connectionMap.filter(_._2 == dir)))
     {
@@ -67,7 +67,7 @@ abstract class NodeConnector[A <: AnyRef](parent: INodeProvider) extends Node(pa
     }
   }
 
-  def directionMap: JMap[A, ForgeDirection] = connectionMap
+	def directionMap: JMap[A, Direction] = connectionMap
 
   /**
    * Called to rebuild the connection map.

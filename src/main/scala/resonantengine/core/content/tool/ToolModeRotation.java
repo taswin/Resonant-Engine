@@ -5,7 +5,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import nova.core.util.Direction;
 
 public class ToolModeRotation extends ToolMode
 {
@@ -15,7 +15,7 @@ public class ToolModeRotation extends ToolMode
 		int blockMeta = world.getBlockMetadata(x, y, z);
 		Block block = world.getBlock(x, y, z);
 
-		if (block != null && block.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side)))
+		if (block != null && block.rotateBlock(world, x, y, z, Direction.getOrientation(side)))
 		{
 			((ItemScrewdriver) stack.getItem()).wrenchUsed(player, x, y, z);
 			player.swingItem();

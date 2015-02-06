@@ -26,7 +26,7 @@ trait RenderRotatedTexture extends ResonantBlock with IRotatable
 
     val targetDir = getDirection()
 
-    for (dir <- ForgeDirection.VALID_DIRECTIONS)
+	  for (dir <- Direction.VALID_DIRECTIONS)
     {
       renderBlocks.limitedSide = dir.ordinal
 

@@ -1,6 +1,6 @@
 package resonantengine.lib.utility
 
-import net.minecraftforge.common.util.ForgeDirection
+import nova.core.util.Direction
 
 object RotationUtility
 {
@@ -8,15 +8,15 @@ object RotationUtility
   var sideRotMap: Array[Int] = Array[Int](3, 4, 2, 5, 3, 5, 2, 4, 1, 5, 0, 4, 1, 4, 0, 5, 1, 2, 0, 3, 1, 3, 0, 2)
 
   /**
-   * Rototes a relative side into a ForgeDirection global size.
+   * Rototes a relative side into a Direction global size.
    *
    * @param s - The current face we are on (0-6)
    * @param r - The rotation to be applied (0-3)
-   * @return The ForgeDirection ordinal from 0-5.
+   * @return The Direction ordinal from 0-5.
    */
   def rotateSide(s: Int, r: Int): Int = sideRotMap(s << 2 | r)
 
-  def rotateSide(s: ForgeDirection, r: ForgeDirection): ForgeDirection = ForgeDirection.getOrientation(sideRotMap(s.ordinal << 2 | r.ordinal))
+	def rotateSide(s: Direction, r: Direction): Direction = Direction.getOrientation(sideRotMap(s.ordinal << 2 | r.ordinal))
 
   /**
    * Finds the direction relative to a base direction.
@@ -26,12 +26,12 @@ object RotationUtility
    * @param side - The side you are trying to find. A number between 0 and 5.
    * @return The side relative to the facing direction.
    */
-  def getRelativeSide(front: ForgeDirection, side: ForgeDirection): ForgeDirection =
+  def getRelativeSide(front: Direction, side: Direction): Direction =
   {
-    if (front != ForgeDirection.UNKNOWN && side != ForgeDirection.UNKNOWN)
+	  if (front != Direction.UNKNOWN && side != Direction.UNKNOWN)
     {
-      return ForgeDirection.getOrientation(relativeMatrix(front.ordinal)(side.ordinal))
+		return Direction.getOrientation(relativeMatrix(front.ordinal)(side.ordinal))
     }
-    return ForgeDirection.UNKNOWN
+	  return Direction.UNKNOWN
   }
 }

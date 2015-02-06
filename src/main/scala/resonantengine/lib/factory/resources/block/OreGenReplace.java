@@ -77,8 +77,8 @@ public class OreGenReplace extends OreGenerator
 	public boolean generateReplace(World world, Random rand, int varX, int varY, int varZ)
 	{
         /*TODO recode this as this is causing extra gen time during chunk generation
-            possibly change it to use a simple pathfinding logic to place blocks next to center block
-            In which we use ForgeDirection in combination with a range limiter of 2
+			possibly change it to use a simple pathfinding logic to place blocks next to center block
+            In which we use Direction in combination with a range limiter of 2
              AS well make sure that only the first iteration uses UP & DOWN*/
 		float angle = rand.nextFloat() * (float) Math.PI;
 		double rxUpper = varX + 8 + MathHelper.sin(angle) * this.amountPerBranch / 8.0F;

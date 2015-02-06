@@ -12,7 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import nova.core.util.Direction;
 import nova.core.util.transform.Vector3d;
 import resonantengine.lib.transform.vector.VectorWorld;
 import resonantengine.lib.utility.DummyPlayer;
@@ -134,7 +134,7 @@ public class InventoryUtility
 			else
 			{
 				ISidedInventory sidedInventory = (ISidedInventory) inventory;
-				int[] slots = sidedInventory.getAccessibleSlotsFromSide(ForgeDirection.getOrientation(side).getOpposite().ordinal());
+				int[] slots = sidedInventory.getAccessibleSlotsFromSide(Direction.getOrientation(side).getOpposite().ordinal());
 
 				if (slots != null && slots.length != 0)
 				{
@@ -144,7 +144,7 @@ public class InventoryUtility
 
 						if (!force)
 						{
-							if (!sidedInventory.isItemValidForSlot(slotID, toInsert) && !sidedInventory.canInsertItem(slotID, toInsert, ForgeDirection.getOrientation(side).getOpposite().ordinal()))
+							if (!sidedInventory.isItemValidForSlot(slotID, toInsert) && !sidedInventory.canInsertItem(slotID, toInsert, Direction.getOrientation(side).getOpposite().ordinal()))
 							{
 								continue;
 							}
@@ -395,7 +395,7 @@ public class InventoryUtility
 
 				if (world.isAirBlock(x, y, z))
 				{
-					rightClickPos.add(ForgeDirection.getOrientation(side));
+					rightClickPos.add(Direction.getOrientation(side));
 				}
 
 				side ^= 1;

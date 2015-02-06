@@ -1,7 +1,7 @@
 package resonantengine.api.tile;
 
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.util.ForgeDirection;
+import nova.core.util.Direction;
 import resonantengine.api.graph.node.IExternalInventory;
 
 /** Used with IExternalInventory to move the inventory functionality
@@ -18,8 +18,8 @@ public interface IInventoryProvider
 	public IExternalInventory getInventory();
 
     /** Call back for IExternalInventory to check if the item can be stored */
-	public boolean canStore(ItemStack stack, int slot, ForgeDirection side);
+	public boolean canStore(ItemStack stack, int slot, Direction side);
 
     /** Call back for IExternalInventory to check if the item can be removed */
-	public boolean canRemove(ItemStack stack, int slot, ForgeDirection side);
+	public boolean canRemove(ItemStack stack, int slot, Direction side);
 }

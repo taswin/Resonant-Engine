@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import nova.core.util.Direction;
 import nova.core.util.transform.Vector3d;
 import resonantengine.api.tile.IExtendedStorage;
 import resonantengine.lib.transform.vector.VectorWorld;
@@ -57,7 +57,7 @@ public class InternalInventoryHandler
 		this.inverted = inverted;
 	}
 
-	public void throwItem(ForgeDirection direction, ItemStack items)
+	public void throwItem(Direction direction, ItemStack items)
 	{
 		throwItem(this.location.clone().add(direction), items);
 	}
@@ -81,12 +81,12 @@ public class InternalInventoryHandler
 		}
 	}
 
-	public ItemStack storeItem(ItemStack item, ForgeDirection... directions)
+	public ItemStack storeItem(ItemStack item, Direction... directions)
 	{
 		if (item != null)
 		{
 			ItemStack remainingStack = item.copy();
-			for (ForgeDirection direction : directions)
+			for (Direction direction : directions)
 			{
 				remainingStack = tryPlaceInPosition(remainingStack, this.location.clone().add(direction), direction.getOpposite());
 			}
@@ -100,10 +100,10 @@ public class InternalInventoryHandler
 	 *
 	 * @return The ItemStack remained after place attempt
 	 */
-	public ItemStack tryPlaceInPosition(ItemStack itemStack, Vector3d position, ForgeDirection dir)
+	public ItemStack tryPlaceInPosition(ItemStack itemStack, Vector3d position, Direction dir)
 	{
 		TileEntity tileEntity = position.getTileEntity(world);
-		ForgeDirection direction = dir.getOpposite();
+		Direction direction = dir.getOpposite();
 
 		if (tileEntity != null && itemStack != null)
 		{
@@ -114,7 +114,7 @@ public class InternalInventoryHandler
 				/** Try to find a double chest. */
 				for (int i = 2; i < 6; i++)
 				{
-					ForgeDirection searchDirection = ForgeDirection.getOrientation(i);
+					Direction searchDirection = Direction.getOrientation(i);
 					Vector3d searchPosition = position.clone();
 					searchPosition.add(searchDirection);
 
@@ -229,11 +229,11 @@ public class InternalInventoryHandler
 	 * @param ammount  - amount up to one stack to grab
 	 * @return the grabbed item stack
 	 */
-	public ItemStack tryGrabFromPosition(Vector3d position, ForgeDirection dir, int ammount)
+	public ItemStack tryGrabFromPosition(Vector3d position, Direction dir, int ammount)
 	{
 		ItemStack returnStack = null;
 		TileEntity tileEntity = position.getTileEntity(world);
-		ForgeDirection direction = dir.getOpposite();
+		Direction direction = dir.getOpposite();
 
 		if (tileEntity != null)
 		{
@@ -244,7 +244,7 @@ public class InternalInventoryHandler
 				/** Try to find a double chest. */
 				for (int i = 2; i < 6; i++)
 				{
-					ForgeDirection searchDirection = ForgeDirection.getOrientation(i);
+					Direction searchDirection = Direction.getOrientation(i);
 					Vector3d searchPosition = position.clone();
 					searchPosition.add(searchDirection);
 
@@ -314,7 +314,7 @@ public class InternalInventoryHandler
 		return returnStack;
 	}
 
-	public ItemStack tryGrabFromPosition(ForgeDirection dir, int ammount)
+	public ItemStack tryGrabFromPosition(Direction dir, int ammount)
 	{
 		return tryGrabFromPosition(location.clone(), dir, ammount);
 	}

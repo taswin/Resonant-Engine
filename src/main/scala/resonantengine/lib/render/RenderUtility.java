@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.util.ForgeDirection;
+import nova.core.util.Direction;
 import nova.core.util.transform.Vector3d;
 import org.lwjgl.opengl.GL11;
 import resonantengine.lib.utility.WorldUtility;
@@ -25,7 +25,19 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_BLEND;
+import static org.lwjgl.opengl.GL11.GL_FLAT;
+import static org.lwjgl.opengl.GL11.GL_LINE_SMOOTH;
+import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.GL_POLYGON_SMOOTH;
+import static org.lwjgl.opengl.GL11.GL_SMOOTH;
+import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.glBlendFunc;
+import static org.lwjgl.opengl.GL11.glDisable;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glRotatef;
+import static org.lwjgl.opengl.GL11.glShadeModel;
+import static org.lwjgl.opengl.GL11.glTranslatef;
 
 public class RenderUtility
 {
@@ -224,10 +236,10 @@ public class RenderUtility
 
 	public static void renderText(String text, int side, float maxScale, double x, double y, double z)
 	{
-		renderText(text, ForgeDirection.getOrientation(side), maxScale, x, y, z);
+		renderText(text, Direction.getOrientation(side), maxScale, x, y, z);
 	}
 
-	public static void renderText(String text, ForgeDirection side, float maxScale, double x, double y, double z)
+	public static void renderText(String text, Direction side, float maxScale, double x, double y, double z)
 	{
 		GL11.glPushMatrix();
 
@@ -352,7 +364,7 @@ public class RenderUtility
 	/**
 	 * @author OpenBlocks
 	 */
-	public static void rotateFacesOnRenderer(ForgeDirection rotation, RenderBlocks renderer, boolean fullRotation)
+	public static void rotateFacesOnRenderer(Direction rotation, RenderBlocks renderer, boolean fullRotation)
 	{
 		if (fullRotation)
 		{
@@ -426,17 +438,17 @@ public class RenderUtility
 		renderer.flipTexture = false;
 	}
 
-	public static void renderInventoryBlock(RenderBlocks renderer, Block block, ForgeDirection rotation)
+	public static void renderInventoryBlock(RenderBlocks renderer, Block block, Direction rotation)
 	{
 		renderInventoryBlock(renderer, block, rotation, -1);
 	}
 
-	public static void renderInventoryBlock(RenderBlocks renderer, Block block, ForgeDirection rotation, int colorMultiplier)
+	public static void renderInventoryBlock(RenderBlocks renderer, Block block, Direction rotation, int colorMultiplier)
 	{
 		renderInventoryBlock(renderer, block, rotation, colorMultiplier, null);
 	}
 
-	public static void renderInventoryBlock(RenderBlocks renderer, Block block, ForgeDirection rotation, int colorMultiplier, Set<ForgeDirection> enabledSides)
+	public static void renderInventoryBlock(RenderBlocks renderer, Block block, Direction rotation, int colorMultiplier, Set<Direction> enabledSides)
 	{
 		Tessellator tessellator = Tessellator.instance;
 		block.setBlockBoundsForItemRender();
@@ -457,42 +469,42 @@ public class RenderUtility
 		GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
 		GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
 		int metadata = rotation.ordinal();
-		if (enabledSides == null || enabledSides.contains(ForgeDirection.DOWN))
+		if (enabledSides == null || enabledSides.contains(Direction.DOWN))
 		{
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(0.0F, -1.0F, 0.0F);
 			renderer.renderFaceYNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 0, metadata));
 			tessellator.draw();
 		}
-		if (enabledSides == null || enabledSides.contains(ForgeDirection.UP))
+		if (enabledSides == null || enabledSides.contains(Direction.UP))
 		{
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(0.0F, 1.0F, 0.0F);
 			renderer.renderFaceYPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 1, metadata));
 			tessellator.draw();
 		}
-		if (enabledSides == null || enabledSides.contains(ForgeDirection.SOUTH))
+		if (enabledSides == null || enabledSides.contains(Direction.SOUTH))
 		{
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(0.0F, 0.0F, -1.0F);
 			renderer.renderFaceZNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 2, metadata));
 			tessellator.draw();
 		}
-		if (enabledSides == null || enabledSides.contains(ForgeDirection.NORTH))
+		if (enabledSides == null || enabledSides.contains(Direction.NORTH))
 		{
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(0.0F, 0.0F, 1.0F);
 			renderer.renderFaceZPos(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 3, metadata));
 			tessellator.draw();
 		}
-		if (enabledSides == null || enabledSides.contains(ForgeDirection.WEST))
+		if (enabledSides == null || enabledSides.contains(Direction.WEST))
 		{
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(-1.0F, 0.0F, 0.0F);
 			renderer.renderFaceXNeg(block, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSideAndMetadata(block, 4, metadata));
 			tessellator.draw();
 		}
-		if (enabledSides == null || enabledSides.contains(ForgeDirection.EAST))
+		if (enabledSides == null || enabledSides.contains(Direction.EAST))
 		{
 			tessellator.startDrawingQuads();
 			tessellator.setNormal(1.0F, 0.0F, 0.0F);
@@ -561,7 +573,7 @@ public class RenderUtility
 	 * @param placementSide
 	 */
 	@SuppressWarnings("incomplete-switch")
-	public static void rotateFaceBlockToSide(ForgeDirection placementSide)
+	public static void rotateFaceBlockToSide(Direction placementSide)
 	{
 		switch (placementSide)
 		{
@@ -592,7 +604,7 @@ public class RenderUtility
 	}
 
 	@SuppressWarnings("incomplete-switch")
-	public static void rotateFaceToSideNoTranslate(ForgeDirection placementSide)
+	public static void rotateFaceToSideNoTranslate(Direction placementSide)
 	{
 		switch (placementSide)
 		{
@@ -617,7 +629,7 @@ public class RenderUtility
 	}
 
 	@SuppressWarnings("incomplete-switch")
-	public static void rotateFaceBlockToSideOutwards(ForgeDirection placementSide)
+	public static void rotateFaceBlockToSideOutwards(Direction placementSide)
 	{
 		switch (placementSide)
 		{
@@ -656,12 +668,12 @@ public class RenderUtility
 	 *
 	 * @param direction
 	 */
-	public static void rotateBlockBasedOnDirection(ForgeDirection direction)
+	public static void rotateBlockBasedOnDirection(Direction direction)
 	{
 		switch (direction)
 		{
 			default:
-				glRotatef(WorldUtility.getAngleFromForgeDirection(direction), 0, 1, 0);
+				glRotatef(WorldUtility.getAngleFromDirection(direction), 0, 1, 0);
 				break;
 			case DOWN:
 				glRotatef(90, 1, 0, 0);
@@ -677,12 +689,12 @@ public class RenderUtility
 	 *
 	 * @param direction
 	 */
-	public static void rotateBlockBasedOnDirectionUp(ForgeDirection direction)
+	public static void rotateBlockBasedOnDirectionUp(Direction direction)
 	{
 		switch (direction)
 		{
 			default:
-				glRotatef(WorldUtility.getAngleFromForgeDirection(direction), 0, 1, 0);
+				glRotatef(WorldUtility.getAngleFromDirection(direction), 0, 1, 0);
 				glRotatef(-90, 0, 0, 1);
 				break;
 			case DOWN:

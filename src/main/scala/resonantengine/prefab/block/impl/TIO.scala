@@ -5,7 +5,7 @@ import _root_.java.util
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.ChatComponentText
-import net.minecraftforge.common.util.ForgeDirection
+import nova.core.util.Direction
 import resonantengine.api.tile.IIO
 import resonantengine.lib.modcontent.block.ResonantTile
 
@@ -33,8 +33,8 @@ trait TIO extends ResonantTile with IIO
   {
     if (!world.isRemote)
     {
-      val newIO = (getIO(ForgeDirection.getOrientation(side)) + 1) % 3
-      setIO(ForgeDirection.getOrientation(side), newIO)
+		val newIO = (getIO(Direction.getOrientation(side)) + 1) % 3
+		setIO(Direction.getOrientation(side), newIO)
 
       if (!world.isRemote)
       {
@@ -46,7 +46,7 @@ trait TIO extends ResonantTile with IIO
     return true
   }
 
-  override def setIO(dir: ForgeDirection, ioType: Int)
+	override def setIO(dir: Direction, ioType: Int)
   {
     val currentIO: String = getIOMapBase3
     val str: StringBuilder = new StringBuilder(currentIO)
@@ -60,11 +60,11 @@ trait TIO extends ResonantTile with IIO
    * @return The direction that electricity is entered into the tile. Return null for no input. By
    *         default you can accept power from all sides.
    */
-  override def getInputDirections: util.HashSet[ForgeDirection] =
+  override def getInputDirections: util.HashSet[Direction] =
   {
-    var dirs = new util.HashSet[ForgeDirection]()
+	  var dirs = new util.HashSet[Direction]()
 
-    for (direction <- ForgeDirection.VALID_DIRECTIONS)
+	  for (direction <- Direction.VALID_DIRECTIONS)
     {
       if (getIO(direction) == 1)
       {
@@ -74,7 +74,7 @@ trait TIO extends ResonantTile with IIO
     return dirs
   }
 
-  override def getIO(dir: ForgeDirection): Int =
+	override def getIO(dir: Direction): Int =
   {
     val currentIO: String = getIOMapBase3
     return Integer.parseInt("" + currentIO.charAt(dir.ordinal))
@@ -97,11 +97,11 @@ trait TIO extends ResonantTile with IIO
    * @return The direction that electricity is output from the tile. Return null for no output. By
    *         default it will return an empty EnumSet.
    */
-  override def getOutputDirections: util.HashSet[ForgeDirection] =
+  override def getOutputDirections: util.HashSet[Direction] =
   {
-    var dirs = new util.HashSet[ForgeDirection]()
+	  var dirs = new util.HashSet[Direction]()
 
-    for (direction <- ForgeDirection.VALID_DIRECTIONS)
+	  for (direction <- Direction.VALID_DIRECTIONS)
     {
       if (getIO(direction) == 2)
       {
