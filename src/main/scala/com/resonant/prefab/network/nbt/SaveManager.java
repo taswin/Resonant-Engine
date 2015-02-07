@@ -1,4 +1,4 @@
-package com.resonant.lib.utility.nbt;
+package com.resonant.prefab.network.nbt;
 
 import com.resonant.core.api.misc.ISave;
 import com.resonant.lib.utility.ReflectionUtility;
@@ -8,6 +8,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.world.WorldEvent;
+import nova.wrapper.mc1710.util.NBTUtility;
 import org.apache.logging.log4j.Level;
 import resonantengine.core.Reference;
 
@@ -108,7 +109,7 @@ public class SaveManager {
 	 */
 	public static Object createAndLoad(File file, Object... args) {
 		if (file.exists()) {
-			Object obj = createAndLoad(NBTUtility.loadData(file), args);
+			Object obj = createAndLoad(NBTUtility.load(file), args);
 			if (obj instanceof IVirtualObject) {
 				((IVirtualObject) obj).setSaveFile(file);
 			}

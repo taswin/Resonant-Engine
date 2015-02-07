@@ -1,4 +1,4 @@
-package com.resonant.prefab.block.impl
+package com.resonant.prefab.block
 
 import com.resonant.core.api.tile.IInventoryProvider
 import nova.core.util.transform.Vector3d
@@ -23,18 +23,6 @@ trait TInventory extends ResonantBlock with IInventoryProvider with ISidedInvent
 		markDirty()
 	}
 
-	override def getStackInSlot(index: Int): ItemStack = this.getInventory().getStackInSlot(index)
-
-	override def setInventorySlotContents(index: Int, stack: ItemStack) {
-		this.getInventory().setInventorySlotContents(index, stack)
-		onInventoryChanged()
-	}
-
-	/** Called each time the inventory changes */
-	def onInventoryChanged() {
-
-	}
-
 	override def getStackInSlotOnClosing(index: Int): ItemStack = this.getInventory().getStackInSlotOnClosing(index)
 
 	override def getInventoryName: String = getBlockType.getLocalizedName
@@ -46,8 +34,6 @@ trait TInventory extends ResonantBlock with IInventoryProvider with ISidedInvent
 	override def isUseableByPlayer(entityplayer: EntityPlayer) = getInventory.isUseableByPlayer(entityplayer)
 
 	override def openInventory() = getInventory.openInventory()
-
-	override def getInventory: IExternalInventory = inventory
 
 	override def closeInventory() = getInventory.closeInventory()
 
@@ -156,10 +142,24 @@ trait TInventory extends ResonantBlock with IInventoryProvider with ISidedInvent
 		markDirty()
 	}
 
+	override def getStackInSlot(index: Int): ItemStack = this.getInventory().getStackInSlot(index)
+
+	override def setInventorySlotContents(index: Int, stack: ItemStack) {
+		this.getInventory().setInventorySlotContents(index, stack)
+		onInventoryChanged()
+	}
+
+	/** Called each time the inventory changes */
+	def onInventoryChanged() {
+
+	}
+
 	override def readFromNBT(nbt: NBTTagCompound) {
 		super.readFromNBT(nbt)
 		getInventory.load(nbt)
 	}
+
+	override def getInventory: IExternalInventory = inventory
 
 	override def writeToNBT(nbt: NBTTagCompound) {
 		super.writeToNBT(nbt)

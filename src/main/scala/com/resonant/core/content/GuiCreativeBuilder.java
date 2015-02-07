@@ -1,4 +1,4 @@
-package com.resonant.core.content.debug;
+package com.resonant.core.content;
 
 import com.resonant.lib.schematic.Schematic;
 import com.resonant.lib.schematic.SchematicRegistry;
@@ -11,9 +11,9 @@ import resonantengine.core.network.discriminator.PacketTile;
 
 public class GuiCreativeBuilder extends GuiContainerBase {
 	private GuiTextField textFieldSize;
-	private TileCreativeBuilder builder;
+	private BlockCreativeBuilder builder;
 
-	public GuiCreativeBuilder(TileCreativeBuilder builder) {
+	public GuiCreativeBuilder(BlockCreativeBuilder builder) {
 		super();
 		this.builder = builder;
 	}

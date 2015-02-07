@@ -1,9 +1,8 @@
-package com.resonant.core.content.tool
+package com.resonant.core.content
 
 import java.util.Optional
 
 import buildcraft.api.tools.IToolWrench
-import com.resonant.core.content.ResonantContent
 import net.minecraft.entity.player.EntityPlayer
 import nova.core.item.Item
 import nova.core.render.texture.ItemTexture

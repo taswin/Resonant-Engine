@@ -1,6 +1,5 @@
-package com.resonant.prefab.block.impl
+package com.resonant.prefab.block
 
-import com.resonant.lib.modcontent.block.ResonantBlock
 import net.minecraft.nbt.NBTTagCompound
 
 /**

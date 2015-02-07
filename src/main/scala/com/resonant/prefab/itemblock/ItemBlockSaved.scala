@@ -1,4 +1,4 @@
-package com.resonant.prefab.block.itemblock
+package com.resonant.prefab.itemblock
 
 import nova.core.util.transform.Vector3d
 

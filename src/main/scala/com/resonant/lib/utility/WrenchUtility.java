@@ -1,7 +1,7 @@
 package com.resonant.lib.utility;
 
 import buildcraft.api.tools.IToolWrench;
-import com.resonant.core.content.tool.ItemScrewdriver;
+import com.resonant.core.content.ItemScrewdriver;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import resonantengine.core.Reference;

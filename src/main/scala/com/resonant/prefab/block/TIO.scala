@@ -1,4 +1,4 @@
-package com.resonant.prefab.block.impl
+package com.resonant.prefab.block
 
 import _root_.java.util
 

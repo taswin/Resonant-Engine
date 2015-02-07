@@ -2,20 +2,19 @@ package com.resonant.core
 
 import com.resonant.core.api.edx.recipe.{MachineRecipes, RecipeType}
 import com.resonant.core.api.mffs.fortron.FrequencyGridRegistry
-import com.resonant.core.api.tile.IBoilHandler
-import com.resonant.core.content.ResonantContent
-import com.resonant.core.content.debug.TileCreativeBuilder
-import com.resonant.core.content.tool.ItemScrewdriver
+import com.resonant.core.content.{BlockCreativeBuilder, ItemScrewdriver, ResonantContent}
 import com.resonant.graph.core.UpdateTicker
 import com.resonant.graph.frequency.GridFrequency
 import com.resonant.graph.thermal.{GridThermal, ThermalPhysics}
 import com.resonant.lib.factory.resources.ResourceFactory
 import com.resonant.lib.mod.config.{ConfigHandler, ConfigScanner}
-import com.resonant.lib.utility.nbt.SaveManager
 import com.resonant.lib.utility.{PlayerInteractionHandler, PotionUtility}
-import net.minecraft.block.Block
-import nova.core.loader.NovaMod
-import nova.core.util.transform.Vector3d
+import com.resonant.prefab.modcontent.ContentLoader
+import com.resonant.prefab.network.nbt.SaveManager
+import cpw.mods.fml.common.network.NetworkRegistry
+import nova.core.block.Block
+import nova.core.item.Item
+import nova.core.loader.{Loadable, NovaMod}
 
 /**
  * Mob class for Resonant Engine that handles common loading
@@ -23,39 +22,31 @@ import nova.core.util.transform.Vector3d
  * @author Calclavia, DarkGuardsman
  */
 @NovaMod(id = Reference.id, name = Reference.name, version = Reference.version)
-object ResonantEngine {
+object ResonantEngine extends Loadable with ContentLoader {
 
-	var blockCreativeBuilder: Block = new TileCreativeBuilder
-	var itemWrench = new ItemScrewdriver
+	var blockCreativeBuilder: Block = classOf[BlockCreativeBuilder]
+	var itemWrench: Item = classOf[ItemScrewdriver]
 
-	@EventHandler
-	def preInit(evt: FMLPreInitializationEvent) {
+	override def preInit() {
 		ConfigScanner.instance.generateSets(evt.getAsmData)
 		ConfigHandler.sync(Reference.config, Reference.domain)
 		Reference.config.load()
 		NetworkRegistry.INSTANCE.registerGuiHandler(this, ResonantEngine.proxy)
-		loadables.applyModule(ResonantEngine.proxy)
-		loadables.applyModule(packetHandler)
 		loadables.applyModule(ResonantContent)
 		PotionUtility.resizePotionArray()
-		MinecraftForge.EVENT_BUS.register(this)
 		MinecraftForge.EVENT_BUS.register(ThermalPhysics)
 		MinecraftForge.EVENT_BUS.register(SaveManager.instance)
 		MinecraftForge.EVENT_BUS.register(new PlayerInteractionHandler)
-		ToolMode.REGISTRY.add(new ToolModeGeneral)
-		ToolMode.REGISTRY.add(new ToolModeRotation)
 		ResourceFactory.preInit()
 		loadables.preInit()
 	}
 
-	@EventHandler
-	def init(evt: FMLInitializationEvent) {
+	override def init(evt: FMLInitializationEvent) {
 		FMLCommonHandler.instance.bus.register(UpdateTicker.world)
 		loadables.init()
 	}
 
-	@EventHandler
-	def postInit(evt: FMLPostInitializationEvent) {
+	override def postInit(evt: FMLPostInitializationEvent) {
 		UpdateTicker.threaded.addUpdater(GridThermal)
 
 		if (!UpdateTicker.threaded.isAlive) {
@@ -80,21 +71,19 @@ object ResonantEngine {
 		Reference.config.save()
 	}
 
-	@EventHandler
-	def serverStopped(event: FMLServerStoppedEvent) {
+	def serverStopped() {
 		FrequencyGridRegistry.CLIENT_INSTANCE = new GridFrequency
 		FrequencyGridRegistry.SERVER_INSTANCE = new GridFrequency
 		GridThermal.clear()
 	}
 
-	@EventHandler
-	def onServerStopping(evt: FMLServerStoppingEvent) {
+	def onServerStopping() {
 		SaveManager.saveAll()
 	}
 
 	/**
 	 * Default handler.
-	 */
+
 	@SubscribeEvent
 	def boilEventHandler(evt: BoilEvent) {
 		val world: World = evt.world
@@ -116,6 +105,6 @@ object ResonantEngine {
 		}
 
 		evt.setResult(Event.Result.DENY)
-	}
+	} */
 
 }

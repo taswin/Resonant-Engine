@@ -1,4 +1,4 @@
-package com.resonant.prefab.block.itemblock
+package com.resonant.prefab.itemblock
 
 import com.resonant.prefab.item.TItemToolTip
 import net.minecraft.block.Block

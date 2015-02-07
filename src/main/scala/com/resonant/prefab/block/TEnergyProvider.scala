@@ -1,4 +1,4 @@
-package com.resonant.prefab.block.impl
+package com.resonant.prefab.block
 
 import com.resonant.graph.energy.EnergyStorage
 import nova.core.util.Direction
