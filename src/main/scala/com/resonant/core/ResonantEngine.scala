@@ -4,14 +4,17 @@ import com.resonant.core.api.edx.recipe.{MachineRecipes, RecipeType}
 import com.resonant.core.api.mffs.fortron.FrequencyGridRegistry
 import com.resonant.core.api.tile.IBoilHandler
 import com.resonant.core.content.ResonantContent
+import com.resonant.core.content.debug.TileCreativeBuilder
+import com.resonant.core.content.tool.ItemScrewdriver
 import com.resonant.graph.core.UpdateTicker
 import com.resonant.graph.frequency.GridFrequency
 import com.resonant.graph.thermal.{GridThermal, ThermalPhysics}
 import com.resonant.lib.factory.resources.ResourceFactory
 import com.resonant.lib.mod.config.{ConfigHandler, ConfigScanner}
-import com.resonant.lib.mod.loadable.LoadableHandler
 import com.resonant.lib.utility.nbt.SaveManager
 import com.resonant.lib.utility.{PlayerInteractionHandler, PotionUtility}
+import net.minecraft.block.Block
+import nova.core.loader.NovaMod
 import nova.core.util.transform.Vector3d
 
 /**
@@ -19,12 +22,11 @@ import nova.core.util.transform.Vector3d
  *
  * @author Calclavia, DarkGuardsman
  */
-@Mod(modid = Reference.id, name = Reference.name, version = Reference.version, modLanguage = "scala")
+@NovaMod(id = Reference.id, name = Reference.name, version = Reference.version)
 object ResonantEngine {
-	val packetHandler = new PacketManager(Reference.channel)
-	private val loadables = new LoadableHandler
-	@SidedProxy(clientSide = "resonantengine.core.ClientProxy", serverSide = "resonantengine.core.CommonProxy")
-	var proxy: CommonProxy = null
+
+	var blockCreativeBuilder: Block = new TileCreativeBuilder
+	var itemWrench = new ItemScrewdriver
 
 	@EventHandler
 	def preInit(evt: FMLPreInitializationEvent) {

@@ -1,7 +1,5 @@
 package com.resonant.prefab.modcontent
 
-import com.resonant.lib.modcontent.ContentManager
-import com.resonant.lib.modcontent.block.ResonantBlock
 import net.minecraft.block.Block
 import net.minecraft.block.material.Material
 import net.minecraft.item.Item
@@ -26,8 +24,8 @@ trait ContentLoader {
 
 			if (obj != null) {
 				// Get Annotation Name if present
-				var name: String = null;
-				val annotation = field.getAnnotation(classOf[ExplicitContentName])
+				var name: String = null
+				val annotation = field.getAnnotation(classOf[ExplicitID])
 
 				if (annotation != null) {
 					if (!annotation.value.isEmpty) {

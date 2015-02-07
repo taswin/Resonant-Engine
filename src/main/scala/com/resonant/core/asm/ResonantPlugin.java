@@ -1,6 +1,5 @@
-package com.resonant.core;
+package com.resonant.core.asm;
 
-import com.resonant.core.asm.EventTransformer;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin;
 import cpw.mods.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 
