@@ -1,18 +1,24 @@
 package com.resonant.prefab.save;
 
+import com.resonant.core.Reference;
 import com.resonant.core.api.misc.ISave;
 import com.resonant.lib.utility.ReflectionUtility;
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.event.world.WorldEvent;
+import nova.core.util.components.Storable;
 import nova.wrapper.mc1710.util.NBTUtility;
 import org.apache.logging.log4j.Level;
-import resonantengine.core.Reference;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -29,11 +35,11 @@ public class SaveManager {
 	/**
 	 * Map of save names with there class file
 	 */
-	private HashMap<String, Class<?>> idToClassMap = new HashMap<String, Class<?>>();
+	private HashMap<String, Class<?>> idToClassMap = new HashMap<>();
 	/**
 	 * Reverse of the idToClassMap
 	 */
-	private HashMap<Class<?>, String> classToIDMap = new HashMap<Class<?>, String>();
+	private HashMap<Class<?>, String> classToIDMap = new HashMap<>();
 	/**
 	 * List of object to save on the next save call
 	 */
@@ -42,6 +48,7 @@ public class SaveManager {
 	 * Object that save each time the world saves
 	 */
 	private LinkedHashSet<IVirtualObject> objects = new LinkedHashSet<IVirtualObject>();
+
 	/**
 	 * Last cpu time that the save manager tried to save a file
 	 */
@@ -170,10 +177,10 @@ public class SaveManager {
 	 */
 	public static void saveAll() {
 		for (IVirtualObject ref : instance().objects) {
-			saveObject(ref);
+			save(ref);
 		}
 		for (IVirtualObject ref : instance().saveList) {
-			saveObject(ref);
+			save(ref);
 		}
 		instance().saveList.clear();
 	}
@@ -181,25 +188,24 @@ public class SaveManager {
 	/**
 	 * Saves an object to its preferred save location. Does check for null, registered save class,
 	 * and if save file doesn't exist. Redirects to NBTUtility for actual saving of the file itself.
-	 * @param object - instance of @IVirtualObject
+	 * @param storable - instance of @IVirtualObject
 	 */
-	public static void saveObject(IVirtualObject object) {
+	public static void save(Storable storable) {
 		try {
 			if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-				if (object != null) {
-					if (getID(object.getClass()) != null) {
-						if (object.getSaveFile() != null) {
+				if (storable != null) {
+					if (getID(storable.getClass()) != null) {
+						if (storable.getSaveFile() != null) {
 							/* Get file, and make directories */
-							File file = object.getSaveFile();
+							File file = storable.getSaveFile();
 							file.mkdirs();
 
                             /* Create nbt save object */
 							NBTTagCompound tag = new NBTTagCompound();
-							object.save(tag);
-							tag.setString("id", getID(object.getClass()));
+							storable.save(tag);
+							tag.setString("id", getID(storable.getClass()));
 
-                            /* Save data using NBTUtility */
-							NBTUtility.saveData(file, tag);
+							saveFile(file, tag);
 						} else {
 							throw new NullPointerException("SaveManager: Object save file path is null");
 						}
@@ -211,7 +217,7 @@ public class SaveManager {
 				}
 			}
 		} catch (Exception e) {
-			FMLLog.fine("[Resonant Engine]SaveManager: Error trying to save object class: " + (object != null ? object.getClass() : "null"));
+			FMLLog.fine("[Resonant Engine]SaveManager: Error trying to save object class: " + (storable != null ? storable.getClass() : "null"));
 			e.printStackTrace();
 		}
 	}
@@ -230,9 +236,89 @@ public class SaveManager {
 		return instance().idToClassMap.get(id);
 	}
 
+	/**
+	 * Saves NBT data in the world folder.
+	 * @return True on success.
+	 */
+	public static boolean saveFile(File file, NBTTagCompound data) {
+		try {
+			File tempFile = new File(file.getParent(), file.getName() + "_tmp.dat");
+
+			CompressedStreamTools.writeCompressed(data, new FileOutputStream(tempFile));
+
+			if (file.exists()) {
+				file.delete();
+			}
+
+			tempFile.renameTo(file);
+			return true;
+		} catch (Exception e) {
+			Reference.logger().fatal("Failed to save " + file.getName() + ".dat!");
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public static boolean saveFile(File saveDirectory, String filename, NBTTagCompound data) {
+		return saveFile(new File(saveDirectory, filename + ".dat"), data);
+	}
+
+	public static boolean saveFile(String filename, NBTTagCompound data) {
+		return saveFile(getSaveDirectory(MinecraftServer.getServer().getFolderName()), filename, data);
+	}
+
+	public static NBTTagCompound loadFile(File file) {
+		try {
+			if (file.exists()) {
+				return CompressedStreamTools.readCompressed(new FileInputStream(file));
+			} else {
+				return new NBTTagCompound();
+			}
+		} catch (Exception e) {
+			Reference.logger().fatal("Failed to load " + file.getName() + ".dat!");
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * Reads NBT data from the world folder.
+	 * @return The NBT data
+	 */
+	public static NBTTagCompound loadFile(File saveDirectory, String filename) {
+		return loadFile(new File(saveDirectory, filename + ".dat"));
+	}
+
+	public static NBTTagCompound loadFile(String filename) {
+		return loadFile(getSaveDirectory(MinecraftServer.getServer().getFolderName()), filename);
+	}
+
+	public static File getSaveDirectory() {
+		return getSaveDirectory(MinecraftServer.getServer().getFolderName());
+	}
+
+	public static File getSaveDirectory(String worldName) {
+		File parent = getBaseDirectory();
+
+		if (FMLCommonHandler.instance().getSide().isClient()) {
+			parent = new File(getBaseDirectory(), "saves" + File.separator);
+		}
+
+		return new File(parent, worldName + File.separator);
+	}
+
+	public static File getBaseDirectory() {
+		if (FMLCommonHandler.instance().getSide().isClient()) {
+			FMLClientHandler.instance().getClient();
+			return FMLClientHandler.instance().getClient().mcDataDir;
+		} else {
+			return new File(".");
+		}
+	}
+
 	@SubscribeEvent
 	public void worldSave(WorldEvent evt) {
-		//current time milli-seconds is used to prevent the files from saving 20 times when the world loads
+		//Current time milli-seconds is used to prevent the files from saving 20 times when the world loads
 		if (System.currentTimeMillis() - lastSaveMills > 2000) {
 			lastSaveMills = System.currentTimeMillis();
 			saveAll();

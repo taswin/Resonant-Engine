@@ -2,16 +2,14 @@ package com.resonant.core
 
 import com.resonant.config.{ConfigHandler, ConfigScanner}
 import com.resonant.core.api.edx.recipe.{MachineRecipes, RecipeType}
-import com.resonant.core.api.mffs.fortron.FrequencyGridRegistry
 import com.resonant.core.content.{BlockCreativeBuilder, ItemScrewdriver}
 import com.resonant.graph.core.UpdateTicker
 import com.resonant.graph.frequency.GridFrequency
 import com.resonant.graph.thermal.{GridThermal, ThermalPhysics}
 import com.resonant.lib.factory.resources.ResourceFactory
-import com.resonant.lib.utility.{PlayerInteractionHandler, PotionUtility}
+import com.resonant.lib.utility.PotionUtility
 import com.resonant.prefab.modcontent.ContentLoader
 import com.resonant.prefab.save.SaveManager
-import cpw.mods.fml.common.network.NetworkRegistry
 import nova.core.block.Block
 import nova.core.item.Item
 import nova.core.loader.{Loadable, NovaMod}
@@ -29,21 +27,16 @@ object ResonantEngine extends Loadable with ContentLoader {
 
 	override def preInit() {
 		ConfigScanner.instance.generateSets(evt.getAsmData)
-		ConfigHandler.sync(Reference.config, Reference.domain)
+		ConfigHandler.sync(Reference.config, "com.resonant.core")
 		Reference.config.load()
-		NetworkRegistry.INSTANCE.registerGuiHandler(this, ResonantEngine.proxy)
-		loadables.applyModule(ResonantContent)
 		PotionUtility.resizePotionArray()
 		MinecraftForge.EVENT_BUS.register(ThermalPhysics)
 		MinecraftForge.EVENT_BUS.register(SaveManager.instance)
-		MinecraftForge.EVENT_BUS.register(new PlayerInteractionHandler)
 		ResourceFactory.preInit()
-		loadables.preInit()
 	}
 
-	override def init(evt: FMLInitializationEvent) {
+	override def init() {
 		FMLCommonHandler.instance.bus.register(UpdateTicker.world)
-		loadables.init()
 	}
 
 	override def postInit(evt: FMLPostInitializationEvent) {

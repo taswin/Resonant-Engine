@@ -1,8 +1,8 @@
 package com.resonant.prefab.block.multiblock;
 
-import com.resonant.core.api.misc.ISave;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import nova.core.util.components.Storable;
 import nova.core.util.transform.Vector3d;
 
 import java.lang.ref.WeakReference;
@@ -15,7 +15,7 @@ import java.util.Set;
  * have a reference of this object.
  * @author Calclavia
  */
-public class MultiBlockHandler<W extends IMultiBlockStructure> implements ISave {
+public class MultiBlockHandler<W extends IMultiBlockStructure> implements Storable {
 	protected final W tile;
 	/**
 	 * The main block used for reference

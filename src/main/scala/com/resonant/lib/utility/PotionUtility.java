@@ -4,6 +4,7 @@ import net.minecraft.potion.Potion;
 
 /** Utility to handle anything related to Potion.class */
 public class PotionUtility {
+
 	/** Limit based on the max size the NBT save allows, too set it higher the save must be ASMed */
 	private static final int EXTEND_LIMIT = 256;
 

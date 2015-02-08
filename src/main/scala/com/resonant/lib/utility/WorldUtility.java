@@ -115,8 +115,8 @@ public class WorldUtility {
 
 	public static TileEntity[] getSurroundingTileEntities(World world, int x, int y, int z) {
 		TileEntity[] list = new TileEntity[6];
-		for (Direction direction : Direction.VALID_DIRECTIONS) {
-			list[direction.ordinal()] = world.getTileEntity(x + direction.offsetX, y + direction.offsetY, z + direction.offsetZ);
+		for (Direction direction : Direction.DIRECTIONS) {
+			list[direction.ordinal()] = world.getTileEntity(x + direction.x, y + direction.y, z + direction.z);
 		}
 		return list;
 	}

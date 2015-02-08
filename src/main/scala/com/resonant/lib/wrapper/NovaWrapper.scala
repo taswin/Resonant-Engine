@@ -6,7 +6,7 @@ import nova.core.network.Packet
  * Wraps NOVA objects and provides them with Scala synthetic sugar coating.
  * @author Calclavia
  */
-package object NovaWrapper {
+object NovaWrapper {
 
 	implicit class PacketWrapper(underlying: Packet) {
 
