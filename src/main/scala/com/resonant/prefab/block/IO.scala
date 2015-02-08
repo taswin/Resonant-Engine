@@ -2,19 +2,23 @@ package com.resonant.prefab.block
 
 import _root_.java.util
 
+import com.resonant.core.api.tile.IIO
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.util.ChatComponentText
+import nova.core.block.Block
 import nova.core.util.Direction
+import nova.core.util.components.Storable
 
 import scala.collection.convert.wrapAll._
 
 /**
- * A Trait that handles IO Traits
+ * A Trait that handles input and outputs
  *
  * @author Calclavia
  */
-trait TIO extends ResonantTile with IIO {
+//TODO: Using ternary is kind of ineffective
+trait IO extends Block with Storable with IIO {
+
 	/**
 	 * IO METHODS.
 	 * Default: Connect from all sides. "111111"
@@ -56,29 +60,11 @@ trait TIO extends ResonantTile with IIO {
 	override def getInputDirections: util.HashSet[Direction] = {
 		var dirs = new util.HashSet[Direction]()
 
-		for (direction <- Direction.VALID_DIRECTIONS) {
+		for (direction <- Direction.DIRECTIONS) {
 			if (getIO(direction) == 1) {
 				dirs += direction
 			}
 		}
-		return dirs
-	}
-
-	/**
-	 * The electrical output direction.
-	 *
-	 * @return The direction that electricity is output from the tile. Return null for no output. By
-	 *         default it will return an empty EnumSet.
-	 */
-	override def getOutputDirections: util.HashSet[Direction] = {
-		var dirs = new util.HashSet[Direction]()
-
-		for (direction <- Direction.VALID_DIRECTIONS) {
-			if (getIO(direction) == 2) {
-				dirs += direction
-			}
-		}
-
 		return dirs
 	}
 
@@ -96,19 +82,37 @@ trait TIO extends ResonantTile with IIO {
 
 	}
 
-	override def readFromNBT(nbt: NBTTagCompound) {
-		super.readFromNBT(nbt)
+	/**
+	 * The electrical output direction.
+	 *
+	 * @return The direction that electricity is output from the tile. Return null for no output. By
+	 *         default it will return an empty EnumSet.
+	 */
+	override def getOutputDirections: util.HashSet[Direction] = {
+		var dirs = new util.HashSet[Direction]()
 
-		if (saveIOMap && nbt.hasKey("ioMap")) {
-			ioMap = nbt.getShort("ioMap")
+		for (direction <- Direction.DIRECTIONS) {
+			if (getIO(direction) == 2) {
+				dirs += direction
+			}
+		}
+
+		return dirs
+	}
+
+	override def save(data: util.Map[String, AnyRef]) {
+		super.save(data)
+
+		if (saveIOMap) {
+			data.put("ioMap", ioMap.toShort)
 		}
 	}
 
-	override def writeToNBT(nbt: NBTTagCompound) {
-		super.writeToNBT(nbt)
+	override def load(data: util.Map[String, AnyRef]) {
+		super.load(data)
 
 		if (saveIOMap) {
-			nbt.setShort("ioMap", ioMap.toShort)
+			ioMap = data.getOrDefault("ioMap", 364).asInstanceOf[Int]
 		}
 	}
 

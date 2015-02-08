@@ -4,10 +4,10 @@ package com.resonant.prefab.block
  * An object that can handle ticks.
  * @author Calclavia
  */
-trait TTicker {
+trait Updater extends nova.core.util.components.Updater {
 	protected var ticks = 0L
 
-	def update() {
+	override def update(deltaTime: Double) {
 		if (ticks == 0) {
 			start()
 		}
