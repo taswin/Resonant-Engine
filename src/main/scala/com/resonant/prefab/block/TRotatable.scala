@@ -2,14 +2,21 @@ package com.resonant.prefab.block
 
 import nova.core.block.Block
 import nova.core.entity.Entity
+import nova.core.network.Sync
 import nova.core.util.Direction
+import nova.core.util.components.Stored
 import nova.core.util.transform.Vector3d
 
 trait TRotatable extends Block {
+
 	var rotationMask = 0x3C
 	var isFlipPlacement = false
 
-	override def getDirection: Direction = Direction.getOrientation(getBlockMetadata)
+	@Sync
+	@Stored
+	var direction = Direction.UNKNOWN
+
+	override def getDirection: Direction = Direction.fromOrdinal(getBlockMetadata)
 
 	def determineRotation(entity: Entity): Direction = {
 		if (Math.abs(entity.getPosition.x - x) < 2 && Math.abs(entity.getPosition.z - z) < 2) {
@@ -27,19 +34,17 @@ trait TRotatable extends Block {
 		val returnSide = if (playerSide == 0 && canRotate(2)) 2 else if (playerSide == 1 && canRotate(5)) 5 else if (playerSide == 2 && canRotate(3)) 3 else if (playerSide == 3 && canRotate(4)) 4 else 0
 
 		if (isFlipPlacement) {
-			return Direction.fromOrdinal(returnSide).getOpposite
+			return Direction.fromOrdinal(returnSide).opposite()
 		}
 
 		return Direction.fromOrdinal(returnSide)
 	}
 
-	def canRotate(ord: Int): Boolean = (rotationMask & (1 << ord)) != 0
-
 	def determineRotation(entity: Entity): Direction =
 	{
 		if (Math.abs(entity.getPosition.x - x) < 2 && Math.abs(entity.getPosition.z - z) < 2) {
 			val d0 = entity.getPosition.y + 1.82D //- entity.yOffset
-			
+
 			if (canRotate(1) && d0 - y > 2.0D) {
 				return Direction.UP
 			}
@@ -65,7 +70,7 @@ trait TRotatable extends Block {
 		val result = getSideToRotate(side.asInstanceOf[Byte], hit.x, hit.y, hit.z)
 
 		if (result != -1) {
-			setDirection(Direction.getOrientation(result))
+			setDirection(Direction.fromOrdinal(result))
 			return true
 		}
 
@@ -219,4 +224,6 @@ trait TRotatable extends Block {
 		}
 		return -1
 	}
+
+	def canRotate(ord: Int): Boolean = (rotationMask & (1 << ord)) != 0
 }
