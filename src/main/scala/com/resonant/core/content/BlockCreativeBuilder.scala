@@ -2,7 +2,7 @@ package com.resonant.core.content
 
 import java.util
 
-import com.resonant.prefab.block.TRotatable
+import com.resonant.prefab.block.Rotatable
 import com.resonant.prefab.network.TPacketSender
 import nova.core.block.BlockChanger.Block
 import nova.core.util.collection.Pair
@@ -10,7 +10,7 @@ import nova.core.util.transform.Vector3d
 
 import scala.collection.JavaConversions._
 
-class BlockCreativeBuilder extends Block with TRotatable with PacketReceiver with TPacketSender {
+class BlockCreativeBuilder extends Block with Rotatable with PacketReceiver with TPacketSender {
 	//Current build task vars
 	var doBuild: Boolean = false
 	var buildMap: util.HashMap[Vector3d, Pair[Block, Integer]] = null
