@@ -50,9 +50,9 @@ public class SchematicMap extends Schematic implements ISave {
 		if (this.schematicSize != null) {
 			this.init = true;
 			this.schematicCenter = new Vector3d();
-			this.schematicCenter.x(this.schematicSize.x() / 2);
+			this.schematicCenter.x(this.schematicSize.x / 2);
 			// this.schematicCenter.y = this.schematicSize.y() / 2;
-			this.schematicCenter.z(this.schematicSize.z() / 2);
+			this.schematicCenter.z(this.schematicSize.z / 2);
 		}
 	}
 

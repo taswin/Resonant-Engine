@@ -1,4 +1,4 @@
-package com.resonant.prefab.network.nbt;
+package com.resonant.prefab.nbt;
 
 import com.resonant.core.api.misc.ISave;
 import com.resonant.lib.utility.ReflectionUtility;
@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 
 /**
- * Simple manager that handles common saving and creation of object threw Minecraft's NBT system.
+ * Simple manager that handles external file saving.
  * @author Darkguardsman
  */
 public class SaveManager {

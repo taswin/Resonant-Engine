@@ -1,4 +1,4 @@
-package com.resonant.lib.mod.compat.computers
+package com.resonant.lib.compat.computers
 
 /**
  * Stub for the moment, in 1.7 will be adjusted to ship no API files at all.

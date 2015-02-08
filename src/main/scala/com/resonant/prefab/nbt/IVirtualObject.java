@@ -1,4 +1,4 @@
-package com.resonant.prefab.network.nbt;
+package com.resonant.prefab.nbt;
 
 import com.resonant.core.api.misc.ISave;
 

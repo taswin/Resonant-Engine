@@ -1,4 +1,4 @@
-package com.resonant.lib.mod.compat;
+package com.resonant.lib.compat;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.LoaderState;

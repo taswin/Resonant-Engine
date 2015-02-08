@@ -1,4 +1,4 @@
-package com.resonant.lib.mod.compat
+package com.resonant.lib.compat
 
 /**
  * @since 22/03/14

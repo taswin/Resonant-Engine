@@ -1,4 +1,4 @@
-package com.resonant.nova
+package com.resonant.lib
 
 import nova.core.network.Packet
 
@@ -6,7 +6,7 @@ import nova.core.network.Packet
  * Wraps NOVA objects and provides them with Scala synthetic sugar coating.
  * @author Calclavia
  */
-package object wrapper {
+package object NovaWrapper {
 
 	implicit class PacketWrapper(underlying: Packet) {
 

@@ -1,4 +1,4 @@
-package com.resonant.lib.mod.config;
+package com.resonant.config;
 
 import com.resonant.lib.utility.LanguageUtility;
 import net.minecraftforge.common.MinecraftForge;

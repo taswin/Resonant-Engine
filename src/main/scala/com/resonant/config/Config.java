@@ -1,6 +1,4 @@
-package com.resonant.lib.mod.config;
-
-import net.minecraftforge.common.config.Configuration;
+package com.resonant.config;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -28,12 +26,14 @@ import java.lang.annotation.Target;
  * <p/>
  * As by reflection the Config Handler goes with Default Configuration.CATEGORY_GENERAL and uses the
  * Key as the Field name
+ *
+ * @author Calclavia 
  * @since 09/03/14
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Config {
-	public String category() default Configuration.CATEGORY_GENERAL;
+	public String category() default "general";
 
 	/**
 	 * The default key would be the name of the field. The name of the field must be in camel case.

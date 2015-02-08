@@ -1,16 +1,16 @@
 package com.resonant.core
 
+import com.resonant.config.{ConfigHandler, ConfigScanner}
 import com.resonant.core.api.edx.recipe.{MachineRecipes, RecipeType}
 import com.resonant.core.api.mffs.fortron.FrequencyGridRegistry
-import com.resonant.core.content.{BlockCreativeBuilder, ItemScrewdriver, ResonantContent}
+import com.resonant.core.content.{BlockCreativeBuilder, ItemScrewdriver}
 import com.resonant.graph.core.UpdateTicker
 import com.resonant.graph.frequency.GridFrequency
 import com.resonant.graph.thermal.{GridThermal, ThermalPhysics}
 import com.resonant.lib.factory.resources.ResourceFactory
-import com.resonant.lib.mod.config.{ConfigHandler, ConfigScanner}
 import com.resonant.lib.utility.{PlayerInteractionHandler, PotionUtility}
 import com.resonant.prefab.modcontent.ContentLoader
-import com.resonant.prefab.network.nbt.SaveManager
+import com.resonant.prefab.nbt.SaveManager
 import cpw.mods.fml.common.network.NetworkRegistry
 import nova.core.block.Block
 import nova.core.item.Item

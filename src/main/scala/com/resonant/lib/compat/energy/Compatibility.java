@@ -1,4 +1,4 @@
-package com.resonant.lib.mod.compat.energy;
+package com.resonant.lib.compat.energy;
 
 import cpw.mods.fml.common.Loader;
 import net.minecraft.item.ItemStack;

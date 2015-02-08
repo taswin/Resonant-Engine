@@ -1,4 +1,4 @@
-package com.resonant.lib.mod.config;
+package com.resonant.config;
 
 import cpw.mods.fml.common.discovery.ASMDataTable;
 

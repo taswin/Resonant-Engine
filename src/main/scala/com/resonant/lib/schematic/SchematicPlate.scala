@@ -2,6 +2,8 @@ package com.resonant.lib.schematic
 
 import java.util.HashMap
 
+import nova.core.block.Block
+import nova.core.util.Direction
 import nova.core.util.collection.Pair
 import nova.core.util.transform.Vector3d
 

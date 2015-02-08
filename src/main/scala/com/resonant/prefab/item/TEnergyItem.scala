@@ -2,7 +2,7 @@ package com.resonant.prefab.item
 
 import java.util.List
 
-import com.resonant.lib.mod.compat.energy.Compatibility
+import com.resonant.lib.compat.energy.Compatibility
 import com.resonant.lib.utility.science.UnitDisplay
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
@@ -39,21 +39,20 @@ trait TEnergyItem extends Item with IEnergyItem {
 		list.add(color + new UnitDisplay(UnitDisplay.Unit.JOULES, energy) + "/" + new UnitDisplay(UnitDisplay.Unit.JOULES, getEnergyCapacity(itemStack)).symbol)
 	}
 
+	override def getEnergy(itemStack: ItemStack): Double = {
+		if (itemStack.getTagCompound == null) {
+			itemStack.setTagCompound(new NBTTagCompound)
+		}
+		val energyStored = itemStack.getTagCompound.getDouble(nbtName)
+		itemStack.setItemDamage((100 - (energyStored.toDouble / getEnergyCapacity(itemStack)) * 100).toInt)
+		return energyStored
+	}
+
 	/**
 	 * Makes sure the item is uncharged when it is crafted and not charged.
 	 */
 	override def onCreated(itemStack: ItemStack, par2World: World, par3EntityPlayer: EntityPlayer) {
 		setEnergy(itemStack, 0)
-	}
-
-	override def setEnergy(itemStack: ItemStack, energy: Double): ItemStack = {
-		if (itemStack.getTagCompound == null) {
-			itemStack.setTagCompound(new NBTTagCompound)
-		}
-		val electricityStored = Math.max(Math.min(energy, getEnergyCapacity(itemStack)), 0)
-		itemStack.getTagCompound.setDouble(nbtName, electricityStored)
-		itemStack.setItemDamage((100 - (electricityStored / getEnergyCapacity(itemStack)) * 100).toInt)
-		return itemStack
 	}
 
 	override def recharge(itemStack: ItemStack, energy: Double, doReceive: Boolean): Double = {
@@ -72,17 +71,18 @@ trait TEnergyItem extends Item with IEnergyItem {
 		return energyExtracted
 	}
 
-	def getTransferRate(itemStack: ItemStack): Double = {
-		return getEnergyCapacity(itemStack) / 100
-	}
-
-	override def getEnergy(itemStack: ItemStack): Double = {
+	override def setEnergy(itemStack: ItemStack, energy: Double): ItemStack = {
 		if (itemStack.getTagCompound == null) {
 			itemStack.setTagCompound(new NBTTagCompound)
 		}
-		val energyStored = itemStack.getTagCompound.getDouble(nbtName)
-		itemStack.setItemDamage((100 - (energyStored.toDouble / getEnergyCapacity(itemStack)) * 100).toInt)
-		return energyStored
+		val electricityStored = Math.max(Math.min(energy, getEnergyCapacity(itemStack)), 0)
+		itemStack.getTagCompound.setDouble(nbtName, electricityStored)
+		itemStack.setItemDamage((100 - (electricityStored / getEnergyCapacity(itemStack)) * 100).toInt)
+		return itemStack
+	}
+
+	def getTransferRate(itemStack: ItemStack): Double = {
+		return getEnergyCapacity(itemStack) / 100
 	}
 
 	def getTransfer(itemStack: ItemStack): Double = {

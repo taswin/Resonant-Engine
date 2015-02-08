@@ -1,7 +1,6 @@
-package com.resonant.lib.mod.compat.computers
+package com.resonant.lib.compat.computers
 
-import com.resonant.lib.mod.compat.Mods
-import com.resonant.lib.mod.loadable.ICompatProxy
+import com.resonant.lib.compat.Mods
 
 /**
  * @since 22/03/14

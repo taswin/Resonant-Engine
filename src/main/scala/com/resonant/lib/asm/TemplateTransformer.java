@@ -5,7 +5,7 @@
 package com.resonant.lib.asm;
 
 import com.google.common.collect.HashBiMap;
-import com.resonant.lib.mod.compat.energy.Compatibility;
+import com.resonant.lib.compat.energy.Compatibility;
 import net.minecraft.launchwrapper.IClassTransformer;
 import net.minecraft.launchwrapper.LaunchClassLoader;
 import org.objectweb.asm.ClassWriter;
