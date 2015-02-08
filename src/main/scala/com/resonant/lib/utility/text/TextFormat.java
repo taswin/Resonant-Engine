@@ -1,4 +1,4 @@
-package com.resonant.lib.utility;
+package com.resonant.lib.utility.text;
 
 public enum TextFormat {
 	RANDOMCHARS("\247k"),

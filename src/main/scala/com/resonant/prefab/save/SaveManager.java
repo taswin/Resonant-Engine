@@ -1,4 +1,4 @@
-package com.resonant.prefab.nbt;
+package com.resonant.prefab.save;
 
 import com.resonant.core.api.misc.ISave;
 import com.resonant.lib.utility.ReflectionUtility;

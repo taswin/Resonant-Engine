@@ -101,9 +101,9 @@ public class MathUtility {
 	 * @return new Vector3d(radius, inclination, azimuth)
 	 */
 	public static Vector3d vecToSphereAngles(Vector3d vec) {
-		double radius = Math.sqrt((vec.x() * vec.x()) + (vec.y() * vec.y()) + (vec.z() * vec.z()));
-		double inclination = Math.acos(vec.z() / radius);
-		double azimuth = Math.atan(vec.y() / vec.z());
+		double radius = Math.sqrt((vec.x * vec.x) + (vec.y * vec.y) + (vec.z * vec.z));
+		double inclination = Math.acos(vec.z / radius);
+		double azimuth = Math.atan(vec.y / vec.z);
 		return new Vector3d(radius, inclination, azimuth);
 	}
 

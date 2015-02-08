@@ -15,7 +15,7 @@ object RotationUtility {
 	 */
 	def rotateSide(s: Int, r: Int): Int = sideRotMap(s << 2 | r)
 
-	def rotateSide(s: Direction, r: Direction): Direction = Direction.getOrientation(sideRotMap(s.ordinal << 2 | r.ordinal))
+	def rotateSide(s: Direction, r: Direction): Direction = Direction.fromOrdinal(sideRotMap(s.ordinal << 2 | r.ordinal))
 
 	/**
 	 * Finds the direction relative to a base direction.
@@ -27,7 +27,7 @@ object RotationUtility {
 	 */
 	def getRelativeSide(front: Direction, side: Direction): Direction = {
 		if (front != Direction.UNKNOWN && side != Direction.UNKNOWN) {
-			return Direction.getOrientation(relativeMatrix(front.ordinal)(side.ordinal))
+			return Direction.fromOrdinal(relativeMatrix(front.ordinal)(side.ordinal))
 		}
 		return Direction.UNKNOWN
 	}

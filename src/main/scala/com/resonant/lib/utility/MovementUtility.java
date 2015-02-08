@@ -57,7 +57,7 @@ public class MovementUtility {
 				//chunk.getBlockLightOpacity(chunkPosition.xi(), position.yi(), chunkPosition.zi())
 				if (chunk.getBlockLightValue(chunkPosition.xi(), position.yi(), chunkPosition.zi(), 0) > 0) {
 					if (position.yi() >= heightMapValue) {
-						relightBlock(chunk, chunkPosition.clone().add(new Vector3d(0, 1, 0)));
+						relightBlock(chunk, chunkPosition.add(new Vector3d(0, 1, 0)));
 					}
 				} else if (position.yi() == heightMapValue - 1) {
 					relightBlock(chunk, chunkPosition);

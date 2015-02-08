@@ -1,4 +1,4 @@
-package com.resonant.lib.utility;
+package com.resonant.lib.utility.text;
 
 import java.awt.*;
 

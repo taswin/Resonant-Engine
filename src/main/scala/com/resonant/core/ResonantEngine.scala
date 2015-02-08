@@ -10,7 +10,7 @@ import com.resonant.graph.thermal.{GridThermal, ThermalPhysics}
 import com.resonant.lib.factory.resources.ResourceFactory
 import com.resonant.lib.utility.{PlayerInteractionHandler, PotionUtility}
 import com.resonant.prefab.modcontent.ContentLoader
-import com.resonant.prefab.nbt.SaveManager
+import com.resonant.prefab.save.SaveManager
 import cpw.mods.fml.common.network.NetworkRegistry
 import nova.core.block.Block
 import nova.core.item.Item

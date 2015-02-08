@@ -58,7 +58,7 @@ public class SchematicMap extends Schematic implements ISave {
 
 	public void build(VectorWorld spot, boolean doWorldCheck) {
 		if (this.block_map != null) {
-			HashMap<Vector3d, ItemStack> blocksToPlace = new HashMap<Vector3d, ItemStack>();
+			HashMap<Vector3d, ItemStack> blocksToPlace = new HashMap<>();
 			this.getBlocksToPlace(spot, blocksToPlace, doWorldCheck, doWorldCheck);
 			for (Entry<Vector3d, ItemStack> entry : blocksToPlace.entrySet()) {
 				entry.getKey().setBlock(spot.world(), Block.getBlockFromItem(entry.getValue().getItem()), entry.getValue().getItemDamage());
