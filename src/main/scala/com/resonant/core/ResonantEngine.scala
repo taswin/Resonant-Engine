@@ -9,10 +9,10 @@ import com.resonant.graph.thermal.{GridThermal, ThermalPhysics}
 import com.resonant.lib.factory.resources.ResourceFactory
 import com.resonant.lib.utility.PotionUtility
 import com.resonant.prefab.modcontent.ContentLoader
-import com.resonant.prefab.save.SaveManager
 import nova.core.block.Block
 import nova.core.item.Item
 import nova.core.loader.{Loadable, NovaMod}
+import nova.core.util.SaveManager
 
 /**
  * Mob class for Resonant Engine that handles common loading

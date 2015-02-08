@@ -24,7 +24,7 @@ import java.util.Map.Entry;
  * @author DarkGuardsman
  */
 public class SchematicMap extends Schematic implements ISave {
-	//TODO save the schematics using block names, include a reference sheet to match block names to IDs instead of saving each block as a string
+	//TODO queueSave the schematics using block names, include a reference sheet to match block names to IDs instead of saving each block as a string
 
 	public static final String BLOCK_LIST_SAVE_NAME = "BlockList";
 	public static final String BLOCK_REF_SAVE_NAME = "BlockRef";

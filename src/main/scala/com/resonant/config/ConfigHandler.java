@@ -15,7 +15,7 @@ import java.lang.reflect.Field;
  * <p/>
  * this is all you need to do for the field itself,
  * <p/>
- * next: Just before you call save for your Configuration file, call this method:
+ * next: Just before you call queueSave for your Configuration file, call this method:
  * <p/>
  * ConfigHandler.sync(Configuration configObject, String namespace);
  * <p/>
