@@ -1,4 +1,4 @@
-package com.resonant.wrapper.lib.utility.path;
+package com.resonant.core.graph.internal.path;
 
 import nova.core.util.transform.Vector3d;
 

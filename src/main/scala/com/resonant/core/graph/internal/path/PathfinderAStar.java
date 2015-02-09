@@ -1,4 +1,4 @@
-package com.resonant.wrapper.lib.utility.path;
+package com.resonant.core.graph.internal.path;
 
 import nova.core.util.Direction;
 import nova.core.util.transform.Vector3d;
@@ -12,6 +12,7 @@ import java.util.Set;
 /**
  * An advanced version of pathfinding to find the shortest path between two points. Uses the A*
  * Pathfinding algorithm.
+ *
  * @author Calclavia
  */
 public class PathfinderAStar extends Pathfinder {
@@ -140,7 +141,7 @@ public class PathfinderAStar extends Pathfinder {
 			Set<Vector3d> neighbors = new HashSet<Vector3d>();
 
 			for (int i = 0; i < 6; i++) {
-				neighbors.add(vector.clone().add(Direction.getOrientation(i)));
+				neighbors.add(vector.add(Direction.fromOrdinal(i).toVector()));
 			}
 
 			return neighbors;
