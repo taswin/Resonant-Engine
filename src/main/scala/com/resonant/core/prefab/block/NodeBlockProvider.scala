@@ -4,7 +4,7 @@ import java.util
 import java.util.{List => JList}
 
 import com.resonant.core.graph.internal.Node
-import com.resonant.wrapper.core.api.tile.IDebugInfo
+import com.resonant.wrapper.core.api.tile.DebugInfo
 import nova.core.block.Block
 import nova.core.block.components.Stateful
 import nova.core.network.NetworkManager
@@ -17,7 +17,7 @@ import scala.collection.convert.wrapAll._
 /**
  * @author Calclavia
  */
-trait NodeProvider extends Block with Stateful with Storable with NodeProvider with IDebugInfo {
+trait NodeBlockProvider extends Block with Stateful with Storable with NodeBlockProvider with DebugInfo {
 	
 	protected val nodes = new util.HashSet[Node]
 
@@ -63,10 +63,10 @@ trait NodeProvider extends Block with Stateful with Storable with NodeProvider w
 	}
 
 	override def getDebugInfo: JList[String] = {
-		val debugs = nodes.toList.filter(_.isInstanceOf[IDebugInfo])
+		val debugs = nodes.toList.filter(_.isInstanceOf[DebugInfo])
 
 		if (debugs.size > 0) {
-			return debugs.map(_.asInstanceOf[IDebugInfo].getDebugInfo.toList).reduceLeft(_ ::: _)
+			return debugs.map(_.asInstanceOf[DebugInfo].getDebugInfo.toList).reduceLeft(_ ::: _)
 		}
 
 		return List[String]()

@@ -1,11 +1,13 @@
 package com.resonant.core.graph.internal.electric
 
+import com.resonant.core.graph.api.NodeProvider
+
 /**
  * Wires are nodes in the grid that will not have different terminals, but instead can connect omni-directionally.
  * Wires will be treated as junctions and collapsed.
  * @author Calclavia
  */
-class NodeElectricJunction(parent: INodeProvider) extends NodeElectricComponent(parent) {
+class NodeElectricJunction(parent: NodeProvider) extends NodeElectricComponent(parent) {
 
 	override def toString: String = {
 		if (junctionA != null) {

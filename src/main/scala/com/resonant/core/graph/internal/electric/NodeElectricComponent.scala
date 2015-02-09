@@ -2,6 +2,10 @@ package com.resonant.core.graph.internal.electric
 
 import java.util.{Set => JSet}
 
+import com.resonant.core.graph.api.NodeProvider
+import com.resonant.core.graph.internal.NodeBlockConnect
+import com.resonant.wrapper.core.api.tile.DebugInfo
+import com.resonant.wrapper.lib.wrapper.BitmaskWrapper._
 import nova.core.util.Direction
 
 import scala.beans.BeanProperty
@@ -16,7 +20,7 @@ import scala.collection.convert.wrapAll._
  *
  * @author Calclavia
  */
-class NodeElectricComponent(parent: INodeProvider) extends NodeGrid[NodeElectricComponent](parent) with TTileConnector[NodeElectricComponent] with IDebugInfo {
+class NodeElectricComponent(parent: NodeProvider) extends NodeBlockConnect[NodeElectricComponent](parent) with DebugInfo {
 	/**
 	 * When dynamic terminal is set to true, then the grid will attempt to swap negative and positive terminals as needed.
 	 */
@@ -56,9 +60,9 @@ class NodeElectricComponent(parent: INodeProvider) extends NodeGrid[NodeElectric
 	 */
 	private var negativeMask = 0
 
-	def positives: JSet[NodeElectricComponent] = directionMap.filter(keyVal => positiveMask.mask(keyVal._2)).keySet
+	def positives: JSet[NodeElectricComponent] = connectedMap.filter(keyVal => positiveMask.mask(keyVal._2)).keySet
 
-	def negatives: JSet[NodeElectricComponent] = directionMap.filter(keyVal => negativeMask.mask(keyVal._2)).keySet
+	def negatives: JSet[NodeElectricComponent] = connectedMap.filter(keyVal => negativeMask.mask(keyVal._2)).keySet
 
 	def setPositive(dir: Direction, open: Boolean = true) {
 		positiveMask = positiveMask.mask(dir, open)
@@ -156,10 +160,11 @@ class NodeElectricComponent(parent: INodeProvider) extends NodeGrid[NodeElectric
 		bufferPower = 0
 	}
 
-	override protected def newGrid: GridNode[NodeElectricComponent] = new GridElectric
+	override protected def newGrid: GridNode[NodeElectricComponent] = new GraphElectric
 
 	/**
 	 * The class used to compare when making connections
 	 */
 	override protected def getCompareClass = getClass
+
 }

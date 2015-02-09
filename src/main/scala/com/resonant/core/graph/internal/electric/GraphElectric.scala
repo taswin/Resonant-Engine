@@ -1,5 +1,11 @@
 package com.resonant.core.graph.internal.electric
 
+import com.resonant.core.graph.internal.GraphConnect
+import com.resonant.core.prefab.block.Updater
+import nova.internal.tick.UpdateTicker
+
+import scala.collection.convert.wrapAll._
+
 /**
  * A direct current electricity grid.
  *
@@ -7,23 +13,21 @@ package com.resonant.core.graph.internal.electric
  *
  * @author Calclavia
  */
-class GridElectric extends GridNode[NodeElectricComponent] with IUpdate {
+class GraphElectric extends GraphConnect[NodeElectricComponent] with Updater {
 	/**
 	 * There should always at least (node.size - 1) amount of intersections.
 	 */
 	var junctions = Set.empty[Junction]
 
-	nodeClass = classOf[NodeElectricComponent]
-
 	/**
 	 * Reconstruct must build the links and intersections of the grid
 	 */
-	override def reconstruct(first: NodeElectricComponent) {
+	override def build() {
+		super.build()
 		junctions = Set.empty[Junction]
-		super.reconstruct(first)
 		solveWires()
 		solveGraph()
-		UpdateTicker.world.addUpdater(this)
+		UpdateTicker.SynchronizedTicker.instance.add(this)
 	}
 
 	/**
@@ -42,9 +46,9 @@ class GridElectric extends GridNode[NodeElectricComponent] with IUpdate {
 
 		var recursed = Set.empty[NodeElectricComponent]
 
-		val nodes = getNodes.filter(_.isInstanceOf[NodeElectricJunction]).map(_.asInstanceOf[NodeElectricJunction])
+		val relevantNodes = nodes.filter(_.isInstanceOf[NodeElectricJunction]).map(_.asInstanceOf[NodeElectricJunction])
 
-		for (node <- nodes) {
+		for (node <- relevantNodes) {
 			if (!recursed.contains(node)) {
 				//Create a junction
 				val junction = new Junction
@@ -133,15 +137,10 @@ class GridElectric extends GridNode[NodeElectricComponent] with IUpdate {
 			}
 		}
 
-		getNodes.filterNot(_.isInstanceOf[NodeElectricJunction]).headOption match {
+		nodes.filterNot(_.isInstanceOf[NodeElectricJunction]).headOption match {
 			case Some(x) => solveGraph(x)
 			case _ =>
 		}
-	}
-
-	override def deconstruct(first: NodeElectricComponent) {
-		super.deconstruct(first)
-		UpdateTicker.world.removeUpdater(this)
 	}
 
 	override def update(deltaTime: Double) {
@@ -150,10 +149,8 @@ class GridElectric extends GridNode[NodeElectricComponent] with IUpdate {
 		nodes.foreach(_.postUpdate())
 	}
 
-	override def updatePeriod: Int = if (getNodes.size > 0) 20 else 0
-
-	override protected def populateNode(node: NodeElectricComponent, prev: NodeElectricComponent) {
-		super.populateNode(node, prev)
+	override protected def populate(node: NodeElectricComponent, prev: NodeElectricComponent) {
+		super.populate(node, prev)
 		node.junctionA = null
 		node.junctionB = null
 		node.voltage = 0

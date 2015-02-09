@@ -13,12 +13,12 @@ import java.util.HashMap;
  */
 public class NodeRegistry {
 	public static final NodeRegistry instance = new NodeRegistry();
-	private final HashMap<Class, Class> interfaceNodeMap = new HashMap<>();
+	private final HashMap<Class<? extends Node>, Class<? extends Node>> interfaceNodeMap = new HashMap<>();
 
 	private NodeRegistry() {
 	}
 
-	public void register(Class nodeInterface, Class nodeClass) {
+	public void register(Class<? extends Node> nodeInterface, Class<? extends Node> nodeClass) {
 		interfaceNodeMap.put(nodeInterface, nodeClass);
 	}
 

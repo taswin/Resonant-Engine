@@ -32,13 +32,12 @@ public class NodeBlockConnect<N extends NodeConnect<N>> extends NodeConnect<N> {
 	@Override
 	public Set<N> connections() {
 
-		Map<Direction, Optional<Block>> adjacentBlocks = Arrays.stream(Direction.DIRECTIONS)
-			.collect(Collectors.toMap(Function.identity(), dir -> blockAccess().getBlock(position().add(dir.toVector()))));
+		Map<Direction, Optional<Block>> adjacentBlocks = adjacentBlocks();
 
 		Map<Direction, N> adjacentNodes = adjacentBlocks.entrySet().stream()
 			.filter(entry -> entry.getValue().isPresent())
 			.filter(entry -> entry.getValue().get().getClass().isAssignableFrom(compareClass()))
-			.collect(Collectors.toMap(Map.Entry::getKey, entry -> getNodeFrom(entry.getValue().get(), entry.getKey())));
+			.collect(Collectors.toMap(Map.Entry::getKey, entry -> getNodeFromBlock(entry.getValue().get(), entry.getKey())));
 
 		//Generates a map of connections and their directions
 		connectedMap = adjacentNodes.entrySet().stream()
@@ -52,7 +51,12 @@ public class NodeBlockConnect<N extends NodeConnect<N>> extends NodeConnect<N> {
 		return connectedMap.keySet();
 	}
 
-	protected N getNodeFrom(Block block, Direction from) {
+	protected Map<Direction, Optional<Block>> adjacentBlocks() {
+		return Arrays.stream(Direction.DIRECTIONS)
+			.collect(Collectors.toMap(Function.identity(), dir -> blockAccess().getBlock(position().add(dir.toVector()))));
+	}
+
+	protected N getNodeFromBlock(Block block, Direction from) {
 		if (block instanceof NodeProvider) {
 			return ((NodeProvider) block).getNode(compareClass(), from);
 		}
