@@ -1,6 +1,6 @@
 package com.resonant.core.graph.api.node;
 
-import com.resonant.core.graph.api.INodeProvider;
+import com.resonant.core.graph.api.NodeProvider;
 
 /** Simple point in a grid that can link to or represent a tile/multipart/entity/block */
 public interface INode {
@@ -13,6 +13,6 @@ public interface INode {
 	public void deconstruct();
 
 	/** The object that houses this node */
-	public INodeProvider getParent();
+	public NodeProvider getParent();
 
 }

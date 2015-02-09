@@ -3,7 +3,6 @@ package com.resonant.core.prefab.block
 import java.util
 import java.util.{List => JList}
 
-import com.resonant.core.graph.api.INodeProvider
 import com.resonant.core.graph.api.node.INode
 import com.resonant.wrapper.core.api.tile.IDebugInfo
 import nova.core.block.Block
@@ -18,7 +17,7 @@ import scala.collection.convert.wrapAll._
 /**
  * @author Calclavia
  */
-trait NodeProvider extends Block with Stateful with Storable with INodeProvider with IDebugInfo {
+trait NodeProvider extends Block with Stateful with Storable with NodeProvider with IDebugInfo {
 	
 	protected val nodes = new util.HashSet[Node]
 

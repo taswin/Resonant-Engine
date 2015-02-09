@@ -1,6 +1,6 @@
 package com.resonant.core.graph.api.node;
 
-import com.resonant.core.graph.api.INodeProvider;
+import com.resonant.core.graph.api.NodeProvider;
 
 import java.util.HashMap;
 
@@ -17,11 +17,11 @@ public class NodeRegistry {
 		INTERFACE_NODE_MAP.put(nodeInterface, nodeClass);
 	}
 
-	public static <N extends INode> N get(INodeProvider parent, Class<N> nodeInterface) {
+	public static <N extends INode> N get(NodeProvider parent, Class<N> nodeInterface) {
 		Class nodeClass = INTERFACE_NODE_MAP.get(nodeInterface);
 
 		try {
-			return (N) nodeClass.getConstructor(INodeProvider.class).newInstance(parent);
+			return (N) nodeClass.getConstructor(NodeProvider.class).newInstance(parent);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -6,7 +6,7 @@ import nova.core.util.Direction;
 /**
  * @author Calclavia
  */
-public interface INodeProvider {
+public interface NodeProvider {
 	/**
 	 * @param nodeType - The type of node we are looking for.
 	 * @param from - The direction.
