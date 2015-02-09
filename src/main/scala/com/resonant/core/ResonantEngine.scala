@@ -1,11 +1,10 @@
 package com.resonant.core
 
-import com.resonant.config.{ConfigHandler, ConfigScanner}
+import com.resonant.api.graph.core.UpdateTicker
+import com.resonant.api.graph.frequency.GridFrequency
+import com.resonant.api.graph.thermal.{GridThermal, ThermalPhysics}
 import com.resonant.core.api.edx.recipe.{MachineRecipes, RecipeType}
 import com.resonant.core.content.{BlockCreativeBuilder, ItemScrewdriver}
-import com.resonant.graph.core.UpdateTicker
-import com.resonant.graph.frequency.GridFrequency
-import com.resonant.graph.thermal.{GridThermal, ThermalPhysics}
 import com.resonant.lib.factory.resources.ResourceFactory
 import com.resonant.lib.utility.PotionUtility
 import com.resonant.prefab.modcontent.ContentLoader

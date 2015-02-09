@@ -2,7 +2,7 @@ package com.resonant.core
 
 import java.util.List
 
-import com.resonant.graph.core.UpdateTicker
+import com.resonant.api.graph.core.UpdateTicker
 import net.minecraft.command.{CommandBase, ICommandSender, WrongUsageException}
 import net.minecraft.util.ChatComponentText
 

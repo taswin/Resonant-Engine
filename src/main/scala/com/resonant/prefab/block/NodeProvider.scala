@@ -3,10 +3,10 @@ package com.resonant.prefab.block
 import java.util
 import java.util.{List => JList}
 
+import com.resonant.api.graph.api.INodeProvider
+import com.resonant.api.graph.api.node.INode
+import com.resonant.api.graph.core.Node
 import com.resonant.core.api.tile.IDebugInfo
-import com.resonant.graph.api.INodeProvider
-import com.resonant.graph.api.node.INode
-import com.resonant.graph.core.Node
 import nova.core.block.Block
 import nova.core.block.components.Stateful
 import nova.core.network.NetworkManager

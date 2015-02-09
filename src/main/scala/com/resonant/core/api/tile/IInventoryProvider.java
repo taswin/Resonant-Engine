@@ -1,6 +1,6 @@
 package com.resonant.core.api.tile;
 
-import com.resonant.graph.api.node.IExternalInventory;
+import com.resonant.api.graph.api.node.IExternalInventory;
 import net.minecraft.item.ItemStack;
 import nova.core.util.Direction;
 

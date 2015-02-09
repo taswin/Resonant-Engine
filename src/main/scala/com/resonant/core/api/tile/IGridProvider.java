@@ -1,6 +1,6 @@
 package com.resonant.core.api.tile;
 
-import com.resonant.graph.api.IGraph;
+import com.resonant.api.graph.api.IGraph;
 
 /**
  * Any node that is part of a grid system such as a power network
