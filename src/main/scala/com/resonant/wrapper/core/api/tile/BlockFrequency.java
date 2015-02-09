@@ -5,7 +5,7 @@ package com.resonant.wrapper.core.api.tile;
  * @author Calclavia
  */
 
-public interface IBlockFrequency {
+public interface BlockFrequency {
 	/**
 	 * @return The frequency of this object.
 	 */

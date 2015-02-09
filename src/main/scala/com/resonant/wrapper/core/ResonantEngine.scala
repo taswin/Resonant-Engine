@@ -1,5 +1,7 @@
 package com.resonant.wrapper.core
 
+import com.resonant.core.graph.api.{NodeElectric, NodeRegistry}
+import com.resonant.core.graph.internal.electric.NodeElectricComponent
 import com.resonant.core.graph.internal.frequency.GridFrequency
 import com.resonant.core.graph.internal.thermal.{GridThermal, ThermalPhysics}
 import com.resonant.core.prefab.modcontent.ContentLoader
@@ -31,8 +33,12 @@ object ResonantEngine extends Loadable with ContentLoader {
 		MinecraftForge.EVENT_BUS.register(ThermalPhysics)
 		MinecraftForge.EVENT_BUS.register(SaveManager.instance)
 		ResourceFactory.preInit()
-	}
 
+		/**
+		 * Register graphs 
+		 */
+		NodeRegistry.instance.register(classOf[NodeElectric], classOf[NodeElectricComponent]);
+	}
 
 	override def postInit(evt: FMLPostInitializationEvent) {
 		UpdateTicker.threaded.addUpdater(GridThermal)

@@ -1,13 +1,15 @@
 package com.resonant.core.graph.internal.electric
 
 import cofh.api.energy.IEnergyHandler
+import com.resonant.wrapper.lib.compat.energy.Compatibility
 import nova.core.util.Direction
 
 /**
  * An energy bridge between TE and UE
  * @author Calclavia
  */
-trait TTEBridge extends TBlockNodeProvider with TEnergyProvider with IEnergyHandler {
+trait TTEBridge extends IEnergyHandler {
+
 	val electricNode = new NodeElectricComponent(this)
 
 	override def receiveEnergy(from: Direction, maxReceive: Int, simulate: Boolean): Int = {

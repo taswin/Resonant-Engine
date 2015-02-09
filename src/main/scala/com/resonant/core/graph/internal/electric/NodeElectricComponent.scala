@@ -2,7 +2,7 @@ package com.resonant.core.graph.internal.electric
 
 import java.util.{Set => JSet}
 
-import com.resonant.core.graph.api.NodeProvider
+import com.resonant.core.graph.api.{NodeElectric, NodeProvider}
 import com.resonant.core.graph.internal.NodeBlockConnect
 import com.resonant.wrapper.core.api.tile.DebugInfo
 import com.resonant.wrapper.lib.wrapper.BitmaskWrapper._
@@ -20,7 +20,7 @@ import scala.collection.convert.wrapAll._
  *
  * @author Calclavia
  */
-class NodeElectricComponent(parent: NodeProvider) extends NodeBlockConnect[NodeElectricComponent](parent) with DebugInfo {
+class NodeElectricComponent(parent: NodeProvider) extends NodeBlockConnect[NodeElectricComponent](parent) with DebugInfo with NodeElectric {
 	/**
 	 * When dynamic terminal is set to true, then the grid will attempt to swap negative and positive terminals as needed.
 	 */
@@ -60,17 +60,17 @@ class NodeElectricComponent(parent: NodeProvider) extends NodeBlockConnect[NodeE
 	 */
 	private var negativeMask = 0
 
-	def positives: JSet[NodeElectricComponent] = connectedMap.filter(keyVal => positiveMask.mask(keyVal._2)).keySet
+	override def positives: JSet[NodeElectricComponent] = connectedMap.filter(keyVal => positiveMask.mask(keyVal._2)).keySet
 
-	def negatives: JSet[NodeElectricComponent] = connectedMap.filter(keyVal => negativeMask.mask(keyVal._2)).keySet
+	override def negatives: JSet[NodeElectricComponent] = connectedMap.filter(keyVal => negativeMask.mask(keyVal._2)).keySet
 
-	def setPositive(dir: Direction, open: Boolean = true) {
+	override def setPositive(dir: Direction, open: Boolean = true) {
 		positiveMask = positiveMask.mask(dir, open)
 		negativeMask &= ~positiveMask
 		connectionMask = positiveMask | negativeMask
 	}
 
-	def setPositives(dirs: JSet[Direction]) {
+	override def setPositives(dirs: JSet[Direction]) {
 		positiveMask = 0
 
 		dirs.foreach(dir => positiveMask = positiveMask.mask(dir, true))
@@ -78,13 +78,13 @@ class NodeElectricComponent(parent: NodeProvider) extends NodeBlockConnect[NodeE
 		connectionMask = positiveMask | negativeMask
 	}
 
-	def setNegative(dir: Direction, open: Boolean = true) {
+	override def setNegative(dir: Direction, open: Boolean = true) {
 		negativeMask = negativeMask.mask(dir, open)
 		positiveMask &= ~negativeMask
 		connectionMask = positiveMask | negativeMask
 	}
 
-	def setNegatives(dirs: JSet[Direction]) {
+	override def setNegatives(dirs: JSet[Direction]) {
 		negativeMask = 0
 
 		dirs.foreach(dir => negativeMask = negativeMask.mask(dir, true))
@@ -95,7 +95,7 @@ class NodeElectricComponent(parent: NodeProvider) extends NodeBlockConnect[NodeE
 	/**
 	 * Retrieves the power of the DC node in Watts.
 	 */
-	def power: Double = {
+	override def power: Double = {
 		if (bufferVoltage != 0) {
 			//This is a voltage source. Calculate current based on junction current
 			return Math.abs(junctionB.currentOut * voltage)
@@ -107,7 +107,7 @@ class NodeElectricComponent(parent: NodeProvider) extends NodeBlockConnect[NodeE
 	 * Generates a potential difference across the two intersections that go across this node.
 	 * @param voltage - The target voltage, in Volts
 	 */
-	def generateVoltage(voltage: Double) {
+	override def generateVoltage(voltage: Double) {
 		bufferVoltage = voltage
 	}
 
@@ -115,7 +115,7 @@ class NodeElectricComponent(parent: NodeProvider) extends NodeBlockConnect[NodeE
 	 * Generates power by adjusting varying the voltage until the target power is reached
 	 * @param power - The target power, in Watts
 	 */
-	def generatePower(power: Double) {
+	override def generatePower(power: Double) {
 		bufferPower = power
 	}
 
@@ -159,12 +159,4 @@ class NodeElectricComponent(parent: NodeProvider) extends NodeBlockConnect[NodeE
 		bufferVoltage = 0
 		bufferPower = 0
 	}
-
-	override protected def newGrid: GridNode[NodeElectricComponent] = new GraphElectric
-
-	/**
-	 * The class used to compare when making connections
-	 */
-	override protected def getCompareClass = getClass
-
 }

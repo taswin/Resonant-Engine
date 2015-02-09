@@ -102,22 +102,22 @@ public class PathfinderAStar extends Pathfinder {
 
 	@Override
 	public Pathfinder reset() {
-		this.openSet = new HashSet<Vector3d>();
-		this.navigationMap = new HashMap<Vector3d, Vector3d>();
-		this.gScore = new HashMap<Vector3d, Double>();
-		this.fScore = new HashMap<Vector3d, Double>();
+		this.openSet = new HashSet<>();
+		this.navigationMap = new HashMap<>();
+		this.gScore = new HashMap<>();
+		this.fScore = new HashMap<>();
 		return super.reset();
 	}
 
 	/**
 	 * A recursive function to back track and find the path in which we have analyzed.
 	 */
-	public List<Vector3d> reconstructPath(HashMap<Vector3d, Vector3d> nagivationMap, Vector3d current_node) {
-		List<Vector3d> path = new LinkedList<Vector3d>();
+	public List<Vector3d> reconstructPath(HashMap<Vector3d, Vector3d> navMap, Vector3d current_node) {
+		List<Vector3d> path = new LinkedList<>();
 		path.add(current_node);
 
-		if (nagivationMap.containsKey(current_node)) {
-			path.addAll(reconstructPath(nagivationMap, nagivationMap.get(current_node)));
+		if (navMap.containsKey(current_node)) {
+			path.addAll(reconstructPath(navMap, navMap.get(current_node)));
 			return path;
 		} else {
 			return path;
@@ -138,7 +138,7 @@ public class PathfinderAStar extends Pathfinder {
 		if (this.callBackCheck != null) {
 			return this.callBackCheck.getConnectedNodes(this, vector);
 		} else {
-			Set<Vector3d> neighbors = new HashSet<Vector3d>();
+			Set<Vector3d> neighbors = new HashSet<>();
 
 			for (int i = 0; i < 6; i++) {
 				neighbors.add(vector.add(Direction.fromOrdinal(i).toVector()));
