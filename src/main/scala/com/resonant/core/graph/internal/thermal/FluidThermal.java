@@ -1,4 +1,4 @@
-package com.resonant.core.graph.thermal;
+package com.resonant.core.graph.internal.thermal;
 
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -7,8 +7,8 @@ import net.minecraftforge.fluids.FluidStack;
  * An advanced fluid that takes account in temperature.
  * @author Calclavia
  */
-public class FluidAdvanced extends Fluid {
-	public FluidAdvanced(String fluidName) {
+public class FluidThermal extends Fluid {
+	public FluidThermal(String fluidName) {
 		super(fluidName);
 	}
 

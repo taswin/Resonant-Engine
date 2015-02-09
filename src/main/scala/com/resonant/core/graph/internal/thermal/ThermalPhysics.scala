@@ -1,6 +1,5 @@
-package com.resonant.core.graph.thermal
+package com.resonant.core.graph.internal.thermal
 
-import com.resonant.core.graph.core.UpdateTicker
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraft.block.material.Material
 import net.minecraft.init.Blocks

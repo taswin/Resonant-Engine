@@ -1,8 +1,7 @@
-package com.resonant.core.graph.energy.electric
+package com.resonant.core.graph.internal.electric
 
 import java.util.{Set => JSet}
 
-import com.resonant.core.graph.TTileConnector
 import nova.core.util.Direction
 
 import scala.beans.BeanProperty

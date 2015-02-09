@@ -1,4 +1,4 @@
-package com.resonant.core.graph.energy
+package com.resonant.core.prefab.energy
 
 /**
  * A node used to store energy.

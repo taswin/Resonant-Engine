@@ -1,4 +1,4 @@
-package com.resonant.core.graph.energy.electric
+package com.resonant.core.graph.internal.electric
 
 /**
  * An junction is the intersection between multiple nodes.

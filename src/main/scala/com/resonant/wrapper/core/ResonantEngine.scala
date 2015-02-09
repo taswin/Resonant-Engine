@@ -1,7 +1,7 @@
 package com.resonant.wrapper.core
 
-import com.resonant.core.graph.frequency.GridFrequency
-import com.resonant.core.graph.thermal.{GridThermal, ThermalPhysics}
+import com.resonant.core.graph.internal.frequency.GridFrequency
+import com.resonant.core.graph.internal.thermal.{GridThermal, ThermalPhysics}
 import com.resonant.core.prefab.modcontent.ContentLoader
 import com.resonant.wrapper.core.api.edx.recipe.{MachineRecipes, RecipeType}
 import com.resonant.wrapper.core.content.{BlockCreativeBuilder, ItemScrewdriver}

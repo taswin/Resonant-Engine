@@ -1,8 +1,9 @@
-package com.resonant.core.graph;
+package com.resonant.core.graph.internal;
 
 import nova.core.item.ItemStack;
 
 import java.util.Iterator;
+import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Stream;
@@ -15,16 +16,18 @@ import java.util.stream.StreamSupport;
  */
 public interface Graph<N> extends Iterable<N> {
 
-	public void add(N node);
+	void add(N node);
 
-	public void remove(N node);
+	void remove(N node);
 
-	public N get(int i);
+	default int size() {
+		return nodes().size();
+	}
 
-	public int size();
+	public Set<N> nodes();
 
 	default Iterator<N> iterator() {
-		return new GraphIterator(this);
+		return nodes().iterator();
 	}
 
 	default Spliterator<N> spliterator() {
@@ -41,36 +44,7 @@ public interface Graph<N> extends Iterable<N> {
 	}
 
 	/**
-	 * Builds the grid, refreshing all its internal.
+	 * Builds the grid, refreshing all its internal cache.
 	 */
 	void build();
-
-	public class GraphIterator<N> implements Iterator<N> {
-		private final Graph graph;
-		private int i;
-		private N next = null;
-
-		public GraphIterator(Graph graph) {
-			this.graph = graph;
-			findNext();
-		}
-
-		private void findNext() {
-			while (i < graph.size()) {
-				next = (N) graph.get(i++);
-			}
-		}
-
-		@Override
-		public boolean hasNext() {
-			return next != null;
-		}
-
-		@Override
-		public N next() {
-			N current = next;
-			findNext();
-			return current;
-		}
-	}
 }

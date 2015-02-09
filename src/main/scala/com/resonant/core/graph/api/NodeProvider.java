@@ -1,6 +1,6 @@
 package com.resonant.core.graph.api;
 
-import com.resonant.core.graph.api.node.INode;
+import com.resonant.core.graph.internal.Node;
 import nova.core.util.Direction;
 
 /**
@@ -12,5 +12,5 @@ public interface NodeProvider {
 	 * @param from - The direction.
 	 * @return Returns the node object.
 	 */
-	public <N extends INode> N getNode(Class<? extends N> nodeType, Direction from);
+	public <N extends Node> N getNode(Class<? extends N> nodeType, Direction from);
 }

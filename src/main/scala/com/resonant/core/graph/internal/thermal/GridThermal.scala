@@ -1,4 +1,4 @@
-package com.resonant.core.graph.thermal
+package com.resonant.core.graph.internal.thermal
 
 import net.minecraftforge.common.MinecraftForge
 import nova.core.util.Direction

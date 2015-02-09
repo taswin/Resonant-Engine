@@ -1,6 +1,4 @@
-package com.resonant.core.graph.energy.electric
-
-import com.resonant.core.graph.core.UpdateTicker
+package com.resonant.core.graph.internal.electric
 
 /**
  * A direct current electricity grid.

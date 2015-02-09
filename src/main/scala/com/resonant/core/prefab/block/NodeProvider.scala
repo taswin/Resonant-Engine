@@ -3,7 +3,7 @@ package com.resonant.core.prefab.block
 import java.util
 import java.util.{List => JList}
 
-import com.resonant.core.graph.api.node.INode
+import com.resonant.core.graph.internal.Node
 import com.resonant.wrapper.core.api.tile.IDebugInfo
 import nova.core.block.Block
 import nova.core.block.components.Stateful
@@ -58,7 +58,7 @@ trait NodeProvider extends Block with Stateful with Storable with NodeProvider w
 		nodes.filter(_.isInstanceOf[Storable]).foreach(_.asInstanceOf[Storable].load(data))
 	}
 
-	override def getNode[N <: INode](nodeType: Class[_ <: N], from: Direction): N = {
+	override def getNode[N <: Node](nodeType: Class[_ <: N], from: Direction): N = {
 		return nodes.filter(node => nodeType.isAssignableFrom(node.getClass)).headOption.getOrElse(null).asInstanceOf[N]
 	}
 

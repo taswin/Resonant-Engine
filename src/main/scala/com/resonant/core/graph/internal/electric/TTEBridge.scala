@@ -1,4 +1,4 @@
-package com.resonant.core.graph.energy.electric
+package com.resonant.core.graph.internal.electric
 
 import cofh.api.energy.IEnergyHandler
 import nova.core.util.Direction

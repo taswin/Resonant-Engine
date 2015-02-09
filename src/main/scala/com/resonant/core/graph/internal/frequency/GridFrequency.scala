@@ -1,4 +1,4 @@
-package com.resonant.core.graph.frequency
+package com.resonant.core.graph.internal.frequency
 
 import java.util.Set
 

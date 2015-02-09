@@ -1,4 +1,4 @@
-package com.resonant.core.graph.energy.electric
+package com.resonant.core.graph.internal.electric
 
 /**
  * Wires are nodes in the grid that will not have different terminals, but instead can connect omni-directionally.
