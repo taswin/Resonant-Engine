@@ -1,6 +1,5 @@
 package com.resonant.wrapper.core
 
-import com.resonant.core.graph.core.UpdateTicker
 import com.resonant.core.graph.frequency.GridFrequency
 import com.resonant.core.graph.thermal.{GridThermal, ThermalPhysics}
 import com.resonant.core.prefab.modcontent.ContentLoader
@@ -34,16 +33,9 @@ object ResonantEngine extends Loadable with ContentLoader {
 		ResourceFactory.preInit()
 	}
 
-	override def init() {
-		FMLCommonHandler.instance.bus.register(UpdateTicker.world)
-	}
 
 	override def postInit(evt: FMLPostInitializationEvent) {
 		UpdateTicker.threaded.addUpdater(GridThermal)
-
-		if (!UpdateTicker.threaded.isAlive) {
-			UpdateTicker.threaded.start()
-		}
 
 		loadables.postInit()
 		FrequencyGridRegistry.CLIENT_INSTANCE = new GridFrequency

@@ -1,4 +1,4 @@
-package com.resonant.core.graph.core
+package com.resonant.core.graph
 
 import net.minecraft.tileentity.TileEntity
 import nova.core.util.Direction
