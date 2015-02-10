@@ -1,5 +1,6 @@
 package com.resonant.core.graph.internal.thermal
 
+import com.resonant.core.prefab.block.Updater
 import net.minecraftforge.common.MinecraftForge
 import nova.core.util.Direction
 
@@ -8,7 +9,7 @@ import nova.core.util.Direction
  *
  * Heat flows from hot to cold.
  */
-object GridThermal extends IUpdate {
+object GridThermal extends Updater {
 	/**
 	 * A map of positions and heat source energy
 	 */

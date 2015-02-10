@@ -3,7 +3,7 @@ package com.resonant.wrapper.core
 import com.resonant.core.graph.api.{NodeElectric, NodeRegistry}
 import com.resonant.core.graph.internal.electric.NodeElectricComponent
 import com.resonant.core.graph.internal.frequency.GridFrequency
-import com.resonant.core.graph.internal.thermal.{GridThermal, ThermalPhysics}
+import com.resonant.core.graph.internal.thermal.GridThermal
 import com.resonant.core.prefab.modcontent.ContentLoader
 import com.resonant.wrapper.core.api.edx.recipe.{MachineRecipes, RecipeType}
 import com.resonant.wrapper.core.content.{BlockCreativeBuilder, ItemScrewdriver}
@@ -13,6 +13,7 @@ import nova.core.block.Block
 import nova.core.item.Item
 import nova.core.loader.{Loadable, NovaMod}
 import nova.core.util.SaveManager
+import nova.internal.tick.UpdateTicker
 
 /**
  * Mob class for Resonant Engine that handles common loading
@@ -26,12 +27,8 @@ object ResonantEngine extends Loadable with ContentLoader {
 	var itemWrench: Item = classOf[ItemScrewdriver]
 
 	override def preInit() {
-		ConfigScanner.instance.generateSets(evt.getAsmData)
-		ConfigHandler.sync(Reference.config, "com.resonant.core")
 		Reference.config.load()
 		PotionUtility.resizePotionArray()
-		MinecraftForge.EVENT_BUS.register(ThermalPhysics)
-		MinecraftForge.EVENT_BUS.register(SaveManager.instance)
 		ResourceFactory.preInit()
 
 		/**
@@ -40,10 +37,9 @@ object ResonantEngine extends Loadable with ContentLoader {
 		NodeRegistry.instance.register(classOf[NodeElectric], classOf[NodeElectricComponent]);
 	}
 
-	override def postInit(evt: FMLPostInitializationEvent) {
-		UpdateTicker.threaded.addUpdater(GridThermal)
+	override def postInit() {
+		UpdateTicker.ThreadTicker.ticker.add(GridThermal)
 
-		loadables.postInit()
 		FrequencyGridRegistry.CLIENT_INSTANCE = new GridFrequency
 		FrequencyGridRegistry.SERVER_INSTANCE = new GridFrequency
 		OreDictionary.registerOre("ingotGold", Items.gold_ingot)

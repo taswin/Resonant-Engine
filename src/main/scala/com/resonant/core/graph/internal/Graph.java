@@ -44,6 +44,12 @@ public interface Graph<N> extends Iterable<N> {
 	}
 
 	/**
+	 * Marks the graph as dirty, indicating it needs to be rebuilt.
+	 * Calling this method differs with build() that this is thread safe.
+	 */
+	void markBuild();
+
+	/**
 	 * Builds the grid, refreshing all its internal cache.
 	 */
 	void build();
