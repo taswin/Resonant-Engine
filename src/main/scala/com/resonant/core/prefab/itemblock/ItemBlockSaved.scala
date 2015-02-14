@@ -1,6 +1,8 @@
 package com.resonant.core.prefab.itemblock
 
+import nova.core.block.Block
 import nova.core.util.transform.Vector3d
+import nova.core.world.World
 
 /**
  * An ItemBlock that can store its block's internal data.

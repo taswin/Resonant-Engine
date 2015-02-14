@@ -1,11 +1,11 @@
-package com.resonant.wrapper.core.api.item;
+package com.resonant.core.energy;
 
 import net.minecraft.item.ItemStack;
 
 /**
  * An interface for items that store energy in joules.
  */
-public interface IEnergyItem {
+public interface EnergyItem {
 	/**
 	 * Adds energy to an item. Returns the quantity of energy that was accepted. This should always
 	 * return 0 if the item cannot be externally charged.
@@ -32,14 +32,15 @@ public interface IEnergyItem {
 	public double getEnergy(ItemStack itemStack);
 
 	/**
-	 * Get the max amount of energy that can be stored in the item.
-	 */
-	public double getEnergyCapacity(ItemStack itemStack);
-
-	/**
 	 * Sets the amount of energy in the ItemStack.
 	 * @param itemStack - the ItemStack.
 	 * @param energy - Amount of electrical energy.
 	 */
 	public ItemStack setEnergy(ItemStack itemStack, double energy);
+
+	/**
+	 * Get the max amount of energy that can be stored in the item.
+	 */
+	public double getEnergyCapacity(ItemStack itemStack);
+
 }

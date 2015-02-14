@@ -1,4 +1,4 @@
-package com.resonant.core.prefab.energy
+package com.resonant.core.energy
 
 import java.util
 

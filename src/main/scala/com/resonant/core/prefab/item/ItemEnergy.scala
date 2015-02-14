@@ -1,29 +1,34 @@
 package com.resonant.core.prefab.item
 
-import java.util.List
+import java.util
+import java.util.{List, Optional}
 
-import com.resonant.wrapper.core.api.item.IEnergyItem
+import com.resonant.core.energy.EnergyItem
 import com.resonant.wrapper.lib.compat.energy.Compatibility
 import com.resonant.wrapper.lib.utility.science.UnitDisplay
-import net.minecraft.creativetab.CreativeTabs
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.{Item, ItemStack}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.world.World
+import nova.core.item.{Item, ItemStack}
+import nova.core.player.Player
 
 /**
  * A trait implementation of IEnergyItem
  *
  * @author Calclavia
  */
-trait TEnergyItem extends Item with IEnergyItem {
+trait ItemEnergy extends Item with EnergyItem {
+
+	protected var maxEnergy = 0d
+	protected var energy = 0d
+
 	protected var nbtName: String = "energy"
 
-	setMaxStackSize(1)
-	setMaxDamage(100)
-	setNoRepair()
+	override def getMaxStackSize: Int = 1
 
-	override def addInformation(itemStack: ItemStack, entityPlayer: EntityPlayer, list: List[_], par4: Boolean) {
+	override def getTooltips(player: Optional[Player]): util.List[String] = {
+		super.getTooltips(player)
+
 		val energy = getEnergy(itemStack)
 		val color = {
 			if (energy <= getEnergyCapacity(itemStack) / 3) {
@@ -37,7 +42,7 @@ trait TEnergyItem extends Item with IEnergyItem {
 			}
 		}
 
-		list.add(color + new UnitDisplay(UnitDisplay.Unit.JOULES, energy) + "/" + new UnitDisplay(UnitDisplay.Unit.JOULES, getEnergyCapacity(itemStack)).symbol)
+		return new List(color + new UnitDisplay(UnitDisplay.Unit.JOULES, energy) + "/" + new UnitDisplay(UnitDisplay.Unit.JOULES, getEnergyCapacity(itemStack)).symbol)
 	}
 
 	/**
@@ -45,23 +50,6 @@ trait TEnergyItem extends Item with IEnergyItem {
 	 */
 	override def onCreated(itemStack: ItemStack, par2World: World, par3EntityPlayer: EntityPlayer) {
 		setEnergy(itemStack, 0)
-	}
-
-	override def recharge(itemStack: ItemStack, energy: Double, doReceive: Boolean): Double = {
-		val energyReceived: Double = Math.min(getEnergyCapacity(itemStack) - getEnergy(itemStack), Math.min(getTransferRate(itemStack), energy))
-		if (doReceive) {
-			setEnergy(itemStack, getEnergy(itemStack) + energyReceived)
-		}
-		return energyReceived
-	}
-
-	override def getEnergy(itemStack: ItemStack): Double = {
-		if (itemStack.getTagCompound == null) {
-			itemStack.setTagCompound(new NBTTagCompound)
-		}
-		val energyStored = itemStack.getTagCompound.getDouble(nbtName)
-		itemStack.setItemDamage((100 - (energyStored.toDouble / getEnergyCapacity(itemStack)) * 100).toInt)
-		return energyStored
 	}
 
 	override def setEnergy(itemStack: ItemStack, energy: Double): ItemStack = {
@@ -74,8 +62,12 @@ trait TEnergyItem extends Item with IEnergyItem {
 		return itemStack
 	}
 
-	def getTransferRate(itemStack: ItemStack): Double = {
-		return getEnergyCapacity(itemStack) / 100
+	override def recharge(itemStack: ItemStack, energy: Double, doReceive: Boolean): Double = {
+		val energyReceived: Double = Math.min(getEnergyCapacity(itemStack) - getEnergy(itemStack), Math.min(getTransferRate(itemStack), energy))
+		if (doReceive) {
+			setEnergy(itemStack, getEnergy(itemStack) + energyReceived)
+		}
+		return energyReceived
 	}
 
 	def discharge(itemStack: ItemStack, energy: Double, doTransfer: Boolean): Double = {
@@ -86,8 +78,21 @@ trait TEnergyItem extends Item with IEnergyItem {
 		return energyExtracted
 	}
 
+	def getTransferRate(itemStack: ItemStack): Double = {
+		return getEnergyCapacity(itemStack) / 100
+	}
+
 	def getTransfer(itemStack: ItemStack): Double = {
 		return getEnergyCapacity(itemStack) - getEnergy(itemStack)
+	}
+
+	override def getEnergy(itemStack: ItemStack): Double = {
+		if (itemStack.getTagCompound == null) {
+			itemStack.setTagCompound(new NBTTagCompound)
+		}
+		val energyStored = itemStack.getTagCompound.getDouble(nbtName)
+		itemStack.setItemDamage((100 - (energyStored.toDouble / getEnergyCapacity(itemStack)) * 100).toInt)
+		return energyStored
 	}
 
 	override def getSubItems(id: Item, par2CreativeTabs: CreativeTabs, par3List: List[_]) {

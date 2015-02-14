@@ -1,13 +1,12 @@
 package com.resonant.core.prefab.misc;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
+import nova.core.network.NetworkManager;
 
 import java.util.HashMap;
 
 public class Timer<K> {
-	private final HashMap<K, Integer> clientTimer = new HashMap<K, Integer>();
-	private final HashMap<K, Integer> serverTimer = new HashMap<K, Integer>();
+	private final HashMap<K, Integer> clientTimer = new HashMap<>();
+	private final HashMap<K, Integer> serverTimer = new HashMap<>();
 
 	public void put(K key, int defaultTime) {
 		getTimeMap().put(key, defaultTime);
@@ -32,7 +31,7 @@ public class Timer<K> {
 	}
 
 	public HashMap<K, Integer> getTimeMap() {
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
+		if (NetworkManager.instance.get().isServer()) {
 			return serverTimer;
 		}
 
