@@ -42,7 +42,7 @@ object RenderBlockUtility {
 
 		for (dir <- Direction.VALID_DIRECTIONS; r <- 0 until 4) {
 			if (!sideMap.mask(dir)) {
-				val absDir = Direction.getOrientation(RotationUtility.rotateSide(dir.ordinal, r))
+				val absDir = Direction.fromOrdinal(RotationUtility.rotateSide(dir.ordinal, r))
 
 				if (!sideMap.mask(absDir)) {
 					RenderUtility.rotateFacesOnRenderer(absDir, renderBlocks, true)
@@ -100,7 +100,7 @@ object RenderBlockUtility {
 		GL11.glTranslated(-0.5, -0.5, -0.5)
 
 		for (dir <- Direction.VALID_DIRECTIONS; r <- 0 until 4) {
-			val absDir = Direction.getOrientation(RotationUtility.rotateSide(dir.ordinal, r))
+			val absDir = Direction.fromOrdinal(RotationUtility.rotateSide(dir.ordinal, r))
 			RenderUtility.rotateFacesOnRenderer(absDir, renderBlocks, true)
 			tessellateFace(renderBlocks, block, edgeOverride, dir.ordinal)
 			RenderUtility.resetFacesOnRenderer(renderBlocks)

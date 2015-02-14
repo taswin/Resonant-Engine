@@ -8,7 +8,7 @@ import nova.core.util.transform.Vector3d
  */
 object DirectionWrapper {
 
-	implicit def DirectionEnumFacingWrapper(enumFacing: EnumFacing): Direction = Direction.getOrientation(enumFacing.ordinal)
+	implicit def DirectionEnumFacingWrapper(enumFacing: EnumFacing): Direction = Direction.fromOrdinal(enumFacing.ordinal)
 
 	implicit def EnumFacingDirectionWrapper(forgeDir: Direction): EnumFacing = EnumFacing.getFront(forgeDir.ordinal)
 

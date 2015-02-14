@@ -6,6 +6,7 @@ import com.resonant.wrapper.core.api.tile.IIO
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.ChatComponentText
 import nova.core.block.Block
+import nova.core.network.NetworkManager
 import nova.core.util.Direction
 import nova.core.util.components.Storable
 
@@ -31,15 +32,11 @@ trait IO extends Block with Storable with IIO {
 	protected var saveIOMap = false
 
 	def toggleIO(side: Int, entityPlayer: EntityPlayer): Boolean = {
-		if (!world.isRemote) {
-			val newIO = (getIO(Direction.getOrientation(side)) + 1) % 3
-			setIO(Direction.getOrientation(side), newIO)
-
-			if (!world.isRemote) {
-				entityPlayer.addChatMessage(new ChatComponentText("Side changed to: " + (if (newIO == 0) "None" else (if (newIO == 1) "Input" else "Output"))))
-			}
-
-			world.notifyBlocksOfNeighborChange(x, y, z, block)
+		if (NetworkManager.instance.get().isServer) {
+			val newIO = (getIO(Direction.fromOrdinal(side)) + 1) % 3
+			setIO(Direction.fromOrdinal(side), newIO)
+			entityPlayer.addChatMessage(new ChatComponentText("Side changed to: " + (if (newIO == 0) "None" else if (newIO == 1) "Input" else "Output")))
+			world.markChange(position)
 		}
 		return true
 	}

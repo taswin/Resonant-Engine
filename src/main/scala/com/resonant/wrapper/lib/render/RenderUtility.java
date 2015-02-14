@@ -215,7 +215,7 @@ public class RenderUtility {
 	}
 
 	public static void renderText(String text, int side, float maxScale, double x, double y, double z) {
-		renderText(text, Direction.getOrientation(side), maxScale, x, y, z);
+		renderText(text, Direction.fromOrdinal(side), maxScale, x, y, z);
 	}
 
 	public static void renderText(String text, Direction side, float maxScale, double x, double y, double z) {

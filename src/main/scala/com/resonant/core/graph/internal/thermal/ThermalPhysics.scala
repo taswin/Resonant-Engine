@@ -1,13 +1,9 @@
 package com.resonant.core.graph.internal.thermal
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import net.minecraft.block.material.Material
-import net.minecraft.init.Blocks
 import net.minecraft.world.World
-import net.minecraftforge.common.MinecraftForge
-import net.minecraftforge.fluids.{FluidContainerRegistry, FluidRegistry, FluidStack}
+import net.minecraftforge.fluids.FluidStack
 import nova.core.util.transform.Vector3d
-import nova.internal.tick.UpdateTicker
 
 /**
  * A thermal block manager
@@ -136,7 +132,7 @@ object ThermalPhysics {
 
 	/**
 	 * Default handler.
-	 */
+
 	@SubscribeEvent
 	def thermalEventHandler(evt: ThermalEvent.EventThermalUpdate) {
 		val pos = evt.position
@@ -156,5 +152,5 @@ object ThermalPhysics {
 				UpdateTicker.threaded.enqueue(() => pos.setBlock(Blocks.flowing_water))
 			}
 		}
-	}
+	}*/
 }

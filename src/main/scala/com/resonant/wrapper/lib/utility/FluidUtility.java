@@ -387,15 +387,15 @@ public class FluidUtility {
 			IFluidHandler tank = (IFluidHandler) world.getTileEntity(x, y, z);
 
 			if (fluid != null) {
-				if (tank.fill(Direction.getOrientation(side), fluid.copy(), false) == fluid.amount) {
-					tank.fill(Direction.getOrientation(side), fluid.copy(), true);
+				if (tank.fill(Direction.fromOrdinal(side), fluid.copy(), false) == fluid.amount) {
+					tank.fill(Direction.fromOrdinal(side), fluid.copy(), true);
 					if (!entityplayer.capabilities.isCreativeMode) {
 						InventoryUtility.consumeHeldItem(entityplayer);
 					}
 					return true;
 				}
 			} else {
-				FluidStack available = tank.drain(Direction.getOrientation(side), Integer.MAX_VALUE, false);
+				FluidStack available = tank.drain(Direction.fromOrdinal(side), Integer.MAX_VALUE, false);
 
 				if (available != null) {
 					ItemStack filled = FluidContainerRegistry.fillFluidContainer(available, current);
