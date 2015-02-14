@@ -2,6 +2,7 @@ package com.resonant.core.prefab.item
 
 import java.util.List
 
+import com.resonant.wrapper.core.api.item.IEnergyItem
 import com.resonant.wrapper.lib.compat.energy.Compatibility
 import com.resonant.wrapper.lib.utility.science.UnitDisplay
 import net.minecraft.creativetab.CreativeTabs

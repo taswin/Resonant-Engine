@@ -1,24 +1,49 @@
 package com.resonant.core.graph.internal.thermal
 
 import com.resonant.core.prefab.block.Updater
-import net.minecraftforge.common.MinecraftForge
 import nova.core.util.Direction
+import nova.core.util.transform.Vector3i
+import nova.core.world.World
+import nova.internal.tick.UpdateTicker
+
+import scala.collection.mutable
 
 /**
  * A grid managing the flow of thermal energy.
  *
  * Heat flows from hot to cold.
  */
+
 object GridThermal extends Updater {
+
+	private val worldMap = mutable.WeakHashMap.empty[World, GridThermal]
+
+	/**
+	 * Gets the thermal grid for this world object. 
+	 * @param world
+	 */
+	def get(world: World): GridThermal = {
+		if (!worldMap.contains(world)) {
+			val thermal: GridThermal = new GridThermal(world)
+			worldMap += (world -> thermal)
+			UpdateTicker.ThreadTicker.ticker.add(thermal)
+		}
+
+		return worldMap(world)
+	}
+}
+
+class GridThermal(val world: World) extends Updater {
+
 	/**
 	 * A map of positions and heat source energy
 	 */
-	private var heatMap = Map.empty[VectorWorld, Double].withDefaultValue(0d)
+	private var heatMap = Map.empty[Vector3i, Double].withDefaultValue(0d)
 
 	/**
 	 * A map of temperature at every block position relative to its default temperature
 	 */
-	private var deltaTemperatureMap = Map.empty[VectorWorld, Int].withDefaultValue(0)
+	private var deltaTemperatureMap = Map.empty[Vector3i, Int].withDefaultValue(0)
 
 	private var markClear = false
 
@@ -44,7 +69,7 @@ object GridThermal extends Updater {
 					 * Therefore:
 					 * T = Q/mc
 					 */
-					val specificHeatCapacity = ThermalPhysics.getSHC(pos.getBlock.getMaterial)
+					val specificHeatCapacity = 4200 //ThermalPhysics.getSHC(world.getBlock(pos).getMaterial)
 					val deltaTemperature = (heat / (1 * specificHeatCapacity)).toInt
 					deltaTemperatureMap += pos -> deltaTemperature
 				}
@@ -54,50 +79,46 @@ object GridThermal extends Updater {
 
 			heatMap.foreach {
 				case (pos, heat) => {
-					val event = new EventThermalUpdate(pos, getTemperature(pos))
 
-					MinecraftForge.EVENT_BUS.post(event)
+					/**
+					 * Do heat transfer based on thermal conductivity
+					 *
+					 * Assume transfer by conduction
+					 *
+					 * Q = k * A * deltaTemp * deltaTime /d
+					 * Q = k * deltaTemp * deltaTime
+					 *
+					 * where k = thermal conductivity, A = 1 m*m, and d = 1 meter (for every block)
+					 */
+					val temperature = getTemperature(pos)
 
-					if (!event.isCanceled) {
-						/**
-						 * Do heat transfer based on thermal conductivity
-						 *
-						 * Assume transfer by conduction
-						 *
-						 * Q = k * A * deltaTemp * deltaTime /d
-						 * Q = k * deltaTemp * deltaTime
-						 *
-						 * where k = thermal conductivity, A = 1 m^2, and d = 1 meter (for every block)
-						 */
-						val temperature = getTemperature(pos)
+					Direction.DIRECTIONS
+						.map(pos + _.toVector)
+						.foreach(
+							adj => {
+								val adjTemp = getTemperature(adj)
 
-						Direction.VALID_DIRECTIONS
-							.map(pos + _)
-							.foreach(
-								adj => {
-									val adjTemp = getTemperature(adj)
+								if (temperature > adjTemp) {
+									//TODO: Based on materials
+									val thermalConductivity = 100 //2.18
 
-									if (temperature > adjTemp) {
-										//TODO: Based on materials
-										val thermalConductivity = 100 //2.18
-
-										val heatTransfer = Math.min(thermalConductivity * (temperature - adjTemp) * deltaTime, heat / 6)
-										addHeat(adj, heatTransfer)
-										removeHeat(pos, heatTransfer)
-									}
+									val heatTransfer = Math.min(thermalConductivity * (temperature - adjTemp) * deltaTime, heat / 6)
+									addHeat(adj, heatTransfer)
+									removeHeat(pos, heatTransfer)
 								}
-							)
-					}
+							}
+						)
+
 				}
 			}
 		}
 	}
 
-	def addHeat(position: VectorWorld, heat: Double) {
+	def addHeat(position: Vector3i, heat: Double) {
 		heatMap += position -> (heatMap(position) + heat)
 	}
 
-	def removeHeat(position: VectorWorld, heat: Double) {
+	def removeHeat(position: Vector3i, heat: Double) {
 		heatMap += position -> (heatMap(position) - heat)
 	}
 
@@ -105,11 +126,9 @@ object GridThermal extends Updater {
 	 * Gets the temperature at a specific position
 	 * @return - Temperature in Kelvin
 	 */
-	def getTemperature(pos: VectorWorld): Int = ThermalPhysics.getDefaultTemperature(pos) + deltaTemperatureMap(pos)
+	def getTemperature(pos: Vector3i): Int = 295 /*ThermalPhysics.getDefaultTemperature(pos)*/ + deltaTemperatureMap(pos)
 
 	def clear() {
 		markClear = true
 	}
-
-	override def updatePeriod = 50
 }

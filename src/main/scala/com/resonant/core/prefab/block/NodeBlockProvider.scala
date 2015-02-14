@@ -3,7 +3,8 @@ package com.resonant.core.prefab.block
 import java.util
 import java.util.{List => JList}
 
-import com.resonant.core.graph.internal.Node
+import com.resonant.core.graph.api.NodeProvider
+import com.resonant.core.graph.internal.{Graph, GraphProvider, Node}
 import com.resonant.wrapper.core.api.tile.DebugInfo
 import nova.core.block.Block
 import nova.core.block.components.Stateful
@@ -17,34 +18,37 @@ import scala.collection.convert.wrapAll._
 /**
  * @author Calclavia
  */
-trait NodeBlockProvider extends Block with Stateful with Storable with NodeBlockProvider with DebugInfo {
-	
-	protected val nodes = new util.HashSet[Node]
+trait NodeBlockProvider extends Block with Stateful with Storable with NodeProvider with DebugInfo {
+
+	protected var nodes = Set.empty[Node[_ <: Node[_]]]
 
 	override def awake() {
 		super.awake()
 
 		if (NetworkManager.instance.get().isServer) {
-			nodes.foreach(_.reconstruct())
+			nodes
+				.filter(_.isInstanceOf[GraphProvider[_ <: Graph[_]]])
+				.map(_.asInstanceOf[GraphProvider[_ <: Graph[_]]])
+				.foreach(_.getGraph.markBuild())
 		}
 	}
 
 	override def load() {
 		if (NetworkManager.instance.get().isServer) {
-			nodes.foreach(_.reconstruct())
+			nodes
+				.filter(_.isInstanceOf[GraphProvider[_ <: Graph[_]]])
+				.map(_.asInstanceOf[GraphProvider[_ <: Graph[_]]])
+				.foreach(_.getGraph.markBuild())
 		}
 	}
 
 	override def onNeighborChange(neighborPosition: Vector3i) {
 		super.onNeighborChange(neighborPosition)
 		if (NetworkManager.instance.get().isServer) {
-			nodes.foreach(_.reconstruct())
-		}
-	}
-
-	override def unload() {
-		if (NetworkManager.instance.get().isServer) {
-			nodes.foreach(_.deconstruct())
+			nodes
+				.filter(_.isInstanceOf[GraphProvider[_ <: Graph[_]]])
+				.map(_.asInstanceOf[GraphProvider[_ <: Graph[_]]])
+				.foreach(_.getGraph.markBuild())
 		}
 	}
 
@@ -58,9 +62,7 @@ trait NodeBlockProvider extends Block with Stateful with Storable with NodeBlock
 		nodes.filter(_.isInstanceOf[Storable]).foreach(_.asInstanceOf[Storable].load(data))
 	}
 
-	override def getNode[N <: Node](nodeType: Class[_ <: N], from: Direction): N = {
-		return nodes.filter(node => nodeType.isAssignableFrom(node.getClass)).headOption.getOrElse(null).asInstanceOf[N]
-	}
+	override def getNodes(from: Direction): util.Set[Node[_ <: Node[_]]] = nodes
 
 	override def getDebugInfo: JList[String] = {
 		val debugs = nodes.toList.filter(_.isInstanceOf[DebugInfo])

@@ -1,7 +1,6 @@
 package com.resonant.core.graph.internal;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
@@ -13,7 +12,7 @@ import java.util.WeakHashMap;
 public abstract class GraphConnect<N extends Node> implements Graph<N> {
 
 	//A map of nodes and their connections
-	protected Map<N, Set<N>> nodeMap = new HashMap<>();
+	protected Map<N, Set<N>> nodeMap = new WeakHashMap<>();
 	//True if the grid needs to be rebuilt.
 	protected boolean dirty = false;
 	//A queue of nodes to be added to the grid upon next build()

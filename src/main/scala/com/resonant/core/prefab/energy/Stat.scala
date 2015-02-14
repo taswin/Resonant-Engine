@@ -1,12 +1,14 @@
 package com.resonant.core.prefab.energy
 
-import net.minecraft.nbt.NBTTagCompound
+import java.util
+
+import nova.core.util.components.Storable
 
 /**
  * A stat is a type of positive numerical value that has a maximum value
  * @author Calclavia
  */
-class Stat[T](implicit n: Numeric[T]) extends Ordered[T] with ISave {
+class Stat[T](implicit n: Numeric[T]) extends Ordered[T] with Storable {
 	private var _value: T = n.zero
 	private var _prevValue: T = n.zero
 	private var _max: T = n.zero
@@ -21,6 +23,13 @@ class Stat[T](implicit n: Numeric[T]) extends Ordered[T] with ISave {
 	def isMax: Boolean = n.gteq(value, max)
 
 	def setMax(newMax: T) = max = newMax
+
+	def max = _max
+
+	def max_=(newMax: T) {
+		_max = newMax
+		value = value
+	}
 
 	def isLastEmpty: Boolean = (prev == 0 && !isMin) || (n.gt(prev, n.zero) && isMin)
 
@@ -42,13 +51,6 @@ class Stat[T](implicit n: Numeric[T]) extends Ordered[T] with ISave {
 		return value
 	}
 
-	def value = _value
-
-	def value_=(newValue: T) {
-		_prevValue = _value
-		_value = n.min(n.max(newValue, n.zero), max)
-	}
-
 	def -=(amount: T): T = {
 		value = n.minus(value, amount)
 		return value
@@ -56,21 +58,21 @@ class Stat[T](implicit n: Numeric[T]) extends Ordered[T] with ISave {
 
 	override def compare(that: T): Int = n.compare(value, that)
 
-	override def load(nbt: NBTTagCompound) {
-		max = nbt.getDouble("statMax").asInstanceOf[T]
-		value = nbt.getDouble("statValue").asInstanceOf[T]
+	def value = _value
+
+	def value_=(newValue: T) {
+		_prevValue = _value
+		_value = n.min(n.max(newValue, n.zero), max)
 	}
 
-	def max = _max
-
-	def max_=(newMax: T) {
-		_max = newMax
-		value = value
+	override def save(data: util.Map[String, AnyRef]) {
+		data.put("statMax", Double.box(n.toDouble(max)))
+		data.put("statValue", Double.box(n.toDouble(value)))
 	}
 
-	override def save(nbt: NBTTagCompound) {
-		nbt.setDouble("statMax", n.toDouble(max))
-		nbt.setDouble("statValue", n.toDouble(value))
+	override def load(data: util.Map[String, AnyRef]) {
+		max = data.getOrDefault("statMax", Double.box(0)).asInstanceOf[T]
+		value = data.getOrDefault("statValue", Double.box(0)).asInstanceOf[T]
 	}
 
 	override def toString: String = getClass.getSimpleName + "[" + value + "/" + max + "]"

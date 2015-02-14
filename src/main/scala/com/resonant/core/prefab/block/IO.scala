@@ -101,7 +101,7 @@ trait IO extends Block with Storable with IIO {
 		super.save(data)
 
 		if (saveIOMap) {
-			data.put("ioMap", ioMap.toShort)
+			data.put("ioMap", Int.box(ioMap))
 		}
 	}
 
@@ -109,7 +109,7 @@ trait IO extends Block with Storable with IIO {
 		super.load(data)
 
 		if (saveIOMap) {
-			ioMap = data.getOrDefault("ioMap", 364).asInstanceOf[Int]
+			ioMap = data.getOrDefault("ioMap", Int.box(364)).asInstanceOf[Int]
 		}
 	}
 
