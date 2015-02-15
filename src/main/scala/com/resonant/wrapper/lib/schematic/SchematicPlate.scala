@@ -13,7 +13,7 @@ import nova.core.util.transform.Vector3d
  * @param name - unlocalized name for translation
  * @param block - block to build with
  */
-class SchematicPlate(name: String, block: Block) extends Schematic {
+class SchematicPlate(name: String, block: Block) extends Structure {
 	override def getName: String = name
 
 	def getStructure(dir: Direction, size: Int): HashMap[Vector3d, Pair[Block, Integer]] = {

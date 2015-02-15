@@ -8,7 +8,7 @@ import com.resonant.wrapper.lib.utility.science.UnitDisplay
 import net.minecraft.nbt.NBTTagCompound
 import nova.core.item.{Item, ItemStack}
 import nova.core.player.Player
-import nova.core.util.components.Storable
+import nova.core.util.components.{Storable, Stored}
 
 /**
  * A trait implementation of IEnergyItem
@@ -19,7 +19,7 @@ trait ItemEnergy extends Item with EnergyItem with Storable {
 
 	protected var maxEnergy = 0d
 
-	@Storable
+	@Stored
 	protected var energy = 0d
 
 	override def getMaxStackSize: Int = 1

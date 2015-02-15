@@ -3,7 +3,7 @@ package com.resonant.wrapper.core.content;
 import com.resonant.core.prefab.gui.GuiContainerBase;
 import com.resonant.lib.schematic.SchematicRegistry;
 import com.resonant.lib.utility.LanguageUtility;
-import com.resonant.wrapper.lib.schematic.Schematic;
+import com.resonant.wrapper.lib.schematic.Structure;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import resonantengine.core.ResonantEngine;
@@ -38,7 +38,7 @@ public class GuiCreativeBuilder extends GuiContainerBase {
 		this.textFieldSize.drawTextBox();
 
 		//Button Name
-		Schematic sch = SchematicRegistry.INSTANCE.getByID(builder.schematicID());
+		Structure sch = SchematicRegistry.INSTANCE.getByID(builder.schematicID());
 		((GuiButton) this.buttonList.get(1)).displayString = sch != null ? LanguageUtility.getLocal(sch.getName()) : "None";
 
 		fontRendererObj.drawString("Mode: ", 9, 80, 4210752);

@@ -1,6 +1,5 @@
 package com.resonant.wrapper.lib.schematic;
 
-import com.resonant.wrapper.core.api.misc.ISave;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -11,6 +10,7 @@ import net.minecraft.world.chunk.Chunk;
 import nova.core.util.Direction;
 import nova.core.util.collection.Pair;
 import nova.core.util.transform.Vector3d;
+import nova.core.util.transform.Vector3i;
 import resonantengine.lib.transform.vector.VectorWorld;
 import resonantengine.lib.utility.nbt.NBTUtility;
 
@@ -23,7 +23,7 @@ import java.util.Map.Entry;
  * File that represents all the data loaded from a schematic data file
  * @author DarkGuardsman
  */
-public class SchematicMap extends Schematic implements ISave {
+public class SchematicMap extends Structure implements Stoable {
 	//TODO queueSave the schematics using block names, include a reference sheet to match block names to IDs instead of saving each block as a string
 
 	public static final String BLOCK_LIST_SAVE_NAME = "BlockList";
@@ -157,7 +157,8 @@ public class SchematicMap extends Schematic implements ISave {
 			//int blockID = 0;
 			Block block = null;
 			int blockMeta = 0;
-			Vector3d blockPostion = new Vector3d();
+			Vector3d blockPostion = new Vector3i();
+			
 			if (blockData != null) {
 				try {
 					if (blockData.length > 0) {
@@ -252,7 +253,7 @@ public class SchematicMap extends Schematic implements ISave {
 	}
 
 	@Override
-	public HashMap<Vector3d, Pair<Block, Integer>> getStructure(Direction dir, int size) {
+	public HashMap<Vector3i, Block> getStructure(Direction dir, int size) {
 		return this.block_map;
 	}
 }
