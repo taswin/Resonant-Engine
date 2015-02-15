@@ -1,19 +1,23 @@
 package com.resonant.core.prefab.item
 
 import java.util
+import java.util.Optional
 
 import com.resonant.wrapper.lib.render.EnumColor
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.item.{Item, ItemStack}
+import com.resonant.wrapper.lib.wrapper.StringWrapper._
+import nova.core.item.Item
+import nova.core.player.Player
 import org.lwjgl.input.Keyboard
 
 /**
  * @author Calclavia
  */
 trait TItemToolTip extends Item {
-	override def addInformation(itemStack: ItemStack, par2EntityPlayer: EntityPlayer, list: util.List[_], par4: Boolean) {
-		val tooltipID = getUnlocalizedName(itemStack) + ".tooltip"
+
+	override def getTooltips(player: Optional[Player]): util.List[String] = {
+		val tooltipID = getID + ".tooltip"
 		val tooltip = tooltipID.getLocal
+		val list = new util.ArrayList[String]()
 
 		if (tooltip != null && !tooltip.isEmpty && !tooltip.equals(tooltipID)) {
 			if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
@@ -24,11 +28,6 @@ trait TItemToolTip extends Item {
 			}
 		}
 
-		if (Keyboard.isKeyDown(Keyboard.KEY_J)) {
-			TooltipUtility.addTooltip(itemStack, list.asInstanceOf[util.List[String]])
-		}
-		else {
-			list.add("info.recipes.tooltip".getLocal.replace("#0", EnumColor.AQUA.toString).replace("#1", EnumColor.GREY.toString))
-		}
+		return list
 	}
 }
