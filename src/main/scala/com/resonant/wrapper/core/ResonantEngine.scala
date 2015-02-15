@@ -10,9 +10,9 @@ import com.resonant.wrapper.core.content.{BlockCreativeBuilder, ItemScrewdriver}
 import com.resonant.wrapper.lib.factory.resources.ResourceFactory
 import com.resonant.wrapper.lib.utility.PotionUtility
 import nova.core.block.Block
+import nova.core.event.{EventListener, EventManager}
 import nova.core.item.Item
 import nova.core.loader.{Loadable, NovaMod}
-import nova.core.util.SaveManager
 import nova.internal.tick.UpdateTicker
 
 /**
@@ -29,12 +29,26 @@ object ResonantEngine extends Loadable with ContentLoader {
 	override def preInit() {
 		Reference.config.load()
 		PotionUtility.resizePotionArray()
+
+		/**
+		 * Register events 
+		 */
+		EventManager.instance.serverStopping.add(new EventListener[AnyRef] {
+			override def onEvent(event: AnyRef): Unit = serverStopped()
+		})
+		
 		ResourceFactory.preInit()
 
 		/**
 		 * Register graphs 
 		 */
-		NodeRegistry.instance.register(classOf[NodeElectric], classOf[NodeElectricComponent]);
+		NodeRegistry.instance.register(classOf[NodeElectric], classOf[NodeElectricComponent])
+	}
+
+	def serverStopped() {
+		FrequencyGridRegistry.CLIENT_INSTANCE = new GridFrequency
+		FrequencyGridRegistry.SERVER_INSTANCE = new GridFrequency
+		GridThermal.clear()
 	}
 
 	override def postInit() {
@@ -55,16 +69,6 @@ object ResonantEngine extends Loadable with ContentLoader {
 		MachineRecipes.instance.addRecipe(RecipeType.SIFTER.name, Blocks.gravel, Blocks.sand)
 		MachineRecipes.instance.addRecipe(RecipeType.SIFTER.name, Blocks.glass, Blocks.sand)
 		Reference.config.save()
-	}
-
-	def serverStopped() {
-		FrequencyGridRegistry.CLIENT_INSTANCE = new GridFrequency
-		FrequencyGridRegistry.SERVER_INSTANCE = new GridFrequency
-		GridThermal.clear()
-	}
-
-	def onServerStopping() {
-		SaveManager.saveAll()
 	}
 
 	/**

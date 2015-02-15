@@ -31,6 +31,10 @@ object GridThermal extends Updater {
 
 		return worldMap(world)
 	}
+
+	def clear() {
+		worldMap.clear()
+	}
 }
 
 class GridThermal(val world: World) extends Updater {

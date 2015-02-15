@@ -19,7 +19,7 @@ object RECommand extends CommandBase {
 		}
 		if (args(0).equalsIgnoreCase("gridinfo")) {
 			sender.addChatMessage(new
-					ChatComponentText("[Universal Electricity Grid] Tick rate: " + (if (UpdateTicker.ThreadTicker.instance.pause) "Paused" else UpdateTicker.ThreadTicker.instance.getDeltaTime + "/s")))
+					ChatComponentText("[Universal Electricity Grid] Tick rate: " + (if (UpdateTicker.ThreadTicker.instance.pause) "Paused" else UpdateTicker.ThreadTicker.ticker.getDeltaTime + "/s")))
 			sender.addChatMessage(new ChatComponentText("[Universal Electricity Grid] Grids running: " + UpdateTicker.ThreadTicker.ticker.getDeltaTime))
 			return
 		}
