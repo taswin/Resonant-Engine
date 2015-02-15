@@ -2,9 +2,9 @@ package com.resonant.wrapper.core
 
 import java.util.List
 
-import com.resonant.core.graph.core.UpdateTicker
 import net.minecraft.command.{CommandBase, ICommandSender, WrongUsageException}
 import net.minecraft.util.ChatComponentText
+import nova.internal.tick.UpdateTicker
 
 object RECommand extends CommandBase {
 	override def processCommand(sender: ICommandSender, args: Array[String]) {
@@ -19,13 +19,13 @@ object RECommand extends CommandBase {
 		}
 		if (args(0).equalsIgnoreCase("gridinfo")) {
 			sender.addChatMessage(new
-					ChatComponentText("[Universal Electricity Grid] Tick rate: " + (if (UpdateTicker.threaded.pause) "Paused" else (if (UpdateTicker.threaded.getDeltaTime > 0) 1 / UpdateTicker.threaded.getDeltaTime.asInstanceOf[Double] else 0) * 1000 + "/s")))
-			sender.addChatMessage(new ChatComponentText("[Universal Electricity Grid] Grids running: " + UpdateTicker.threaded.getUpdaterCount))
+					ChatComponentText("[Universal Electricity Grid] Tick rate: " + (if (UpdateTicker.ThreadTicker.instance.pause) "Paused" else UpdateTicker.ThreadTicker.instance.getDeltaTime + "/s")))
+			sender.addChatMessage(new ChatComponentText("[Universal Electricity Grid] Grids running: " + UpdateTicker.ThreadTicker.ticker.getDeltaTime))
 			return
 		}
 		if (args(0).equalsIgnoreCase("gridpause")) {
-			UpdateTicker.threaded.pause = !UpdateTicker.threaded.pause
-			sender.addChatMessage(new ChatComponentText("[Universal Electricity Grid] Ticking grids running state: " + !UpdateTicker.threaded.pause))
+			UpdateTicker.ThreadTicker.instance.pause = !UpdateTicker.ThreadTicker.instance.pause
+			sender.addChatMessage(new ChatComponentText("[Universal Electricity Grid] Ticking grids running state: " + !UpdateTicker.ThreadTicker.instance.pause))
 			return
 		}
 

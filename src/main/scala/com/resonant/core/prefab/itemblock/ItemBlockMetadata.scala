@@ -1,9 +1,9 @@
 package com.resonant.core.prefab.itemblock
 
-import net.minecraft.block.Block
-import net.minecraft.item.ItemStack
+import nova.core.block.Block
 
 class ItemBlockMetadata(block: Block) extends ItemBlockTooltip(block) {
+	/*
 	setHasSubtypes(true)
 
 	override def getMetadata(damage: Int): Int = {
@@ -16,5 +16,5 @@ class ItemBlockMetadata(block: Block) extends ItemBlockTooltip(block) {
 			return getUnlocalizedName() + "." + itemstack.getItemDamage
 		}
 		return getUnlocalizedName()
-	}
+	}*/
 }

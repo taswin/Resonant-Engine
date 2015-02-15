@@ -4,32 +4,29 @@ import java.util
 import java.util.{List, Optional}
 
 import com.resonant.core.energy.EnergyItem
-import com.resonant.wrapper.lib.compat.energy.Compatibility
 import com.resonant.wrapper.lib.utility.science.UnitDisplay
-import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.world.World
 import nova.core.item.{Item, ItemStack}
 import nova.core.player.Player
+import nova.core.util.components.Storable
 
 /**
  * A trait implementation of IEnergyItem
  *
  * @author Calclavia
  */
-trait ItemEnergy extends Item with EnergyItem {
+trait ItemEnergy extends Item with EnergyItem with Storable {
 
 	protected var maxEnergy = 0d
-	protected var energy = 0d
 
-	protected var nbtName: String = "energy"
+	@Storable
+	protected var energy = 0d
 
 	override def getMaxStackSize: Int = 1
 
 	override def getTooltips(player: Optional[Player]): util.List[String] = {
 		super.getTooltips(player)
 
-		val energy = getEnergy(itemStack)
 		val color = {
 			if (energy <= getEnergyCapacity(itemStack) / 3) {
 				"\u00a74"
@@ -45,12 +42,20 @@ trait ItemEnergy extends Item with EnergyItem {
 		return new List(color + new UnitDisplay(UnitDisplay.Unit.JOULES, energy) + "/" + new UnitDisplay(UnitDisplay.Unit.JOULES, getEnergyCapacity(itemStack)).symbol)
 	}
 
+	override def recharge(itemStack: ItemStack, energy: Double, doReceive: Boolean): Double = {
+		val energyReceived: Double = Math.min(getEnergyCapacity(itemStack) - getEnergy(itemStack), Math.min(getTransferRate(itemStack), energy))
+		if (doReceive) {
+			setEnergy(itemStack, getEnergy(itemStack) + energyReceived)
+		}
+		return energyReceived
+	}
+
 	/**
 	 * Makes sure the item is uncharged when it is crafted and not charged.
-	 */
+
 	override def onCreated(itemStack: ItemStack, par2World: World, par3EntityPlayer: EntityPlayer) {
 		setEnergy(itemStack, 0)
-	}
+	 */
 
 	override def setEnergy(itemStack: ItemStack, energy: Double): ItemStack = {
 		if (itemStack.getTagCompound == null) {
@@ -62,28 +67,8 @@ trait ItemEnergy extends Item with EnergyItem {
 		return itemStack
 	}
 
-	override def recharge(itemStack: ItemStack, energy: Double, doReceive: Boolean): Double = {
-		val energyReceived: Double = Math.min(getEnergyCapacity(itemStack) - getEnergy(itemStack), Math.min(getTransferRate(itemStack), energy))
-		if (doReceive) {
-			setEnergy(itemStack, getEnergy(itemStack) + energyReceived)
-		}
-		return energyReceived
-	}
-
-	def discharge(itemStack: ItemStack, energy: Double, doTransfer: Boolean): Double = {
-		val energyExtracted: Double = Math.min(getEnergy(itemStack), Math.min(getTransferRate(itemStack), energy))
-		if (doTransfer) {
-			setEnergy(itemStack, getEnergy(itemStack) - energyExtracted)
-		}
-		return energyExtracted
-	}
-
 	def getTransferRate(itemStack: ItemStack): Double = {
 		return getEnergyCapacity(itemStack) / 100
-	}
-
-	def getTransfer(itemStack: ItemStack): Double = {
-		return getEnergyCapacity(itemStack) - getEnergy(itemStack)
 	}
 
 	override def getEnergy(itemStack: ItemStack): Double = {
@@ -95,8 +80,21 @@ trait ItemEnergy extends Item with EnergyItem {
 		return energyStored
 	}
 
-	override def getSubItems(id: Item, par2CreativeTabs: CreativeTabs, par3List: List[_]) {
-		par3List.add(Compatibility.getItemWithCharge(new ItemStack(this), 0))
-		par3List.add(Compatibility.getItemWithCharge(new ItemStack(this), getEnergyCapacity(new ItemStack(this))))
+	def discharge(itemStack: ItemStack, energy: Double, doTransfer: Boolean): Double = {
+		val energyExtracted: Double = Math.min(getEnergy(itemStack), Math.min(getTransferRate(itemStack), energy))
+		if (doTransfer) {
+			setEnergy(itemStack, getEnergy(itemStack) - energyExtracted)
+		}
+		return energyExtracted
 	}
+
+	def getTransfer(itemStack: ItemStack): Double = {
+		return getEnergyCapacity(itemStack) - getEnergy(itemStack)
+	}
+
+	/*
+		override def getSubItems(id: Item, par2CreativeTabs: CreativeTabs, par3List: List[_]) {
+			par3List.add(Compatibility.getItemWithCharge(new ItemStack(this), 0))
+			par3List.add(Compatibility.getItemWithCharge(new ItemStack(this), getEnergyCapacity(new ItemStack(this))))
+		}*/
 }

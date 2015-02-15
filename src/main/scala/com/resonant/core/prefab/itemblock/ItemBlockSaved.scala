@@ -1,11 +1,15 @@
 package com.resonant.core.prefab.itemblock
 
+import java.util
+import java.util.Optional
+
 import nova.core.block.Block
-import nova.core.util.transform.Vector3d
+import nova.core.util.components.Storable
+import nova.core.util.transform.{Vector3d, Vector3i}
 import nova.core.world.World
 
 /**
- * An ItemBlock that can store its block's internal data.
+ * An ItemBlock that can store its block's internal data even after the block breaks.
  *
  * @author Calclavia
  */
@@ -41,26 +45,27 @@ object ItemBlockSaved {
 	}
 }
 
-class ItemBlockSaved(block: Block) extends ItemBlockTooltip(block) {
-	setMaxDamage(0)
-	setHasSubtypes(true)
-	setMaxStackSize(1)
+class ItemBlockSaved(block: Block) extends ItemBlockTooltip(block) with Storable {
 
-	override def placeBlockAt(stack: ItemStack, player: EntityPlayer, world: World, x: Int, y: Int, z: Int, side: Int, hitX: Float, hitY: Float, hitZ: Float, metadata: Int): Boolean = {
-		val flag: Boolean = super.placeBlockAt(stack, player, world, x, y, z, side, hitX, hitY, hitZ, metadata)
-		val tile: TileEntity = world.getTileEntity(x, y, z)
-		if (tile != null) {
-			val essentialNBT: NBTTagCompound = new NBTTagCompound
-			tile.writeToNBT(essentialNBT)
-			val setNbt: NBTTagCompound = NBTUtility.getNBTTagCompound(stack)
-			if (essentialNBT.hasKey("id")) {
-				setNbt.setString("id", essentialNBT.getString("id"))
-				setNbt.setInteger("x", essentialNBT.getInteger("x"))
-				setNbt.setInteger("y", essentialNBT.getInteger("y"))
-				setNbt.setInteger("z", essentialNBT.getInteger("z"))
-			}
-			tile.readFromNBT(setNbt)
+	var data: util.Map[String, AnyRef] = new util.HashMap
+
+	override def getMaxStackSize: Int = 1
+
+	override def save(data: util.Map[String, AnyRef]) {
+		data.clear()
+		data.putAll(this.data)
+	}
+
+	override def load(data: util.Map[String, AnyRef]): Unit = this.data = data
+
+	override protected def onPostPlace(world: World, placePos: Vector3i): Boolean = {
+		val placedBlock: Optional[Block] = world.getBlock(placePos)
+
+		if (placedBlock.isPresent && placedBlock.get().isInstanceOf[Storable]) {
+			//Check if basic NBT data such as x,y,z is retained.
+			placedBlock.get().asInstanceOf[Storable].load(data)
 		}
-		return flag
+
+		return super.onPostPlace(world, placePos)
 	}
 }
