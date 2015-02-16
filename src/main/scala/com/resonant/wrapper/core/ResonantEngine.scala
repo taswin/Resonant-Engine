@@ -5,7 +5,6 @@ import com.resonant.core.graph.internal.electric.NodeElectricComponent
 import com.resonant.core.graph.internal.frequency.GridFrequency
 import com.resonant.core.graph.internal.thermal.GridThermal
 import com.resonant.core.prefab.modcontent.ContentLoader
-import com.resonant.wrapper.core.api.edx.recipe.{MachineRecipes, RecipeType}
 import com.resonant.wrapper.core.content.{BlockCreativeBuilder, ItemScrewdriver}
 import com.resonant.wrapper.lib.factory.resources.ResourceFactory
 import com.resonant.wrapper.lib.utility.PotionUtility
@@ -36,7 +35,7 @@ object ResonantEngine extends Loadable with ContentLoader {
 		EventManager.instance.serverStopping.add(new EventListener[AnyRef] {
 			override def onEvent(event: AnyRef): Unit = serverStopped()
 		})
-		
+
 		ResourceFactory.preInit()
 
 		/**
@@ -46,21 +45,22 @@ object ResonantEngine extends Loadable with ContentLoader {
 	}
 
 	def serverStopped() {
-		FrequencyGridRegistry.CLIENT_INSTANCE = new GridFrequency
-		FrequencyGridRegistry.SERVER_INSTANCE = new GridFrequency
+		GridFrequency.client = new GridFrequency
+		GridFrequency.server = new GridFrequency
 		GridThermal.clear()
 	}
 
 	override def postInit() {
 		UpdateTicker.ThreadTicker.ticker.add(GridThermal)
 
-		FrequencyGridRegistry.CLIENT_INSTANCE = new GridFrequency
-		FrequencyGridRegistry.SERVER_INSTANCE = new GridFrequency
-		OreDictionary.registerOre("ingotGold", Items.gold_ingot)
-		OreDictionary.registerOre("ingotIron", Items.iron_ingot)
-		OreDictionary.registerOre("oreGold", Blocks.gold_ore)
-		OreDictionary.registerOre("oreIron", Blocks.iron_ore)
-		OreDictionary.registerOre("oreLapis", Blocks.lapis_ore)
+		/*
+		Game.instance.get().itemDictionary.add("ingotGold", Items.gold_ingot)
+		Game.instance.get().itemDictionary.add("ingotIron", Items.iron_ingot) 
+		Game.instance.get().itemDictionary.add("oreGold", Blocks.gold_ore)
+		Game.instance.get().itemDictionary.add("oreIron", Blocks.iron_ore)
+		Game.instance.get().itemDictionary.add("oreLapis", Blocks.lapis_ore)
+		
+
 		MachineRecipes.instance.addRecipe(RecipeType.SMELTER.name, new FluidStack(FluidRegistry.LAVA, FluidContainerRegistry.BUCKET_VOLUME), new ItemStack(Blocks.stone))
 		MachineRecipes.instance.addRecipe(RecipeType.GRINDER.name, Blocks.cobblestone, Blocks.gravel)
 		MachineRecipes.instance.addRecipe(RecipeType.GRINDER.name, Blocks.stone, Blocks.cobblestone)
@@ -68,6 +68,7 @@ object ResonantEngine extends Loadable with ContentLoader {
 		MachineRecipes.instance.addRecipe(RecipeType.SIFTER.name, Blocks.cobblestone, Blocks.sand)
 		MachineRecipes.instance.addRecipe(RecipeType.SIFTER.name, Blocks.gravel, Blocks.sand)
 		MachineRecipes.instance.addRecipe(RecipeType.SIFTER.name, Blocks.glass, Blocks.sand)
+		*/
 		Reference.config.save()
 	}
 
