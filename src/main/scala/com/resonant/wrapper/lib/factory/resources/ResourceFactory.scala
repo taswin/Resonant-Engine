@@ -1,7 +1,7 @@
 package com.resonant.wrapper.lib.factory.resources
 
-import com.resonant.wrapper.lib.factory.resources.block.{TBlockResource, TileOre}
-import com.resonant.wrapper.lib.factory.resources.item.TItemResource
+import com.resonant.wrapper.lib.factory.resources.block.TileOre
+import com.resonant.wrapper.lib.factory.resources.item.ItemIngot
 import com.resonant.wrapper.lib.wrapper.StringWrapper._
 import net.minecraft.item.Item
 import net.minecraftforge.oredict.OreDictionary
@@ -51,7 +51,7 @@ object ResourceFactory {
 		assert(materials.contains(material))
 		val newResource = resourceBlocks(resourceType).newInstance()
 		newResource.name = resourceType + material.capitalizeFirst
-		newResource.asInstanceOf[TBlockResource].resourceMaterial = material
+		newResource.asInstanceOf[Resource].resourceMaterial = material
 
 		val result = ResonantContent.manager.newBlock(newResource)
 		generatedBlocks += (resourceType, material) -> result
@@ -68,7 +68,7 @@ object ResourceFactory {
 	def requestItem(resourceType: String, material: String): Item = {
 		assert(materials.contains(material))
 		val newResource = resourceItems(resourceType).newInstance()
-		newResource.asInstanceOf[TItemResource].material = material
+		newResource.asInstanceOf[Resource].material = material
 		val result = ResonantContent.manager.newItem(resourceType + material.capitalizeFirst, newResource)
 		generatedItems += (resourceType, material) -> result
 
