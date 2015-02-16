@@ -1,15 +1,31 @@
 package com.resonant.wrapper.lib.schematic
 
+import java.util.Optional
+
 import com.google.common.math.DoubleMath
 import nova.core.block.Block
 import nova.core.util.Identifiable
 import nova.core.util.transform.{MatrixStack, Quaternion, Vector3d, Vector3i}
 
+import scala.beans.BeanProperty
+
 /**
  * Defines a 3D structure.
  * @author Calclavia
  */
-abstract class Structure(translate: Vector3d, scale: Vector3d, rotation: Quaternion) extends Identifiable {
+abstract class Structure extends Identifiable {
+
+	//The error allowed in fuzzy comparisons
+	protected val error = 0.001
+
+	@BeanProperty
+	var translate = Vector3d.zero
+	@BeanProperty
+	var scale = Vector3d.one
+	@BeanProperty
+	var rotation = Quaternion.identity
+	@BeanProperty
+	var block = Optional.empty[Block]()
 
 	/**
 	 * Do a search within an appropriate region by generating a search set.
@@ -32,14 +48,26 @@ abstract class Structure(translate: Vector3d, scale: Vector3d, rotation: Quatern
 		 * Therefore, we need to transform the test vector back into the default, to test against the equation
 		 */
 		return searchSpace.par
-			.filter(v => DoubleMath.fuzzyEquals(surfaceEquation(v.transform(rotationMatrix).divide(scale)), 0, 0.001))
+			.filter(v => DoubleMath.fuzzyEquals(surfaceEquation(v.transform(rotationMatrix).divide(scale)), 0, error))
 			.map(_ + translate)
 			.map(_.toInt)
 			.seq
 			.toSet
 	}
 
-	def getBlockStructure: Map[Vector3i, Block]
+	def getBlockStructure: Map[Vector3i, Block] = {
+		return getStructure
+			.filter(getBlock(_).isPresent)
+			.map(v => (v, getBlock(v).get()))
+			.toMap
+	}
+
+	/**
+	 * Gets the block at this position (relatively) 
+	 * @param position
+	 * @return
+	 */
+	def getBlock(position: Vector3i): Optional[Block] = block
 
 	/**
 	 * Checks if this world position is within this structure. 
@@ -47,8 +75,9 @@ abstract class Structure(translate: Vector3d, scale: Vector3d, rotation: Quatern
 	 * @return True if there is an intersection
 	 */
 	def isIntersects(position: Vector3d): Boolean = {
+		//TODO: Use inverse matrix
 		val rotationMatrix = new MatrixStack().rotate(rotation).getMatrix
-		return intersects((position - translate).transform(rotationMatrix).divide(scale))
+		return DoubleMath.fuzzyEquals(intersects((position - translate).transform(rotationMatrix).divide(scale)), 0, error)
 	}
 
 	/**
@@ -63,5 +92,5 @@ abstract class Structure(translate: Vector3d, scale: Vector3d, rotation: Quatern
 	 * The transformation should be default.
 	 * @return The result of the equation. Zero if the position satisfy the equation.
 	 */
-	def intersects(position: Vector3d): Boolean
+	def intersects(position: Vector3d): Double
 }
