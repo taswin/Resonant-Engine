@@ -1,4 +1,4 @@
-package com.resonant.core.prefab.item
+package com.resonant.core.prefab.itemblock
 
 import java.util
 import java.util.Optional

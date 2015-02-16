@@ -1,11 +1,11 @@
 package com.resonant.wrapper.lib.factory.resources
 
-import com.resonant.wrapper.lib.factory.resources.block.TileOre
+import com.resonant.wrapper.lib.factory.resources.block.{TBlockResource, TileOre}
 import com.resonant.wrapper.lib.factory.resources.item.TItemResource
-import net.minecraft.block.Block
+import com.resonant.wrapper.lib.wrapper.StringWrapper._
 import net.minecraft.item.Item
 import net.minecraftforge.oredict.OreDictionary
-
+import nova.core.block.Block
 /**
  * A factor class generates different types of resources based on its material
  *
@@ -19,7 +19,7 @@ object ResourceFactory {
 	 */
 	private var materials = Set.empty[String]
 	private var materialColorCache = Map.empty[String, Integer]
-	private var resourceBlocks = Map.empty[String, Class[_ <: ResonantBlock]]
+	private var resourceBlocks = Map.empty[String, Class[_ <: Block]]
 	private var resourceItems = Map.empty[String, Class[_ <: Item]]
 
 	private var generatedBlocks = Map.empty[(String, String), Block]

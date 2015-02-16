@@ -1,7 +1,11 @@
 package com.resonant.core.graph.internal.frequency
 
+import java.util
+
 import com.resonant.core.graph.internal.Graph
 import com.resonant.wrapper.core.api.tile.BlockFrequency
+
+import scala.collection.convert.wrapAll._
 
 object GridFrequency {
 	var client = new GridFrequency
@@ -35,7 +39,7 @@ class GridFrequency extends Graph[BlockFrequency] {
 		)
 	}
 
-	override def nodes: util.Set[BlockFrequency] = _nodes
+	override def nodes(): util.Set[BlockFrequency] = _nodes
 
 	def get(frequency: Int) = frequencyMap(frequency)
 }

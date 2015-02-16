@@ -1,5 +1,6 @@
 package com.resonant.core.prefab.modcontent
 
+import com.resonant.wrapper.lib.utility.recipe.Recipes
 import net.minecraft.block.Block
 import net.minecraft.item.crafting.IRecipe
 import net.minecraft.item.{Item, ItemStack}
@@ -29,6 +30,9 @@ trait RecipeHolder {
 	protected def shapeless(output: Item, input: Any*): IRecipe =
 		new ShapelessOreRecipe(output, convertToMinecraft(input): _*)
 
+	protected def shapeless(output: Block, input: Any*): IRecipe =
+		new ShapelessOreRecipe(output, convertToMinecraft(input): _*)
+
 	private def convertToMinecraft(params: Seq[Any]): Seq[AnyRef] =
 		params.flatMap {
 			case ch: Char =>
@@ -42,9 +46,6 @@ trait RecipeHolder {
 			case _ =>
 				Seq()
 		}
-
-	protected def shapeless(output: Block, input: Any*): IRecipe =
-		new ShapelessOreRecipe(output, convertToMinecraft(input): _*)
 
 	protected def smelting(input: ItemStack, output: ItemStack, xp: Double = 0.0): (ItemStack, ItemStack, Float) =
 		(input, output, xp.toFloat)

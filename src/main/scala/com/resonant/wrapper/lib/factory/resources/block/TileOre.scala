@@ -2,13 +2,14 @@ package com.resonant.wrapper.lib.factory.resources.block
 
 import java.awt.Color
 
+import nova.core.block.Block
 import nova.core.util.transform.Vector3d
 
 /**
  * A generic ore block that is automatically colored/textured based on a color multiplier.
  * @author Calclavia
  */
-class TileOre extends ResonantBlock(Material.rock) with TBlockResource {
+class TileOre extends Block(Material.rock) with TBlockResource {
 	var renderingForeground = false
 
 	setTextureName("oreBackground")
@@ -18,14 +19,14 @@ class TileOre extends ResonantBlock(Material.rock) with TBlockResource {
 	@SideOnly(Side.CLIENT)
 	override def registerIcons(iconRegister: IIconRegister) {
 		super.registerIcons(iconRegister)
-		ResonantBlock.icon.put("oreForeground", iconRegister.registerIcon(Reference.prefix + "oreForeground"))
+		Block.icon.put("oreForeground", iconRegister.registerIcon(Reference.prefix + "oreForeground"))
 	}
 
 	@SideOnly(Side.CLIENT)
 	override def colorMultiplier: Int = 0xFFFFFF
 
 	@SideOnly(Side.CLIENT)
-	override def getIcon: IIcon = if (renderingForeground) ResonantBlock.icon.get("oreForeground") else super.getIcon
+	override def getIcon: IIcon = if (renderingForeground) Block.icon.get("oreForeground") else super.getIcon
 
 	@SideOnly(Side.CLIENT)
 	override def renderInventory(itemStack: ItemStack) {
@@ -41,7 +42,7 @@ class TileOre extends ResonantBlock(Material.rock) with TBlockResource {
 		val material = ResourceFactory.getMaterial(itemStack.getItem.asInstanceOf[ItemBlock].field_150939_a)
 		val color = new Color(ResourceFactory.getColor(material))
 		GL11.glColor4f(color.getRed / 255f, color.getGreen / 255f, color.getBlue / 255f, 1)
-		RenderUtility.renderBlocks.setOverrideBlockTexture(ResonantBlock.icon.get("oreForeground"))
+		RenderUtility.renderBlocks.setOverrideBlockTexture(Block.icon.get("oreForeground"))
 		RenderUtility.renderNormalBlockAsItem(itemStack.getItem.asInstanceOf[ItemBlock].field_150939_a, itemStack.getItemDamage, RenderUtility.renderBlocks)
 		RenderUtility.renderBlocks.clearOverrideBlockTexture()
 		GL11.glPopMatrix()

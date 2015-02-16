@@ -1,14 +1,15 @@
 package com.resonant.core.prefab.item
 
 import java.util
-import java.util.{List, Optional}
+import java.util.Optional
 
 import com.resonant.core.energy.EnergyItem
 import com.resonant.wrapper.lib.utility.science.UnitDisplay
-import net.minecraft.nbt.NBTTagCompound
-import nova.core.item.{Item, ItemStack}
+import nova.core.item.Item
 import nova.core.player.Player
 import nova.core.util.components.{Storable, Stored}
+
+import scala.collection.convert.wrapAll._
 
 /**
  * A trait implementation of IEnergyItem
@@ -28,10 +29,10 @@ trait ItemEnergy extends Item with EnergyItem with Storable {
 		super.getTooltips(player)
 
 		val color = {
-			if (energy <= getEnergyCapacity(itemStack) / 3) {
+			if (energy <= maxEnergy / 3) {
 				"\u00a74"
 			}
-			else if (energy > getEnergyCapacity(itemStack) * 2 / 3) {
+			else if (energy > maxEnergy * 2 / 3) {
 				"\u00a72"
 			}
 			else {
@@ -39,13 +40,13 @@ trait ItemEnergy extends Item with EnergyItem with Storable {
 			}
 		}
 
-		return new List(color + new UnitDisplay(UnitDisplay.Unit.JOULES, energy) + "/" + new UnitDisplay(UnitDisplay.Unit.JOULES, getEnergyCapacity(itemStack)).symbol)
+		return List(color + new UnitDisplay(UnitDisplay.Unit.JOULES, energy) + "/" + new UnitDisplay(UnitDisplay.Unit.JOULES, maxEnergy).symbol)
 	}
 
-	override def recharge(itemStack: ItemStack, energy: Double, doReceive: Boolean): Double = {
-		val energyReceived: Double = Math.min(getEnergyCapacity(itemStack) - getEnergy(itemStack), Math.min(getTransferRate(itemStack), energy))
+	override def recharge(energy: Double, doReceive: Boolean): Double = {
+		val energyReceived: Double = Math.min(maxEnergy - energy, Math.min(getTransferRate, energy))
 		if (doReceive) {
-			setEnergy(itemStack, getEnergy(itemStack) + energyReceived)
+			setEnergy(energy + energyReceived)
 		}
 		return energyReceived
 	}
@@ -57,39 +58,24 @@ trait ItemEnergy extends Item with EnergyItem with Storable {
 		setEnergy(itemStack, 0)
 	 */
 
-	override def setEnergy(itemStack: ItemStack, energy: Double): ItemStack = {
-		if (itemStack.getTagCompound == null) {
-			itemStack.setTagCompound(new NBTTagCompound)
-		}
-		val electricityStored = Math.max(Math.min(energy, getEnergyCapacity(itemStack)), 0)
-		itemStack.getTagCompound.setDouble(nbtName, electricityStored)
-		itemStack.setItemDamage((100 - (electricityStored / getEnergyCapacity(itemStack)) * 100).toInt)
-		return itemStack
+	override def setEnergy(energy: Double) {
+		this.energy = energy
 	}
 
-	def getTransferRate(itemStack: ItemStack): Double = {
-		return getEnergyCapacity(itemStack) / 100
-	}
+	def getTransferRate: Double = maxEnergy / 100
 
-	override def getEnergy(itemStack: ItemStack): Double = {
-		if (itemStack.getTagCompound == null) {
-			itemStack.setTagCompound(new NBTTagCompound)
-		}
-		val energyStored = itemStack.getTagCompound.getDouble(nbtName)
-		itemStack.setItemDamage((100 - (energyStored.toDouble / getEnergyCapacity(itemStack)) * 100).toInt)
-		return energyStored
-	}
+	override def getEnergy = energy
 
-	def discharge(itemStack: ItemStack, energy: Double, doTransfer: Boolean): Double = {
-		val energyExtracted: Double = Math.min(getEnergy(itemStack), Math.min(getTransferRate(itemStack), energy))
+	def discharge(energy: Double, doTransfer: Boolean): Double = {
+		val energyExtracted: Double = Math.min(energy, Math.min(getTransferRate, energy))
 		if (doTransfer) {
-			setEnergy(itemStack, getEnergy(itemStack) - energyExtracted)
+			setEnergy(energy - energyExtracted)
 		}
 		return energyExtracted
 	}
 
-	def getTransfer(itemStack: ItemStack): Double = {
-		return getEnergyCapacity(itemStack) - getEnergy(itemStack)
+	def getTransfer(): Double = {
+		return maxEnergy - energy
 	}
 
 	/*

@@ -1,6 +1,7 @@
 package com.resonant.wrapper.lib.factory.resources.item
 
-import net.minecraft.item.{Item, ItemStack}
+import com.resonant.wrapper.lib.factory.resources.ResourceFactory
+import nova.core.item.Item
 
 /**
  * A class used by rubble, dusts and refined dusts
