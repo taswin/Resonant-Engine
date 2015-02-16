@@ -37,7 +37,7 @@ class StructureCustom(val name: String) extends Structure with Storable {
 		data.put("translate", translate)
 		data.put("scale", scale)
 		data.put("rotation", rotation)
-		data.put("structure", structure)
+		data.put("structure", structure.asInstanceOf[util.Map[String, AnyRef]])
 	}
 
 	/**
