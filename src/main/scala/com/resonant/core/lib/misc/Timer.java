@@ -1,4 +1,4 @@
-package com.resonant.core.prefab.misc;
+package com.resonant.core.lib.misc;
 
 import nova.core.network.NetworkManager;
 

@@ -1,4 +1,4 @@
-package com.resonant.wrapper.lib.collection;
+package com.resonant.core.lib.collection;
 
 import java.util.LinkedList;
 
