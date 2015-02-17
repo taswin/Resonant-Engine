@@ -12,6 +12,7 @@ import nova.core.block.Block
 import nova.core.event.{EventListener, EventManager}
 import nova.core.item.Item
 import nova.core.loader.{Loadable, NovaMod}
+import nova.core.render.texture.ItemTexture
 import nova.internal.tick.UpdateTicker
 
 /**
@@ -23,7 +24,8 @@ import nova.internal.tick.UpdateTicker
 object ResonantEngine extends Loadable with ContentLoader {
 
 	var blockCreativeBuilder: Block = classOf[BlockCreativeBuilder]
-	var itemWrench: Item = classOf[ItemScrewdriver]
+	var itemScrewdriver: Item = classOf[ItemScrewdriver]
+	var textureScrewdriver: ItemTexture = new ItemTexture(Reference.id, "screwdriver")
 
 	override def preInit() {
 		Reference.config.load()
@@ -75,7 +77,6 @@ object ResonantEngine extends Loadable with ContentLoader {
 	/**
 	 * Default handler.
 
-	@SubscribeEvent
 	def boilEventHandler(evt: BoilEvent) {
 		val world: World = evt.world
 		val position: Vector3d = evt.position

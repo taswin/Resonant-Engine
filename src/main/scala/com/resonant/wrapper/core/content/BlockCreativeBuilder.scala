@@ -31,12 +31,11 @@ class BlockCreativeBuilder extends Block with Rotatable with PacketReceiver with
 		if (NetworkManager.instance.get().isServer && id == 1) {
 			val schematicID = packet.readInt
 			val size = packet.readInt
-			val buildMap = BlockCreativeBuilder.schematics(schematicID).getStructure(direction, size)
-
-			for (entry <- buildMap.entrySet()) {
-				val placement = position + entry.getKey
-				blockAccess.setBlock(placement, entry.getValue)
-			}
+			val buildMap = BlockCreativeBuilder.schematics(schematicID).getBlockStructure
+			buildMap.foreach(kv => {
+				val placement = position + kv._1
+				blockAccess.setBlock(placement, kv._2)
+			})
 		}
 	}
 

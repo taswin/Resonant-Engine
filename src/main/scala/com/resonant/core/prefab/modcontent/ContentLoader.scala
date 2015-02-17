@@ -4,6 +4,7 @@ import nova.core.block.Block
 import nova.core.game.Game
 import nova.core.item.Item
 import nova.core.loader.Loadable
+import nova.core.render.texture.{BlockTexture, ItemTexture}
 
 /**
  * Automatic content registration for all Blocks, Items, Entities and Textures.
@@ -27,8 +28,10 @@ trait ContentLoader extends Loadable {
 			if (obj != null) {
 				// Get type of object, then register it if supported
 				obj match {
-					case itemWrapper: ItemWrapper => field.set(self, Game.instance.get.itemManager.registerItem(obj.asInstanceOf[ItemWrapper].wrapped))
-					case blockWrapper: BlockWrapper => field.set(self, Game.instance.get.blockManager.registerBlock(obj.asInstanceOf[BlockWrapper].wrapped))
+					case itemWrapper: ItemWrapper => field.set(self, Game.instance.get.itemManager.registerItem(itemWrapper.wrapped))
+					case blockWrapper: BlockWrapper => field.set(self, Game.instance.get.blockManager.registerBlock(blockWrapper.wrapped))
+					case itemTexture: ItemTexture => field.set(self, Game.instance.get.renderManager.registerTexture(itemTexture))
+					case blockTexture: BlockTexture => field.set(self, Game.instance.get.renderManager.registerTexture(blockTexture))
 				}
 			}
 		}

@@ -3,6 +3,7 @@ package com.resonant.wrapper.core.content
 import java.util.Optional
 
 import buildcraft.api.tools.IToolWrench
+import com.resonant.wrapper.core.ResonantEngine
 import net.minecraft.entity.player.EntityPlayer
 import nova.core.item.Item
 import nova.core.render.texture.ItemTexture
@@ -17,6 +18,6 @@ class ItemScrewdriver extends Item with IToolWrench {
 	}
 
 	override def getTexture: Optional[ItemTexture] = {
-		return Optional.of(ResonantContent.screwTexture)
+		return Optional.of(ResonantEngine.textureScrewdriver)
 	}
 }

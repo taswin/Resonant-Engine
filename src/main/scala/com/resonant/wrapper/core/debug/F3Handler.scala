@@ -1,5 +1,6 @@
 package com.resonant.wrapper.core.debug
 
+import com.resonant.wrapper.core.api.tile.DebugInfo
 import cpw.mods.fml.common.FMLCommonHandler
 import cpw.mods.fml.common.eventhandler.SubscribeEvent
 import cpw.mods.fml.relauncher.{Side, SideOnly}
@@ -23,10 +24,10 @@ object F3Handler {
 			val objectPosition = player.rayTrace(8, 1)
 
 			if (objectPosition != null) {
-				val tile = new VectorWorld(world, objectPosition.blockX, objectPosition.blockY, objectPosition.blockZ).getTileEntity
+				val tile = world.getTileEntity(objectPosition.blockX, objectPosition.blockY, objectPosition.blockZ)
 
-				if (tile.isInstanceOf[IDebugInfo]) {
-					event.left.addAll(tile.asInstanceOf[IDebugInfo].getDebugInfo)
+				if (tile.isInstanceOf[DebugInfo]) {
+					event.left.addAll(tile.asInstanceOf[DebugInfo].getDebugInfo)
 				}
 			}
 		}
