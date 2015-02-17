@@ -23,7 +23,7 @@ trait ItemEnergy extends Item with EnergyItem with Storable {
 	@Stored
 	protected var energy = 0d
 
-	override def getMaxStackSize: Int = 1
+	override def getMaxCount: Int = 1
 
 	override def getTooltips(player: Optional[Player]): util.List[String] = {
 		super.getTooltips(player)

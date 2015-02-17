@@ -17,7 +17,7 @@ class ItemBlockSaved(block: Block) extends ItemBlockTooltip(block) with Storable
 
 	var data: util.Map[String, AnyRef] = new util.HashMap
 
-	override def getMaxStackSize: Int = 1
+	override def getMaxCount: Int = 1
 
 	override def save(data: util.Map[String, AnyRef]) {
 		data.clear()

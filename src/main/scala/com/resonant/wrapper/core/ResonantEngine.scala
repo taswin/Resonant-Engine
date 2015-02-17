@@ -19,7 +19,7 @@ import nova.internal.tick.UpdateTicker
  *
  * @author Calclavia, DarkGuardsman
  */
-@NovaMod(id = Reference.id, name = Reference.name, version = Reference.version)
+@NovaMod(id = Reference.id, name = Reference.name, version = Reference.version, novaVersion = "1.0.0")
 object ResonantEngine extends Loadable with ContentLoader {
 
 	var blockCreativeBuilder: Block = classOf[BlockCreativeBuilder]
