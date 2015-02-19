@@ -19,8 +19,8 @@ object ResourceFactory {
 	 */
 	private var materials = Set.empty[String]
 	private var materialColorCache = Map.empty[String, Integer]
-	private var resourceBlocks = Map.empty[String, Class[_ <: Block]]
-	private var resourceItems = Map.empty[String, Class[_ <: Item]]
+	private var resourceBlocks = Map.empty[String, Class[_ <: Block with Resource]]
+	private var resourceItems = Map.empty[String, Class[_ <: Item with Resource]]
 
 	private var generatedBlocks = Map.empty[(String, String), Block]
 	private var generatedItems = Map.empty[(String, String), Item]
@@ -50,8 +50,8 @@ object ResourceFactory {
 	def requestBlock(resourceType: String, material: String): Block = {
 		assert(materials.contains(material))
 		val newResource = resourceBlocks(resourceType).newInstance()
-		newResource.name = resourceType + material.capitalizeFirst
-		newResource.asInstanceOf[Resource].resourceMaterial = material
+		newResource.id = resourceType + material.capitalizeFirst
+		newResource.asInstanceOf[Resource].material = material
 
 		val result = ResonantContent.manager.newBlock(newResource)
 		generatedBlocks += (resourceType, material) -> result

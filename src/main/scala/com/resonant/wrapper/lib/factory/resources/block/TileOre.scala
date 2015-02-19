@@ -2,6 +2,7 @@ package com.resonant.wrapper.lib.factory.resources.block
 
 import java.awt.Color
 
+import com.resonant.wrapper.lib.factory.resources.Resource
 import nova.core.block.Block
 import nova.core.util.transform.Vector3d
 
@@ -9,20 +10,13 @@ import nova.core.util.transform.Vector3d
  * A generic ore block that is automatically colored/textured based on a color multiplier.
  * @author Calclavia
  */
-class TileOre extends Block(Material.rock) with TBlockResource {
+class TileOre extends Block with Resource {
 	var renderingForeground = false
 
-	setTextureName("oreBackground")
-	setCreativeTab(CreativeTabs.tabBlock)
-	normalRender = false
+	//TODO: Register these textures:
+	//"oreForeground"
+	//"oreBackground"
 
-	@SideOnly(Side.CLIENT)
-	override def registerIcons(iconRegister: IIconRegister) {
-		super.registerIcons(iconRegister)
-		Block.icon.put("oreForeground", iconRegister.registerIcon(Reference.prefix + "oreForeground"))
-	}
-
-	@SideOnly(Side.CLIENT)
 	override def colorMultiplier: Int = 0xFFFFFF
 
 	@SideOnly(Side.CLIENT)
