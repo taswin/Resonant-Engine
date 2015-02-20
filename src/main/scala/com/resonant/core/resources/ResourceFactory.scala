@@ -59,7 +59,7 @@ object ResourceFactory extends ContentLoader {
 	def requestBlock(resourceType: String, material: String): Block = {
 		assert(materials.contains(material))
 
-		val result = Game.instance.get().blockManager.registerBlock(new Supplier[Block] {
+		val result = Game.instance.get().blockManager.register(new Supplier[Block] {
 			override def get(): Block = {
 				val newResource = resourceBlocks(resourceType).newInstance()
 				newResource.id = resourceType + material.capitalizeFirst
@@ -80,7 +80,7 @@ object ResourceFactory extends ContentLoader {
 
 	def requestItem(resourceType: String, material: String): Item = {
 		assert(materials.contains(material))
-		val result = Game.instance.get().itemManager.registerItem(new Supplier[core.item.Item] {
+		val result = Game.instance.get().itemManager.register(new Supplier[core.item.Item] {
 			override def get(): Item = {
 				val newResource = resourceItems(resourceType).newInstance()
 				newResource.id = resourceType + material.capitalizeFirst

@@ -17,8 +17,8 @@ trait Rotatable extends Block {
 	var direction = Direction.UNKNOWN
 
 	def determineRotation(entity: Entity): Direction = {
-		if (Math.abs(entity.getPosition.x - x) < 2 && Math.abs(entity.getPosition.z - z) < 2) {
-			val d0 = entity.getPosition.y + 1.82D //- entity.yOffset
+		if (Math.abs(entity.position.x - x) < 2 && Math.abs(entity.position.z - z) < 2) {
+			val d0 = entity.position.y + 1.82D //- entity.yOffset
 
 			if (canRotate(1) && d0 - y > 2.0D) {
 				return Direction.UP
@@ -28,7 +28,7 @@ trait Rotatable extends Block {
 			}
 		}
 
-		val playerSide = Math.floor(entity.getRotation.toEuler.x * 4.0F / 360.0F + 0.5D).toInt & 3
+		val playerSide = Math.floor(entity.rotation.toEuler.x * 4.0F / 360.0F + 0.5D).toInt & 3
 		val returnSide = if (playerSide == 0 && canRotate(2)) 2 else if (playerSide == 1 && canRotate(5)) 5 else if (playerSide == 2 && canRotate(3)) 3 else if (playerSide == 3 && canRotate(4)) 4 else 0
 
 		if (isFlipPlacement) {

@@ -28,8 +28,8 @@ trait ContentLoader extends Loadable {
 			if (obj != null) {
 				// Get type of object, then register it if supported
 				obj match {
-					case itemWrapper: ItemWrapper => field.set(self, Game.instance.get.itemManager.registerItem(itemWrapper.wrapped))
-					case blockWrapper: BlockWrapper => field.set(self, Game.instance.get.blockManager.registerBlock(blockWrapper.wrapped))
+					case itemWrapper: ItemWrapper => field.set(self, Game.instance.get.itemManager.register(itemWrapper.wrapped))
+					case blockWrapper: BlockWrapper => field.set(self, Game.instance.get.blockManager.register(blockWrapper.wrapped))
 					case itemTexture: ItemTexture => field.set(self, Game.instance.get.renderManager.registerTexture(itemTexture))
 					case blockTexture: BlockTexture => field.set(self, Game.instance.get.renderManager.registerTexture(blockTexture))
 				}
