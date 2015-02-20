@@ -12,7 +12,7 @@ import org.lwjgl.opengl.GL11
  */
 object RenderBlockUtility {
 	def setupLight(world: World, x: Int, y: Int, z: Int) {
-		if (world.getBlock(x, y, z).isOpaqueCube()) {
+		if (world.getBlock(x, y, z).isOpaqueCube) {
 			return
 		}
 		val br: Int = world.getLightBrightnessForSkyBlocks(x, y, z, 0)
