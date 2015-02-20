@@ -1,9 +1,9 @@
 package com.resonant.wrapper.lib.utility;
 
+import com.resonant.wrapper.core.Reference;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import org.apache.logging.log4j.Level;
-import resonantengine.core.Reference;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
