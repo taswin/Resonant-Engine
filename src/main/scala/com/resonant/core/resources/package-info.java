@@ -6,4 +6,4 @@
  * @author Calclavia
  */
 
-package com.resonant.wrapper.lib.factory.resources;
+package com.resonant.core.resources;

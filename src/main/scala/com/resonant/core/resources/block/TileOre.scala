@@ -1,8 +1,8 @@
-package com.resonant.wrapper.lib.factory.resources.block
+package com.resonant.core.resources.block
 
 import java.util.Optional
 
-import com.resonant.wrapper.lib.factory.resources.{Resource, ResourceFactory}
+import com.resonant.core.resources.{Resource, ResourceFactory}
 import nova.core.block.Block
 import nova.core.render.Color
 import nova.core.render.model.Model
@@ -16,13 +16,9 @@ import nova.core.util.Direction
 class TileOre extends Block with Resource {
 	var renderingForeground = false
 
-	//TODO: Register these textures:
-	//"oreForeground"
-	//"oreBackground"
-
 	override def colorMultiplier(side: Direction): Color = if (renderingForeground) Color.argb(ResourceFactory.getColor(material)) else Color.white
 
-	override def getTexture(side: Direction): Optional[Texture] = if (renderingForeground) super.getTexture(side) else super.getTexture(side)
+	override def getTexture(side: Direction): Optional[Texture] = if (renderingForeground) Optional.of(ResourceFactory.oreForeground) else Optional.of(ResourceFactory.oreBackground)
 
 	override def renderStatic(model: Model) {
 		renderingForeground = false

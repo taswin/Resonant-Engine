@@ -1,4 +1,4 @@
-package com.resonant.wrapper.lib.factory.resources.block;
+package com.resonant.core.resources.block;
 
 import cpw.mods.fml.common.IWorldGenerator;
 import net.minecraft.block.Block;

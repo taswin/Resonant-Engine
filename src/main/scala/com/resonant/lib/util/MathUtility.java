@@ -1,4 +1,4 @@
-package com.resonant.core.lib.util;
+package com.resonant.lib.util;
 
 import nova.core.util.Direction;
 import nova.core.util.transform.Vector3d;

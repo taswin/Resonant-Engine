@@ -5,8 +5,8 @@ import com.resonant.core.graph.internal.electric.NodeElectricComponent
 import com.resonant.core.graph.internal.frequency.GridFrequency
 import com.resonant.core.graph.internal.thermal.GridThermal
 import com.resonant.core.prefab.modcontent.ContentLoader
+import com.resonant.core.resources.ResourceFactory
 import com.resonant.wrapper.core.content.{BlockCreativeBuilder, ItemScrewdriver}
-import com.resonant.wrapper.lib.factory.resources.ResourceFactory
 import com.resonant.wrapper.lib.utility.PotionUtility
 import nova.core.block.Block
 import nova.core.event.{EventListener, EventManager}

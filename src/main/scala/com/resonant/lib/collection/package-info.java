@@ -3,4 +3,4 @@
  * @author Calclavia
  */
 
-package com.resonant.core.lib.collection;
+package com.resonant.lib.collection;

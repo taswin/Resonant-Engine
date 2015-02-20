@@ -1,4 +1,4 @@
-package com.resonant.core.lib.collection;
+package com.resonant.lib.collection;
 
 import com.google.common.collect.Lists;
 

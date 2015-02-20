@@ -1,4 +1,4 @@
-package com.resonant.wrapper.lib.factory.resources
+package com.resonant.core.resources
 
 import nova.core.util.Identifiable
 

@@ -1,11 +1,18 @@
-package com.resonant.wrapper.lib.factory.resources
+package com.resonant.core.resources
 
-import com.resonant.wrapper.lib.factory.resources.block.TileOre
-import com.resonant.wrapper.lib.factory.resources.item.ItemIngot
+import java.util.function.Supplier
+
+import com.resonant.core.prefab.modcontent.ContentLoader
+import com.resonant.core.resources.block.TileOre
+import com.resonant.core.resources.item.ItemIngot
+import com.resonant.wrapper.core.Reference
 import com.resonant.wrapper.lib.wrapper.StringWrapper._
-import net.minecraft.item.Item
-import net.minecraftforge.oredict.OreDictionary
+import nova.core
 import nova.core.block.Block
+import nova.core.game.Game
+import nova.core.item.Item
+import nova.core.render.texture.{BlockTexture, ItemTexture}
+
 /**
  * A factor class generates different types of resources based on its material
  *
@@ -13,7 +20,10 @@ import nova.core.block.Block
  *
  * @author Calclavia
  */
-object ResourceFactory {
+object ResourceFactory extends ContentLoader {
+	val oreForeground = new BlockTexture(Reference.id, "oreForeground")
+	val oreBackground = new BlockTexture(Reference.id, "oreBackground")
+	val ingot = new ItemTexture(Reference.id, "ingot")
 	/**
 	 * Reference to color of material
 	 */
@@ -21,7 +31,6 @@ object ResourceFactory {
 	private var materialColorCache = Map.empty[String, Integer]
 	private var resourceBlocks = Map.empty[String, Class[_ <: Block with Resource]]
 	private var resourceItems = Map.empty[String, Class[_ <: Item with Resource]]
-
 	private var generatedBlocks = Map.empty[(String, String), Block]
 	private var generatedItems = Map.empty[(String, String), Item]
 
@@ -49,15 +58,19 @@ object ResourceFactory {
 	 */
 	def requestBlock(resourceType: String, material: String): Block = {
 		assert(materials.contains(material))
-		val newResource = resourceBlocks(resourceType).newInstance()
-		newResource.id = resourceType + material.capitalizeFirst
-		newResource.asInstanceOf[Resource].material = material
 
-		val result = ResonantContent.manager.newBlock(newResource)
+		val result = Game.instance.get().blockManager.registerBlock(new Supplier[Block] {
+			override def get(): Block = {
+				val newResource = resourceBlocks(resourceType).newInstance()
+				newResource.id = resourceType + material.capitalizeFirst
+				newResource.asInstanceOf[Resource].material = material
+				return newResource
+			}
+		})
 		generatedBlocks += (resourceType, material) -> result
 
 		//Register ore dictionary
-		OreDictionary.registerOre(resourceType + material.capitalizeFirst, result)
+		Game.instance.get().itemDictionary.add(resourceType + material.capitalizeFirst, result.getID)
 		return result
 	}
 
@@ -67,13 +80,19 @@ object ResourceFactory {
 
 	def requestItem(resourceType: String, material: String): Item = {
 		assert(materials.contains(material))
-		val newResource = resourceItems(resourceType).newInstance()
-		newResource.asInstanceOf[Resource].material = material
-		val result = ResonantContent.manager.newItem(resourceType + material.capitalizeFirst, newResource)
+		val result = Game.instance.get().itemManager.registerItem(new Supplier[core.item.Item] {
+			override def get(): Item = {
+				val newResource = resourceItems(resourceType).newInstance()
+				newResource.id = resourceType + material.capitalizeFirst
+				newResource.material = material
+				return newResource
+			}
+		})
+
 		generatedItems += (resourceType, material) -> result
 
 		//Register ore dictionary
-		OreDictionary.registerOre(resourceType + material.capitalizeFirst, result)
+		Game.instance.get().itemDictionary.add(resourceType + material.capitalizeFirst, result.getID)
 		return result
 	}
 
@@ -85,17 +104,20 @@ object ResourceFactory {
 
 	def getMaterial(item: Item) = generatedItems.map(keyVal => (keyVal._2, keyVal._1._2)).getOrElse(item, null)
 
-	def preInit() {
+	override def preInit() {
 		//By default, we want to register ore resource type and ingot resource type
 		registerResourceBlock("ore", classOf[TileOre])
 		registerResourceItem("ingot", classOf[ItemIngot])
+
+		//Register texture
+		super.preInit()
 	}
 
-	def registerResourceBlock(name: String, clazz: Class[_ <: ResonantBlock]) {
+	def registerResourceBlock(name: String, clazz: Class[_ <: Block with Resource]) {
 		resourceBlocks += name -> clazz
 	}
 
-	def registerResourceItem(name: String, clazz: Class[_ <: Item]) {
+	def registerResourceItem(name: String, clazz: Class[_ <: Item with Resource]) {
 		resourceItems += name -> clazz
 	}
 

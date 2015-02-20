@@ -1,4 +1,4 @@
-package com.resonant.wrapper.lib.factory.resources.block;
+package com.resonant.core.resources.block;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
