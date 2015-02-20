@@ -18,7 +18,6 @@ import net.minecraft.util.ResourceLocation;
 import nova.core.util.Direction;
 import nova.core.util.transform.Vector3d;
 import org.lwjgl.opengl.GL11;
-import resonantengine.lib.utility.WorldUtility;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -41,11 +40,11 @@ import static org.lwjgl.opengl.GL11.glTranslatef;
 
 public class RenderUtility {
 	public static final ResourceLocation PARTICLE_RESOURCE = new ResourceLocation("textures/particle/particles.png");
-	public static final HashMap<String, ResourceLocation> resourceCahce = new HashMap<String, ResourceLocation>();
+	public static final HashMap<String, ResourceLocation> resourceCahce = new HashMap<>();
 	/**
 	 * Icon loading map for external icon registration.
 	 */
-	public static final HashMap<String, IIcon> loadedIconMap = new HashMap<String, IIcon>();
+	public static final HashMap<String, IIcon> loadedIconMap = new HashMap<>();
 	public static RenderBlocks renderBlocks = new RenderBlocks();
 
 	public static ResourceLocation getResource(String domain, String name) {
@@ -167,10 +166,11 @@ public class RenderUtility {
 
 	/**
 	 * Renders a floating text in a specific position.
+	 *
 	 * @author Briman0094
 	 */
 	public static void renderFloatingText(String text, Vector3d position, int color) {
-		renderFloatingText(text, position.x(), position.y(), position.z(), color);
+		renderFloatingText(text, position.x, position.y, position.z, color);
 	}
 
 	public static void renderFloatingText(String text, double x, double y, double z, int color) {
@@ -338,7 +338,7 @@ public class RenderUtility {
 	}
 
 	/**
-	 * @author OpenBlocks
+	 * Rotates the UV texture by a specific direction
 	 */
 	public static void rotateFacesOnRenderer(Direction rotation, RenderBlocks renderer, boolean fullRotation) {
 		if (fullRotation) {
@@ -525,6 +525,7 @@ public class RenderUtility {
 	/**
 	 * Rotates a render based on the direction it is placed on. Used for things like flat wires or
 	 * panels. The model will need to be centered and be facing upright to begin with.
+	 *
 	 * @param placementSide
 	 */
 	@SuppressWarnings("incomplete-switch")
@@ -608,42 +609,6 @@ public class RenderUtility {
 				GL11.glTranslatef(-0.45f, 0, 0);
 				GL11.glRotatef(-90, 0, 0, 1);
 				GL11.glRotatef(90, 0, 1, 0);
-				break;
-		}
-	}
-
-	/**
-	 * Rotates a block based on the direction it is facing.
-	 * @param direction
-	 */
-	public static void rotateBlockBasedOnDirection(Direction direction) {
-		switch (direction) {
-			default:
-				glRotatef(WorldUtility.getAngleFromDirection(direction), 0, 1, 0);
-				break;
-			case DOWN:
-				glRotatef(90, 1, 0, 0);
-				break;
-			case UP:
-				glRotatef(-90, 1, 0, 0);
-				break;
-		}
-	}
-
-	/**
-	 * Use this for models that are facing up by default.
-	 * @param direction
-	 */
-	public static void rotateBlockBasedOnDirectionUp(Direction direction) {
-		switch (direction) {
-			default:
-				glRotatef(WorldUtility.getAngleFromDirection(direction), 0, 1, 0);
-				glRotatef(-90, 0, 0, 1);
-				break;
-			case DOWN:
-				glRotatef(180, 0, 0, 1);
-				break;
-			case UP:
 				break;
 		}
 	}

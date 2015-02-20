@@ -1,6 +1,6 @@
 package com.resonant.wrapper.lib.render.block
 
-import com.resonant.wrapper.lib.render.{RenderBlockUtility, RenderUtility}
+import com.resonant.wrapper.lib.render.RenderUtility
 import nova.core.util.transform.Vector3d
 
 /**
