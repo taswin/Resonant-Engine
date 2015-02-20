@@ -9,7 +9,9 @@ import com.resonant.core.resources.ResourceFactory
 import com.resonant.wrapper.core.content.{BlockCreativeBuilder, ItemScrewdriver}
 import com.resonant.wrapper.lib.utility.PotionUtility
 import nova.core.block.Block
-import nova.core.event.{EventListener, EventManager}
+import nova.core.event.EventListener
+import nova.core.event.EventManager.EmptyEvent
+import nova.core.game.Game
 import nova.core.item.Item
 import nova.core.loader.{Loadable, NovaMod}
 import nova.core.render.texture.ItemTexture
@@ -34,8 +36,8 @@ object ResonantEngine extends Loadable with ContentLoader {
 		/**
 		 * Register events 
 		 */
-		EventManager.instance.serverStopping.add(new EventListener[AnyRef] {
-			override def onEvent(event: AnyRef): Unit = serverStopped()
+		Game.instance.get().eventManager.serverStopping.add(new EventListener[EmptyEvent] {
+			override def onEvent(event: EmptyEvent): Unit = serverStopped()
 		})
 
 		ResourceFactory.preInit()
