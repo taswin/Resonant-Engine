@@ -1,7 +1,7 @@
 package com.resonant.wrapper.lib.utility.science.units;
 
+import com.resonant.wrapper.core.Reference;
 import nova.core.util.collection.Pair;
-import resonantengine.core.Reference;
 
 import java.util.ArrayList;
 import java.util.List;
