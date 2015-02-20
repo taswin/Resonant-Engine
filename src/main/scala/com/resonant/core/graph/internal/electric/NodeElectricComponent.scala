@@ -20,7 +20,7 @@ import scala.collection.convert.wrapAll._
  *
  * @author Calclavia
  */
-class NodeElectricComponent(parent: NodeProvider) extends NodeBlockConnect[NodeElectricComponent](parent) with DebugInfo with NodeElectric {
+class NodeElectricComponent(parent: NodeProvider) extends NodeBlockConnect[NodeElectric](parent) with DebugInfo with NodeElectric {
 	/**
 	 * When dynamic terminal is set to true, then the grid will attempt to swap negative and positive terminals as needed.
 	 */
@@ -60,9 +60,9 @@ class NodeElectricComponent(parent: NodeProvider) extends NodeBlockConnect[NodeE
 	 */
 	private var negativeMask = 0
 
-	override def positives: JSet[NodeElectricComponent] = connectedMap.filter(keyVal => positiveMask.mask(keyVal._2)).keySet
+	override def positives: JSet[NodeElectric] = connectedMap.filter(keyVal => positiveMask.mask(keyVal._2)).keySet
 
-	override def negatives: JSet[NodeElectricComponent] = connectedMap.filter(keyVal => negativeMask.mask(keyVal._2)).keySet
+	override def negatives: JSet[NodeElectric] = connectedMap.filter(keyVal => negativeMask.mask(keyVal._2)).keySet
 
 	override def setPositive(dir: Direction, open: Boolean = true) {
 		positiveMask = positiveMask.mask(dir, open)

@@ -55,7 +55,7 @@ class GraphElectric extends GraphConnect[NodeElectricComponent] with Updater {
 				val foundWires = recurseFind(node).toSet[NodeElectricComponent]
 				recursed ++= foundWires
 				junction.wires = foundWires
-				junction.nodes = foundWires.map(_.connections).flatten.filterNot(_.isInstanceOf[NodeElectricJunction])
+				junction.nodes = foundWires.map(_.connections).flatten.filterNot(_.isInstanceOf[NodeElectricJunction]).map(_.asInstanceOf[NodeElectricComponent])
 				foundWires.foreach(
 					w => {
 						w.junctionA = junction
@@ -122,7 +122,7 @@ class GraphElectric extends GraphConnect[NodeElectricComponent] with Updater {
 										//We create a new virtual junction, because this terminal is not connected to any wires, but another component
 										val virtual = new VirtualJunction
 										virtual.nodes += node
-										virtual.nodes ++= node.connections.filterNot(_.isInstanceOf[NodeElectricJunction])
+										virtual.nodes ++= node.connections.filterNot(_.isInstanceOf[NodeElectricJunction]).map(_.asInstanceOf[NodeElectricComponent])
 										virtual
 								}
 						}

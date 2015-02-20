@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  *
  * @author Calclavia
  */
-public class NodeBlockConnect<N extends NodeConnect<N>> extends NodeConnect<N> {
+public class NodeBlockConnect<N extends Node<?>> extends NodeConnect<N> {
 
 	public final NodeProvider parent;
 	//The cached connection map
@@ -42,7 +42,7 @@ public class NodeBlockConnect<N extends NodeConnect<N>> extends NodeConnect<N> {
 		//Generates a map of connections and their directions
 		connectedMap = adjacentNodes.entrySet().stream()
 			.filter(entry -> canConnect(entry.getValue(), entry.getKey()))
-			.filter(entry -> entry.getValue().canConnect((N) this, entry.getKey().opposite()))
+			.filter(entry -> ((NodeConnect) entry.getValue()).canConnect((N) this, entry.getKey().opposite()))
 			.collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
 
 		//Sets the connection mask based on the connections

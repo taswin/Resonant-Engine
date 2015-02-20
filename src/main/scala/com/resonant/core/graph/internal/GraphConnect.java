@@ -7,9 +7,10 @@ import java.util.WeakHashMap;
 
 /**
  * A graph that contains nodes, each with its ability to connect to other nodes.
+ *
  * @author Calclavia
  */
-public abstract class GraphConnect<N extends Node> implements Graph<N> {
+public abstract class GraphConnect<N> implements Graph<N> {
 
 	//A map of nodes and their connections
 	protected Map<N, Set<N>> nodeMap = new WeakHashMap<>();
@@ -53,7 +54,7 @@ public abstract class GraphConnect<N extends Node> implements Graph<N> {
 
 	protected void populate(N node, N prev) {
 		if (!nodes().contains(node)) {
-			Set<N> connections = node.connections();
+			Set<N> connections = ((Node) node).connections();
 			nodeMap.put(node, connections);
 
 			if (node instanceof GraphProvider) {

@@ -8,6 +8,7 @@ import java.awt.*;
  * Simple color enum for adding colors to in-game GUI strings of text.
  * @author Calclavia
  */
+@Deprecated
 public enum EnumColor {
 	BLACK("\u00a70", "black", new int[] { 0, 0, 0 }, 0),
 	DARK_BLUE("\u00a71", "darkBlue", new int[] { 0, 0, 170 }, 4),
