@@ -57,7 +57,7 @@ public class MathUtility {
 
 	/**
 	 * Clamps the angles to a min max by adding or subtracting the min max. This way it maintanes
-	 * the change in angle in the chance it goes out of bounds
+	 * the change in rotation in the chance it goes out of bounds
 	 */
 	public static float clampAngle(float var, float min, float max) {
 		while (var < min) {
@@ -92,7 +92,7 @@ public class MathUtility {
 	}
 
 	/**
-	 * Clamps an angle to 360 degree circle
+	 * Clamps an rotation to 360 degree circle
 	 */
 	public static float clampAngleTo360(float var) {
 		return MathUtility.clampAngle(var, 0, 360);
@@ -111,7 +111,7 @@ public class MathUtility {
 	}
 
 	/**
-	 * Find the shortest delta change to the angle goal from the current angle
+	 * Find the shortest delta change to the rotation goal from the current rotation
 	 */
 	public static float shortestAngleTo360(float angle, float angleGoal) {
 		angle = clampAngleTo360(angle);
@@ -163,7 +163,7 @@ public class MathUtility {
 	}
 
 	/**
-	 * gets the facing direction using the yaw angle
+	 * gets the facing direction using the yaw rotation
 	 */
 	public static Direction getFacingDirectionFromAngle(float yaw) {
 		float angle = net.minecraft.util.MathHelper.wrapAngleTo180_float(yaw);
@@ -181,7 +181,7 @@ public class MathUtility {
 	}
 
 	/**
-	 * gets the facing direction using the yaw angle
+	 * gets the facing direction using the yaw rotation
 	 */
 	public static Direction getFacingDirectionFromAngle(double yaw) {
 		return getFacingDirectionFromAngle((float) yaw);

@@ -1,9 +1,8 @@
 package com.resonant.core.graph.internal.electric
 
 import cofh.api.energy.IEnergyHandler
-import com.resonant.core.energy.EnergyStorage
+import com.resonant.core.energy.{Compatibility, EnergyStorage}
 import com.resonant.core.graph.api.NodeProvider
-import com.resonant.wrapper.lib.compat.energy.Compatibility
 import net.minecraftforge.common.util.ForgeDirection
 import nova.core.util.Direction
 

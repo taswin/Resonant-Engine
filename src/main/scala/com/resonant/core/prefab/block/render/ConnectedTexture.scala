@@ -1,4 +1,4 @@
-package com.resonant.core.prefab.block
+package com.resonant.core.prefab.block.render
 
 import java.util.Optional
 
@@ -12,7 +12,7 @@ import nova.core.util.Direction
 /**
  * A trait for blocks with connected textures.
  */
-trait BlockConnectedTexture extends Block {
+trait ConnectedTexture extends Block {
 
 	override def renderStatic(model: Model) {
 		//Render the block face
@@ -33,5 +33,9 @@ trait BlockConnectedTexture extends Block {
 
 	def edgeTexture: BlockTexture
 
-	def sideMask: Int
+	def sideMask: Int =
+		Direction.DIRECTIONS
+			.map(d => (d, world.getBlock(position + d.toVector)))
+			.filter(kv => kv._2.isPresent && kv._2.get.getID == getID)
+			.foldLeft(0)((b, a) => b | 1 << a._1.ordinal())
 }

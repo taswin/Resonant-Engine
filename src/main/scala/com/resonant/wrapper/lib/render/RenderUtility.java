@@ -16,6 +16,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
 import nova.core.util.Direction;
+import nova.core.util.collection.Pair;
 import nova.core.util.transform.Vector3d;
 import org.lwjgl.opengl.GL11;
 
@@ -34,6 +35,7 @@ import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
 import static org.lwjgl.opengl.GL11.glBlendFunc;
 import static org.lwjgl.opengl.GL11.glDisable;
 import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glRotated;
 import static org.lwjgl.opengl.GL11.glRotatef;
 import static org.lwjgl.opengl.GL11.glShadeModel;
 import static org.lwjgl.opengl.GL11.glTranslatef;
@@ -623,6 +625,21 @@ public class RenderUtility {
 
 	public static void bind(ResourceLocation location) {
 		FMLClientHandler.instance().getClient().renderEngine.bindTexture(location);
+	}
+
+	public static void rotateBlockBasedOnDirection(Direction direction) {
+		switch (direction) {
+			default:
+				Pair<Vector3d, Double> angleAxis = direction.rotation.toAngleAxis();
+				glRotated(Math.toDegrees(angleAxis._2), angleAxis._1.x, angleAxis._1.y, angleAxis._1.z);
+				break;
+			case DOWN:
+				glRotatef(90, 1, 0, 0);
+				break;
+			case UP:
+				glRotatef(-90, 1, 0, 0);
+				break;
+		}
 	}
 
 	public void renderTags(Vector3d coord, HashMap<String, Integer> tags, float height) {

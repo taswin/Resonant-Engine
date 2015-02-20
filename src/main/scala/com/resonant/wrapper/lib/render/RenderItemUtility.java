@@ -1,6 +1,5 @@
 package com.resonant.wrapper.lib.render;
 
-import com.resonant.lib.utility.LanguageUtility;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -15,18 +14,21 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
 import nova.core.util.Direction;
 import nova.core.util.transform.Vector3d;
+import nova.core.util.transform.Vector3i;
 import org.lwjgl.opengl.GL11;
-import resonantengine.lib.transform.rotation.Quaternion;
-import resonantengine.lib.utility.WorldUtility;
 
 import java.util.EnumSet;
 
+/**
+ * Renders items
+ */
 @SideOnly(Side.CLIENT)
-public class RenderItemOverlayUtility {
+public class RenderItemUtility {
 	public static final Direction[] forge_sides = { Direction.NORTH, Direction.SOUTH, Direction.WEST, Direction.EAST };
 
 	public static RenderBlocks renderBlocks = new RenderBlocks();
@@ -62,7 +64,7 @@ public class RenderItemOverlayUtility {
 
 				GL11.glTranslated(0, 0, scale / 6);
 
-				GL11.glTranslated(translation.x(), translation.y(), translation.z());
+				GL11.glTranslated(translation.x, translation.y, translation.z);
 				GL11.glScalef(scale, scale, scale);
 				renderItem(tileEntity.getWorldObj(), inventory[i], new Vector3d(0, 0, 0), 0, 1);
 				GL11.glPopMatrix();
@@ -70,8 +72,7 @@ public class RenderItemOverlayUtility {
 				if (isLooking) {
 					GL11.glPushMatrix();
 					GL11.glTranslated(x, y, z);
-					int angle = dir != null ? WorldUtility.getAngleFromDirection(WorldUtility.invertX(dir)) : 0;
-					RenderUtility.renderFloatingText("" + inventory[i].stackSize, translation.transform(new Quaternion(angle, Vector3d.up())).add(0.5).add(new Vector3d(0, 0.5, 0)));
+					RenderUtility.renderFloatingText("" + inventory[i].stackSize, translation.transform(dir.rotation).add(0.5).add(new Vector3d(0, 0.5, 0)));
 					GL11.glPopMatrix();
 				}
 			}
@@ -81,69 +82,62 @@ public class RenderItemOverlayUtility {
 	}
 
 	public static void renderItemOnSides(TileEntity tile, ItemStack itemStack, double x, double y, double z) {
-		renderItemOnSides(tile, itemStack, x, y, z, LanguageUtility.getLocal("tooltip.noOutput"));
+		renderItemOnSides(tile, itemStack, x, y, z, StatCollector.translateToLocal("tooltip.noOutput"));
 	}
 
 	public static void renderItemOnSides(TileEntity tile, ItemStack itemStack, double x, double y, double z, String renderText) {
-		renderItemOnSides(tile, itemStack, x, y, z, renderText, EnumSet.of(Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST));
+		renderItemOnSides(tile.getWorldObj(), itemStack, x, y, z, renderText, EnumSet.of(Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST));
 	}
 
-	//TODO replace tile param with world to reduce errors and increases uses of this method
-	public static void renderItemOnSides(TileEntity tile, ItemStack itemStack, double x, double y, double z, String renderText, EnumSet<Direction> sides) {
-		if (tile != null && tile.getWorldObj() != null) {
-			/** Render the Output */
-			String amount = "";
+	public static void renderItemOnSides(World world, ItemStack itemStack, double x, double y, double z, String renderText, EnumSet<Direction> sides) {
+		/** Render the Output */
+		String amount = "";
 
-			if (itemStack != null) {
-				renderText = itemStack.getDisplayName();
-				amount = Integer.toString(itemStack.stackSize);
-			}
+		if (itemStack != null) {
+			renderText = itemStack.getDisplayName();
+			amount = Integer.toString(itemStack.stackSize);
+		}
 
-			for (Direction direction : sides) {
-				if (direction != Direction.UNKNOWN) {
-					if (tile.getBlockType().isSideSolid(tile.getWorldObj(), tile.xCoord + direction.offsetX, tile.yCoord, tile.zCoord + direction.offsetZ, direction.getOpposite())) {
-						continue;
-					}
+		for (Direction direction : sides) {
+			if (direction != Direction.UNKNOWN) {
+				renderItemOnSide(world, itemStack, direction, x, y, z, renderText, amount);
 
-					renderItemOnSide(tile, itemStack, direction, x, y, z, renderText, amount);
-
-					GL11.glPushMatrix();
-					setupLight(tile, direction.offsetX, direction.offsetZ);
-					OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
-					GL11.glDisable(2896);
-					RenderUtility.renderText(renderText, direction, 0.02f, x, y - 0.35f, z);
-					RenderUtility.renderText(amount, direction, 0.02f, x, y - 0.15f, z);
-					GL11.glEnable(2896);
-					GL11.glPopMatrix();
-				}
+				GL11.glPushMatrix();
+				setupLight(world, new Vector3d(x, y, z).toInt(), direction.x, direction.z);
+				OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
+				GL11.glDisable(2896);
+				RenderUtility.renderText(renderText, direction, 0.02f, x, y - 0.35f, z);
+				RenderUtility.renderText(amount, direction, 0.02f, x, y - 0.15f, z);
+				GL11.glEnable(2896);
+				GL11.glPopMatrix();
 			}
 		}
+
 	}
 
-	protected static void renderItemSingleSide(TileEntity tile, double x, double y, double z, ItemStack itemStack, Direction direction, String renderText) {
-		if (!tile.getBlockType().isSideSolid(tile.getWorldObj(), tile.xCoord + direction.offsetX, tile.yCoord, tile.zCoord + direction.offsetZ, direction.getOpposite())) {
-			String amount = "";
+	protected static void renderItemSingleSide(World world, Vector3d position, ItemStack itemStack, Direction direction, String renderText) {
+		String amount = "";
 
-			if (itemStack != null) {
-				renderText = itemStack.getDisplayName();
-				amount = Integer.toString(itemStack.stackSize);
-			}
-
-			renderItemOnSide(tile, itemStack, direction, x, y, z, renderText, amount);
-
-			GL11.glPushMatrix();
-			setupLight(tile, direction.offsetX, direction.offsetZ);
-			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
-			GL11.glDisable(2896);
-			RenderUtility.renderText(renderText, direction, 0.02f, x, y - 0.35f, z);
-			RenderUtility.renderText(amount, direction, 0.02f, x, y - 0.15f, z);
-			GL11.glEnable(2896);
-			GL11.glPopMatrix();
+		if (itemStack != null) {
+			renderText = itemStack.getDisplayName();
+			amount = Integer.toString(itemStack.stackSize);
 		}
+
+		renderItemOnSide(world, itemStack, direction, position.x, position.y, position.z, renderText, amount);
+
+		GL11.glPushMatrix();
+		setupLight(world, position.toInt(), direction.x, direction.z);
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
+		GL11.glDisable(2896);
+		RenderUtility.renderText(renderText, direction, 0.02f, position.x, position.y - 0.35f, position.z);
+		RenderUtility.renderText(amount, direction, 0.02f, position.x, position.y - 0.15f, position.z);
+		GL11.glEnable(2896);
+		GL11.glPopMatrix();
+
 	}
 
 	@SuppressWarnings("incomplete-switch")
-	protected static void renderItemOnSide(TileEntity tile, ItemStack itemStack, Direction direction, double x, double y, double z, String renderText, String amount) {
+	protected static void renderItemOnSide(World world, ItemStack itemStack, Direction direction, double x, double y, double z, String renderText, String amount) {
 		if (itemStack != null) {
 			GL11.glPushMatrix();
 
@@ -181,7 +175,7 @@ public class RenderItemOverlayUtility {
 
 			TextureManager renderEngine = Minecraft.getMinecraft().renderEngine;
 
-			setupLight(tile, direction.offsetX, direction.offsetZ);
+			setupLight(world, new Vector3d(x, y, z).toInt(), direction.x, direction.z);
 			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
 			GL11.glDisable(2896);
 
@@ -194,14 +188,8 @@ public class RenderItemOverlayUtility {
 		}
 	}
 
-	private static void setupLight(TileEntity tileEntity, int xDifference, int zDifference) {
-		World world = tileEntity.getWorldObj();
-
-		if (tileEntity.getBlockType().isOpaqueCube()) {
-			return;
-		}
-
-		int br = world.getLightBrightnessForSkyBlocks(tileEntity.xCoord + xDifference, tileEntity.yCoord, tileEntity.zCoord + zDifference, 0);
+	private static void setupLight(World world, Vector3i pos, int xDifference, int zDifference) {
+		int br = world.getLightBrightnessForSkyBlocks(pos.x + xDifference, pos.y, pos.z + zDifference, 0);
 		int var11 = br % 65536;
 		int var12 = br / 65536;
 		float scale = 1;
@@ -210,7 +198,7 @@ public class RenderItemOverlayUtility {
 
 	public static void renderItem(World world, ItemStack itemStack, Vector3d position, float rotationYaw, int angle) {
 		if (itemStack != null) {
-			EntityItem entityItem = new EntityItem(world, position.x(), position.y(), position.z(), itemStack.copy());
+			EntityItem entityItem = new EntityItem(world, position.x, position.y, position.z, itemStack.copy());
 			entityItem.getEntityItem().stackSize = 1;
 			entityItem.hoverStart = 0.0F;
 			GL11.glPushMatrix();
