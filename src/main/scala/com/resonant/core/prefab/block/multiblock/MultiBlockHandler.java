@@ -1,47 +1,49 @@
 package com.resonant.core.prefab.block.multiblock;
 
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
+import nova.core.block.Block;
 import nova.core.util.components.Storable;
-import nova.core.util.transform.Vector3d;
+import nova.core.util.transform.Vector3i;
 
 import java.lang.ref.WeakReference;
 import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 /**
  * A reference-based multiblock structure uses a central block as the "primary block" and have all
  * the blocks around it be "dummy blocks". This handler should be extended. Every single block will
  * have a reference of this object.
+ *
  * @author Calclavia
  */
 public class MultiBlockHandler<W extends IMultiBlockStructure> implements Storable {
-	protected final W tile;
+	protected final W block;
 	/**
 	 * The main block used for reference
 	 */
 	protected WeakReference<W> prim = null;
 	/**
-	 * The relative primary block position to be loaded in once the tile is initiated.
+	 * The relative primary block position to be loaded in once the block is initiated.
 	 */
-	protected Vector3d newPrimary = null;
+	protected Vector3i newPrimary = null;
 	protected Class<? extends W> wrapperClass;
 
 	public MultiBlockHandler(W wrapper) {
-		this.tile = wrapper;
+		this.block = wrapper;
 		wrapperClass = (Class<? extends W>) wrapper.getClass();
 	}
 
 	public void update() {
-		if (tile.getWorld() != null && newPrimary != null) {
-			W checkWrapper = getWrapperAt(newPrimary.clone().add(tile.getPosition()));
+		if (block.world() != null && newPrimary != null) {
+			W checkWrapper = getWrapperAt(newPrimary.add(block.position()));
 
 			if (checkWrapper != null) {
 				newPrimary = null;
 
 				if (checkWrapper != getPrimary()) {
 					prim = new WeakReference(checkWrapper);
-					tile.onMultiBlockChanged();
+					block.onMultiBlockChanged();
 				}
 			}
 		}
@@ -49,6 +51,7 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements Storab
 
 	/**
 	 * Try to construct the structure, otherwise, deconstruct it.
+	 *
 	 * @return True if operation is successful.
 	 */
 	public boolean toggleConstruct() {
@@ -60,14 +63,15 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements Storab
 
 	/**
 	 * Gets the structure blocks of the multiblock.
+	 *
 	 * @return Null if structure cannot be created.
 	 */
 	public Set<W> getStructure() {
-		Set<W> structure = new LinkedHashSet<W>();
-		Iterable<Vector3d> vectors = tile.getMultiBlockVectors();
+		Set<W> structure = new LinkedHashSet<>();
+		Iterable<Vector3i> vectors = block.getMultiBlockVectors();
 
-		for (Vector3d vector : vectors) {
-			W checkWrapper = getWrapperAt(vector.add(tile.getPosition()));
+		for (Vector3i vector : vectors) {
+			W checkWrapper = getWrapperAt(vector.add(block.position()));
 
 			if (checkWrapper != null) {
 				structure.add(checkWrapper);
@@ -82,6 +86,7 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements Storab
 	/**
 	 * Called to construct the multiblock structure. Example: Wrenching the center block or checking
 	 * if a placement was done correct. Note that this block will become the PRIMARY block.
+	 *
 	 * @return True if the construction was successful.
 	 */
 	public boolean construct() {
@@ -95,7 +100,7 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements Storab
 					}
 				}
 
-				prim = new WeakReference(tile);
+				prim = new WeakReference(block);
 				for (W structure : structures) {
 					structure.getMultiBlock().prim = prim;
 				}
@@ -134,11 +139,11 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements Storab
 		return false;
 	}
 
-	public W getWrapperAt(Vector3d position) {
-		TileEntity tile = position.getTileEntity(this.tile.getWorld());
+	public W getWrapperAt(Vector3i position) {
+		Optional<Block> block = this.block.world().getBlock(position);
 
-		if (tile != null && wrapperClass.isAssignableFrom(tile.getClass())) {
-			return (W) tile;
+		if (block.isPresent() && wrapperClass.isAssignableFrom(block.get().getClass())) {
+			return (W) block.get();
 		}
 
 		return null;
@@ -149,7 +154,7 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements Storab
 	}
 
 	public boolean isPrimary() {
-		return !isConstructed() || getPrimary() == tile;
+		return !isConstructed() || getPrimary() == block;
 	}
 
 	public W getPrimary() {
@@ -157,29 +162,27 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements Storab
 	}
 
 	public W get() {
-		return getPrimary() != null ? getPrimary() : tile;
+		return getPrimary() != null ? getPrimary() : block;
+	}
+
+	@Override
+	public void save(Map<String, Object> data) {
+		if (isConstructed()) {
+			data.put("primaryMultiBlock", getPrimary().position().subtract(block.position()));
+		}
 	}
 
 	/**
 	 * Only the primary wrapper of the multiblock saves and loads data.
 	 */
 	@Override
-	public void load(NBTTagCompound nbt) {
-		if (nbt.hasKey("primaryMultiBlock")) {
-			newPrimary = new Vector3d(nbt.getCompoundTag("primaryMultiBlock"));
-			update();
+	public void load(Map<String, Object> data) {
+		if (data.containsKey("primaryMultiBlock")) {
+			Vector3i zero = Vector3i.ZERO;
+			zero.load((Map) data.get("primaryMultiBlock"));
+			newPrimary = zero;
 		} else {
 			prim = null;
-		}
-	}
-
-	/**
-	 * @param nbt
-	 */
-	@Override
-	public void save(NBTTagCompound nbt) {
-		if (isConstructed()) {
-			nbt.setTag("primaryMultiBlock", getPrimary().getPosition().subtract(tile.getPosition()).toNBT());
 		}
 	}
 

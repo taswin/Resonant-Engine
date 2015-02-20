@@ -51,7 +51,7 @@ trait IO extends Block with Storable with IIO {
 	/**
 	 * The electrical input direction.
 	 *
-	 * @return The direction that electricity is entered into the tile. Return null for no input. By
+	 * @return The direction that electricity is entered into the block. Return null for no input. By
 	 *         default you can accept power from all sides.
 	 */
 	override def getInputDirections: util.HashSet[Direction] = {
@@ -68,7 +68,7 @@ trait IO extends Block with Storable with IIO {
 	/**
 	 * The electrical output direction.
 	 *
-	 * @return The direction that electricity is output from the tile. Return null for no output. By
+	 * @return The direction that electricity is output from the block. Return null for no output. By
 	 *         default it will return an empty EnumSet.
 	 */
 	override def getOutputDirections: util.HashSet[Direction] = {

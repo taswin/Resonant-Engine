@@ -1,14 +1,14 @@
 package com.resonant.core.prefab.block.multiblock;
 
-import net.minecraft.world.World;
-import nova.core.util.transform.Vector3d;
+import nova.core.util.transform.Vector3i;
+import nova.core.world.World;
 
 public interface IMultiBlockStructure<W extends IMultiBlockStructure> extends IMultiBlock {
-	public World getWorld();
+	public World world();
 
 	public void onMultiBlockChanged();
 
-	public Vector3d getPosition();
+	public Vector3i position();
 
 	public MultiBlockHandler<W> getMultiBlock();
 }

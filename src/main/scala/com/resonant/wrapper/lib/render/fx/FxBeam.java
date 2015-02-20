@@ -18,6 +18,7 @@ import java.awt.*;
 
 /**
  * Based off Thaumcraft's Beam Renderer.
+ *
  * @author Calclavia, Azanor
  */
 @SideOnly(Side.CLIENT)
@@ -33,7 +34,7 @@ public class FxBeam extends EntityFX {
 	private float rotPitch = 0.0F;
 	private float prevYaw = 0.0F;
 	private float prevPitch = 0.0F;
-	private Vector3d target = new Vector3d();
+	private Vector3d target = Vector3d.zero;
 	private float endModifier = 1.0F;
 	private int rotationSpeed = 20;
 	private float prevSize = 0.0F;
@@ -43,7 +44,7 @@ public class FxBeam extends EntityFX {
 	}
 
 	public FxBeam(ResourceLocation texture, World par1World, Vector3d position, Vector3d target2, float red, float green, float blue, int age) {
-		super(par1World, position.x(), position.y(), position.z(), 0.0D, 0.0D, 0.0D);
+		super(par1World, position.x, position.y, position.z, 0.0D, 0.0D, 0.0D);
 		this.texture = texture;
 
 		this.setRGB(red, green, blue);
@@ -54,10 +55,10 @@ public class FxBeam extends EntityFX {
 		this.motionY = 0.0D;
 		this.motionZ = 0.0D;
 		this.target = target2;
-		float xd = (float) (this.posX - this.target.x());
-		float yd = (float) (this.posY - this.target.y());
-		float zd = (float) (this.posZ - this.target.z());
-		this.length = (float) new Vector3d(this).distance(this.target);
+		float xd = (float) (this.posX - this.target.x);
+		float yd = (float) (this.posY - this.target.y);
+		float zd = (float) (this.posZ - this.target.z);
+		this.length = (float) new Vector3d(posX, posY, posZ).distance(this.target);
 		double var7 = MathHelper.sqrt_double(xd * xd + zd * zd);
 		this.rotYaw = ((float) (Math.atan2(xd, zd) * 180.0D / 3.141592653589793D));
 		this.rotPitch = ((float) (Math.atan2(yd, var7) * 180.0D / 3.141592653589793D));
@@ -88,9 +89,9 @@ public class FxBeam extends EntityFX {
 		this.prevYaw = this.rotYaw;
 		this.prevPitch = this.rotPitch;
 
-		float xd = (float) (this.posX - this.target.x());
-		float yd = (float) (this.posY - this.target.y());
-		float zd = (float) (this.posZ - this.target.z());
+		float xd = (float) (this.posX - this.target.x);
+		float yd = (float) (this.posY - this.target.y);
+		float zd = (float) (this.posZ - this.target.z);
 
 		this.length = MathHelper.sqrt_float(xd * xd + yd * yd + zd * zd);
 
