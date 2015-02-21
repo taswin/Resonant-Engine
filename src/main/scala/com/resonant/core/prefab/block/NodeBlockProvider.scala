@@ -8,6 +8,7 @@ import com.resonant.core.graph.internal.{Graph, GraphProvider, Node}
 import com.resonant.wrapper.core.api.tile.DebugInfo
 import nova.core.block.Block
 import nova.core.block.components.Stateful
+import nova.core.game.Game
 import nova.core.network.NetworkManager
 import nova.core.util.Direction
 import nova.core.util.components.Storable
@@ -25,7 +26,7 @@ trait NodeBlockProvider extends Block with Stateful with Storable with NodeProvi
 	override def awake() {
 		super.awake()
 
-		if (NetworkManager.instance.get().isServer) {
+		if (Game.instance.get().networkManager.isServer) {
 			nodes
 				.filter(_.isInstanceOf[GraphProvider[_ <: Graph[_]]])
 				.map(_.asInstanceOf[GraphProvider[_ <: Graph[_]]])
@@ -34,7 +35,7 @@ trait NodeBlockProvider extends Block with Stateful with Storable with NodeProvi
 	}
 
 	override def load() {
-		if (NetworkManager.instance.get().isServer) {
+		if (Game.instance.get().networkManager.isServer) {
 			nodes
 				.filter(_.isInstanceOf[GraphProvider[_ <: Graph[_]]])
 				.map(_.asInstanceOf[GraphProvider[_ <: Graph[_]]])
@@ -44,7 +45,7 @@ trait NodeBlockProvider extends Block with Stateful with Storable with NodeProvi
 
 	override def onNeighborChange(neighborPosition: Vector3i) {
 		super.onNeighborChange(neighborPosition)
-		if (NetworkManager.instance.get().isServer) {
+		if (Game.instance.get().networkManager.isServer) {
 			nodes
 				.filter(_.isInstanceOf[GraphProvider[_ <: Graph[_]]])
 				.map(_.asInstanceOf[GraphProvider[_ <: Graph[_]]])
