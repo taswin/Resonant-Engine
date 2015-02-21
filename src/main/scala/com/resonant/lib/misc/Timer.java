@@ -1,6 +1,6 @@
 package com.resonant.lib.misc;
 
-import nova.core.network.NetworkManager;
+import nova.core.game.Game;
 
 import java.util.HashMap;
 
@@ -31,7 +31,7 @@ public class Timer<K> {
 	}
 
 	public HashMap<K, Integer> getTimeMap() {
-		if (NetworkManager.instance.get().isServer()) {
+		if (Game.instance.get().networkManager.isServer()) {
 			return serverTimer;
 		}
 

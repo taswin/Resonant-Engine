@@ -6,7 +6,7 @@ import com.resonant.core.graph.internal.frequency.GridFrequency
 import com.resonant.core.graph.internal.thermal.GridThermal
 import com.resonant.core.prefab.modcontent.ContentLoader
 import com.resonant.core.resources.ResourceFactory
-import com.resonant.wrapper.core.content.{BlockCreativeBuilder, ItemScrewdriver}
+import com.resonant.wrapper.core.content.{BlockCreativeBuilder, GuiCreativeBuilder, ItemScrewdriver}
 import com.resonant.wrapper.lib.utility.PotionUtility
 import nova.core.block.Block
 import nova.core.event.EventListener
@@ -22,7 +22,7 @@ import nova.internal.tick.UpdateTicker
  *
  * @author Calclavia, DarkGuardsman
  */
-@NovaMod(id = Reference.id, name = Reference.name, version = Reference.version, novaVersion = "1.0.0")
+@NovaMod(id = Reference.id, name = Reference.name, version = Reference.version, novaVersion = "0.0.1")
 object ResonantEngine extends Loadable with ContentLoader {
 
 	var blockCreativeBuilder: Block = classOf[BlockCreativeBuilder]
@@ -32,6 +32,11 @@ object ResonantEngine extends Loadable with ContentLoader {
 	override def preInit() {
 		Reference.config.load()
 		PotionUtility.resizePotionArray()
+
+		/**
+		 * Register GUI
+		 */
+		Game.instance.get.guiFactory.get.registerGui(new GuiCreativeBuilder, Reference.id)
 
 		/**
 		 * Register events 
