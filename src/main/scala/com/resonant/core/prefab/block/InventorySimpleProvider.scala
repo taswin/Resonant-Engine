@@ -5,12 +5,14 @@ import java.util.Optional
 import nova.core.inventory.components.InventoryProvider
 import nova.core.inventory.{Inventory, InventorySimple}
 import nova.core.util.Direction
+import nova.core.util.components.Stored
 
 /**
  * A trait applied to inventory objects.
  */
 trait InventorySimpleProvider extends InventoryProvider {
 
+	@Stored
 	protected val inventory: InventorySimple
 
 	override def getInventory(side: Direction): Optional[Inventory] = Optional.of(inventory)
