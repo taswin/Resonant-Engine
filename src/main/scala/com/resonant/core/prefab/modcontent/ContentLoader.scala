@@ -32,6 +32,7 @@ trait ContentLoader extends Loadable {
 					case blockWrapper: BlockWrapper => field.set(self, Game.instance.get.blockManager.register(blockWrapper.wrapped))
 					case itemTexture: ItemTexture => field.set(self, Game.instance.get.renderManager.registerTexture(itemTexture))
 					case blockTexture: BlockTexture => field.set(self, Game.instance.get.renderManager.registerTexture(blockTexture))
+					case _ =>
 				}
 			}
 		}
