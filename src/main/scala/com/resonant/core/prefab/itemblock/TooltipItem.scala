@@ -12,7 +12,7 @@ import org.lwjgl.input.Keyboard
 /**
  * @author Calclavia
  */
-trait TItemToolTip extends Item {
+trait TooltipItem extends Item {
 
 	override def getTooltips(player: Optional[Player]): util.List[String] = {
 		val tooltipID = getID + ".tooltip"
