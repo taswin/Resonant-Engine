@@ -16,8 +16,6 @@ object Reference {
 	/**
 	 * The configuration file.
 	 */
-	final val config = new Configuration(new File(Loader.instance.getConfigDir, name + ".cfg"))
-	final val logger = LogManager.getLogger(name)
 	final val majorVersion = "@MAJOR@"
 	final val minorVersion = "@MINOR@"
 	final val revisionVersion = "@REVIS@"

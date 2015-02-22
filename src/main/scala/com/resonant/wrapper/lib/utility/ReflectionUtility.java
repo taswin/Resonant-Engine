@@ -1,9 +1,8 @@
 package com.resonant.wrapper.lib.utility;
 
-import com.resonant.wrapper.core.Reference;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.relauncher.ReflectionHelper;
-import org.apache.logging.log4j.Level;
+import nova.core.game.Game;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -21,6 +20,7 @@ import java.util.List;
 public class ReflectionUtility extends ReflectionHelper {
 	/**
 	 * Looks for a constructor matching the argument given.
+	 *
 	 * @param clazz - class to look for the constructor in
 	 * @param args - arguments that the constructor should have
 	 * @return first match found
@@ -52,6 +52,7 @@ public class ReflectionUtility extends ReflectionHelper {
 
 	/**
 	 * Sets a field inside of Minecraft's code that is normally srg or obfuscated
+	 *
 	 * @param clazz - class to look for the field in
 	 * @param instance - - instance of the class, null will assume static field
 	 * @param fieldName - name of the field as seen in readable version of the code
@@ -63,14 +64,15 @@ public class ReflectionUtility extends ReflectionHelper {
 		try {
 			setMCField(clazz, instance, fieldName, newValue);
 		} catch (NoSuchFieldException e) {
-			Reference.logger().catching(Level.ERROR, e);
+			Game.instance.get().logger.error(e.getMessage());
 		} catch (IllegalAccessException e) {
-			Reference.logger().catching(Level.ERROR, e);
+			Game.instance.get().logger.error(e.getMessage());
 		}
 	}
 
 	/**
 	 * Sets a field inside of Minecraft's code that is normally srg or obfuscated
+	 *
 	 * @param clazz - class to look for the field in
 	 * @param instance - - instance of the class, null will assume static field
 	 * @param fieldName - name of the field as seen in readable version of the code
@@ -198,6 +200,7 @@ public class ReflectionUtility extends ReflectionHelper {
 
 	/**
 	 * Sets a final field, will remove final modified, and will make the field public for access.
+	 *
 	 * @param fieldname - name of the field to set
 	 * @param newValue - value to set the field too
 	 * @throws NullPointerException - if you failed to provide a field
@@ -212,6 +215,7 @@ public class ReflectionUtility extends ReflectionHelper {
 
 	/**
 	 * Sets a final field, will remove final modified, and will make the field public for access.
+	 *
 	 * @param field - field to set, uses reflection to mess with the field object
 	 * @param newValue - value to set the field too
 	 * @throws NullPointerException - if you failed to provide a field
@@ -226,6 +230,7 @@ public class ReflectionUtility extends ReflectionHelper {
 
 	/**
 	 * Sets a final field, will remove final modified, and will make the field public for access.
+	 *
 	 * @param instance - instance of the class, null will assume static field
 	 * @param field - field to set, uses reflection to mess with the field object
 	 * @param newValue - value to set the field too
@@ -245,6 +250,7 @@ public class ReflectionUtility extends ReflectionHelper {
 
 	/**
 	 * Removes final off of the field so it can be set
+	 *
 	 * @param field - field to remove final off of
 	 * @return the previous modifier state so it can be restored
 	 * @throws NoSuchFieldException - field not found, should never happen
@@ -256,6 +262,7 @@ public class ReflectionUtility extends ReflectionHelper {
 
 	/**
 	 * Sets a fields modifiers, mainly used for removing final modifiers and then restoring it after settings the field
+	 *
 	 * @param field - field to mess with
 	 * @param modifier - modifers to set
 	 * @return modifiers before they were changed

@@ -7,13 +7,12 @@ import com.resonant.core.graph.internal.thermal.GridThermal
 import com.resonant.core.prefab.modcontent.ContentLoader
 import com.resonant.core.resources.ResourceFactory
 import com.resonant.wrapper.core.content.{BlockCreativeBuilder, GuiCreativeBuilder, ItemScrewdriver}
-import com.resonant.wrapper.lib.utility.PotionUtility
 import nova.core.block.Block
 import nova.core.event.EventListener
 import nova.core.event.EventManager.EmptyEvent
 import nova.core.game.Game
 import nova.core.item.Item
-import nova.core.loader.{Loadable, NovaMod}
+import nova.core.loader.NovaMod
 import nova.core.render.texture.{BlockTexture, ItemTexture}
 
 /**
@@ -22,7 +21,7 @@ import nova.core.render.texture.{BlockTexture, ItemTexture}
  * @author Calclavia, DarkGuardsman
  */
 @NovaMod(id = Reference.id, name = Reference.name, version = Reference.version, novaVersion = "0.0.1")
-object ResonantEngine extends Loadable with ContentLoader {
+object ResonantEngine extends ContentLoader {
 
 	var blockCreativeBuilder: Block = classOf[BlockCreativeBuilder]
 	var itemScrewdriver: Item = classOf[ItemScrewdriver]
@@ -32,8 +31,6 @@ object ResonantEngine extends Loadable with ContentLoader {
 
 	override def preInit() {
 		super.preInit()
-		Reference.config.load()
-		PotionUtility.resizePotionArray()
 
 		/**
 		 * Register GUI
@@ -80,7 +77,6 @@ object ResonantEngine extends Loadable with ContentLoader {
 		MachineRecipes.instance.addRecipe(RecipeType.SIFTER.name, Blocks.gravel, Blocks.sand)
 		MachineRecipes.instance.addRecipe(RecipeType.SIFTER.name, Blocks.glass, Blocks.sand)
 		*/
-		Reference.config.save()
 	}
 
 	/**
