@@ -27,7 +27,7 @@ class GraphElectric extends GraphConnect[NodeElectricComponent] with Updater {
 		junctions = Set.empty[Junction]
 		solveWires()
 		solveGraph()
-		Game.instance.get().syncTicker.add(this)
+		Game.instance.syncTicker.add(this)
 	}
 
 	/**

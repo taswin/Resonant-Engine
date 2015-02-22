@@ -1,6 +1,5 @@
 package com.resonant.wrapper.lib.utility.science.units;
 
-import com.resonant.wrapper.core.Reference;
 import nova.core.game.Game;
 import nova.core.util.collection.Pair;
 
@@ -37,7 +36,7 @@ public class UnitHelper {
 			try {
 				return Integer.parseInt((String) var);
 			} catch (NumberFormatException e) {
-				Game.instance.get().logger.error(e.getMessage());
+				Game.instance.logger.error(e.getMessage());
 			}
 		}
 		if (var instanceof Integer || var instanceof Float || var instanceof Double || var instanceof Long) {
@@ -66,7 +65,7 @@ public class UnitHelper {
 			try {
 				return Double.parseDouble((String) var);
 			} catch (NumberFormatException e) {
-				Game.instance.get().logger.error(e.getMessage());
+				Game.instance.logger.error(e.getMessage());
 			}
 		}
 		if (var instanceof Integer || var instanceof Float || var instanceof Double) {
@@ -95,7 +94,7 @@ public class UnitHelper {
 			try {
 				return Float.parseFloat((String) var);
 			} catch (NumberFormatException e) {
-				Game.instance.get().logger.error(e.getMessage());
+				Game.instance.logger.error(e.getMessage());
 			}
 		}
 		if (var instanceof Integer || var instanceof Float || var instanceof Double) {
@@ -148,7 +147,7 @@ public class UnitHelper {
 			try {
 				number = Float.parseFloat(numberAsString);
 			} catch (NumberFormatException e) {
-				Game.instance.get().logger.error(e.getMessage());
+				Game.instance.logger.error(e.getMessage());
 			}
 			editedString.replaceAll("[0-9]", "");
 			chars = editedString.toCharArray();

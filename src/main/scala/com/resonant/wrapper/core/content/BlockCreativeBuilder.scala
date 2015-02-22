@@ -26,13 +26,13 @@ class BlockCreativeBuilder extends Block with Rotatable with PacketReceiver with
 	 * Called when the block is right clicked by the player
 	 */
 	override def onRightClick(entity: Entity, side: Int, hit: Vector3d): Boolean = {
-		Game.instance.get.guiFactory.get.showGui(Reference.id, "creativeBuilder", entity, position)
+		Game.instance.guiFactory.get.showGui(Reference.id, "creativeBuilder", entity, position)
 		return true
 	}
 
 	override def read(id: Int, packet: Packet) {
 		super.read(id, packet)
-		if (Game.instance.get().networkManager.isServer && id == 1) {
+		if (Game.instance.networkManager.isServer && id == 1) {
 			val schematicID = packet.readInt
 			val size = packet.readInt
 			val buildMap = BlockCreativeBuilder.schematics(schematicID).getBlockStructure

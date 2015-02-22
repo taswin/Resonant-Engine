@@ -26,7 +26,7 @@ object GridThermal extends Updater {
 		if (!worldMap.contains(world)) {
 			val thermal: GridThermal = new GridThermal(world)
 			worldMap += (world -> thermal)
-			Game.instance.get().syncTicker.add(thermal)
+			Game.instance.syncTicker.add(thermal)
 		}
 
 		return worldMap(world)

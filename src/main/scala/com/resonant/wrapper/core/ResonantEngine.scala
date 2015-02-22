@@ -33,16 +33,16 @@ object ResonantEngine extends ContentLoader {
 		/**
 		 * Register GUI
 		 */
-		Game.instance.get.guiFactory.get.registerGui(new GuiCreativeBuilder, Reference.id)
+		Game.instance.guiFactory.get.registerGui(new GuiCreativeBuilder, Reference.id)
 
 		/**
 		 * Register events 
 		 */
-		Game.instance.get.eventManager.serverStopping.add(new EventListener[EmptyEvent] {
+		Game.instance.eventManager.serverStopping.add(new EventListener[EmptyEvent] {
 			override def onEvent(event: EmptyEvent): Unit = serverStopped()
 		})
 
-		Game.instance.get.threadTicker.add(GridThermal)
+		Game.instance.threadTicker.add(GridThermal)
 
 		ResourceFactory.preInit()
 
@@ -60,11 +60,11 @@ object ResonantEngine extends ContentLoader {
 
 	override def postInit() {
 		/*
-		Game.instance.get().itemDictionary.add("ingotGold", Items.gold_ingot)
-		Game.instance.get().itemDictionary.add("ingotIron", Items.iron_ingot) 
-		Game.instance.get().itemDictionary.add("oreGold", Blocks.gold_ore)
-		Game.instance.get().itemDictionary.add("oreIron", Blocks.iron_ore)
-		Game.instance.get().itemDictionary.add("oreLapis", Blocks.lapis_ore)
+		Game.instance.itemDictionary.add("ingotGold", Items.gold_ingot)
+		Game.instance.itemDictionary.add("ingotIron", Items.iron_ingot)
+		Game.instance.itemDictionary.add("oreGold", Blocks.gold_ore)
+		Game.instance.itemDictionary.add("oreIron", Blocks.iron_ore)
+		Game.instance.itemDictionary.add("oreLapis", Blocks.lapis_ore)
 		
 
 		MachineRecipes.instance.addRecipe(RecipeType.SMELTER.name, new FluidStack(FluidRegistry.LAVA, FluidContainerRegistry.BUCKET_VOLUME), new ItemStack(Blocks.stone))

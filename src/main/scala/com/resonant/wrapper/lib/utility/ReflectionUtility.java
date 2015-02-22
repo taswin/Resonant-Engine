@@ -64,9 +64,9 @@ public class ReflectionUtility extends ReflectionHelper {
 		try {
 			setMCField(clazz, instance, fieldName, newValue);
 		} catch (NoSuchFieldException e) {
-			Game.instance.get().logger.error(e.getMessage());
+			Game.instance.logger.error(e.getMessage());
 		} catch (IllegalAccessException e) {
-			Game.instance.get().logger.error(e.getMessage());
+			Game.instance.logger.error(e.getMessage());
 		}
 	}
 
