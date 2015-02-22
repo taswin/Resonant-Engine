@@ -2,7 +2,6 @@ package com.resonant.wrapper.core
 
 import com.resonant.core.graph.api.{NodeElectric, NodeRegistry}
 import com.resonant.core.graph.internal.electric.NodeElectricComponent
-import com.resonant.core.graph.internal.frequency.GridFrequency
 import com.resonant.core.graph.internal.thermal.GridThermal
 import com.resonant.core.prefab.modcontent.ContentLoader
 import com.resonant.core.resources.ResourceFactory
@@ -54,8 +53,8 @@ object ResonantEngine extends ContentLoader {
 	}
 
 	def serverStopped() {
-		GridFrequency.client = new GridFrequency
-		GridFrequency.server = new GridFrequency
+		GraphFrequency.client = new GraphFrequency
+		GraphFrequency.server = new GraphFrequency
 		GridThermal.clear()
 	}
 
