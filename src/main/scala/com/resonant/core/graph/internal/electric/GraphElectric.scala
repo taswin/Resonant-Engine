@@ -2,7 +2,7 @@ package com.resonant.core.graph.internal.electric
 
 import com.resonant.core.graph.internal.GraphConnect
 import com.resonant.core.prefab.block.Updater
-import nova.internal.tick.UpdateTicker
+import nova.core.game.Game
 
 import scala.collection.convert.wrapAll._
 
@@ -27,7 +27,7 @@ class GraphElectric extends GraphConnect[NodeElectricComponent] with Updater {
 		junctions = Set.empty[Junction]
 		solveWires()
 		solveGraph()
-		UpdateTicker.SynchronizedTicker.instance.add(this)
+		Game.instance.get().syncTicker.add(this)
 	}
 
 	/**

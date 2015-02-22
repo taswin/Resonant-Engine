@@ -1,10 +1,10 @@
 package com.resonant.core.graph.internal.thermal
 
 import com.resonant.core.prefab.block.Updater
+import nova.core.game.Game
 import nova.core.util.Direction
 import nova.core.util.transform.Vector3i
 import nova.core.world.World
-import nova.internal.tick.UpdateTicker
 
 import scala.collection.mutable
 
@@ -26,7 +26,7 @@ object GridThermal extends Updater {
 		if (!worldMap.contains(world)) {
 			val thermal: GridThermal = new GridThermal(world)
 			worldMap += (world -> thermal)
-			UpdateTicker.ThreadTicker.ticker.add(thermal)
+			Game.instance.get().syncTicker.add(thermal)
 		}
 
 		return worldMap(world)

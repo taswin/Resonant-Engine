@@ -15,7 +15,6 @@ import nova.core.game.Game
 import nova.core.item.Item
 import nova.core.loader.{Loadable, NovaMod}
 import nova.core.render.texture.ItemTexture
-import nova.internal.tick.UpdateTicker
 
 /**
  * Mob class for Resonant Engine that handles common loading
@@ -60,7 +59,7 @@ object ResonantEngine extends Loadable with ContentLoader {
 	}
 
 	override def postInit() {
-		UpdateTicker.ThreadTicker.ticker.add(GridThermal)
+		Game.instance.get().threadTicker.add(GridThermal)
 
 		/*
 		Game.instance.get().itemDictionary.add("ingotGold", Items.gold_ingot)
