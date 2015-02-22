@@ -53,8 +53,6 @@ object ResonantEngine extends ContentLoader {
 	}
 
 	def serverStopped() {
-		GraphFrequency.client = new GraphFrequency
-		GraphFrequency.server = new GraphFrequency
 		GridThermal.clear()
 	}
 
