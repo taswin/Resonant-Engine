@@ -23,11 +23,11 @@ import nova.core.render.texture.{BlockTexture, ItemTexture}
 @NovaMod(id = Reference.id, name = Reference.name, version = Reference.version, novaVersion = "0.0.1")
 object ResonantEngine extends ContentLoader {
 
-	var blockCreativeBuilder: Block = classOf[BlockCreativeBuilder]
-	var itemScrewdriver: Item = classOf[ItemScrewdriver]
+	val blockCreativeBuilder: Block = classOf[BlockCreativeBuilder]
+	val itemScrewdriver: Item = classOf[ItemScrewdriver]
 
-	var textureCreativeBuilder = new BlockTexture(Reference.id, "creativeBuilder")
-	var textureScrewdriver = new ItemTexture(Reference.id, "screwdriver")
+	val textureCreativeBuilder = new BlockTexture(Reference.id, "creativeBuilder")
+	val textureScrewdriver = new ItemTexture(Reference.id, "screwdriver")
 
 	override def preInit() {
 		super.preInit()
@@ -40,9 +40,11 @@ object ResonantEngine extends ContentLoader {
 		/**
 		 * Register events 
 		 */
-		Game.instance.get().eventManager.serverStopping.add(new EventListener[EmptyEvent] {
+		Game.instance.get.eventManager.serverStopping.add(new EventListener[EmptyEvent] {
 			override def onEvent(event: EmptyEvent): Unit = serverStopped()
 		})
+
+		Game.instance.get.threadTicker.add(GridThermal)
 
 		ResourceFactory.preInit()
 
@@ -59,8 +61,6 @@ object ResonantEngine extends ContentLoader {
 	}
 
 	override def postInit() {
-		Game.instance.get().threadTicker.add(GridThermal)
-
 		/*
 		Game.instance.get().itemDictionary.add("ingotGold", Items.gold_ingot)
 		Game.instance.get().itemDictionary.add("ingotIron", Items.iron_ingot) 

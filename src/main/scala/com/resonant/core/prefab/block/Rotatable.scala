@@ -1,13 +1,14 @@
 package com.resonant.core.prefab.block
 
 import nova.core.block.Block
+import nova.core.block.components.Stateful
 import nova.core.entity.Entity
 import nova.core.network.Sync
 import nova.core.util.Direction
-import nova.core.util.components.Stored
+import nova.core.util.components.{Storable, Stored}
 import nova.core.util.transform.Vector3d
 
-trait Rotatable extends Block {
+trait Rotatable extends Block with Stateful with Storable {
 
 	var rotationMask = 0x3C
 	var isFlipPlacement = false
@@ -37,8 +38,6 @@ trait Rotatable extends Block {
 
 		return Direction.fromOrdinal(returnSide)
 	}
-
-	def canRotate(ord: Int): Boolean = (rotationMask & (1 << ord)) != 0
 
 	/**
 	 * Rotatable Block
@@ -199,4 +198,6 @@ trait Rotatable extends Block {
 		}
 		return -1
 	}
+
+	def canRotate(ord: Int): Boolean = (rotationMask & (1 << ord)) != 0
 }
