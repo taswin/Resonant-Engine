@@ -7,8 +7,9 @@ import com.resonant.wrapper.core.ResonantEngine
 import net.minecraft.entity.player.EntityPlayer
 import nova.core.item.Item
 import nova.core.render.texture.ItemTexture
+import nova.core.util.Category
 
-class ItemScrewdriver extends Item with IToolWrench {
+class ItemScrewdriver extends Item with IToolWrench with Category {
 
 	override def getID: String = "screwdriver"
 
@@ -17,7 +18,7 @@ class ItemScrewdriver extends Item with IToolWrench {
 	override def wrenchUsed(entityPlayer: EntityPlayer, x: Int, y: Int, z: Int) {
 	}
 
-	override def getTexture: Optional[ItemTexture] = {
-		return Optional.of(ResonantEngine.textureScrewdriver)
-	}
+	override def getTexture: Optional[ItemTexture] = Optional.of(ResonantEngine.textureScrewdriver)
+
+	override def getCategory: String = "tools"
 }

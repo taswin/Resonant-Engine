@@ -14,7 +14,7 @@ import nova.core.event.EventManager.EmptyEvent
 import nova.core.game.Game
 import nova.core.item.Item
 import nova.core.loader.{Loadable, NovaMod}
-import nova.core.render.texture.ItemTexture
+import nova.core.render.texture.{BlockTexture, ItemTexture}
 
 /**
  * Mob class for Resonant Engine that handles common loading
@@ -26,9 +26,12 @@ object ResonantEngine extends Loadable with ContentLoader {
 
 	var blockCreativeBuilder: Block = classOf[BlockCreativeBuilder]
 	var itemScrewdriver: Item = classOf[ItemScrewdriver]
-	var textureScrewdriver: ItemTexture = new ItemTexture(Reference.id, "screwdriver")
+
+	var textureCreativeBuilder = new BlockTexture(Reference.id, "creativeBuilder")
+	var textureScrewdriver = new ItemTexture(Reference.id, "screwdriver")
 
 	override def preInit() {
+		super.preInit()
 		Reference.config.load()
 		PotionUtility.resizePotionArray()
 

@@ -1,19 +1,23 @@
 package com.resonant.wrapper.core.content
 
+import java.util.Optional
+
 import com.resonant.core.prefab.block.Rotatable
-import com.resonant.wrapper.core.Reference
+import com.resonant.wrapper.core.{Reference, ResonantEngine}
 import com.resonant.wrapper.lib.schematic.Structure
 import nova.core.block.Block
 import nova.core.entity.Entity
 import nova.core.game.Game
-import nova.core.network.{NetworkManager, Packet, PacketReceiver, PacketSender}
+import nova.core.network.{Packet, PacketReceiver, PacketSender}
+import nova.core.render.texture.Texture
 import nova.core.util.transform.Vector3d
+import nova.core.util.{Category, Direction}
 
 object BlockCreativeBuilder {
 	var schematics: Seq[Structure] = Seq.empty
 }
 
-class BlockCreativeBuilder extends Block with Rotatable with PacketReceiver with PacketSender {
+class BlockCreativeBuilder extends Block with Rotatable with PacketReceiver with PacketSender with Category {
 
 	//Constructor
 	rotationMask = 0x3F
@@ -39,5 +43,9 @@ class BlockCreativeBuilder extends Block with Rotatable with PacketReceiver with
 		}
 	}
 
+	override def getTexture(side: Direction): Optional[Texture] = Optional.of(ResonantEngine.textureCreativeBuilder)
+
 	override def getID: String = "creativeBuilder"
+
+	override def getCategory: String = "tools"
 }
