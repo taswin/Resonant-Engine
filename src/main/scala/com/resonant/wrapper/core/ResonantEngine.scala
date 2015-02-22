@@ -16,9 +16,8 @@ import nova.core.loader.NovaMod
 import nova.core.render.texture.{BlockTexture, ItemTexture}
 
 /**
- * Mob class for Resonant Engine that handles common loading
- *
- * @author Calclavia, DarkGuardsman
+ * Resonant Engine's main loading class
+ * @author Calclavia
  */
 @NovaMod(id = Reference.id, name = Reference.name, version = Reference.version, novaVersion = "0.0.1")
 object ResonantEngine extends ContentLoader {

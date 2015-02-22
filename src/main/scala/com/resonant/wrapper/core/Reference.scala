@@ -17,7 +17,6 @@ object Reference {
 	final val domain = id
 	final val prefix = domain + ":"
 	final val directory = "/assets/" + domain + "/"
-	final val channel = "resonantengine"
 	final val textureDirectory = "textures/"
 	final val guiDirectory = textureDirectory + "gui/"
 	final val blockTextureDirectory = textureDirectory + "blocks/"
