@@ -4,170 +4,170 @@
 death.attack.electrocution=%1$s got electrocuted!
 
 ## Ores
-tile.resonantengine:oreCopper.name=Copper Ore
-tile.resonantengine:oreTin.name=Tin Ore
-tile.resonantengine:oreSilver.name=Silver Ore
-tile.resonantengine:oreLead.name=Lead Ore
-tile.resonantengine:oreZinc.name=Zinc Ore
-tile.resonantengine:oreNickel.name=Nickel Ore
-tile.resonantengine:oreAluminium.name=Bauxite Ore
-tile.resonantengine:oreMagnesium.name=Magnesite Ore
-tile.resonantengine:oreUranium.name=Uranium Ore
+tile.oreCopper.name=Copper Ore
+tile.oreTin.name=Tin Ore
+tile.oreSilver.name=Silver Ore
+tile.oreLead.name=Lead Ore
+tile.oreZinc.name=Zinc Ore
+tile.oreNickel.name=Nickel Ore
+tile.oreAluminium.name=Bauxite Ore
+tile.oreMagnesium.name=Magnesite Ore
+tile.oreUranium.name=Uranium Ore
 
 ## Dust
-item.resonantengine:dustCopper.name=Copper Dust
-item.resonantengine:dustTin.name=Tin Dust
-item.resonantengine:dustSilver.name=Silver Dust
-item.resonantengine:dustLead.name=Lead Dust
-item.resonantengine:dustZinc.name=Zinc Dust
-item.resonantengine:dustNickel.name=Nickel Dust
-item.resonantengine:dustAluminium.name=Aluminium Dust
-item.resonantengine:dustMagnesium.name=Magnesium Dust
+item.dustCopper.name=Copper Dust
+item.dustTin.name=Tin Dust
+item.dustSilver.name=Silver Dust
+item.dustLead.name=Lead Dust
+item.dustZinc.name=Zinc Dust
+item.dustNickel.name=Nickel Dust
+item.dustAluminium.name=Aluminium Dust
+item.dustMagnesium.name=Magnesium Dust
 
-item.resonantengine:dustSteel.name=Steel Dust
-item.resonantengine:dustBrass.name=Brass Clump
-item.resonantengine:dustBronze.name=Bronze Clump
+item.dustSteel.name=Steel Dust
+item.dustBrass.name=Brass Clump
+item.dustBronze.name=Bronze Clump
 
 ## Ruble
-item.resonantengine:rubbleCopper.name=Copper Rubble
-item.resonantengine:rubbleTin.name=Tin Rubble
-item.resonantengine:rubbleSilver.name=Silver Rubble
-item.resonantengine:rubbleLead.name=Lead Rubble
-item.resonantengine:rubbleZinc.name=Zinc Rubble
-item.resonantengine:rubbleNickel.name=Nickel Rubble
-item.resonantengine:rubbleAluminium.name=Aluminium Rubble
-item.resonantengine:rubbleMagnesium.name=Magnesium Rubble
+item.rubbleCopper.name=Copper Rubble
+item.rubbleTin.name=Tin Rubble
+item.rubbleSilver.name=Silver Rubble
+item.rubbleLead.name=Lead Rubble
+item.rubbleZinc.name=Zinc Rubble
+item.rubbleNickel.name=Nickel Rubble
+item.rubbleAluminium.name=Aluminium Rubble
+item.rubbleMagnesium.name=Magnesium Rubble
 
 ## Ingot
-item.resonantengine:ingotCopper.name=Copper Ingot
-item.resonantengine:ingotTin.name=Tin Ingot
-item.resonantengine:ingotSilver.name=Silver Ingot
-item.resonantengine:ingotLead.name=Lead Ingot
-item.resonantengine:ingotZinc.name=Zinc Ingot
-item.resonantengine:ingotNickel.name=Nickel Ingot
-item.resonantengine:ingotAluminium.name=Aluminium Ingot
-item.resonantengine:ingotMagnesium.name=Magnesium Ingot
+item.ingotCopper.name=Copper Ingot
+item.ingotTin.name=Tin Ingot
+item.ingotSilver.name=Silver Ingot
+item.ingotLead.name=Lead Ingot
+item.ingotZinc.name=Zinc Ingot
+item.ingotNickel.name=Nickel Ingot
+item.ingotAluminium.name=Aluminium Ingot
+item.ingotMagnesium.name=Magnesium Ingot
 
-item.resonantengine:ingotSteel.name=Steel Ingot
-item.resonantengine:ingotBrass.name=Brass Ingot
-item.resonantengine:ingotBronze.name=Bronze Ingot
+item.ingotSteel.name=Steel Ingot
+item.ingotBrass.name=Brass Ingot
+item.ingotBronze.name=Bronze Ingot
 
 ## Plate
-item.resonantengine:plateCopper.name=Copper Plate
-item.resonantengine:plateTin.name=Tin Plate
-item.resonantengine:plateSilver.name=Silver Plate
-item.resonantengine:plateLead.name=Lead Plate
-item.resonantengine:plateZinc.name=Zinc Plate
-item.resonantengine:plateNickel.name=Nickel Plate
-item.resonantengine:plateAluminium.name=Aluminium Plate
-item.resonantengine:plateMagnesium.name=Magnesium Plate
+item.plateCopper.name=Copper Plate
+item.plateTin.name=Tin Plate
+item.plateSilver.name=Silver Plate
+item.plateLead.name=Lead Plate
+item.plateZinc.name=Zinc Plate
+item.plateNickel.name=Nickel Plate
+item.plateAluminium.name=Aluminium Plate
+item.plateMagnesium.name=Magnesium Plate
 
-item.resonantengine:plateSteel.name=Steel Plate
-item.resonantengine:plateBrass.name=Brass Plate
-item.resonantengine:plateBronze.name=Bronze Plate
+item.plateSteel.name=Steel Plate
+item.plateBrass.name=Brass Plate
+item.plateBronze.name=Bronze Plate
 
 ## Rod
-item.resonantengine:rodCopper.name=Copper Rod
-item.resonantengine:rodTin.name=Tin Rod
-item.resonantengine:rodSilver.name=Silver Rod
-item.resonantengine:rodLead.name=Lead Rod
-item.resonantengine:rodZinc.name=Zinc Rod
-item.resonantengine:rodNickel.name=Nickel Rod
-item.resonantengine:rodAluminium.name=Aluminium Rod
-item.resonantengine:rodMagnesium.name=Magnesium Rod
+item.rodCopper.name=Copper Rod
+item.rodTin.name=Tin Rod
+item.rodSilver.name=Silver Rod
+item.rodLead.name=Lead Rod
+item.rodZinc.name=Zinc Rod
+item.rodNickel.name=Nickel Rod
+item.rodAluminium.name=Aluminium Rod
+item.rodMagnesium.name=Magnesium Rod
 
-item.resonantengine:rodSteel.name=Steel Rod
-item.resonantengine:rodBrass.name=Brass Rod
-item.resonantengine:rodBronze.name=Bronze Rod
+item.rodSteel.name=Steel Rod
+item.rodBrass.name=Brass Rod
+item.rodBronze.name=Bronze Rod
 
 ## Gear
-item.resonantengine:gearCopper.name=Copper Gear
-item.resonantengine:gearTin.name=Tin Gear
-item.resonantengine:gearSilver.name=Silver Gear
-item.resonantengine:gearLead.name=Lead Gear
-item.resonantengine:gearZinc.name=Zinc Gear
-item.resonantengine:gearNickel.name=Nickel Gear
-item.resonantengine:gearAluminium.name=Aluminium Gear
-item.resonantengine:gearMagnesium.name=Magnesium Gear
+item.gearCopper.name=Copper Gear
+item.gearTin.name=Tin Gear
+item.gearSilver.name=Silver Gear
+item.gearLead.name=Lead Gear
+item.gearZinc.name=Zinc Gear
+item.gearNickel.name=Nickel Gear
+item.gearAluminium.name=Aluminium Gear
+item.gearMagnesium.name=Magnesium Gear
 
-item.resonantengine:gearSteel.name=Steel Gear
-item.resonantengine:gearBrass.name=Brass Gear
-item.resonantengine:gearBronze.name=Bronze Gear
+item.gearSteel.name=Steel Gear
+item.gearBrass.name=Brass Gear
+item.gearBronze.name=Bronze Gear
 
 ## Ax Head
-item.resonantengine:axHeadCopper.name=Copper Ax Head
-item.resonantengine:axHeadTin.name=Tin Ax Head
-item.resonantengine:axHeadSilver.name=Silver Ax Head
-item.resonantengine:axHeadLead.name=Lead Ax Head
-item.resonantengine:axHeadZinc.name=Zinc Ax Head
-item.resonantengine:axHeadNickel.name=Nickel Ax Head
-item.resonantengine:axHeadAluminium.name=Aluminium Ax Head
-item.resonantengine:axHeadMagnesium.name=Magnesium Ax Head
+item.axHeadCopper.name=Copper Ax Head
+item.axHeadTin.name=Tin Ax Head
+item.axHeadSilver.name=Silver Ax Head
+item.axHeadLead.name=Lead Ax Head
+item.axHeadZinc.name=Zinc Ax Head
+item.axHeadNickel.name=Nickel Ax Head
+item.axHeadAluminium.name=Aluminium Ax Head
+item.axHeadMagnesium.name=Magnesium Ax Head
 
-item.resonantengine:axHeadSteel.name=Steel Ax Head
-item.resonantengine:axHeadBrass.name=Brass Ax Head
-item.resonantengine:axHeadBronze.name=Bronze Ax Head
+item.axHeadSteel.name=Steel Ax Head
+item.axHeadBrass.name=Brass Ax Head
+item.axHeadBronze.name=Bronze Ax Head
 
 ## Shovel Head
-item.resonantengine:shovelHeadCopper.name=Copper Shovel Head
-item.resonantengine:shovelHeadTin.name=Tin Shovel Head
-item.resonantengine:shovelHeadSilver.name=Silver Shovel Head
-item.resonantengine:shovelHeadLead.name=Lead Shovel Head
-item.resonantengine:shovelHeadZinc.name=Zinc Shovel Head
-item.resonantengine:shovelHeadNickel.name=Nickel Shovel Head
-item.resonantengine:shovelHeadAluminium.name=Aluminium Shovel Head
-item.resonantengine:shovelHeadMagnesium.name=Magnesium Shovel Head
+item.shovelHeadCopper.name=Copper Shovel Head
+item.shovelHeadTin.name=Tin Shovel Head
+item.shovelHeadSilver.name=Silver Shovel Head
+item.shovelHeadLead.name=Lead Shovel Head
+item.shovelHeadZinc.name=Zinc Shovel Head
+item.shovelHeadNickel.name=Nickel Shovel Head
+item.shovelHeadAluminium.name=Aluminium Shovel Head
+item.shovelHeadMagnesium.name=Magnesium Shovel Head
 
-item.resonantengine:shovelHeadSteel.name=Steel Shovel Head
-item.resonantengine:shovelHeadBrass.name=Brass Shovel Head
-item.resonantengine:shovelHeadBronze.name=Bronze Shovel Head
+item.shovelHeadSteel.name=Steel Shovel Head
+item.shovelHeadBrass.name=Brass Shovel Head
+item.shovelHeadBronze.name=Bronze Shovel Head
 
 ## Sword Blade
-item.resonantengine:swordBladeCopper.name=Copper Sword Blade
-item.resonantengine:swordBladeTin.name=Tin Sword Blade
-item.resonantengine:swordBladeSilver.name=Silver Sword Blade
-item.resonantengine:swordBladeLead.name=Lead Sword Blade
-item.resonantengine:swordBladeZinc.name=Zinc Sword Blade
-item.resonantengine:swordBladeNickel.name=Nickel Sword Blade
-item.resonantengine:swordBladeAluminium.name=Aluminium Sword Blade
-item.resonantengine:swordBladeMagnesium.name=Magnesium Sword Blade
+item.swordBladeCopper.name=Copper Sword Blade
+item.swordBladeTin.name=Tin Sword Blade
+item.swordBladeSilver.name=Silver Sword Blade
+item.swordBladeLead.name=Lead Sword Blade
+item.swordBladeZinc.name=Zinc Sword Blade
+item.swordBladeNickel.name=Nickel Sword Blade
+item.swordBladeAluminium.name=Aluminium Sword Blade
+item.swordBladeMagnesium.name=Magnesium Sword Blade
 
-item.resonantengine:shovelHeadSteel.name=Steel Shovel Head
-item.resonantengine:shovelHeadBrass.name=Brass Shovel Head
-item.resonantengine:shovelHeadBronze.name=Bronze Shovel Head
+item.shovelHeadSteel.name=Steel Shovel Head
+item.shovelHeadBrass.name=Brass Shovel Head
+item.shovelHeadBronze.name=Bronze Shovel Head
 
 ## Pick Head
-item.resonantengine:pickHeadCopper.name=Copper Pick Head
-item.resonantengine:pickHeadTin.name=Tin Pick Head
-item.resonantengine:pickHeadSilver.name=Silver Pick Head
-item.resonantengine:pickHeadLead.name=Lead Pick Head
-item.resonantengine:pickHeadZinc.name=Zinc Pick Head
-item.resonantengine:pickHeadNickel.name=Nickel Pick Head
-item.resonantengine:pickHeadAluminium.name=Aluminium Pick Head
-item.resonantengine:pickHeadMagnesium.name=Magnesium Pick Head
+item.pickHeadCopper.name=Copper Pick Head
+item.pickHeadTin.name=Tin Pick Head
+item.pickHeadSilver.name=Silver Pick Head
+item.pickHeadLead.name=Lead Pick Head
+item.pickHeadZinc.name=Zinc Pick Head
+item.pickHeadNickel.name=Nickel Pick Head
+item.pickHeadAluminium.name=Aluminium Pick Head
+item.pickHeadMagnesium.name=Magnesium Pick Head
 
-item.resonantengine:pickHeadSteel.name=Steel Pick Head
-item.resonantengine:pickHeadBrass.name=Brass Pick Head
-item.resonantengine:pickHeadBronze.name=Bronze Pick Head
+item.pickHeadSteel.name=Steel Pick Head
+item.pickHeadBrass.name=Brass Pick Head
+item.pickHeadBronze.name=Bronze Pick Head
 
 ## Hoe Head
-item.resonantengine:hoeHeadCopper.name=Copper Hoe Head
-item.resonantengine:hoeHeadTin.name=Tin Hoe Head
-item.resonantengine:hoeHeadSilver.name=Silver Hoe Head
-item.resonantengine:hoeHeadLead.name=Lead Hoe Head
-item.resonantengine:hoeHeadZinc.name=Zinc Hoe Head
-item.resonantengine:hoeHeadNickel.name=Nickel Hoe Head
-item.resonantengine:hoeHeadAluminium.name=Aluminium Hoe Head
-item.resonantengine:hoeHeadMagnesium.name=Magnesium Hoe Head
+item.hoeHeadCopper.name=Copper Hoe Head
+item.hoeHeadTin.name=Tin Hoe Head
+item.hoeHeadSilver.name=Silver Hoe Head
+item.hoeHeadLead.name=Lead Hoe Head
+item.hoeHeadZinc.name=Zinc Hoe Head
+item.hoeHeadNickel.name=Nickel Hoe Head
+item.hoeHeadAluminium.name=Aluminium Hoe Head
+item.hoeHeadMagnesium.name=Magnesium Hoe Head
 
-item.resonantengine:hoeHeadSteel.name=Steel Hoe Head
-item.resonantengine:hoeHeadBrass.name=Brass Hoe Head
-item.resonantengine:hoeHeadBronze.name=Bronze Hoe Head
+item.hoeHeadSteel.name=Steel Hoe Head
+item.hoeHeadBrass.name=Brass Hoe Head
+item.hoeHeadBronze.name=Bronze Hoe Head
 
 ## Creative Testing Blocks
-tile.resonantengine:creativeBuilder.name=Creative Builder
-tile.resonantengine:infiniteEnergy.name=Infinite Energy
-tile.resonantengine:infiniteFluid.name=Infinite Fluid
+tile.creativeBuilder.name=Creative Builder
+tile.infiniteEnergy.name=Infinite Energy
+tile.infiniteFluid.name=Infinite Fluid
 
 ## Tools
 toolmode.mode=Mode
@@ -175,8 +175,8 @@ toolmode.general.name=General
 toolmode.rotation.name=Rotation
 
 # Items
-item.resonantengine:screwdriver.name=Screwdriver
-item.resonantengine:screwdriver.tooltip=Used to configure blocks. Shift-right click to change mode.
+item.screwdriver.name=Screwdriver
+item.screwdriver.tooltip=Used to configure blocks. Shift-right click to change mode.
 
 #Misc
 # %0 goes before the localized name of the shift key, %1 goes after
@@ -188,8 +188,8 @@ info.energycapacity.waila=Maximum Energy Level
 
 info.isCraftingOnlyItem=Crafting Item
 
-info.resonantengine:explosive.name=Explosive
-info.resonantengine:explosive.size.name=Size
+info.explosive.name=Explosive
+info.explosive.size.name=Size
 
 ## Permissions
 root.machine=Manage Machine
