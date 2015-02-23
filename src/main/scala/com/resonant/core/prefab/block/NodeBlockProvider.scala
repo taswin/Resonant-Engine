@@ -9,8 +9,8 @@ import com.resonant.wrapper.core.api.tile.DebugInfo
 import nova.core.block.Block
 import nova.core.block.components.Stateful
 import nova.core.game.Game
+import nova.core.retention.Storable
 import nova.core.util.Direction
-import nova.core.util.components.Storable
 import nova.core.util.transform.Vector3i
 
 import scala.collection.convert.wrapAll._

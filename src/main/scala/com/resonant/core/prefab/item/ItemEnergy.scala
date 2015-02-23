@@ -7,7 +7,7 @@ import com.resonant.core.energy.EnergyItem
 import com.resonant.wrapper.lib.utility.science.UnitDisplay
 import nova.core.item.Item
 import nova.core.player.Player
-import nova.core.util.components.{Storable, Stored}
+import nova.core.retention.{Storable, Stored}
 
 import scala.collection.convert.wrapAll._
 

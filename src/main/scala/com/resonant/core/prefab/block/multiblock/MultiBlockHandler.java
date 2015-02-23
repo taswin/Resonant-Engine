@@ -1,7 +1,7 @@
 package com.resonant.core.prefab.block.multiblock;
 
 import nova.core.block.Block;
-import nova.core.util.components.Storable;
+import nova.core.retention.Storable;
 import nova.core.util.transform.Vector3i;
 
 import java.lang.ref.WeakReference;
@@ -166,7 +166,7 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements Storab
 	}
 
 	@Override
-	public void save(Map<String, Object> data) {
+	public void save(Data data) {
 		if (isConstructed()) {
 			data.put("primaryMultiBlock", getPrimary().position().subtract(block.position()));
 		}

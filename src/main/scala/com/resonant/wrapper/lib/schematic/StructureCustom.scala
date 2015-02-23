@@ -3,7 +3,7 @@ package com.resonant.wrapper.lib.schematic
 import java.util
 
 import nova.core.block.Block
-import nova.core.util.components.Storable
+import nova.core.retention.Storable
 import nova.core.util.transform.{MatrixStack, Quaternion, Vector3d, Vector3i}
 
 /**

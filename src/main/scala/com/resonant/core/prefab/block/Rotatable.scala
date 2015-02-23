@@ -4,8 +4,8 @@ import nova.core.block.Block
 import nova.core.block.components.Stateful
 import nova.core.entity.Entity
 import nova.core.network.Sync
+import nova.core.retention.{Storable, Stored}
 import nova.core.util.Direction
-import nova.core.util.components.{Storable, Stored}
 import nova.core.util.transform.Vector3d
 
 trait Rotatable extends Block with Stateful with Storable {

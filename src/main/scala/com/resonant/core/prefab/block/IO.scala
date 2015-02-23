@@ -7,8 +7,8 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.util.ChatComponentText
 import nova.core.block.Block
 import nova.core.game.Game
+import nova.core.retention.Storable
 import nova.core.util.Direction
-import nova.core.util.components.Storable
 
 import scala.collection.convert.wrapAll._
 
@@ -48,6 +48,20 @@ trait IO extends Block with Storable with IIO {
 		ioMap = Integer.parseInt(str.toString, 3)
 	}
 
+	override def getIO(dir: Direction): Int = {
+		val currentIO: String = getIOMapBase3
+		return Integer.parseInt("" + currentIO.charAt(dir.ordinal))
+	}
+
+	def getIOMapBase3: String = {
+		var currentIO: String = Integer.toString(ioMap, 3)
+		while (currentIO.length < 6) {
+			currentIO = "0" + currentIO
+		}
+		return currentIO
+
+	}
+
 	/**
 	 * The electrical input direction.
 	 *
@@ -81,20 +95,6 @@ trait IO extends Block with Storable with IIO {
 		}
 
 		return dirs
-	}
-
-	override def getIO(dir: Direction): Int = {
-		val currentIO: String = getIOMapBase3
-		return Integer.parseInt("" + currentIO.charAt(dir.ordinal))
-	}
-
-	def getIOMapBase3: String = {
-		var currentIO: String = Integer.toString(ioMap, 3)
-		while (currentIO.length < 6) {
-			currentIO = "0" + currentIO
-		}
-		return currentIO
-
 	}
 
 	override def save(data: util.Map[String, AnyRef]) {

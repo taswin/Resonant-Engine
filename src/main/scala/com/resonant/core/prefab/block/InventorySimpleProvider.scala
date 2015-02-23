@@ -4,8 +4,8 @@ import java.util.Optional
 
 import nova.core.inventory.components.InventoryProvider
 import nova.core.inventory.{Inventory, InventorySimple}
+import nova.core.retention.Stored
 import nova.core.util.Direction
-import nova.core.util.components.Stored
 
 /**
  * A trait applied to inventory objects.
