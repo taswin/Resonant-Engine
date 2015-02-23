@@ -17,7 +17,7 @@ object BlockCreativeBuilder {
 	var schematics: Seq[Structure] = Seq.empty
 }
 
-class BlockCreativeBuilder extends Block with Rotatable with PacketHandler with PacketSender with Category {
+class BlockCreativeBuilder extends Block with Rotatable with PacketHandler with Category {
 
 	//Constructor
 	rotationMask = 0x3F

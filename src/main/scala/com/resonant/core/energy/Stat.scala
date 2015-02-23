@@ -1,8 +1,6 @@
 package com.resonant.core.energy
 
-import java.util
-
-import nova.core.retention.Storable
+import nova.core.retention.{Data, Storable}
 
 /**
  * A stat is a type of positive numerical value that has a maximum value
@@ -44,13 +42,6 @@ class Stat[T](implicit n: Numeric[T]) extends Ordered[T] with Storable {
 		return value
 	}
 
-	def value = _value
-
-	def value_=(newValue: T) {
-		_prevValue = _value
-		_value = n.min(n.max(newValue, n.zero), max)
-	}
-
 	def -=(amount: T): T = {
 		value = n.minus(value, amount)
 		return value
@@ -58,15 +49,24 @@ class Stat[T](implicit n: Numeric[T]) extends Ordered[T] with Storable {
 
 	override def compare(that: T): Int = n.compare(value, that)
 
-	override def save(data: util.Map[String, AnyRef]) {
+	def value = _value
+
+	def value_=(newValue: T) {
+		_prevValue = _value
+		_value = n.min(n.max(newValue, n.zero), max)
+	}
+
+	override def save(data: Data) {
 		data.put("statMax", Double.box(n.toDouble(max)))
 		data.put("statValue", Double.box(n.toDouble(value)))
 	}
 
-	override def load(data: util.Map[String, AnyRef]) {
+	override def load(data: Data) {
 		max = data.getOrDefault("statMax", Double.box(0)).asInstanceOf[T]
 		value = data.getOrDefault("statValue", Double.box(0)).asInstanceOf[T]
 	}
+
+	override def toString: String = getClass.getSimpleName + "[" + value + "/" + max + "]"
 
 	def max = _max
 
@@ -74,6 +74,4 @@ class Stat[T](implicit n: Numeric[T]) extends Ordered[T] with Storable {
 		_max = newMax
 		value = value
 	}
-
-	override def toString: String = getClass.getSimpleName + "[" + value + "/" + max + "]"
 }

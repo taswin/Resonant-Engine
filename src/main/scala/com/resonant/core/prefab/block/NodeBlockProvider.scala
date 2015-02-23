@@ -9,7 +9,7 @@ import com.resonant.wrapper.core.api.tile.DebugInfo
 import nova.core.block.Block
 import nova.core.block.components.Stateful
 import nova.core.game.Game
-import nova.core.retention.Storable
+import nova.core.retention.{Data, Storable}
 import nova.core.util.Direction
 import nova.core.util.transform.Vector3i
 
@@ -52,12 +52,12 @@ trait NodeBlockProvider extends Block with Stateful with Storable with NodeProvi
 		}
 	}
 
-	override def save(data: util.Map[String, AnyRef]) {
+	override def save(data: Data) {
 		super.save(data)
 		nodes.filter(_.isInstanceOf[Storable]).foreach(_.asInstanceOf[Storable].save(data))
 	}
 
-	override def load(data: util.Map[String, AnyRef]) {
+	override def load(data: Data) {
 		super.load(data)
 		nodes.filter(_.isInstanceOf[Storable]).foreach(_.asInstanceOf[Storable].load(data))
 	}

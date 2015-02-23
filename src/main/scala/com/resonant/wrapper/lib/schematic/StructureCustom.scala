@@ -3,7 +3,7 @@ package com.resonant.wrapper.lib.schematic
 import java.util
 
 import nova.core.block.Block
-import nova.core.retention.Storable
+import nova.core.retention.{Data, Storable}
 import nova.core.util.transform.{MatrixStack, Quaternion, Vector3d, Vector3i}
 
 /**
@@ -26,14 +26,14 @@ class StructureCustom(val name: String) extends Structure with Storable {
 		return structure.map(e => (e._1.transform(matrix).toInt, e._2))
 	}
 
-	override def load(data: util.Map[String, AnyRef]) {
+	override def load(data: Data) {
 		translate = data.get("translate").asInstanceOf[Vector3d]
 		scale = data.get("scale").asInstanceOf[Vector3d]
 		rotation = data.get("rotation").asInstanceOf[Quaternion]
 		structure = data.get("structure").asInstanceOf[Map[Vector3d, Block]]
 	}
 
-	override def save(data: util.Map[String, AnyRef]) {
+	override def save(data: Data) {
 		data.put("translate", translate)
 		data.put("scale", scale)
 		data.put("rotation", rotation)

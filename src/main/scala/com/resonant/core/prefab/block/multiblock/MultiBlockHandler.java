@@ -1,12 +1,12 @@
 package com.resonant.core.prefab.block.multiblock;
 
 import nova.core.block.Block;
+import nova.core.retention.Data;
 import nova.core.retention.Storable;
 import nova.core.util.transform.Vector3i;
 
 import java.lang.ref.WeakReference;
 import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -176,10 +176,10 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements Storab
 	 * Only the primary wrapper of the multiblock saves and loads data.
 	 */
 	@Override
-	public void load(Map<String, Object> data) {
+	public void load(Data data) {
 		if (data.containsKey("primaryMultiBlock")) {
 			Vector3i zero = Vector3i.zero;
-			zero.load((Map) data.get("primaryMultiBlock"));
+			zero.load(data.get("primaryMultiBlock"));
 			newPrimary = zero;
 		} else {
 			prim = null;
