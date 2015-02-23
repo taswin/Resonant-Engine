@@ -8,7 +8,7 @@ import com.resonant.wrapper.lib.schematic.Structure
 import nova.core.block.Block
 import nova.core.entity.Entity
 import nova.core.game.Game
-import nova.core.network.{Packet, PacketReceiver, PacketSender}
+import nova.core.network.{Packet, PacketHandler}
 import nova.core.render.texture.Texture
 import nova.core.util.transform.Vector3d
 import nova.core.util.{Category, Direction}
@@ -17,7 +17,7 @@ object BlockCreativeBuilder {
 	var schematics: Seq[Structure] = Seq.empty
 }
 
-class BlockCreativeBuilder extends Block with Rotatable with PacketReceiver with PacketSender with Category {
+class BlockCreativeBuilder extends Block with Rotatable with PacketHandler with PacketSender with Category {
 
 	//Constructor
 	rotationMask = 0x3F

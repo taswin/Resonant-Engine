@@ -1,5 +1,7 @@
 package com.resonant.core.prefab.modcontent
 
+import java.util.function.Supplier
+
 import nova.core.block.Block
 import nova.core.game.Game
 import nova.core.item.Item
@@ -28,8 +30,14 @@ trait ContentLoader extends Loadable {
 			if (obj != null) {
 				// Get type of object, then register it if supported
 				obj match {
-					case itemWrapper: ItemWrapper => field.set(self, Game.instance.itemManager.register(itemWrapper.wrapped))
-					case blockWrapper: BlockWrapper => field.set(self, Game.instance.blockManager.register(blockWrapper.wrapped))
+					case itemWrapper: ItemClassWrapper => field.set(self, Game.instance.itemManager.register(itemWrapper.wrapped))
+					case itemConstructor: ItemConstructorWrapper => field.set(self, Game.instance.itemManager.register(new Supplier[Item] {
+						override def get(): Item = itemConstructor.wrapped()
+					}))
+					case blockWrapper: BlockClassWrapper => field.set(self, Game.instance.blockManager.register(blockWrapper.wrapped))
+					case blockConstructor: BlockConstructorWrapper => field.set(self, Game.instance.blockManager.register(new Supplier[Block] {
+						override def get(): Block = blockConstructor.wrapped()
+					}))
 					case itemTexture: ItemTexture => field.set(self, Game.instance.renderManager.registerTexture(itemTexture))
 					case blockTexture: BlockTexture => field.set(self, Game.instance.renderManager.registerTexture(blockTexture))
 					case _ =>
@@ -41,11 +49,19 @@ trait ContentLoader extends Loadable {
 	/**
 	 * Creates a dummy instances temporarily until the preInit stage has passed
 	 */
-	implicit protected class BlockWrapper(val wrapped: Class[_ <: Block]) extends Block {
+	implicit protected class BlockClassWrapper(val wrapped: Class[_ <: Block]) extends Block {
 		override def getID: String = ""
 	}
 
-	implicit protected class ItemWrapper(val wrapped: Class[_ <: Item]) extends Item {
+	implicit protected class BlockConstructorWrapper(val wrapped: () => Block) extends Block {
+		override def getID: String = ""
+	}
+
+	implicit protected class ItemClassWrapper(val wrapped: Class[_ <: Item]) extends Item {
+		override def getID: String = ""
+	}
+
+	implicit protected class ItemConstructorWrapper(val wrapped: () => Item) extends Item {
 		override def getID: String = ""
 	}
 

@@ -20,7 +20,7 @@ trait Updater extends nova.core.util.components.Updater {
 	}
 
 	/**
-	 * Called on the TileEntity's first tick.
+	 * Called on the first tick.
 	 */
 	def start() {
 	}
