@@ -3,7 +3,7 @@ package com.resonant.wrapper.lib.utility.science;
 /**
  * List of element from the periodic table of elements for any kind of use. This list is not
  * complete for all parts but each element should have a listed names, symbol, and atomic mass.
- * Atomic number should be the placement # in the list. Var ZERO should not be used as its designed
+ * Atomic number should be the placement # in the list. Var zero should not be used as its designed
  * to offset the placement of all elements by one. As well is returned instead of null.
  * @author Robert Seifert
  * @Source http://www.periodictable.com/Properties/A/SpecificHeat.an.html
@@ -14,7 +14,7 @@ public enum ChemElement {
 	/**
 	 * Placeholder so that hydrogen starts as number one
 	 */
-	ZERO("ZERO", "ZERO", 0, 0, null, null),
+	ZERO("zero", "zero", 0, 0, null, null),
 	Hydrogen("Hydrogen", "H", 1.00794f, 0.08988f, ElementProperty.nonmetal, MatterPhase.gas, new HeatingData(14.01f, 20.28f, 0.558f, 0.558f, 14300f)),
 	Helium("Helium", "He", 4.002602f, 0.1785f, ElementProperty.inertGas, MatterPhase.gas, new HeatingData(0, 4.22f, 0.02f, 0.083f, 5193.1f)),
 	Lithium("Lithium", "Li", 6.941f, 0.53f, ElementProperty.inertGas, MatterPhase.gas, new HeatingData(543.69f, 1615f, 3f, 147f, 3570f)),

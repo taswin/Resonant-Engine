@@ -178,7 +178,7 @@ public class MultiBlockHandler<W extends IMultiBlockStructure> implements Storab
 	@Override
 	public void load(Map<String, Object> data) {
 		if (data.containsKey("primaryMultiBlock")) {
-			Vector3i zero = Vector3i.ZERO;
+			Vector3i zero = Vector3i.zero;
 			zero.load((Map) data.get("primaryMultiBlock"));
 			newPrimary = zero;
 		} else {
