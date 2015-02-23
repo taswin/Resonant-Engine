@@ -30,9 +30,9 @@ class BlockCreativeBuilder extends Block with Rotatable with PacketHandler with 
 		return true
 	}
 
-	override def read(id: Int, packet: Packet) {
-		super.read(id, packet)
-		if (Game.instance.networkManager.isServer && id == 1) {
+	override def read(packet: Packet) {
+		super.read(packet)
+		if (Game.instance.networkManager.isServer && packet.getID == 1) {
 			val schematicID = packet.readInt
 			val size = packet.readInt
 			val buildMap = BlockCreativeBuilder.schematics(schematicID).getBlockStructure
