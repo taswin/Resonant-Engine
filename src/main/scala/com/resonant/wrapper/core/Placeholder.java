@@ -1,7 +1,6 @@
 package com.resonant.wrapper.core;
 
 import nova.core.entity.Entity;
-import nova.core.gui.KeyManager;
 import nova.core.player.Player;
 
 /**
@@ -12,10 +11,6 @@ import nova.core.player.Player;
 public class Placeholder {
 
 	public static boolean isHoldingConfigurator(Entity entity) {
-		return false;
-	}
-
-	public static boolean isKeyDown(KeyManager.Key key) {
 		return false;
 	}
 
