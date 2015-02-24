@@ -18,7 +18,6 @@ class StructureCube extends Structure {
 	 * The transformation should be default.
 	 * @return The result of the equation. Zero if the position satisfy the equation.
 	 */
-	//TODO: Make this numerical
 	override def intersects(position: Vector3d): Double = if (new Cuboid(new Vector3d(-0.5, -0.5, -0.5), new Vector3d(0.5, 0.5, 0.5)).intersects(position)) 0 else 1
 
 	override def getID: String = "Cube"
