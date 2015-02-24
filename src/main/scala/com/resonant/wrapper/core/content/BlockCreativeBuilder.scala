@@ -3,8 +3,8 @@ package com.resonant.wrapper.core.content
 import java.util.Optional
 
 import com.resonant.core.prefab.block.Rotatable
+import com.resonant.core.structure.Structure
 import com.resonant.wrapper.core.{Reference, ResonantEngine}
-import com.resonant.wrapper.lib.schematic.Structure
 import nova.core.block.Block
 import nova.core.entity.Entity
 import nova.core.game.Game

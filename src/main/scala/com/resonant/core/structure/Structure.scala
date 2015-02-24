@@ -1,4 +1,4 @@
-package com.resonant.wrapper.lib.schematic
+package com.resonant.core.structure
 
 import java.util.Optional
 
@@ -16,8 +16,8 @@ import scala.beans.BeanProperty
 abstract class Structure extends Identifiable {
 
 	//The error allowed in fuzzy comparisons
-	protected val error = 0.001
-
+	@BeanProperty
+	var error = 0.001
 	@BeanProperty
 	var translate = Vector3d.zero
 	@BeanProperty
@@ -62,6 +62,22 @@ abstract class Structure extends Identifiable {
 			.toMap
 	}
 
+	def getInteriorStructure: Set[Vector3i] = {
+		//TODO: Use inverse matrix
+		val rotationMatrix = new MatrixStack().rotate(rotation).getMatrix
+
+		/**
+		 * The equation has default transformations.
+		 * Therefore, we need to transform the test vector back into the default, to test against the equation
+		 */
+		return searchSpace.par
+			.filter(v => DoubleMath.fuzzyEquals(volumeEquation(v.transform(rotationMatrix).divide(scale)), 0, error))
+			.map(_ + translate)
+			.map(_.toInt)
+			.seq
+			.toSet
+	}
+
 	/**
 	 * Gets the block at this position (relatively) 
 	 * @param position
@@ -71,13 +87,13 @@ abstract class Structure extends Identifiable {
 
 	/**
 	 * Checks if this world position is within this structure. 
-	 * @param position The world structure
+	 * @param position The world position
 	 * @return True if there is an intersection
 	 */
-	def isIntersects(position: Vector3d): Boolean = {
+	def intersects(position: Vector3d): Boolean = {
 		//TODO: Use inverse matrix
 		val rotationMatrix = new MatrixStack().rotate(rotation).getMatrix
-		return DoubleMath.fuzzyEquals(intersects((position - translate).transform(rotationMatrix).divide(scale)), 0, error)
+		return DoubleMath.fuzzyEquals(volumeEquation((position - translate).transform(rotationMatrix).divide(scale)), 0, error)
 	}
 
 	/**
@@ -92,5 +108,5 @@ abstract class Structure extends Identifiable {
 	 * The transformation should be default.
 	 * @return The result of the equation. Zero if the position satisfy the equation.
 	 */
-	def intersects(position: Vector3d): Double
+	def volumeEquation(position: Vector3d): Double
 }

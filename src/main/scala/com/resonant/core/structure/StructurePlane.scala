@@ -1,4 +1,4 @@
-package com.resonant.wrapper.lib.schematic
+package com.resonant.core.structure
 
 import nova.core.block.Block
 import nova.core.util.transform.Vector3d
@@ -13,7 +13,7 @@ class StructurePlane(name: String, block: Block) extends Structure {
 	 * The transformation should be default.
 	 * @return The result of the equation. Zero if the position satisfy the equation.
 	 */
-	override def intersects(position: Vector3d): Double = surfaceEquation(position)
+	override def volumeEquation(position: Vector3d): Double = surfaceEquation(position)
 
 	/**
 	 * Gets the equation that define the 3D surface in standard form.

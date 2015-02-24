@@ -1,4 +1,4 @@
-package com.resonant.wrapper.lib.schematic
+package com.resonant.core.structure
 
 import java.util
 
@@ -52,7 +52,7 @@ class StructureCustom(val name: String) extends Structure with Storable {
 	 * The transformation should be default.
 	 * @return The result of the equation. Zero if the position satisfy the equation.
 	 */
-	override def intersects(position: Vector3d): Double = Double.PositiveInfinity
+	override def volumeEquation(position: Vector3d): Double = Double.PositiveInfinity
 
 	override def getID: String = name
 }

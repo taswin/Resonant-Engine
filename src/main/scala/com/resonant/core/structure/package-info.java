@@ -4,4 +4,4 @@
  * @author Calclavia
  */
 
-package com.resonant.wrapper.lib.schematic;
+package com.resonant.core.structure;
