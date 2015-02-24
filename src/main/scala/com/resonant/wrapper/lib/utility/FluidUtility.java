@@ -3,8 +3,8 @@ package com.resonant.wrapper.lib.utility;
 import nova.core.block.Block;
 import nova.core.fluid.Fluid;
 import nova.core.fluid.FluidBlock;
+import nova.core.fluid.SidedTankProvider;
 import nova.core.fluid.Tank;
-import nova.core.fluid.TankProvider;
 import nova.core.util.Direction;
 import nova.core.util.transform.Vector3i;
 import nova.core.world.World;
@@ -37,8 +37,8 @@ public class FluidUtility {
 	public static Optional<Tank> getTank(World world, Vector3i pos, Direction from) {
 		Optional<Block> block = world.getBlock(pos);
 
-		if (block.isPresent() && block.get() instanceof TankProvider) {
-			return ((TankProvider) block.get()).getTank(from);
+		if (block.isPresent() && block.get() instanceof SidedTankProvider) {
+			return ((SidedTankProvider) block.get()).getTank(from);
 		}
 
 		return Optional.empty();
@@ -74,8 +74,8 @@ public class FluidUtility {
 		for (Direction side : sides) {
 			Optional<Block> block = world.getBlock(pos);
 
-			if (block.isPresent() && block.get() instanceof TankProvider && (classMask == null || classMask.isAssignableFrom(block.get().getClass()))) {
-				Optional<Tank> tank = ((TankProvider) block.get()).getTank(side);
+			if (block.isPresent() && block.get() instanceof SidedTankProvider && (classMask == null || classMask.isAssignableFrom(block.get().getClass()))) {
+				Optional<Tank> tank = ((SidedTankProvider) block.get()).getTank(side);
 
 				if (tank.isPresent()) {
 					fullness += getAverageFilledPercentage(tank.get());
