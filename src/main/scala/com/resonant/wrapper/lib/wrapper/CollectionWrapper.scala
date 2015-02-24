@@ -13,5 +13,4 @@ object CollectionWrapper {
 
 		def addAll(value: Collection[_]): Boolean = list.addAll(value.asInstanceOf[Collection[T]])
 	}
-
 }

@@ -9,8 +9,6 @@ import nova.core.item.Item
 import nova.core.player.Player
 import nova.core.retention.{Storable, Stored}
 
-import scala.collection.convert.wrapAll._
-
 /**
  * A trait implementation of IEnergyItem
  *
@@ -25,8 +23,8 @@ trait ItemEnergy extends Item with EnergyItem with Storable {
 
 	override def getMaxCount: Int = 1
 
-	override def getTooltips(player: Optional[Player]): util.List[String] = {
-		super.getTooltips(player)
+	override def getTooltips(player: Optional[Player], tooltips: util.List[String]) {
+		super.getTooltips(player, tooltips)
 
 		val color = {
 			if (energy <= maxEnergy / 3) {
@@ -40,7 +38,7 @@ trait ItemEnergy extends Item with EnergyItem with Storable {
 			}
 		}
 
-		return List(color + new UnitDisplay(UnitDisplay.Unit.JOULES, energy) + "/" + new UnitDisplay(UnitDisplay.Unit.JOULES, maxEnergy).symbol)
+		tooltips.add(color + new UnitDisplay(UnitDisplay.Unit.JOULES, energy) + "/" + new UnitDisplay(UnitDisplay.Unit.JOULES, maxEnergy).symbol)
 	}
 
 	override def recharge(energy: Double, doReceive: Boolean): Double = {
