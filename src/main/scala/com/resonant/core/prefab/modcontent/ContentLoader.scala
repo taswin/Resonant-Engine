@@ -6,10 +6,11 @@ import nova.core.block.Block
 import nova.core.game.Game
 import nova.core.item.Item
 import nova.core.loader.Loadable
+import nova.core.render.model.ModelProvider
 import nova.core.render.texture.{BlockTexture, ItemTexture}
 
 /**
- * Automatic content registration for all Blocks, Items, Entities and Textures.
+ * Automatic mffs.content registration for all Blocks, Items, Entities and Textures.
  *
  * Extend this trait from the main mod loading class and all fields will be registered. Elegantly.
  *
@@ -40,6 +41,7 @@ trait ContentLoader extends Loadable {
 					}))
 					case itemTexture: ItemTexture => field.set(self, Game.instance.renderManager.registerTexture(itemTexture))
 					case blockTexture: BlockTexture => field.set(self, Game.instance.renderManager.registerTexture(blockTexture))
+					case modelProvider: ModelProvider => field.set(self, Game.instance.renderManager.registerModel(modelProvider))
 					case _ =>
 				}
 			}
