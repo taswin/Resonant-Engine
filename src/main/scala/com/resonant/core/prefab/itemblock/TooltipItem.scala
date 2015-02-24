@@ -14,20 +14,18 @@ import org.lwjgl.input.Keyboard
  */
 trait TooltipItem extends Item {
 
-	override def getTooltips(player: Optional[Player]): util.List[String] = {
+	override def getTooltips(player: Optional[Player], tooltips: util.List[String]) {
+		super.getTooltips(player, tooltips)
 		val tooltipID = getID + ".tooltip"
 		val tooltip = tooltipID.getLocal
-		val list = new util.ArrayList[String]()
 
 		if (tooltip != null && !tooltip.isEmpty && !tooltip.equals(tooltipID)) {
 			if (!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-				list.add("tooltip.noShift".getLocal.replace("#0", Color.blue.toString).replace("#1", Color.gray.toString))
+				tooltips.add("tooltip.noShift".getLocal.replace("#0", Color.blue.toString).replace("#1", Color.gray.toString))
 			}
 			else {
-				list.addAll(tooltip.listWrap(20))
+				tooltips.addAll(tooltip.listWrap(20))
 			}
 		}
-
-		return list
 	}
 }
