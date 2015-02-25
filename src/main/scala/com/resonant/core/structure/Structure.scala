@@ -8,6 +8,7 @@ import nova.core.util.Identifiable
 import nova.core.util.transform.{MatrixStack, Quaternion, Vector3d, Vector3i}
 
 import scala.beans.BeanProperty
+import scala.collection.parallel.ParSet
 
 /**
  * Defines a 3D structure.
@@ -26,12 +27,24 @@ abstract class Structure extends Identifiable {
 	var rotation = Quaternion.identity
 	@BeanProperty
 	var block = Optional.empty[Block]()
+	/**
+	 * A mapper that acts as a custom transformation function
+	 */
+	var preMapper: PartialFunction[Vector3d, Vector3d] = {
+		case pos: Vector3d => pos
+	}
+
+	var postMapper: PartialFunction[Vector3i, Vector3i] = {
+		case pos: Vector3i => pos
+	}
+
+	var postStructure = (positions: Set[Vector3i]) => positions
 
 	/**
 	 * Do a search within an appropriate region by generating a search set.
 	 */
-	def searchSpace: Set[Vector3d] = {
-		var search = Set.empty[Vector3d]
+	def searchSpace: ParSet[Vector3d] = {
+		var search = ParSet.empty[Vector3d]
 
 		for (x <- -scale.x / 2 to scale.x / 2 by 0.5; y <- -scale.y / 2 to scale.y / 2 by 0.5; z <- -scale.z / 2 to scale.z / 2 by 0.5) {
 			search += new Vector3d(x, y, z)
@@ -39,30 +52,19 @@ abstract class Structure extends Identifiable {
 		return search
 	}
 
-	def getStructure: Set[Vector3i] = {
-		//TODO: Use inverse matrix
-		val rotationMatrix = new MatrixStack().rotate(rotation).getMatrix
+	def getExteriorStructure: Set[Vector3i] = getStructure(surfaceEquation)
 
-		/**
-		 * The equation has default transformations.
-		 * Therefore, we need to transform the test vector back into the default, to test against the equation
-		 */
-		return searchSpace.par
-			.filter(v => DoubleMath.fuzzyEquals(surfaceEquation(v.transform(rotationMatrix).divide(scale)), 0, error))
-			.map(_ + translate)
-			.map(_.toInt)
-			.seq
-			.toSet
-	}
-
+	def getInteriorStructure: Set[Vector3i] = getStructure(volumeEquation)
+	
 	def getBlockStructure: Map[Vector3i, Block] = {
-		return getStructure
+		//TODO: Should be exterior?
+		return getExteriorStructure
 			.filter(getBlock(_).isPresent)
 			.map(v => (v, getBlock(v).get()))
 			.toMap
 	}
 
-	def getInteriorStructure: Set[Vector3i] = {
+	protected def getStructure(equation: (Vector3d) => Double): Set[Vector3i] = {
 		//TODO: Use inverse matrix
 		val rotationMatrix = new MatrixStack().rotate(rotation).getMatrix
 
@@ -70,12 +72,16 @@ abstract class Structure extends Identifiable {
 		 * The equation has default transformations.
 		 * Therefore, we need to transform the test vector back into the default, to test against the equation
 		 */
-		return searchSpace.par
-			.filter(v => DoubleMath.fuzzyEquals(volumeEquation(v.transform(rotationMatrix).divide(scale)), 0, error))
+		val structure = searchSpace
+			.collect(preMapper)
+			.filter(v => DoubleMath.fuzzyEquals(equation(v.transform(rotationMatrix).divide(scale)), 0, error))
 			.map(_ + translate)
 			.map(_.toInt)
+			.collect(postMapper)
 			.seq
 			.toSet
+
+		return postStructure(structure)
 	}
 
 	/**

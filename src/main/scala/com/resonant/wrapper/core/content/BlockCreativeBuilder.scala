@@ -26,7 +26,7 @@ class BlockCreativeBuilder extends Block with Rotatable with PacketHandler with 
 	 * Called when the block is right clicked by the player
 	 */
 	override def onRightClick(entity: Entity, side: Int, hit: Vector3d): Boolean = {
-		Game.instance.guiFactory.get.showGui(Reference.id, "creativeBuilder", entity, position)
+		Game.instance.guiFactory.showGui(Reference.id, "creativeBuilder", entity, position)
 		return true
 	}
 

@@ -33,7 +33,7 @@ object ResonantEngine extends ContentLoader {
 		/**
 		 * Register GUI
 		 */
-		Game.instance.guiFactory.get.registerGui(new GuiCreativeBuilder, Reference.id)
+		Game.instance.guiFactory.registerGui(new GuiCreativeBuilder, Reference.id)
 
 		/**
 		 * Register events 

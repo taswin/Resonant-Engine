@@ -17,7 +17,7 @@ class StructureCustom(val name: String) extends Structure with Storable {
 	 */
 	var structure = Map.empty[Vector3d, Block]
 
-	override def getStructure: Set[Vector3i] = {
+	override def getExteriorStructure: Set[Vector3i] = {
 		return getBlockStructure.keySet
 	}
 
