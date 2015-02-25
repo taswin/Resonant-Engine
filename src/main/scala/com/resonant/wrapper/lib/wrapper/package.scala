@@ -6,5 +6,5 @@ package com.resonant.wrapper.lib
  * @author Calclavia
  */
 package object wrapper {
-
+	val wrapCollections = CollectionWrapper
 }
