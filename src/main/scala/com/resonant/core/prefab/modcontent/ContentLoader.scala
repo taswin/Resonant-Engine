@@ -3,6 +3,7 @@ package com.resonant.core.prefab.modcontent
 import java.util.function.Supplier
 
 import nova.core.block.Block
+import nova.core.entity.{Entity, EntityFactory}
 import nova.core.game.Game
 import nova.core.item.Item
 import nova.core.loader.Loadable
@@ -39,6 +40,8 @@ trait ContentLoader extends Loadable {
 					case blockConstructor: BlockConstructorWrapper => field.set(self, Game.instance.blockManager.register(new Supplier[Block] {
 						override def get(): Block = blockConstructor.wrapped()
 					}))
+					case factory: EntityClassWrapper => field.set(self, Game.instance.entityManager.register(factory))
+					case factory: EntityConstructorWrapper => field.set(self, Game.instance.entityManager.register(factory))
 					case itemTexture: ItemTexture => field.set(self, Game.instance.renderManager.registerTexture(itemTexture))
 					case blockTexture: BlockTexture => field.set(self, Game.instance.renderManager.registerTexture(blockTexture))
 					case modelProvider: ModelProvider => field.set(self, Game.instance.renderManager.registerModel(modelProvider))
@@ -66,5 +69,13 @@ trait ContentLoader extends Loadable {
 	implicit protected class ItemConstructorWrapper(val wrapped: () => Item) extends Item {
 		override def getID: String = ""
 	}
+
+	implicit protected class EntityClassWrapper(val wrapped: Class[_ <: Entity]) extends EntityFactory(new Supplier[Entity] {
+		override def get(): Entity = wrapped.newInstance()
+	})
+
+	implicit protected class EntityConstructorWrapper(val wrapped: () => Entity) extends EntityFactory(new Supplier[Entity] {
+		override def get(): Entity = wrapped()
+	})
 
 }
