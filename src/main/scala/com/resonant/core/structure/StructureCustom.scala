@@ -3,8 +3,11 @@ package com.resonant.core.structure
 import java.util
 
 import nova.core.block.Block
+import nova.core.game.Game
 import nova.core.retention.{Data, Storable}
-import nova.core.util.transform.{MatrixStack, Quaternion, Vector3d, Vector3i}
+import nova.core.util.transform.{MatrixStack, Vector3d, Vector3i}
+
+import scala.collection.convert.wrapAll._
 
 /**
  * Custom structure based on stored state.
@@ -15,7 +18,7 @@ class StructureCustom(val name: String) extends Structure with Storable {
 	/**
 	 * A map of unit vector to block positions.
 	 */
-	var structure = Map.empty[Vector3d, Block]
+	var structure = Map.empty[Vector3i, String]
 
 	override def getExteriorStructure: Set[Vector3i] = {
 		return getBlockStructure.keySet
@@ -23,21 +26,17 @@ class StructureCustom(val name: String) extends Structure with Storable {
 
 	override def getBlockStructure: Map[Vector3i, Block] = {
 		val matrix = new MatrixStack().translate(translate).scale(scale).rotate(rotation).getMatrix
-		return structure.map(e => (e._1.transform(matrix).toInt, e._2))
+		return structure
+			.filter(kv => Game.instance.blockManager.getBlock(kv._2).isPresent)
+			.map(e => (e._1.transform(matrix), Game.instance.blockManager.getBlock(e._2).get()))
 	}
 
 	override def load(data: Data) {
-		translate = data.get("translate").asInstanceOf[Vector3d]
-		scale = data.get("scale").asInstanceOf[Vector3d]
-		rotation = data.get("rotation").asInstanceOf[Quaternion]
-		structure = data.get("structure").asInstanceOf[Map[Vector3d, Block]]
+		structure = data.get("structure").asInstanceOf[util.Map[Vector3i, String]].toMap
 	}
 
 	override def save(data: Data) {
-		data.put("translate", translate)
-		data.put("scale", scale)
-		data.put("rotation", rotation)
-		data.put("structure", structure.asInstanceOf[util.Map[String, AnyRef]])
+		data.put("structure", structure.asInstanceOf[util.Map[Vector3i, String]])
 	}
 
 	/**
