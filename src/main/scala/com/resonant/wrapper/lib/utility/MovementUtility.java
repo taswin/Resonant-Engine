@@ -22,6 +22,51 @@ public class MovementUtility {
 	public static final String[] CHUNK_RELIGHT_BLOCK = { "relightBlock", "func_76615_h" };
 	public static final String[] CHUNK_PROPOGATE_SKY_LIGHT_OCCLUSION = { "propagateSkylightOcclusion", "func_76595_e" };
 
+	//TODO: CB Microblock support
+	/**
+	 *
+
+	 val isMultipart: Boolean = this.tileData.getString("id") == "savedMultipart"
+	 var newTile: TileEntity = null
+	 if (isMultipart)
+	 {
+	 try
+	 {
+	 val multipart: Class[_] = Class.forName("codechicken.multipart.MultipartHelper")
+	 val m: Method = multipart.getMethod("createTileFromNBT", classOf[World], classOf[NBTTagCompound])
+	 newTile = m.invoke(null, startPosition.world, this.tileData).asInstanceOf[TileEntity]
+	 }
+	 catch
+	 {
+	 case e: Exception =>
+	 {
+	 e.printStackTrace
+	 }
+	 }
+	 }
+	 else
+	 {
+	 newTile = TileEntity.createAndLoadEntity(this.tileData)
+	 }*/
+	/*
+	if (newTile != null && isMultipart)
+	{
+		try
+		{
+			val multipart: Class[_] = Class.forName("codechicken.multipart.MultipartHelper")
+			multipart.getMethod("sendDescPacket", classOf[World], classOf[TileEntity]).invoke(null, startPosition.world, newTile)
+			val tileMultipart: Class[_] = Class.forName("codechicken.multipart.TileMultipart")
+			tileMultipart.getMethod("onMoved").invoke(newTile)
+		}
+		catch
+		{
+			case e: Exception =>
+			{
+				e.printStackTrace
+			}
+		}
+	}*/
+	
 	/**
 	 * Sets a block in a sneaky way to bypass some restraints.
 	 */
