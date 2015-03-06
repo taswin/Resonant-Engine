@@ -12,9 +12,9 @@ public class GuiCreativeBuilder extends Gui {
 	public GuiCreativeBuilder() {
 		super("creativeBuilder");
 		//TODO: Add text field
-		addElement(new Button("build", "Build")
+		add(new Button("build", "Build")
 				.setMaximumSize(Integer.MAX_VALUE, 120)
-				.registerEventListener((event) -> System.out.println("Build"), ComponentEvent.ActionEvent.class),
+				.onEvent((event) -> System.out.println("Build"), ComponentEvent.ActionEvent.class),
 			Anchor.SOUTH);
 
 		//TODO: Add build button
