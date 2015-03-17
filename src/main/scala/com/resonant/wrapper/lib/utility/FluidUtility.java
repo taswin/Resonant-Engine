@@ -9,12 +9,13 @@ import nova.core.util.Direction;
 import nova.core.util.transform.Vector3i;
 import nova.core.world.World;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Fluid interaction helper methods.
- *
  * @author Calclavia
  */
 public class FluidUtility {
@@ -34,14 +35,14 @@ public class FluidUtility {
 		return Optional.empty();
 	}
 
-	public static Optional<Tank> getTank(World world, Vector3i pos, Direction from) {
+	public static Set<Tank> getTank(World world, Vector3i pos, Direction from) {
 		Optional<Block> block = world.getBlock(pos);
 
 		if (block.isPresent() && block.get() instanceof SidedTankProvider) {
 			return ((SidedTankProvider) block.get()).getTank(from);
 		}
 
-		return Optional.empty();
+		return Collections.emptySet();
 	}
 
 	/**
@@ -75,10 +76,10 @@ public class FluidUtility {
 			Optional<Block> block = world.getBlock(pos);
 
 			if (block.isPresent() && block.get() instanceof SidedTankProvider && (classMask == null || classMask.isAssignableFrom(block.get().getClass()))) {
-				Optional<Tank> tank = ((SidedTankProvider) block.get()).getTank(side);
+				Set<Tank> tanks = ((SidedTankProvider) block.get()).getTank(side);
 
-				if (tank.isPresent()) {
-					fullness += getAverageFilledPercentage(tank.get());
+				for (Tank tank : tanks) {
+					fullness += getAverageFilledPercentage(tank);
 					count++;
 				}
 			}
@@ -89,7 +90,6 @@ public class FluidUtility {
 
 	/**
 	 * Drains a block of fluid in the world
-	 *
 	 * @param doDrain - do the action
 	 * @return Fluid drained from the block
 	 */
@@ -105,7 +105,6 @@ public class FluidUtility {
 
 	/**
 	 * Fills a position in the world with a specific fluid.
-	 *
 	 * @return The amount of fluid used.
 	 */
 	public static int fillBlock(World world, Vector3i pos, Fluid fluid, boolean doFill) {
