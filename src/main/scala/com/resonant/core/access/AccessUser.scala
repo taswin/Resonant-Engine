@@ -1,22 +1,12 @@
 package com.resonant.core.access
 
-import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.nbt.NBTTagCompound
+import nova.core.player.Player
+import nova.core.retention.Stored
 
-class AccessUser(var username: String) extends AbstractAccess {
-	def this(nbt: NBTTagCompound) {
-		this(nbt.getString("username"))
-		fromNBT(nbt)
-	}
+class AccessUser(@Stored var username: String) extends AbstractAccess {
 
-	def this(player: EntityPlayer) {
-		this(player.getGameProfile.getName)
-	}
-
-	override def toNBT: NBTTagCompound = {
-		val nbt = super.toNBT
-		nbt.setString("username", username)
-		return nbt
+	def this(player: Player) {
+		this(player.getDisplayName)
 	}
 
 	override def hasPermission(username: String, permission: Permission): Boolean = hasPermission(permission)

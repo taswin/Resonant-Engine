@@ -1,25 +1,27 @@
 package com.resonant.core.access
 
-import net.minecraft.nbt.{NBTTagCompound, NBTTagList, NBTTagString}
+import java.util.{Set => JSet}
+
+import nova.core.retention.{Data, Storable}
+
+import scala.collection.convert.wrapAll._
 
 /**
  * The abstract access class.
  * @author Calclavia
  */
-abstract class AbstractAccess {
+abstract class AbstractAccess extends Storable {
+
 	var permissions = Set.empty[Permission]
 
-	def fromNBT(nbt: NBTTagCompound) {
-		val permList = nbt.getTagList("permissions", 8)
-		permissions = ((0 until permList.tagCount()) map (i => Permissions.find(permList.getStringTagAt(i)))).toSet
+	override def save(data: Data) {
+		super.save(data)
+		data.put("permissions", permissions.map(_.toString).asInstanceOf[JSet[String]])
 	}
 
-	def toNBT: NBTTagCompound = {
-		val nbt = new NBTTagCompound
-		val permList = new NBTTagList()
-		permissions foreach (x => permList.appendTag(new NBTTagString(x.toString)))
-		nbt.setTag("permissions", permList)
-		return nbt
+	override def load(data: Data) {
+		super.load(data)
+		permissions = data.get("permissions").asInstanceOf[JSet[String]].map(i => Permissions.find(i)).toSet
 	}
 
 	def hasPermission(username: String, permission: Permission): Boolean
