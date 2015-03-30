@@ -1,24 +1,26 @@
 package com.resonant.core.access
 
-import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
+import java.util.{Set => JSet}
 
+import nova.core.retention.Data
+
+import scala.collection.JavaConversions
+import scala.collection.convert.wrapAll._
+
+/**
+ * An access group is a set of users.
+ */
 class AccessGroup extends AbstractAccess {
 	var users = Set.empty[AccessUser]
 
-	def this(nbt: NBTTagCompound) {
-		this()
-		val nbtList = nbt.getTagList("users", 10)
-		users = ((0 until nbtList.tagCount()) map (i => new AccessUser(nbtList.getCompoundTagAt(i)))).toSet
-		fromNBT(nbt)
+	override def save(data: Data) {
+		super.save(data)
+		users = data.get[JSet[AccessUser]]("users").toSet
 	}
 
-	override def toNBT: NBTTagCompound = {
-		val nbt = super.toNBT
-
-		val userList = new NBTTagList()
-		users.foreach(x => userList.appendTag(x.toNBT))
-		nbt.setTag("users", userList)
-		return nbt
+	override def load(data: Data) {
+		super.load(data)
+		data.put("users", JavaConversions.setAsJavaSet(users))
 	}
 
 	override def hasPermission(username: String, permission: Permission): Boolean = {

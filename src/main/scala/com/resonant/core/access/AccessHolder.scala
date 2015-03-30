@@ -1,30 +1,31 @@
 package com.resonant.core.access
 
-import net.minecraft.nbt.{NBTTagCompound, NBTTagList}
+import java.util.{Set => JSet}
+
+import nova.core.retention.{Data, Storable}
+
+import scala.collection.JavaConversions
+import scala.collection.convert.wrapAll._
 
 /**
  * An access holder that holds a set of groups, with each group containing users.
  * @author Calclavia
  */
 
-class AccessHolder {
+class AccessHolder extends Storable {
 	var groups = Set.empty[AccessGroup]
 
-	def this(nbt: NBTTagCompound) {
-		this()
-		val nbtList = nbt.getTagList("groups", 10)
-		groups = ((0 until nbtList.tagCount()) map (i => new AccessGroup(nbtList.getCompoundTagAt(i)))).toSet
+	override def save(data: Data) {
+		super.save(data)
+		groups = data.get[JSet[AccessGroup]]("groups").toSet
 	}
 
-	def toNBT: NBTTagCompound = {
-		val nbt = new NBTTagCompound()
-		val nbtList = new NBTTagList()
-		groups.foreach(group => nbtList.appendTag(group.toNBT))
-		nbt.setTag("groups", nbtList)
-		return nbt
+	override def load(data: Data) {
+		super.load(data)
+		data.put("groups", JavaConversions.setAsJavaSet(groups))
 	}
 
-	def hasPermission(username: String, permission: Permission): Boolean = return groups.exists(_.hasPermission(username, permission))
+	def hasPermission(username: String, permission: Permission): Boolean = groups.exists(_.hasPermission(username, permission))
 }
 
 
