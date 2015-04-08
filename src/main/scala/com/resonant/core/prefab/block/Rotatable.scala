@@ -8,6 +8,8 @@ import nova.core.retention.{Storable, Stored}
 import nova.core.util.Direction
 import nova.core.util.transform.Vector3d
 
+import scala.beans.BeanProperty
+
 trait Rotatable extends Block with Stateful with Storable {
 
 	var rotationMask = 0x3C
@@ -15,6 +17,7 @@ trait Rotatable extends Block with Stateful with Storable {
 
 	@Sync
 	@Stored
+	@BeanProperty
 	var direction = Direction.UNKNOWN
 
 	def determineRotation(entity: Entity): Direction = {
@@ -38,6 +41,8 @@ trait Rotatable extends Block with Stateful with Storable {
 
 		return Direction.fromOrdinal(returnSide)
 	}
+
+	def canRotate(ord: Int): Boolean = (rotationMask & (1 << ord)) != 0
 
 	/**
 	 * Rotatable Block
@@ -198,6 +203,4 @@ trait Rotatable extends Block with Stateful with Storable {
 		}
 		return -1
 	}
-
-	def canRotate(ord: Int): Boolean = (rotationMask & (1 << ord)) != 0
 }
