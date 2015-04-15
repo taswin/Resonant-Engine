@@ -5,6 +5,7 @@ import java.util.Optional
 import com.resonant.lib.util.RotationUtility
 import com.resonant.wrapper.lib.wrapper.BitmaskWrapper._
 import nova.core.block.Block
+import nova.core.block.components.StaticRenderer
 import nova.core.render.model.{BlockModelUtil, Model, StaticCubeTextureCoordinates}
 import nova.core.render.texture.BlockTexture
 import nova.core.util.Direction
@@ -12,11 +13,11 @@ import nova.core.util.Direction
 /**
  * A trait for blocks with connected textures.
  */
-trait ConnectedTexture extends Block {
+trait ConnectedTexture extends Block with StaticRenderer {
 
 	override def renderStatic(model: Model) {
 		//Render the block face
-		super.renderStatic(model)
+		BlockModelUtil.drawBlock(model, this)
 		//Render the block edge
 		val bounds = getBoundingBox
 		for (dir <- Direction.DIRECTIONS; r <- 0 until 4) {
