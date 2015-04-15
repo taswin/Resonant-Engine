@@ -66,7 +66,7 @@ abstract class Structure extends Identifiable {
 	}
 
 	protected def getStructure(equation: (Vector3d) => Double): Set[Vector3i] = {
-		//TODO: Use inverse matrix
+		//TODO: Use negate matrix
 		val rotationMatrix = new MatrixStack().rotate(rotation).getMatrix
 
 		/**
@@ -98,7 +98,7 @@ abstract class Structure extends Identifiable {
 	 * @return True if there is an intersection
 	 */
 	def intersects(position: Vector3d): Boolean = {
-		//TODO: Use inverse matrix
+		//TODO: Use negate matrix
 		val rotationMatrix = new MatrixStack().rotate(rotation).getMatrix
 		return DoubleMath.fuzzyEquals(volumeEquation((position - translate).transform(rotationMatrix).divide(scale)), 0, error)
 	}
