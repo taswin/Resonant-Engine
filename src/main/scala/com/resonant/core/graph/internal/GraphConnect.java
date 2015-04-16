@@ -29,6 +29,7 @@ public abstract class GraphConnect<N extends Node> implements Graph<N> {
 
 	public int id(Object node) {
 		assert nodes.contains(node);
+		//TODO: Indexof is O(n). A map may be O(1) instead.
 		return nodes.indexOf(node);
 	}
 
@@ -37,8 +38,12 @@ public abstract class GraphConnect<N extends Node> implements Graph<N> {
 		return nodes;
 	}
 
-	public boolean isConnected(N a, N b) {
-		return adjMat[id(a)][id(b)];
+	public boolean isConnected(N from, N to) {
+		return adjMat[id(from)][id(to)];
+	}
+
+	public boolean isUndirectlyConnected(N from, N to) {
+		return isConnected(from, to) || isConnected(to, from);
 	}
 
 	public void connect(N a, N b) {

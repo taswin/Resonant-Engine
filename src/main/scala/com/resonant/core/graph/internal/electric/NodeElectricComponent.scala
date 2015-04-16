@@ -2,9 +2,7 @@ package com.resonant.core.graph.internal.electric
 
 import java.util.{Set => JSet}
 
-import com.resonant.core.graph.api.{NodeElectric, NodeProvider}
-import com.resonant.core.graph.internal.NodeBlockConnect
-import com.resonant.wrapper.core.api.tile.DebugInfo
+import com.resonant.core.graph.api.NodeProvider
 import com.resonant.wrapper.lib.wrapper.BitmaskWrapper._
 import nova.core.util.Direction
 
@@ -20,7 +18,7 @@ import scala.collection.convert.wrapAll._
  *
  * @author Calclavia
  */
-class NodeElectricComponent(parent: NodeProvider) extends NodeBlockConnect[NodeElectric](parent) with DebugInfo with NodeElectric {
+class NodeElectricComponent(parent: NodeProvider) extends NodeElectric(parent) {
 	/**
 	 * When dynamic terminal is set to true, then the grid will attempt to swap negative and positive terminals as needed.
 	 */
@@ -29,9 +27,12 @@ class NodeElectricComponent(parent: NodeProvider) extends NodeBlockConnect[NodeE
 	 * The current and voltage values are set are determined by the DC Grid
 	 */
 	var voltage = 0d
+
 	var current = 0d
+
 	@BeanProperty
 	var resistance = 1d
+
 	/**
 	 * Variables to keep voltage source states
 	 */
@@ -40,11 +41,11 @@ class NodeElectricComponent(parent: NodeProvider) extends NodeBlockConnect[NodeE
 	/**
 	 * Junction A is always preferably negative
 	 */
-	protected[electric] var junctionA: Junction = null
+	protected[electric] var junctionNegative: Junction = null
 	/**
 	 * Junction B is always preferably positive
 	 */
-	protected[electric] var junctionB: Junction = null
+	protected[electric] var junctionPositive: Junction = null
 	/**
 	 * The positive terminals are the directions in which charge can flow out of this electric component.
 	 * Positive and negative terminals must be mutually exclusive.
@@ -98,7 +99,7 @@ class NodeElectricComponent(parent: NodeProvider) extends NodeBlockConnect[NodeE
 	override def power: Double = {
 		if (bufferVoltage != 0) {
 			//This is a voltage source. Calculate current based on junction current
-			return Math.abs(junctionB.currentOut * voltage)
+			return Math.abs(junctionPositive.currentOut * voltage)
 		}
 		return current * voltage
 	}
@@ -119,44 +120,5 @@ class NodeElectricComponent(parent: NodeProvider) extends NodeBlockConnect[NodeE
 		bufferPower = power
 	}
 
-	override def getDebugInfo = List(toString)
-
-	override def toString = "Electric [" + connections.size() + " " + BigDecimal(current).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "A " + BigDecimal(voltage).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "V]"
-
-	protected[electric] def calculate() {
-		voltage = 0
-		current = 0
-
-		if (junctionA != null && junctionB != null && junctionA.nodes.size >= 2 && junctionB.nodes.size >= 2) {
-			// Calculating potential difference across this link.
-			voltage = junctionA.voltage - junctionB.voltage
-
-			//If voltage is very small, approximate it to zero
-			if (Math.abs(voltage) < 0.0001d) {
-				voltage = 0
-			}
-
-			// Calculating current based on voltage and resistance.
-			current = voltage / resistance
-
-			/**
-			 * Adjust power and balance iet until the voltage creates the desired power.
-			 */
-			if (bufferPower > 0) {
-				if (current != 0) {
-					val estimatedResistance = voltage / current
-					bufferVoltage = Math.sqrt(estimatedResistance * bufferPower)
-				}
-				else {
-					//Generate 1 test volt to determine the resistance of the circuit
-					bufferVoltage = 1
-				}
-			}
-		}
-	}
-
-	protected[electric] def postUpdate() {
-		bufferVoltage = 0
-		bufferPower = 0
-	}
+	override def toString = "ElectricComponent [" + connections.size() + " " + BigDecimal(current).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "A " + BigDecimal(voltage).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "V]"
 }
