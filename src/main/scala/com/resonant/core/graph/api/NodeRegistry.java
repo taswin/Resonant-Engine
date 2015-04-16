@@ -5,9 +5,9 @@ import com.resonant.core.graph.internal.Node;
 import java.util.HashMap;
 
 /**
- * A dynamic node loader for registering different nodes for different node interfaces.
+ * A dynamic node loader for registering different getNodes for different node interfaces.
  * <p/>
- * This is the essential class for loading different nodes.
+ * This is the essential class for loading different getNodes.
  *
  * @author Calclavia
  */

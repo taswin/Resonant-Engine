@@ -8,7 +8,7 @@ import java.util.Set;
 public interface Node<N extends Node<?>> {
 
 	/**
-	 * Gets a list of nodes connected to this node.
+	 * Gets a list of getNodes connected to this node.
 	 */
 	public Set<N> connections();
 }

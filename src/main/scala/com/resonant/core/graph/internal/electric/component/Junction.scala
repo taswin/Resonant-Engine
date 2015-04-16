@@ -1,6 +1,6 @@
 package com.resonant.core.graph.internal.electric.component
 
-import com.resonant.core.graph.internal.electric.NodeElectricComponent
+import com.resonant.core.graph.internal.electric.{NodeElectricComponent, NodeElectricJunction}
 
 /**
  * @author Calclavia
@@ -19,7 +19,7 @@ class Junction {
 	/**
 	 * The wires that collapsed into this junction
 	 */
-	var wires = Set.empty[NodeElectricComponent]
+	var wires = Set.empty[NodeElectricJunction]
 
 	/**
 	 * The total resistance of this junction due to wires

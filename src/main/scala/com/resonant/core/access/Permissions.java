@@ -60,12 +60,12 @@ public class Permissions {
 	public static final Permission GROUP_ADD_ENTITY = groupEntity.addChild("add");
 	public static final Permission GROUP_REMOVE_ENTITY = groupEntity.addChild("remove");
 
-	// Default group id nodes for the entire profile
+	// Default group id getNodes for the entire profile
 	public static final Permission PROFILE_OWNER = profile.addChild("owner");
 	public static final Permission PROFILE_ADMIN = profile.addChild("admin");
 	public static final Permission PROFILE_USER = profile.addChild("user");
 
-	// Default user id nodes for a single group
+	// Default user id getNodes for a single group
 	public static final Permission GROUP_OWNER = group.addChild("owner");
 	public static final Permission GROUP_ADMIN = group.addChild("admin");
 	public static final Permission GROUP_USER = group.addChild("user");

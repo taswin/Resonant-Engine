@@ -23,9 +23,9 @@ public interface NodeProvider {
 	}
 
 	/**
-	 * Gets a list of nodes that this NodeProvider provides.
+	 * Gets a list of getNodes that this NodeProvider provides.
 	 * @param from - The direction being accessed
-	 * @return - A set of nodes.
+	 * @return - A set of getNodes.
 	 */
 	Set<Node> getNodes(Direction from);
 }

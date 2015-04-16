@@ -6,7 +6,6 @@ import com.resonant.core.graph.api.NodeProvider
 import com.resonant.wrapper.lib.wrapper.BitmaskWrapper._
 import nova.core.util.Direction
 
-import scala.beans.BeanProperty
 import scala.collection.convert.wrapAll._
 
 /**
@@ -29,9 +28,6 @@ class NodeElectricComponent(parent: NodeProvider) extends NodeElectric(parent) {
 	var voltage = 0d
 
 	var current = 0d
-
-	@BeanProperty
-	var resistance = 1d
 
 	/**
 	 * Variables to keep voltage source states

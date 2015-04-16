@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
- * A graph is a collection of nodes.
+ * A graph is a collection of getNodes.
  *
  * @author Calclavia
  */
@@ -19,13 +19,13 @@ public interface Graph<N> extends Iterable<N> {
 	void remove(N node);
 
 	default int size() {
-		return nodes().size();
+		return getNodes().size();
 	}
 
-	Collection<N> nodes();
+	Collection<N> getNodes();
 
 	default Iterator<N> iterator() {
-		return nodes().iterator();
+		return getNodes().iterator();
 	}
 
 	default Spliterator<N> spliterator() {

@@ -13,12 +13,15 @@ import scala.collection.JavaConversions._
  *
  * @author Calclavia
  */
-class GraphElectric extends GraphConnect[NodeElectricComponent] with Updater {
+class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 
 	// There should always at least (node.size - 1) amount of junctions.
 	var junctions = Seq.empty[Junction]
 	var voltageSources = Seq.empty[NodeElectricComponent]
 	var resistors = Seq.empty[NodeElectricComponent]
+
+	//A matrix that represents connections between junctions and components.
+	var junctionComponentMat = null;
 
 	/**
 	 * Reconstruct must build the links and intersections of the grid
@@ -28,27 +31,27 @@ class GraphElectric extends GraphConnect[NodeElectricComponent] with Updater {
 		 * Builds the adjacency matrix.
 		 * The directed graph indicate current flow from positive terminal to negative terminal.
 		 */
-		adjMat = Array.ofDim[Boolean](nodes.size, nodes.size)
+		adjMat = Array.ofDim[Boolean](getNodes.size, getNodes.size)
 
-		for (node <- nodes) {
+		for (node <- getNodes) {
 			for (con <- node.positives) {
-				if (nodes.contains(con)) {
+				if (getNodes.contains(con)) {
 					connect(node, con.asInstanceOf[NodeElectricComponent])
 				}
 			}
 		}
 
 		solveJunctions()
-		solveGraph()
+		solveComponents()
 		Game.instance.syncTicker.add(this)
 	}
 
 	/**
-	 * Collapse all wires into junctions (conventionally called nodes).
+	 * Collapse all wires into junctions (conventionally called getNodes).
 	 */
-	private def solveJunctions() {
+	def solveJunctions() {
 		/**
-		 * Finds all the wire nodes connected to this one.
+		 * Finds all the wire getNodes connected to this one.
 		 */
 		def recurseFind(wire: NodeElectricJunction, result: Set[NodeElectricJunction] = Set.empty): Set[NodeElectricJunction] = {
 			val wireConnections = wire.connections.filter(_.isInstanceOf[NodeElectricJunction]).map(_.asInstanceOf[NodeElectricJunction])
@@ -62,14 +65,16 @@ class GraphElectric extends GraphConnect[NodeElectricComponent] with Updater {
 			return newResult
 		}
 
-		var recursed = Set.empty[NodeElectricComponent]
-		val relevantNodes = nodes.filter(_.isInstanceOf[NodeElectricJunction]).map(_.asInstanceOf[NodeElectricJunction])
+		var recursed = Set.empty[NodeElectricJunction]
+		val relevantNodes = getNodes.collect { case node: NodeElectricJunction => node }
 
 		for (node <- relevantNodes) {
 			if (!recursed.contains(node)) {
 				//Create a junction
 				val junction = new Junction
-				val foundWires = recurseFind(node).toSet[NodeElectricComponent]
+
+				//Find all the wires for this junction
+				val foundWires = recurseFind(node)
 				recursed ++= foundWires
 				junction.wires = foundWires
 				junction.components = foundWires
@@ -78,12 +83,8 @@ class GraphElectric extends GraphConnect[NodeElectricComponent] with Updater {
 					.filterNot(_.isInstanceOf[NodeElectricJunction])
 					.map(_.asInstanceOf[NodeElectricComponent])
 
-				foundWires.foreach(
-					w => {
-						w.junctionNegative = junction
-						w.junctionPositive = junction
-					}
-				)
+				//Set the junction reference
+				foundWires.foreach(_.junction = junction)
 				junctions :+= junction
 
 				//TODO: Create virtual junctions with resistors to simulate wire resistance
@@ -93,15 +94,14 @@ class GraphElectric extends GraphConnect[NodeElectricComponent] with Updater {
 
 	/**
 	 * Populates the node and junctions recursively
-	 * TODO: Unit test the grid population algorithm
 	 */
-	private def solveGraph() {
+	def solveComponents() {
 		var recursed = Set.empty[NodeElectricComponent]
 
-		def solveGraph(node: NodeElectricComponent, prev: NodeElectricComponent = null) {
+		def solveComponent(node: NodeElectricComponent, prev: NodeElectricComponent = null) {
 			//Check if we already traversed through this node and if it is valid. Proceed if we haven't already done so.
 			if (!recursed.contains(node)) {
-				//Add this node into the list of nodes.
+				//Add this node into the set of getNodes.
 				recursed += node
 
 				//If the node has at least a positive and negative connection, we can build two junctions across it.
@@ -155,14 +155,14 @@ class GraphElectric extends GraphConnect[NodeElectricComponent] with Updater {
 					junctions :+= node.junctionNegative
 					junctions :+= node.junctionPositive
 
-					//Recursively populate for all nodes connected to junction B, because junction A simply goes backwards in the graph. There is no point iterating it.
-					node.junctionPositive.nodes.foreach(next => solveGraph(next, node))
+					//Recursively populate for all getNodes connected to junction B, because junction A simply goes backwards in the graph. There is no point iterating it.
+					node.junctionPositive.nodes.foreach(next => solveComponent(next, node))
 				}
 			}
 		}
 
-		nodes.filterNot(_.isInstanceOf[NodeElectricJunction]).headOption match {
-			case Some(x) => solveGraph(x)
+		getNodes.filterNot(_.isInstanceOf[NodeElectricJunction]).headOption match {
+			case Some(x) => solveComponent(x)
 			case _ =>
 		}
 	}
@@ -232,7 +232,7 @@ class GraphElectric extends GraphConnect[NodeElectricComponent] with Updater {
 		//Solve the circuit
 		val x = mnaMat.solve(b)
 
-		//Set the voltage at the nodes
+		//Set the voltage at the getNodes
 		for (i <- 0 until n) {
 			junctions(i).voltage = x(i, 0)
 		}
