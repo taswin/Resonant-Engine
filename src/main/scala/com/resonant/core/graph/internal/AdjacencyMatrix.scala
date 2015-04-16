@@ -1,5 +1,7 @@
 package com.resonant.core.graph.internal
 
+import nova.core.util.transform.Matrix
+
 /**
  * @author Calclavia
  */
@@ -28,4 +30,14 @@ class AdjacencyMatrix(val rows: Int, val cols: Int) {
 	 * @return Gets a set of getNodes that the given node is connected from.
 	 */
 	def getDirectedFrom(node: Int): Array[Int] = (0 until matrix.size).filter(matrix(_)(node)).toArray
+
+	/**
+	 * @return The adjacency matrix as a binary matrix.
+	 */
+	def toMatrix: Matrix = {
+		val mat = new Matrix(rows, cols)
+		for (i <- 0 until rows; j <- 0 until cols)
+			mat(i, j) = if (matrix(i)(j)) 1 else 0
+		return mat
+	}
 }

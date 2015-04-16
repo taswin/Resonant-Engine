@@ -1,7 +1,7 @@
 package com.resonant.core.graph.internal.electric
 
-import com.resonant.core.graph.internal.GraphConnect
 import com.resonant.core.graph.internal.electric.component.{Junction, VirtualJunction}
+import com.resonant.core.graph.internal.{AdjacencyMatrix, GraphConnect}
 import com.resonant.core.prefab.block.Updater
 import nova.core.game.Game
 import nova.core.util.transform.Matrix
@@ -13,15 +13,20 @@ import scala.collection.JavaConversions._
  *
  * @author Calclavia
  */
+//TODO: Move to EDX?
 class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 
 	// There should always at least (node.size - 1) amount of junctions.
 	var junctions = Seq.empty[Junction]
+	var components = Seq.empty[NodeElectricComponent]
+
+	//A matrix that represents connections between junctions and components. If the columns of the matrix forms a basis, then the graph is a complete cycle.
+	var componentJunctionMat: AdjacencyMatrix = null
+
 	var voltageSources = Seq.empty[NodeElectricComponent]
 	var resistors = Seq.empty[NodeElectricComponent]
 
-	//A matrix that represents connections between junctions and components.
-	var junctionComponentMat = null;
+	private var mnaMat: Matrix = null
 
 	/**
 	 * Reconstruct must build the links and intersections of the grid
@@ -31,15 +36,16 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 		 * Builds the adjacency matrix.
 		 * The directed graph indicate current flow from positive terminal to negative terminal.
 		 */
-		adjMat = Array.ofDim[Boolean](getNodes.size, getNodes.size)
+		adjMat = new AdjacencyMatrix(nodes.size, nodes.size)
 
-		for (node <- getNodes) {
+		for (node <- nodes) {
 			for (con <- node.positives) {
-				if (getNodes.contains(con)) {
-					connect(node, con.asInstanceOf[NodeElectricComponent])
+				if (nodes.contains(con)) {
+					adjMat(id(node), id(con.asInstanceOf[NodeElectric])) = true
 				}
 			}
 		}
+
 
 		solveJunctions()
 		solveComponents()
@@ -68,6 +74,7 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 		var recursed = Set.empty[NodeElectricJunction]
 		val relevantNodes = getNodes.collect { case node: NodeElectricJunction => node }
 
+
 		for (node <- relevantNodes) {
 			if (!recursed.contains(node)) {
 				//Create a junction
@@ -77,18 +84,34 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 				val foundWires = recurseFind(node)
 				recursed ++= foundWires
 				junction.wires = foundWires
-				junction.components = foundWires
-					.map(_.connections)
-					.flatten
-					.filterNot(_.isInstanceOf[NodeElectricJunction])
-					.map(_.asInstanceOf[NodeElectricComponent])
 
-				//Set the junction reference
+				//Add to junctions
 				foundWires.foreach(_.junction = junction)
 				junctions :+= junction
 
 				//TODO: Create virtual junctions with resistors to simulate wire resistance
 			}
+		}
+
+		//Set adjMat
+		componentJunctionMat = new AdjacencyMatrix(nodes.size - relevantNodes.size, junctions.size)
+
+		junctions.zipWithIndex.foreach {
+			case (j, index) =>
+				//Find all the components connected to this node.
+				val connectedComponents = j.wires
+					.flatMap(_.connections)
+					.collect { case n: NodeElectricComponent => n }
+
+				//Add to components
+				connectedComponents
+					.filterNot(components.contains)
+					.foreach(components :+= _)
+
+				//Set adjMat connection
+				connectedComponents
+					.map(components.indexOf)
+					.foreach(componentJunctionMat(_)(index) = true)
 		}
 	}
 

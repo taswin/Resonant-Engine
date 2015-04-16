@@ -1,6 +1,6 @@
 package com.resonant.core.graph.internal.electric.component
 
-import com.resonant.core.graph.internal.electric.{NodeElectricComponent, NodeElectricJunction}
+import com.resonant.core.graph.internal.electric.NodeElectricJunction
 
 /**
  * @author Calclavia
@@ -10,11 +10,6 @@ class Junction {
 	 * The electric potential at this junction.
 	 */
 	var voltage = 0d
-
-	/**
-	 * The components that this junction is connected to.
-	 */
-	var components = Set.empty[NodeElectricComponent]
 
 	/**
 	 * The wires that collapsed into this junction
