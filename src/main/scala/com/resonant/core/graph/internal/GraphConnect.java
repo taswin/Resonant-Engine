@@ -1,68 +1,63 @@
 package com.resonant.core.graph.internal;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
-import java.util.WeakHashMap;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * A graph that contains nodes, each with its ability to connect to other nodes.
- *
  * @author Calclavia
  */
-public abstract class GraphConnect<N> implements Graph<N> {
+public abstract class GraphConnect<N extends Node> implements Graph<N> {
 
-	//A map of nodes and their connections
-	protected Map<N, Set<N>> nodeMap = new WeakHashMap<>();
-	//True if the grid needs to be rebuilt.
-	protected boolean dirty = false;
-	//A queue of nodes to be added to the grid upon next build()
-	private Set<N> addQueue = Collections.newSetFromMap(new WeakHashMap<>());
+	//A list of nodes in the graph
+	protected final List<N> nodes = new ArrayList<>();
+
+	protected boolean[][] adjMat = null;
 
 	@Override
 	public void add(N node) {
-		nodeMap.remove(node);
+		if (!nodes.contains(node)) {
+			nodes.add(node);
+		}
 	}
 
 	@Override
 	public void remove(N node) {
-		nodeMap.remove(node);
+		nodes.remove(node);
+	}
+
+	public int id(Object node) {
+		assert nodes.contains(node);
+		return nodes.indexOf(node);
 	}
 
 	@Override
-	public Set<N> nodes() {
-		return nodeMap.keySet();
+	public Collection<N> nodes() {
+		return nodes;
+	}
+
+	public boolean isConnected(N a, N b) {
+		return adjMat[id(a)][id(b)];
+	}
+
+	public void connect(N a, N b) {
+		adjMat[id(a)][id(b)] = true;
 	}
 
 	@Override
 	public void build() {
-		addQueue.forEach(this::populate);
-		addQueue.clear();
-	}
+		/**
+		 * Builds the adjacency matrix
+		 */
+		adjMat = new boolean[nodes.size()][nodes.size()];
 
-	@Override
-	public void markBuild() {
-		dirty = true;
-	}
-
-	/**
-	 * Populates the node list recursively
-	 */
-	protected void populate(N node) {
-		populate(node, null);
-	}
-
-	protected void populate(N node, N prev) {
-		if (!nodes().contains(node)) {
-			Set<N> connections = ((Node) node).connections();
-			nodeMap.put(node, connections);
-
-			if (node instanceof GraphProvider) {
-				//TODO: This may cause a class cast exception?
-				((GraphProvider) node).setGraph(this);
+		for (N node : nodes) {
+			for (Object con : node.connections()) {
+				if (nodes.contains(con)) {
+					connect(node, (N) con);
+				}
 			}
-
-			connections.forEach(n -> populate(n, node));
 		}
 	}
 }

@@ -1,7 +1,7 @@
 package com.resonant.core.graph.internal;
 
+import java.util.Collection;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Stream;
@@ -22,7 +22,7 @@ public interface Graph<N> extends Iterable<N> {
 		return nodes().size();
 	}
 
-	public Set<N> nodes();
+	Collection<N> nodes();
 
 	default Iterator<N> iterator() {
 		return nodes().iterator();
@@ -35,12 +35,6 @@ public interface Graph<N> extends Iterable<N> {
 	default Stream<N> stream() {
 		return StreamSupport.stream(spliterator(), false);
 	}
-
-	/**
-	 * Marks the graph as dirty, indicating it needs to be rebuilt.
-	 * Calling this method differs with build() that this is thread safe.
-	 */
-	void markBuild();
 
 	/**
 	 * Builds the grid, refreshing all its internal cache.
