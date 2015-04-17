@@ -30,22 +30,71 @@ class GraphElectricTest {
 		val wire2 = new DummyWire()
 
 		battery.connectNeg(wire2)
-		battery.connectPos(wire1)
-		wire1.connect(battery)
-		wire1.connect(resistor1)
-		resistor1.connectNeg(wire1)
-		resistor1.connectPos(wire2)
+		val components = connectInSeries(battery, wire1, resistor1, wire2)
 		wire2.connect(battery)
-		wire2.connect(resistor1)
 
 		battery.generateVoltage(12)
 
-		graph.add(battery)
-		graph.add(wire1)
-		graph.add(resistor1)
-		graph.add(wire2)
+		components.foreach(graph.add)
 		println(profiler)
+
 		return graph
+	}
+
+	/**
+	 * A simple series circuit
+	 */
+	def generateSeriesCircuit2: GraphElectric = {
+		val profiler = new Profiler("Generate graph 2")
+
+		val graph = new GraphElectric
+
+		val battery = new DummyComponent()
+		val wire1 = new DummyWire()
+		val wire2 = new DummyWire()
+		val resistor1 = new DummyComponent()
+		val wire3 = new DummyWire()
+		val resistor2 = new DummyComponent()
+		resistor2.setResistance(2)
+		val wire4 = new DummyWire()
+
+		battery.connectNeg(wire4)
+		val components = connectInSeries(battery, wire1, wire2, resistor1, wire3, resistor2, wire4)
+		wire4.connect(battery)
+
+		battery.generateVoltage(6)
+
+		components.foreach(graph.add)
+		println(profiler)
+
+		return graph
+	}
+
+	/**
+	 * Connects a sequence of electric nodes in series excluding the first and last connection.
+	 */
+	def connectInSeries(series: NodeElectric*): Seq[NodeElectric] = {
+		series.zipWithIndex.foreach {
+			case (component: DummyComponent, index) =>
+				index match {
+					case 0 => component.connectPos(series(index + 1))
+					case l if l == series.size - 1 =>
+						component.connectNeg(series(index - 1))
+					case _ =>
+						component.connectNeg(series(index - 1))
+						component.connectPos(series(index + 1))
+				}
+			case (wire: DummyWire, index) =>
+				index match {
+					case 0 => wire.connect(series(index + 1))
+					case l if l == series.size - 1 =>
+						wire.connect(series(index - 1))
+					case _ =>
+						wire.connect(series(index - 1))
+						wire.connect(series(index + 1))
+				}
+		}
+		return series
 	}
 
 	@Test
@@ -68,20 +117,55 @@ class GraphElectricTest {
 	}
 
 	@Test
-	def testSolveComponents() = {
-		val graph = generateSeriesCircuit1
-		graph.buildAdjacency()
+	def testSolve1() {
+		/**
+		 * Graph 1
+		 */
+		val graph1 = generateSeriesCircuit1
+		graph1.buildAdjacency()
 
 		val profiler = new Profiler("Solving graph 1")
-		graph.solveAll()
-		println(profiler)
+
+		for (trial <- 1 to 100) {
+			val voltage = trial * 10
+			graph1.getNodes.get(0).asInstanceOf[NodeElectricComponent].genVoltage = voltage
+			graph1.solveAll()
+
+			//Test battery
+			assertEquals(voltage, graph1.getNodes.get(0).voltage, 0.0001)
+			assertEquals(voltage, graph1.getNodes.get(0).current, 0.0001)
+			//Test resistor
+			assertEquals(voltage, graph1.getNodes.get(2).voltage, 0.0001)
+			assertEquals(voltage, graph1.getNodes.get(2).current, 0.0001)
+
+			println(profiler)
+			profiler.lap()
+		}
+
+		profiler.printAverage()
+	}
+
+	@Test
+	def testSolve2() {
+		/**
+		 * Graph 2
+		 */
+		val graph2 = generateSeriesCircuit2
+		graph2.buildAdjacency()
+
+		val profiler2 = new Profiler("Solving graph 2")
+		graph2.solveAll()
+		println(profiler2)
 
 		//Test battery
-		assertEquals(12, graph.getNodes.get(0).voltage, 0.0001)
-		assertEquals(12, graph.getNodes.get(0).current, 0.0001)
-		//Test resistor
-		assertEquals(12, graph.getNodes.get(2).voltage, 0.0001)
-		assertEquals(12, graph.getNodes.get(2).current, 0.0001)
+		assertEquals(6, graph2.getNodes.get(0).voltage, 0.0001)
+		assertEquals(2, graph2.getNodes.get(0).current, 0.0001)
+		//Test resistor1
+		assertEquals(2, graph2.getNodes.get(2).voltage, 0.0001)
+		assertEquals(2, graph2.getNodes.get(2).current, 0.0001)
+		//Test resistor2
+		assertEquals(4, graph2.getNodes.get(2).voltage, 0.0001)
+		assertEquals(2, graph2.getNodes.get(2).current, 0.0001)
 	}
 
 	class DummyComponent extends NodeElectricComponent(null) {
@@ -112,14 +196,20 @@ class GraphElectricTest {
 
 	class Profiler(val name: String) {
 		var time = System.currentTimeMillis()
+		var lapped = Seq.empty[Long]
 
-		def lap: this.type = {
+		def lap() {
+			lapped :+= System.currentTimeMillis() - time
 			time = System.currentTimeMillis()
-			return this
 		}
 
 		override def toString = name + " took " + ((System.currentTimeMillis() - time) / 1000d) + " seconds"
 
+		def average = lapped.map(_ / 1000d).sum / lapped.size
+
+		def printAverage(): Unit = {
+			println(name + " took " + average + " seconds on average")
+		}
 	}
 
 }
