@@ -8,9 +8,13 @@ import com.resonant.core.graph.internal.electric.component.Junction
  * Wires will be treated as junctions and collapsed.
  * @author Calclavia
  */
-class NodeElectricJunction(parent: NodeProvider) extends NodeElectric(parent) {
+class NodeElectricJunction(parent: NodeProvider) extends NodeAbstractElectric(parent) {
 
 	var junction: Junction = null
+
+	override def current: Double = voltage * voltage / resistance
+
+	override def voltage: Double = junction.voltage
 
 	override def toString: String = {
 		"ElectricJunction [" + connections.size() + ", " + BigDecimal(voltage).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "V]"

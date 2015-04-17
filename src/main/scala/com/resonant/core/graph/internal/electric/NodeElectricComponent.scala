@@ -2,7 +2,7 @@ package com.resonant.core.graph.internal.electric
 
 import java.util.{Set => JSet}
 
-import com.resonant.core.graph.api.NodeProvider
+import com.resonant.core.graph.api.{NodeElectric, NodeProvider}
 import com.resonant.wrapper.lib.wrapper.BitmaskWrapper._
 import nova.core.util.Direction
 
@@ -17,11 +17,12 @@ import scala.collection.convert.wrapAll._
  *
  * @author Calclavia
  */
-class NodeElectricComponent(parent: NodeProvider) extends NodeElectric(parent) {
+class NodeElectricComponent(parent: NodeProvider) extends NodeAbstractElectric(parent) {
 	/**
 	 * When dynamic terminal is set to true, then the grid will attempt to swap negative and positive terminals as needed.
 	 */
 	var dynamicTerminals = false
+
 	/**
 	 * The current and voltage values are set are determined by the DC Grid
 	 */
@@ -32,16 +33,9 @@ class NodeElectricComponent(parent: NodeProvider) extends NodeElectric(parent) {
 	/**
 	 * Variables to keep voltage source states
 	 */
-	protected[electric] var bufferVoltage = 0d
-	protected[electric] var bufferPower = 0d
-	/**
-	 * Junction A is always preferably negative
-	 */
-	protected[electric] var junctionNegative: Junction = null
-	/**
-	 * Junction B is always preferably positive
-	 */
-	protected[electric] var junctionPositive: Junction = null
+	protected[electric] var genVoltage = 0d
+	protected[electric] var genCurrent = 0d
+
 	/**
 	 * The positive terminals are the directions in which charge can flow out of this electric component.
 	 * Positive and negative terminals must be mutually exclusive.
@@ -57,17 +51,17 @@ class NodeElectricComponent(parent: NodeProvider) extends NodeElectric(parent) {
 	 */
 	private var negativeMask = 0
 
-	override def positives: JSet[NodeElectric] = connectedMap.filter(keyVal => positiveMask.mask(keyVal._2)).keySet
+	def positives: JSet[NodeElectric] = connectedMap.filter(keyVal => positiveMask.mask(keyVal._2)).keySet
 
-	override def negatives: JSet[NodeElectric] = connectedMap.filter(keyVal => negativeMask.mask(keyVal._2)).keySet
+	def negatives: JSet[NodeElectric] = connectedMap.filter(keyVal => negativeMask.mask(keyVal._2)).keySet
 
-	override def setPositive(dir: Direction, open: Boolean = true) {
+	def setPositive(dir: Direction, open: Boolean = true) {
 		positiveMask = positiveMask.mask(dir, open)
 		negativeMask &= ~positiveMask
 		connectionMask = positiveMask | negativeMask
 	}
 
-	override def setPositives(dirs: JSet[Direction]) {
+	def setPositives(dirs: JSet[Direction]) {
 		positiveMask = 0
 
 		dirs.foreach(dir => positiveMask = positiveMask.mask(dir, true))
@@ -75,13 +69,13 @@ class NodeElectricComponent(parent: NodeProvider) extends NodeElectric(parent) {
 		connectionMask = positiveMask | negativeMask
 	}
 
-	override def setNegative(dir: Direction, open: Boolean = true) {
+	def setNegative(dir: Direction, open: Boolean = true) {
 		negativeMask = negativeMask.mask(dir, open)
 		positiveMask &= ~negativeMask
 		connectionMask = positiveMask | negativeMask
 	}
 
-	override def setNegatives(dirs: JSet[Direction]) {
+	def setNegatives(dirs: JSet[Direction]) {
 		negativeMask = 0
 
 		dirs.foreach(dir => negativeMask = negativeMask.mask(dir, true))
@@ -90,30 +84,19 @@ class NodeElectricComponent(parent: NodeProvider) extends NodeElectric(parent) {
 	}
 
 	/**
-	 * Retrieves the power of the DC node in Watts.
-	 */
-	override def power: Double = {
-		if (bufferVoltage != 0) {
-			//This is a voltage source. Calculate current based on junction current
-			return Math.abs(junctionPositive.currentOut * voltage)
-		}
-		return current * voltage
-	}
-
-	/**
 	 * Generates a potential difference across the two intersections that go across this node.
 	 * @param voltage - The target voltage, in Volts
 	 */
-	override def generateVoltage(voltage: Double) {
-		bufferVoltage = voltage
+	def generateVoltage(voltage: Double) {
+		genVoltage = voltage
 	}
 
 	/**
 	 * Generates power by adjusting varying the voltage until the target power is reached
 	 * @param power - The target power, in Watts
 	 */
-	override def generatePower(power: Double) {
-		bufferPower = power
+	def generatePower(power: Double) {
+		genCurrent = power
 	}
 
 	override def toString = "ElectricComponent [" + connections.size() + " " + BigDecimal(current).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "A " + BigDecimal(voltage).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "V]"

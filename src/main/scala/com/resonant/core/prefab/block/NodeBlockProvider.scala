@@ -18,6 +18,7 @@ import scala.collection.convert.wrapAll._
 /**
  * @author Calclavia
  */
+@deprecated
 trait NodeBlockProvider extends Block with Stateful with Storable with NodeProvider with DebugInfo {
 
 	protected var nodes = Set.empty[Node[_ <: Node[_]]]
@@ -29,7 +30,7 @@ trait NodeBlockProvider extends Block with Stateful with Storable with NodeProvi
 			nodes
 				.filter(_.isInstanceOf[GraphProvider[_ <: Graph[_]]])
 				.map(_.asInstanceOf[GraphProvider[_ <: Graph[_]]])
-				.foreach(_.getGraph.markBuild())
+				.foreach(_.getGraph.build())
 		}
 	}
 
@@ -38,7 +39,7 @@ trait NodeBlockProvider extends Block with Stateful with Storable with NodeProvi
 			nodes
 				.filter(_.isInstanceOf[GraphProvider[_ <: Graph[_]]])
 				.map(_.asInstanceOf[GraphProvider[_ <: Graph[_]]])
-				.foreach(_.getGraph.markBuild())
+				.foreach(_.getGraph.build())
 		}
 	}
 
@@ -48,7 +49,7 @@ trait NodeBlockProvider extends Block with Stateful with Storable with NodeProvi
 			nodes
 				.filter(_.isInstanceOf[GraphProvider[_ <: Graph[_]]])
 				.map(_.asInstanceOf[GraphProvider[_ <: Graph[_]]])
-				.foreach(_.getGraph.markBuild())
+				.foreach(_.getGraph.build())
 		}
 	}
 

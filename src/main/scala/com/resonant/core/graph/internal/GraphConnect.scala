@@ -1,17 +1,16 @@
 package com.resonant.core.graph.internal
 
-import java.util.Collection
+import java.util.{List => JLIst}
 
 import scala.collection.JavaConversions._
-
 /**
  * A graph that contains getNodes, each with its ability to connect to other getNodes.
  * @author Calclavia
  */
-abstract class GraphConnect[N <: Node] extends Graph[N] {
+abstract class GraphConnect[N <: Node[_]] extends Graph[N] {
 
 	protected var nodes = List.empty[N]
-	protected var adjMat: AdjacencyMatrix = null
+	protected[graph] var adjMat: AdjacencyMatrix = null
 
 	def add(node: N) {
 		if (!nodes.contains(node)) {
@@ -30,7 +29,7 @@ abstract class GraphConnect[N <: Node] extends Graph[N] {
 		return nodes.indexOf(node)
 	}
 
-	override def getNodes: Collection[N] = getNodes
+	override def getNodes: JLIst[N] = nodes
 
 	def isConnected(from: N, to: N): Boolean = adjMat(id(from))(id(to))
 

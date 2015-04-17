@@ -1,7 +1,7 @@
 package com.resonant.core.graph.internal;
 
-import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.Stream;
@@ -22,7 +22,7 @@ public interface Graph<N> extends Iterable<N> {
 		return getNodes().size();
 	}
 
-	Collection<N> getNodes();
+	List<N> getNodes();
 
 	default Iterator<N> iterator() {
 		return getNodes().iterator();
