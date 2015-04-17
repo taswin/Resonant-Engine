@@ -1,5 +1,6 @@
 package com.resonant.core.graph.internal.electric
 
+import com.resonant.core.graph.api.NodeElectric
 import com.resonant.core.graph.internal.electric.component.Junction
 import com.resonant.core.graph.internal.{AdjacencyMatrix, GraphConnect}
 import com.resonant.core.prefab.block.Updater
@@ -14,7 +15,7 @@ import scala.collection.JavaConversions._
  * @author Calclavia
  */
 //TODO: Move to EDX?
-class GraphElectric extends GraphConnect[NodeAbstractElectric] with Updater {
+class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 
 	// There should always at least (node.size - 1) amount of junctions.
 	var junctions = Seq.empty[Junction]
@@ -303,10 +304,11 @@ class GraphElectric extends GraphConnect[NodeAbstractElectric] with Updater {
 
 		//Retrieve the current values of the voltage sources
 		for (i <- 0 until voltageSources.size) {
+			voltageSources(i).voltage = voltageSources(i).genVoltage
 			voltageSources(i).current = x(i + junctions.size, 0)
 		}
 
-		//Calculate the potential difference for each resistor based on its junctions
+		//Calculate the potential difference for each component based on its junctions
 		resistors.zipWithIndex.foreach {
 			case (components, index) =>
 				val wireTo = nodes(adjMat.getDirectedTo(nodes.indexOf(components)).head)
