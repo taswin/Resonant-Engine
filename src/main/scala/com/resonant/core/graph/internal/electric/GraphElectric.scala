@@ -21,23 +21,20 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 	var junctions = Seq.empty[Junction]
 	var components = Seq.empty[NodeElectricComponent]
 
-	//A matrix that represents connections between junctions and components. If the columns of the matrix forms a basis, then the graph is a complete cycle.
-	var componentJunctionMat: AdjacencyMatrix = null
-
+	//The modified nodal analysis matrix (A) in Ax=b linear equation.
 	protected[graph] var mnaMat: Matrix = null
+	//The source matrix (B)
 	protected[graph] var sourceMatrix: Matrix = null
 
 	/**
 	 * Reconstruct must build the links and intersections of the grid
 	 */
 	override def build() {
-
-		buildAdjacency()
-		solveComponents()
+		buildAll()
 		Game.instance.syncTicker.add(this)
 	}
 
-	def buildAdjacency() {
+	def buildAll() {
 		/**
 		 * Builds the adjacency matrix.
 		 * The directed graph indicate current flow from positive terminal to negative terminal.
@@ -84,12 +81,10 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 		/**
 		 * Create the component junction adjacency matrix.
 		 */
-		componentJunctionMat = new AdjacencyMatrix(nodes.size - recursedWires.size, junctions.size)
-
-		junctions.zipWithIndex.foreach {
-			case (j, index) =>
+		junctions.foreach {
+			case junction =>
 				//Find all the components connected to this junction
-				val connectedComponents = j.wires
+				val connectedComponents = junction.wires
 					.flatMap(_.connections)
 					.collect { case n: NodeElectricComponent => n }
 
@@ -99,10 +94,18 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 					.foreach(components :+= _)
 
 				//Set adjMat connection by marking the component-junction position as true
-				connectedComponents
-					.map(components.indexOf)
-					.foreach(componentJunctionMat(_, index) = true)
+				connectedComponents.foreach(component => {
+					//TODO: Use the adjMat instead to speed up
+					if (component.positives.exists(c => junction.wires.contains(c))) {
+						component.junctionPositive = junction
+					}
+					else if (component.negatives.exists(c => junction.wires.contains(c))) {
+						component.junctionNegative = junction
+					}
+				})
 		}
+
+		//Some nodes are connected to other nodes instead of wires. We need to create virtual nodes and place them between the junctions!
 
 	}
 
@@ -221,21 +224,21 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 		def generateConductanceMatrix() {
 			//Construct G sub-matrix
 			//Set all diagonals of the nxn part of the matrix with the sum of its adjacent resistor's conductance
-			for (i <- 0 until junctions.size) {
-				mnaMat(i, i) =
-					(0 until voltageSources.size)
-						.filter(componentJunctionMat(_)(i))
-						.map(voltageSources)
+			junctions.zipWithIndex.foreach {
+				case (junction, i) =>
+					mnaMat(i, i) = resistors
+						.filter(resistor => resistor.junctionPositive == junction || resistor.junctionNegative == junction)
 						.map(1 / _.resistance)
 						.sum
 			}
 
-			//Set all resistors to have its conductance
+			//The off diagonal elements are the negative conductance of the element connected to the pair of corresponding node.
+			//Therefore a resistor between nodes 1 and 2 goes into the G matrix at location (1,2) and locations (2,1).
 			for (resistor <- resistors) {
 				//The id of the junction at negative terminal
-				val i = componentJunctionMat.getDirectedFrom(components.indexOf(resistor)).head
+				val i = junctions.indexOf(resistor.junctionNegative)
 				//The id of the junction at positive terminal
-				val j = componentJunctionMat.getDirectedTo(components.indexOf(resistor)).head
+				val j = junctions.indexOf(resistor.junctionPositive)
 				//junctions.indexOf(resistor.junctionPositive)
 				val negConductance = -1 / resistor.resistance
 				mnaMat(i, j) = negConductance
@@ -254,15 +257,16 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 		 */
 		def generateConnectionMatrix() {
 			//TODO: Matrix B and C only change when grid is rebuilt
-			for ((voltageSource, i) <- voltageSources.zipWithIndex) {
-				//Positive terminal
-				val posIndex = componentJunctionMat.getDirectedTo(components.indexOf(voltageSource)).head
-				mnaMat(junctions.size + i, posIndex) = 1
-				mnaMat(posIndex, junctions.size + i) = 1
-				//Negative terminal
-				val negIndex = componentJunctionMat.getDirectedFrom(components.indexOf(voltageSource)).head
-				mnaMat(junctions.size + i, negIndex) = -1
-				mnaMat(negIndex, junctions.size + i) = -1
+			voltageSources.zipWithIndex.foreach {
+				case (voltageSource, i) =>
+					//Positive terminal
+					val posIndex = junctions.indexOf(voltageSource.junctionPositive)
+					mnaMat(junctions.size + i, posIndex) = 1
+					mnaMat(posIndex, junctions.size + i) = 1
+					//Negative terminal
+					val negIndex = junctions.indexOf(voltageSource.junctionNegative)
+					mnaMat(junctions.size + i, negIndex) = -1
+					mnaMat(negIndex, junctions.size + i) = -1
 				//TODO: Check if transpose is correct.
 			}
 		}

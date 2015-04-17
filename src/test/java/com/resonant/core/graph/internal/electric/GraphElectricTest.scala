@@ -3,7 +3,6 @@ package com.resonant.core.graph.internal.electric
 import java.util
 
 import com.resonant.core.graph.api.NodeElectric
-import com.resonant.core.graph.internal.AdjacencyMatrix
 import nova.core.util.Direction
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -32,8 +31,6 @@ class GraphElectricTest {
 		battery.connectNeg(wire2)
 		val components = connectInSeries(battery, wire1, resistor1, wire2)
 		wire2.connect(battery)
-
-		battery.generateVoltage(12)
 
 		components.foreach(graph.add)
 		println(profiler)
@@ -102,17 +99,10 @@ class GraphElectricTest {
 		val graph = generateSeriesCircuit1
 
 		val profiler = new Profiler("Building adjacency for graph 1")
-		graph.buildAdjacency()
+		graph.buildAll()
 		println(profiler)
 
-		val compareComponentJunctionMat = new AdjacencyMatrix(2, 2)
-		compareComponentJunctionMat(0, 0) = true
-		compareComponentJunctionMat(0, 1) = true
-		compareComponentJunctionMat(1, 0) = true
-		compareComponentJunctionMat(1, 1) = true
-
 		println(graph.adjMat)
-		assertEquals(graph.componentJunctionMat, compareComponentJunctionMat)
 		assertEquals(graph.junctions.size, 2)
 	}
 
@@ -121,22 +111,22 @@ class GraphElectricTest {
 		/**
 		 * Graph 1
 		 */
-		val graph1 = generateSeriesCircuit1
-		graph1.buildAdjacency()
+		val graph = generateSeriesCircuit1
+		graph.buildAll()
 
 		val profiler = new Profiler("Solving graph 1")
 
 		for (trial <- 1 to 100) {
 			val voltage = trial * 10
-			graph1.getNodes.get(0).asInstanceOf[NodeElectricComponent].genVoltage = voltage
-			graph1.solveAll()
+			graph.getNodes.get(0).asInstanceOf[NodeElectricComponent].genVoltage = voltage
+			graph.solveAll()
 
 			//Test battery
-			assertEquals(voltage, graph1.getNodes.get(0).voltage, 0.0001)
-			assertEquals(voltage, graph1.getNodes.get(0).current, 0.0001)
+			assertEquals(voltage, graph.getNodes.get(0).voltage, 0.0001)
+			assertEquals(voltage, graph.getNodes.get(0).current, 0.0001)
 			//Test resistor
-			assertEquals(voltage, graph1.getNodes.get(2).voltage, 0.0001)
-			assertEquals(voltage, graph1.getNodes.get(2).current, 0.0001)
+			assertEquals(voltage, graph.getNodes.get(2).voltage, 0.0001)
+			assertEquals(voltage, graph.getNodes.get(2).current, 0.0001)
 
 			println(profiler)
 			profiler.lap()
@@ -150,22 +140,24 @@ class GraphElectricTest {
 		/**
 		 * Graph 2
 		 */
-		val graph2 = generateSeriesCircuit2
-		graph2.buildAdjacency()
-
-		val profiler2 = new Profiler("Solving graph 2")
-		graph2.solveAll()
-		println(profiler2)
+		val graph = generateSeriesCircuit2
+		graph.buildAll()
+		val profiler = new Profiler("Solving graph 2")
+		graph.solveAll()
 
 		//Test battery
-		assertEquals(6, graph2.getNodes.get(0).voltage, 0.0001)
-		assertEquals(2, graph2.getNodes.get(0).current, 0.0001)
+		assertEquals(6, graph.getNodes.get(0).voltage, 0.0001)
+		assertEquals(2, graph.getNodes.get(0).current, 0.0001)
 		//Test resistor1
-		assertEquals(2, graph2.getNodes.get(2).voltage, 0.0001)
-		assertEquals(2, graph2.getNodes.get(2).current, 0.0001)
+		assertEquals(2, graph.getNodes.get(2).voltage, 0.0001)
+		assertEquals(2, graph.getNodes.get(2).current, 0.0001)
 		//Test resistor2
-		assertEquals(4, graph2.getNodes.get(2).voltage, 0.0001)
-		assertEquals(2, graph2.getNodes.get(2).current, 0.0001)
+		assertEquals(4, graph.getNodes.get(2).voltage, 0.0001)
+		assertEquals(2, graph.getNodes.get(2).current, 0.0001)
+
+		println(profiler)
+		profiler.lap()
+		profiler.printAverage()
 	}
 
 	class DummyComponent extends NodeElectricComponent(null) {
