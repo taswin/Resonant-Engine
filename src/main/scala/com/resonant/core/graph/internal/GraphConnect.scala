@@ -2,6 +2,8 @@ package com.resonant.core.graph.internal
 
 import java.util.{List => JLIst}
 
+import com.resonant.core.graph.internal.matrix.AdjacencyMatrix
+
 import scala.collection.JavaConversions._
 /**
  * A graph that contains getNodes, each with its ability to connect to other getNodes.

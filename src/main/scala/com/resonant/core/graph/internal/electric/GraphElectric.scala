@@ -1,8 +1,9 @@
 package com.resonant.core.graph.internal.electric
 
 import com.resonant.core.graph.api.NodeElectric
+import com.resonant.core.graph.internal.GraphConnect
 import com.resonant.core.graph.internal.electric.component.Junction
-import com.resonant.core.graph.internal.{AdjacencyMatrix, GraphConnect}
+import com.resonant.core.graph.internal.matrix.AdjacencyMatrix
 import com.resonant.core.prefab.block.Updater
 import nova.core.game.Game
 import nova.core.util.transform.Matrix
@@ -107,6 +108,8 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 					}
 				})
 		}
+
+		//TODO: Using adjacency might be more efficient for juntions?
 
 		//Some nodes are connected to other nodes instead of wires. We need to create virtual nodes and place them between the junctions!
 

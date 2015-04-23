@@ -1,4 +1,4 @@
-package com.resonant.core.graph.internal
+package com.resonant.core.graph.internal.matrix
 
 import java.util
 
