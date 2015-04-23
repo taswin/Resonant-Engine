@@ -18,8 +18,11 @@ import scala.collection.JavaConversions._
 class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 
 	// There should always at least (node.size - 1) amount of junctions.
-	var junctions = Seq.empty[Junction]
-	var components = Seq.empty[NodeElectricComponent]
+	var junctions = List.empty[Junction]
+	//The reference ground junction where voltage is zero.
+	var ground: Junction = null
+	//The components in the circuit
+	var components = List.empty[NodeElectricComponent]
 
 	//The modified nodal analysis matrix (A) in Ax=b linear equation.
 	protected[graph] var mnaMat: Matrix = null
@@ -107,6 +110,10 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 
 		//Some nodes are connected to other nodes instead of wires. We need to create virtual nodes and place them between the junctions!
 
+		//Select reference ground
+		ground = junctions(0)
+		junctions = junctions.splitAt(1)._2
+		ground.voltage = 0
 	}
 
 	/**
@@ -212,11 +219,13 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 		val voltageSources = components.collect { case source if source.genVoltage != 0 => source }
 		val currentSources = components.collect { case source if source.genCurrent != 0 => source }
 		val resistors = components diff voltageSources diff currentSources
+		val n = junctions.size
+		val m = voltageSources.size
 
 		/**
 		 * Setup MNA Matrix
 		 */
-		mnaMat = new Matrix(junctions.size + voltageSources.size)
+		mnaMat = new Matrix(n + m)
 
 		generateConductanceMatrix()
 		generateConnectionMatrix()
@@ -239,10 +248,13 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 				val i = junctions.indexOf(resistor.junctionNegative)
 				//The id of the junction at positive terminal
 				val j = junctions.indexOf(resistor.junctionPositive)
-				//junctions.indexOf(resistor.junctionPositive)
-				val negConductance = -1 / resistor.resistance
-				mnaMat(i, j) = negConductance
-				mnaMat(j, i) = negConductance
+
+				//Check to make sure this is not the ground reference junction
+				if (i != -1 && j != -1) {
+					val negConductance = -1 / resistor.resistance
+					mnaMat(i, j) = negConductance
+					mnaMat(j, i) = negConductance
+				}
 			}
 		}
 
@@ -261,13 +273,18 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 				case (voltageSource, i) =>
 					//Positive terminal
 					val posIndex = junctions.indexOf(voltageSource.junctionPositive)
-					mnaMat(junctions.size + i, posIndex) = 1
-					mnaMat(posIndex, junctions.size + i) = 1
+					//Check to make sure this is not the ground reference junction
+					if (posIndex != -1) {
+						mnaMat(n + i, posIndex) = 1
+						mnaMat(posIndex, n + i) = 1
+					}
 					//Negative terminal
 					val negIndex = junctions.indexOf(voltageSource.junctionNegative)
-					mnaMat(junctions.size + i, negIndex) = -1
-					mnaMat(negIndex, junctions.size + i) = -1
-				//TODO: Check if transpose is correct.
+					//Check to make sure this is not the ground reference junction
+					if (negIndex != -1) {
+						mnaMat(n + i, negIndex) = -1
+						mnaMat(negIndex, n + i) = -1
+					}
 			}
 		}
 
@@ -277,10 +294,10 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 		 */
 		//TODO: Only when sources change
 		def computeSourceMatrix() {
-			sourceMatrix = new Matrix(junctions.size + voltageSources.size, 1)
+			sourceMatrix = new Matrix(n + m, 1)
 
 			//Part one: The sum of current sources corresponding to a particular node
-			for (i <- 0 until junctions.size) {
+			for (i <- 0 until n) {
 				//A set of current sources that is going into this junction
 				sourceMatrix(i, 0) = currentSources.filter(
 					source =>
@@ -291,8 +308,9 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 			}
 
 			//Part two: The voltage of each voltage source
-			for (i <- 0 until voltageSources.size) {
-				sourceMatrix(i + junctions.size, 0) = voltageSources(i).genVoltage
+			for (i <- 0 until m) {
+				sourceMatrix(i + n, 0) = -voltageSources(i).genVoltage
+				//Check why is it negative?
 			}
 		}
 
@@ -302,14 +320,14 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 		val x = mnaMat.solve(sourceMatrix)
 
 		//Retrieve the voltage of the junctions
-		for (i <- 0 until junctions.size) {
+		for (i <- 0 until n) {
 			junctions(i).voltage = x(i, 0)
 		}
 
 		//Retrieve the current values of the voltage sources
-		for (i <- 0 until voltageSources.size) {
+		for (i <- 0 until m) {
 			voltageSources(i).voltage = voltageSources(i).genVoltage
-			voltageSources(i).current = x(i + junctions.size, 0)
+			voltageSources(i).current = x(i + n, 0)
 		}
 
 		//Calculate the potential difference for each component based on its junctions
@@ -317,7 +335,17 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 			case (components, index) =>
 				val wireTo = nodes(adjMat.getDirectedTo(nodes.indexOf(components)).head)
 				val wireFrom = nodes(adjMat.getDirectedFrom(nodes.indexOf(components)).head)
-				components.voltage = junctions.find(_.wires.contains(wireTo)).head.voltage - junctions.find(_.wires.contains(wireFrom)).head.voltage
+
+				val voltageIn = junctions.find(_.wires.contains(wireTo)).headOption match {
+					case Some(junction) => junction.voltage
+					case _ => 0 //Ground
+				}
+				val voltageOut = junctions.find(_.wires.contains(wireFrom)).headOption match {
+					case Some(junction) => junction.voltage
+					case _ => 0 //Ground
+				}
+
+				components.voltage = voltageIn - voltageOut
 				components.current = components.voltage / components.resistance
 		}
 	}
