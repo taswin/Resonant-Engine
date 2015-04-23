@@ -111,7 +111,7 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 		//Some nodes are connected to other nodes instead of wires. We need to create virtual nodes and place them between the junctions!
 
 		//Select reference ground
-		ground = junctions(0)
+		ground = junctions.head
 		junctions = junctions.splitAt(1)._2
 		ground.voltage = 0
 	}
@@ -309,15 +309,16 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 
 			//Part two: The voltage of each voltage source
 			for (i <- 0 until m) {
-				sourceMatrix(i + n, 0) = -voltageSources(i).genVoltage
-				//Check why is it negative?
+				sourceMatrix(i + n, 0) = voltageSources(i).genVoltage
 			}
 		}
 
 		computeSourceMatrix()
+		//TODO: Recalculation is only required when parts of circuit changes
 
 		//Solve the circuit
-		val x = mnaMat.solve(sourceMatrix)
+		//TODO: Check why negation is required?
+		val x = mnaMat.solve(sourceMatrix * -1)
 
 		//Retrieve the voltage of the junctions
 		for (i <- 0 until n) {
