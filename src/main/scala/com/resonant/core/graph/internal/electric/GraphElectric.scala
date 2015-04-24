@@ -100,6 +100,8 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 							case junction: NodeElectricJunction =>
 								adjMat(node, junction) = true
 						}
+
+						components :+= node
 					}
 				}
 			case node: NodeElectricJunction =>
@@ -144,11 +146,6 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 				val connectedComponents = junction.wires
 					.flatMap(_.connections)
 					.collect { case n: NodeElectricComponent => n }
-
-				//Add the found components to the global components list
-				connectedComponents
-					.filterNot(components.contains)
-					.foreach(components :+= _)
 
 				//Set adjMat connection by marking the component-junction position as true
 				connectedComponents.foreach(component => {

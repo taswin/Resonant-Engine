@@ -136,8 +136,6 @@ class GraphElectricTest {
 		val components = connectInSeries(battery, wire1, wire2, resistor1, wire3, resistor2, wire4)
 		wire4.connect(battery)
 
-		battery.setVoltage(6)
-
 		components.foreach(graph.add)
 		println(profilerGen)
 
@@ -320,6 +318,51 @@ class GraphElectricTest {
 		}
 
 		profiler.printAverage()
+	}
+
+	/**
+	 * Series circuit stress test.
+	 * Attempt to generate graphs with more and more resistors.
+	 */
+	@Test
+	def testSolve5() {
+		println("Conducting stress test.")
+
+		for (trial <- 2 to 1000) {
+
+			val graph = new GraphElectric
+			val battery = new DummyComponent()
+			val resistors = (0 until trial).map(i => new DummyComponent()).toList
+
+			battery.connectNeg(resistors.last)
+			val components = connectInSeries(battery :: resistors: _*)
+			resistors.last.connectPos(battery)
+
+			components.foreach(graph.add)
+
+			val profilerGen = new Profiler("Generate graph with " + trial + " resistors")
+			graph.buildAll()
+			println(profilerGen)
+
+			val voltage = trial * 10d * Math.random() + 0.1
+			battery.setVoltage(voltage)
+
+			val profiler = new Profiler("Solve circuit with " + trial + " resistors")
+			graph.update(profiler.delta)
+			println(profiler)
+
+			val current = voltage / trial.toDouble
+
+			//Test battery
+			assertEquals(voltage, battery.voltage, error)
+			assertEquals(current, battery.current, error)
+
+			resistors.foreach(r => {
+				//Test resistor1
+				assertEquals(voltage / trial, r.voltage, error)
+				assertEquals(current, r.current, error)
+			})
+		}
 	}
 
 	class DummyComponent extends NodeElectricComponent(null) {
