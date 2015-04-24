@@ -3,7 +3,6 @@ package com.resonant.core.graph.internal.electric
 import java.util.{Set => JSet}
 
 import com.resonant.core.graph.api.{NodeElectric, NodeProvider}
-import com.resonant.core.graph.internal.electric.component.Junction
 import com.resonant.wrapper.lib.wrapper.BitmaskWrapper._
 import nova.core.util.Direction
 
@@ -30,9 +29,6 @@ class NodeElectricComponent(parent: NodeProvider) extends NodeAbstractElectric(p
 	var voltage = 0d
 
 	var current = 0d
-
-	protected[electric] var junctionPositive: Junction = null
-	protected[electric] var junctionNegative: Junction = null
 
 	/**
 	 * Variables to keep voltage source states

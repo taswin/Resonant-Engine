@@ -32,9 +32,9 @@ object GaloisField {
 		  */
 		def &&(x: GF2): Boolean = self && x.self
 
-		override def plus(x: GF2, y: GF2): GF2 = fromInt(toInt(x) + toInt(y))
+		override def plus(x: GF2, y: GF2): GF2 = fromInt((toInt(x) + toInt(y)) % 2)
 
-		override def minus(x: GF2, y: GF2): GF2 = fromInt(toInt(x) - toInt(y))
+		override def minus(x: GF2, y: GF2): GF2 = fromInt((toInt(x) - toInt(y)) % 2)
 
 		override def times(x: GF2, y: GF2): GF2 = fromInt(toInt(x) * toInt(y))
 
@@ -51,6 +51,8 @@ object GaloisField {
 		override def toFloat(x: GF2): Float = toInt(x)
 
 		override def toLong(x: GF2): Long = toInt(x)
+
+		override def toString: String = "GF(" + (if (self) "1" else "0") + ")"
 	}
 
 }

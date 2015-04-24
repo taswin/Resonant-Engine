@@ -7,6 +7,8 @@ import com.resonant.lib.math.matrix.GaloisField.GF2
  */
 class AdjacencyMatrix[K](rows: Set[K], columns: Set[K]) extends SparseMatrix[K, GF2](rows, columns)(new GF2(false)) {
 
+	def this(rows: Set[K]) = this(rows, rows)
+
 	def isConnected(from: K, to: K): Boolean = this(from, to) || this(to, from)
 
 	def isBiConnected(from: K, to: K): Boolean = this(from, to) && this(to, from)

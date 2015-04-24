@@ -29,6 +29,8 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 	protected[graph] var mnaMat: Matrix = null
 	//The source matrix (B)
 	protected[graph] var sourceMatrix: Matrix = null
+	//The component-junction matrix. Rows (TO) connections are positive. Columns (FROM) connections are negative.
+	protected[graph] var connectMatrix: AdjacencyMatrix[AnyRef] = null
 
 	/**
 	 * Reconstruct must build the links and intersections of the grid
@@ -77,10 +79,12 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 					//Add to junctions
 					foundWires.foreach(_.junction = junction)
 					junctions :+= junction
-
 					//TODO: Create virtual junctions with resistors to simulate wire resistance
 				}
 		}
+
+		//Generate connect matrix
+		connectMatrix = new AdjacencyMatrix[AnyRef](nodes ++ junctions)
 
 		/**
 		 * Create the component junction adjacency matrix.
@@ -99,17 +103,16 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 
 				//Set adjMat connection by marking the component-junction position as true
 				connectedComponents.foreach(component => {
-					//TODO: Use the adjMat instead to speed up
 					if (component.positives.exists(c => junction.wires.contains(c))) {
-						component.junctionPositive = junction
+						connectMatrix(component, junction) = true
 					}
 					else if (component.negatives.exists(c => junction.wires.contains(c))) {
-						component.junctionNegative = junction
+						connectMatrix(junction, component) = true
 					}
 				})
 		}
 
-		//TODO: Using adjacency might be more efficient for juntions?
+		//TODO: Using adjacency might be more efficient for junctions?
 
 		//Some nodes are connected to other nodes instead of wires. We need to create virtual nodes and place them between the junctions!
 
@@ -239,7 +242,7 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 			junctions.zipWithIndex.foreach {
 				case (junction, i) =>
 					mnaMat(i, i) = resistors
-						.filter(resistor => resistor.junctionPositive == junction || resistor.junctionNegative == junction)
+						.filter(resistor => connectMatrix.isConnected(resistor, junction))
 						.map(1 / _.resistance)
 						.sum
 			}
@@ -248,9 +251,9 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 			//Therefore a resistor between nodes 1 and 2 goes into the G matrix at location (1,2) and locations (2,1).
 			for (resistor <- resistors) {
 				//The id of the junction at negative terminal
-				val i = junctions.indexOf(resistor.junctionNegative)
+				val i = junctions.indexOf(connectMatrix.getDirectedFrom(resistor).head)
 				//The id of the junction at positive terminal
-				val j = junctions.indexOf(resistor.junctionPositive)
+				val j = junctions.indexOf(connectMatrix.getDirectedTo(resistor).head)
 
 				//Check to make sure this is not the ground reference junction
 				if (i != -1 && j != -1) {
@@ -275,14 +278,14 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 			voltageSources.zipWithIndex.foreach {
 				case (voltageSource, i) =>
 					//Positive terminal
-					val posIndex = junctions.indexOf(voltageSource.junctionPositive)
+					val posIndex = junctions.indexOf(connectMatrix.getDirectedTo(voltageSource))
 					//Check to make sure this is not the ground reference junction
 					if (posIndex != -1) {
 						mnaMat(n + i, posIndex) = 1
 						mnaMat(posIndex, n + i) = 1
 					}
 					//Negative terminal
-					val negIndex = junctions.indexOf(voltageSource.junctionNegative)
+					val negIndex = junctions.indexOf(connectMatrix.getDirectedFrom(voltageSource).head)
 					//Check to make sure this is not the ground reference junction
 					if (negIndex != -1) {
 						mnaMat(n + i, negIndex) = -1

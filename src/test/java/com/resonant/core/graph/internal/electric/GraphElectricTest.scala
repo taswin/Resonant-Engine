@@ -104,11 +104,12 @@ class GraphElectricTest {
 		profiler.printAverage()
 	}
 
-	/**
-	 * A simple series circuit
-	 */
-	def generateCircuit2: GraphElectric = {
-		val profiler = new Profiler("Generate graph 2")
+	@Test
+	def testSolve2() {
+		/**
+		 * Graph 2
+		 */
+		val profilerGen = new Profiler("Generate graph 2")
 
 		val graph = new GraphElectric
 
@@ -128,23 +129,14 @@ class GraphElectricTest {
 		battery.generateVoltage(6)
 
 		components.foreach(graph.add)
-		println(profiler)
+		println(profilerGen)
 
-		return graph
-	}
-
-	@Test
-	def testSolve2() {
-		/**
-		 * Graph 2
-		 */
-		val graph = generateCircuit2
 		graph.buildAll()
 		val profiler = new Profiler("Solving graph 2")
 
 		for (trial <- 1 to 1000) {
 			val voltage = trial * 10d * Math.random()
-			graph.getNodes.get(0).asInstanceOf[NodeElectricComponent].genVoltage = voltage
+			battery.genVoltage = voltage
 			graph.solveAll()
 
 			val current = voltage / 3d
@@ -163,17 +155,18 @@ class GraphElectricTest {
 		profiler.printAverage()
 	}
 
-	/**
-	 * A complex circuit
-	 *
-	 * |-|||- -|+ ------|
-	 * |                |
-	 * |----- -|+ --|||-|
-	 * |                |
-	 * |------||||------|
-	 */
-	def generateCircuit3: GraphElectric = {
-		val profiler = new Profiler("Generate graph 3")
+	@Test
+	def testSolve3() {
+		/**
+		 * A complex circuit
+		 *
+		 * |-|||- -|+ ------|
+		 * |                |
+		 * |----- -|+ --|||-|
+		 * |                |
+		 * |------||||------|
+		 */
+		val profilerGen = new Profiler("Generate graph 3")
 
 		val graph = new GraphElectric
 
@@ -225,21 +218,15 @@ class GraphElectricTest {
 		graph.add(wire3)
 		graph.add(wire4)
 
-		println(profiler)
+		println(profilerGen)
 
-		return graph
-	}
-
-	@Test
-	def testSolve3() {
-		val graph = generateCircuit3
 		graph.buildAll()
 		val profiler = new Profiler("Solving graph 3")
 
 		for (trial <- 1 to 1000) {
 			val voltage = trial * 10d * Math.random()
-			graph.getNodes.get(0).asInstanceOf[NodeElectricComponent].genVoltage = voltage
-			graph.getNodes.get(1).asInstanceOf[NodeElectricComponent].genVoltage = voltage
+			battery1.genVoltage = voltage
+			battery2.genVoltage = voltage
 			graph.solveAll()
 			//TODO: Test results
 			profiler.lap()
