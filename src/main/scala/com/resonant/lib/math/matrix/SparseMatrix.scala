@@ -14,9 +14,13 @@ class SparseMatrix[K, V](val rows: Set[K], var columns: Set[K])(implicit n: Nume
 
 	protected var mat = Map.empty[(K, K), V].withDefaultValue(n.zero)
 
-	def apply(i: K, j: K): V = mat(i, j)
+	def apply(i: K, j: K): V = {
+		assert(rows.contains(i) && columns.contains(j), "Matrix domain out of bounds!")
+		return mat(i, j)
+	}
 
 	def update(i: K, j: K, value: V) {
+		assert(rows.contains(i) && columns.contains(j), "Matrix domain out of bounds!")
 		mat += (i, j) -> value
 	}
 
@@ -57,19 +61,20 @@ class SparseMatrix[K, V](val rows: Set[K], var columns: Set[K])(implicit n: Nume
 	override def toString: String = {
 		val sb = new StringBuilder
 		sb.append("SparseMatrix [" + rows.size + "x" + columns.size + "]\n")
+		/*
 		val averageRowLabelLength = rows.map(_.toString.length).sum / rows.size
-		(0 until averageRowLabelLength).foreach(sb.append(" "))
+		(0 until averageRowLabelLength).foreach(i=>sb.append(" "))
 		sb.append(" | ")
 		//Print row labels
 		columns.foreach(j => {
 			val averageRowLength = rows.map(this(_, j)).collect { case Some(element) => element.toString.length }.sum / rows.size
 			sb.append(j)
-			(0 until averageRowLength).foreach(sb.append(" "))
+			(0 until averageRowLength).foreach(i=>sb.append(" "))
 		})
-		sb.append("\n")
+		sb.append("\n")*/
 		rows.foreach(i => {
 			//Print column labels
-			sb.append(i + " | ")
+			//			sb.append(i + " | ")
 			columns.foreach(j => sb.append(this(i, j) + " "))
 			sb.append("\n")
 		})

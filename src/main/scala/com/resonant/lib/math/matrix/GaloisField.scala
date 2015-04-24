@@ -6,51 +6,30 @@ package com.resonant.lib.math.matrix
  */
 object GaloisField {
 
-	implicit class GF2(val self: Boolean) extends Numeric[GF2] {
+	/**
+	 * Special GF2 Arithmetic with modulus operator.
+	 */
+	implicit class GF2(val self: Boolean) extends Numeric[Boolean] {
 
-		/** Compares two Boolean expressions and returns `true` if one or both of them evaluate to true.
-		  *
-		  * `a || b` returns `true` if and only if
-		  * - `a` is `true` or
-		  * - `b` is `true` or
-		  * - `a` and `b` are `true`.
-		  *
-		  * @note This method uses 'short-circuit' evaluation and
-		  *       behaves as if it was declared as `def ||(x: => Boolean): Boolean`.
-		  *       If `a` evaluates to `true`, `true` is returned without evaluating `b`.
-		  */
-		def ||(x: GF2): Boolean = self || x.self
+		override def plus(x: Boolean, y: Boolean): Boolean = fromInt((toInt(x) + toInt(y)) % 2)
 
-		/** Compares two Boolean expressions and returns `true` if both of them evaluate to true.
-		  *
-		  * `a && b` returns `true` if and only if
-		  * - `a` and `b` are `true`.
-		  *
-		  * @note This method uses 'short-circuit' evaluation and
-		  *       behaves as if it was declared as `def &&(x: => Boolean): Boolean`.
-		  *       If `a` evaluates to `false`, `false` is returned without evaluating `b`.
-		  */
-		def &&(x: GF2): Boolean = self && x.self
+		override def minus(x: Boolean, y: Boolean): Boolean = fromInt((toInt(x) - toInt(y)) % 2)
 
-		override def plus(x: GF2, y: GF2): GF2 = fromInt((toInt(x) + toInt(y)) % 2)
+		override def times(x: Boolean, y: Boolean): Boolean = fromInt(toInt(x) * toInt(y))
 
-		override def minus(x: GF2, y: GF2): GF2 = fromInt((toInt(x) - toInt(y)) % 2)
+		override def compare(x: Boolean, y: Boolean): Int = toInt(x).compare(toInt(y))
 
-		override def times(x: GF2, y: GF2): GF2 = fromInt(toInt(x) * toInt(y))
+		override def negate(x: Boolean): Boolean = !x
 
-		override def compare(x: GF2, y: GF2): Int = toInt(x).compare(toInt(y))
+		override def toInt(x: Boolean): Int = if (x) 1 else 0
 
-		override def negate(x: GF2): GF2 = !x.self
+		override def fromInt(x: Int): Boolean = if (x > 0) true else false
 
-		override def toInt(x: GF2): Int = if (x.self) 1 else 0
+		override def toDouble(x: Boolean): Double = toInt(x)
 
-		override def fromInt(x: Int): GF2 = if (x > 0) true else false
+		override def toFloat(x: Boolean): Float = toInt(x)
 
-		override def toDouble(x: GF2): Double = toInt(x)
-
-		override def toFloat(x: GF2): Float = toInt(x)
-
-		override def toLong(x: GF2): Long = toInt(x)
+		override def toLong(x: Boolean): Long = toInt(x)
 
 		override def toString: String = "GF(" + (if (self) "1" else "0") + ")"
 	}

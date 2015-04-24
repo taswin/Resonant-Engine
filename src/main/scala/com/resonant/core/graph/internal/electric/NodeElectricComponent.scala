@@ -18,10 +18,6 @@ import scala.collection.convert.wrapAll._
  * @author Calclavia
  */
 class NodeElectricComponent(parent: NodeProvider) extends NodeAbstractElectric(parent) {
-	/**
-	 * When dynamic terminal is set to true, then the grid will attempt to swap negative and positive terminals as needed.
-	 */
-	var dynamicTerminals = false
 
 	/**
 	 * The current and voltage values are set are determined by the DC Grid

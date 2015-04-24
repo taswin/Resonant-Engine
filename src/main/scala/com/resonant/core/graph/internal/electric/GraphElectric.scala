@@ -29,7 +29,7 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 	protected[graph] var mnaMat: Matrix = null
 	//The source matrix (B)
 	protected[graph] var sourceMatrix: Matrix = null
-	//The component-junction matrix. Rows (TO) connections are positive. Columns (FROM) connections are negative.
+	//The component-junction matrix. Rows are from, columns are to. In the directed graph the arrow points from positive to negative in potential difference.
 	protected[graph] var connectMatrix: AdjacencyMatrix[AnyRef] = null
 
 	/**
@@ -54,6 +54,7 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 				for (con <- node.positives) {
 					if (nodes.contains(con)) {
 						adjMat(node, con.asInstanceOf[NodeAbstractElectric]) = true
+						//Todo: Check negative connections?
 					}
 				}
 			case node: NodeElectricJunction =>
@@ -83,12 +84,11 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 				}
 		}
 
-		//Generate connect matrix
+		/**
+		 * Create the connect adjacency matrix.
+		 */
 		connectMatrix = new AdjacencyMatrix[AnyRef](nodes ++ junctions)
 
-		/**
-		 * Create the component junction adjacency matrix.
-		 */
 		junctions.foreach {
 			case junction =>
 				//Find all the components connected to this junction
@@ -103,10 +103,10 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 
 				//Set adjMat connection by marking the component-junction position as true
 				connectedComponents.foreach(component => {
-					if (component.positives.exists(c => junction.wires.contains(c))) {
+					if (adjMat.getDirectedTo(component).exists(c => junction.wires.contains(c))) {
 						connectMatrix(component, junction) = true
 					}
-					else if (component.negatives.exists(c => junction.wires.contains(c))) {
+					else if (adjMat.getDirectedFrom(component).exists(c => junction.wires.contains(c))) {
 						connectMatrix(junction, component) = true
 					}
 				})
