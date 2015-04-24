@@ -2,7 +2,7 @@ package com.resonant.core.graph.internal.electric
 
 import com.resonant.core.graph.api.NodeElectric
 import com.resonant.core.graph.internal.GraphConnect
-import com.resonant.core.graph.internal.electric.component.Junction
+import com.resonant.core.graph.internal.electric.component.{Junction, VirtualJunction}
 import com.resonant.core.prefab.block.Updater
 import com.resonant.lib.math.matrix.AdjacencyMatrix
 import nova.core.game.Game
@@ -36,11 +36,22 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 	 * Reconstruct must build the links and intersections of the grid
 	 */
 	override def build() {
+
 		buildAll()
 		Game.instance.syncTicker.add(this)
 	}
 
 	def buildAll() {
+		/**
+		 * Clean all variables
+		 */
+		junctions = List.empty
+		ground = null
+		components = List.empty
+		mnaMat = null
+		sourceMatrix = null
+		terminalMatrix = null
+
 		/**
 		 * Builds the adjacency matrix.
 		 * The directed graph indicate current flow from positive terminal to negative terminal.
@@ -48,6 +59,8 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 		adjMat = new AdjacencyMatrix(nodes, nodes)
 
 		var recursedWires = Set.empty[NodeElectricJunction]
+		//A queue of virtual junctions to their corresponding tuple component to be binded together
+		var virtualBindQueue = Map.empty[VirtualJunction, (NodeElectricComponent, NodeElectricComponent)]
 
 		nodes.foreach {
 			case node: NodeElectricComponent =>
@@ -55,8 +68,14 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 					if (nodes.contains(con)) {
 						con match {
 							case component: NodeElectricComponent =>
-								//TODO: This component is connected to another component. We need to create a virtual junction!
-								adjMat(node, component) = true
+								//Check if the "component" is negatively connected to the current node
+								if (component.negatives.contains(node)) {
+									adjMat(node, component) = true
+									//This component is connected to another component. Create virtual junctions between them.
+									var junction = new VirtualJunction
+									virtualBindQueue += junction ->(node, component)
+									junctions :+= junction
+								}
 							case junction: NodeElectricJunction =>
 								adjMat(node, junction) = true
 						}
@@ -92,9 +111,13 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 		/**
 		 * Create the connect adjacency matrix.
 		 */
-		terminalMatrix = new AdjacencyMatrix[AnyRef](nodes ++ junctions)
+		terminalMatrix = new AdjacencyMatrix[AnyRef](nodes ++ junctions ++ virtualBindQueue.keys)
 
 		junctions.foreach {
+			case virtualJunction: VirtualJunction =>
+				val (a, b) = virtualBindQueue(virtualJunction)
+				terminalMatrix(a, virtualJunction) = true
+				terminalMatrix(virtualJunction, b) = true
 			case junction =>
 				//Find all the components connected to this junction
 				val connectedComponents = junction.wires
@@ -119,8 +142,6 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 				})
 		}
 
-		//Some nodes are connected to other nodes instead of wires. We need to create virtual nodes and place them between the junctions!
-
 		//Select reference ground
 		ground = junctions.head
 		junctions = junctions.splitAt(1)._2
@@ -142,81 +163,6 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 			.flatten
 
 		return newResult
-	}
-
-	/**
-	 * Populates the node and junctions recursively
-	 */
-	def solveComponents() {
-		var recursed = Set.empty[NodeElectricComponent]
-		/*
-				def solveComponent(node: NodeElectricComponent, prev: NodeElectricComponent = null) {
-					//Check if we already traversed through this node and if it is valid. Proceed if we haven't already done so.
-					if (!recursed.contains(node)) {
-						//Add this node into the set of getNodes.
-						recursed += node
-
-						//If the node has at least a positive and negative connection, we can build two junctions across it.
-						if (node.positives.size > 0 && node.negatives.size > 0) {
-							//Use the junction that this node came from. If this is the first node being recursed, then create a new junction.
-							node.junctionNegative = {
-								if (prev == null) {
-									/**
-									 * This is only called in the first recursion loop.
-									 *
-									 * Look through all junctions, see if there is already one that is connected to this node, but NOT the previous junction
-									 * If the junction does NOT exist, then create a new virtual one
-									 */
-									junctions.find(j => j.components.contains(node) && (j.wires.exists(node.positives.contains) || (node.dynamicTerminals && j.wires.exists(node.negatives.contains)))) match {
-										case Some(j) => j //We found another wire to connect to
-										case _ =>
-											//We create a new virtual junction, because this terminal is not connected to any wires, but another component
-											val virtual = new VirtualJunction
-											virtual.components += node
-											virtual
-									}
-								}
-								else {
-									prev.junctionPositive
-								}
-							}
-
-							//Create a new junction for junction B
-							node.junctionPositive = {
-								/**
-								 * Look through all junctions, see if there is already one that is connected to this node.
-								 * If the junction does NOT exist, then create a new virtual one
-								 */
-								junctions.find(j => j.components.contains(node) && node.junctionNegative != j) match {
-									case Some(j) => j //We found another wire to connect to
-									case _ =>
-										junctions.find(j => j.isInstanceOf[VirtualJunction] && j.components.contains(node) && node.junctionNegative != j) match {
-											case Some(j) =>
-												j.components += node
-												j //We found another virtual junction to connect to
-											case _ =>
-												//We create a new virtual junction, because this terminal is not connected to any wires, but another component
-												val virtual = new VirtualJunction
-												virtual.components += node
-												virtual.components ++= node.connections.filterNot(_.isInstanceOf[NodeElectricJunction]).map(_.asInstanceOf[NodeElectricComponent])
-												virtual
-										}
-								}
-							}
-
-							junctions :+= node.junctionNegative
-							junctions :+= node.junctionPositive
-
-							//Recursively populate for all getNodes connected to junction B, because junction A simply goes backwards in the graph. There is no point iterating it.
-							node.junctionPositive.nodes.foreach(next => solveComponent(next, node))
-						}
-					}
-				}
-
-				getNodes.filterNot(_.isInstanceOf[NodeElectricJunction]).headOption match {
-					case Some(x) => solveComponent(x)
-					case _ =>
-				}*/
 	}
 
 	/**

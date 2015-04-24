@@ -15,6 +15,8 @@ import scala.collection.mutable
  */
 class GraphElectricTest {
 
+	val error = 0.001
+	
 	/**
 	 * Connects a sequence of electric nodes in series excluding the first and last connection.
 	 */
@@ -92,8 +94,6 @@ class GraphElectricTest {
 		assertEquals(Set(wire2), graph.adjMat.getDirectedFrom(resistor1))
 		assertEquals(Set(resistor1, battery), graph.adjMat.getDirectedFrom(wire2))
 
-		graph.buildAll()
-
 		val profiler = new Profiler("Solving graph 1")
 
 		for (trial <- 1 to 1000) {
@@ -102,11 +102,11 @@ class GraphElectricTest {
 			graph.solveAll()
 
 			//Test battery
-			assertEquals(voltage, battery.voltage, 0.0001)
-			assertEquals(voltage, battery.current, 0.0001)
+			assertEquals(voltage, battery.voltage, error)
+			assertEquals(voltage, battery.current, error)
 			//Test resistor
-			assertEquals(voltage, resistor1.voltage, 0.0001)
-			assertEquals(voltage, resistor1.current, 0.0001)
+			assertEquals(voltage, resistor1.voltage, error)
+			assertEquals(voltage, resistor1.current, error)
 			profiler.lap()
 		}
 
@@ -151,14 +151,14 @@ class GraphElectricTest {
 
 			val current = voltage / 3d
 			//Test battery
-			assertEquals(voltage, battery.voltage, 0.0001)
-			assertEquals(current, battery.current, 0.0001)
+			assertEquals(voltage, battery.voltage, error)
+			assertEquals(current, battery.current, error)
 			//Test resistor1
-			assertEquals(voltage / 3, resistor1.voltage, 0.0001)
-			assertEquals(current, resistor1.current, 0.0001)
+			assertEquals(voltage / 3, resistor1.voltage, error)
+			assertEquals(current, resistor1.current, error)
 			//Test resistor2
-			assertEquals(voltage * 2 / 3, resistor2.voltage, 0.0001)
-			assertEquals(current, resistor2.current, 0.0001)
+			assertEquals(voltage * 2 / 3, resistor2.voltage, error)
+			assertEquals(current, resistor2.current, error)
 			profiler.lap()
 		}
 
@@ -189,7 +189,6 @@ class GraphElectricTest {
 		val resistor2 = new DummyComponent()
 		resistor2.setResistance(2)
 		val wire4 = new DummyWire()
-		val wire5 = new DummyWire()
 		val resistor3 = new DummyComponent()
 		resistor3.setResistance(3)
 		val resistor4 = new DummyComponent()
@@ -216,26 +215,26 @@ class GraphElectricTest {
 			graph.solveAll()
 
 			//Test battery
-			assertEquals(voltage, battery.voltage, 0.0001)
-			assertEquals(voltage / totalResistance, battery.current, 0.0001)
+			assertEquals(voltage, battery.voltage, error)
+			assertEquals(voltage / totalResistance, battery.current, error)
 
 			//Branch A:
 			val currentA = voltage / 3d
 			//Test resistor1
-			assertEquals(voltage / 3, resistor1.voltage, 0.0001)
-			assertEquals(currentA, resistor1.current, 0.0001)
+			assertEquals(voltage / 3, resistor1.voltage, error)
+			assertEquals(currentA, resistor1.current, error)
 			//Test resistor2
-			assertEquals(voltage * 2 / 3, resistor2.voltage, 0.0001)
-			assertEquals(currentA, resistor2.current, 0.0001)
+			assertEquals(voltage * 2 / 3, resistor2.voltage, error)
+			assertEquals(currentA, resistor2.current, error)
 
 			//Branch B:
 			val currentB = voltage / 4d
 			//Test resistor1
-			assertEquals(voltage / 4, resistor1.voltage, 0.0001)
-			assertEquals(currentB, resistor1.current, 0.0001)
+			assertEquals(voltage / 4, resistor4.voltage, error)
+			assertEquals(currentB, resistor4.current, error)
 			//Test resistor2
-			assertEquals(voltage * 3 / 4, resistor2.voltage, 0.0001)
-			assertEquals(currentB, resistor2.current, 0.0001)
+			assertEquals(voltage * 3 / 4, resistor3.voltage, error)
+			assertEquals(currentB, resistor3.current, error)
 
 			profiler.lap()
 		}
