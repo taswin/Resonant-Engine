@@ -53,8 +53,13 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 			case node: NodeElectricComponent =>
 				for (con <- node.positives) {
 					if (nodes.contains(con)) {
-						adjMat(node, con) = true
-						//Todo: Check negative connections?
+						con match {
+							case component: NodeElectricComponent =>
+								//TODO: This component is connected to another component. We need to create a virtual junction!
+								adjMat(node, component) = true
+							case junction: NodeElectricJunction =>
+								adjMat(node, junction) = true
+						}
 					}
 				}
 			case node: NodeElectricJunction =>
@@ -113,8 +118,6 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 					}
 				})
 		}
-
-		//TODO: Using adjacency might be more efficient for junctions?
 
 		//Some nodes are connected to other nodes instead of wires. We need to create virtual nodes and place them between the junctions!
 
