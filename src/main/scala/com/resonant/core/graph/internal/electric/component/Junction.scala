@@ -3,6 +3,7 @@ package com.resonant.core.graph.internal.electric.component
 import com.resonant.core.graph.internal.electric.NodeElectricJunction
 
 /**
+ * Essentially a wrapper to collapse wires into junctions for easy management.
  * @author Calclavia
  */
 class Junction {

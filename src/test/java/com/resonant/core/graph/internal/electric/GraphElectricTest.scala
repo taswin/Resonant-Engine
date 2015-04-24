@@ -42,11 +42,10 @@ class GraphElectricTest {
 		return series
 	}
 
-	/**
-	 * The most simple circuit
-	 */
-	def generateCircuit1: GraphElectric = {
-		val profiler = new Profiler("Generate graph 1")
+
+	@Test
+	def testBuild() {
+		val profilerGen = new Profiler("Generate graph 1")
 
 		val graph = new GraphElectric
 
@@ -60,44 +59,70 @@ class GraphElectricTest {
 		wire2.connect(battery)
 
 		components.foreach(graph.add)
-		println(profiler)
-
-		return graph
-	}
-
-	@Test
-	def testBuild() {
-		val graph = generateCircuit1
+		println(profilerGen)
 
 		val profiler = new Profiler("Building adjacency for graph 1")
 		graph.buildAll()
 		println(profiler)
 
 		println(graph.adjMat)
-		assertEquals(graph.junctions.size, 1)
+		//Test component & junction sizes
+		assertEquals(2, graph.components.size)
+		//There should be one less junction in the list, due to the ground
+		assertEquals(1, graph.junctions.size)
+		//Test forward connections
+		assertEquals(true, graph.adjMat(battery, wire1))
+		assertEquals(true, graph.adjMat(wire1, resistor1))
+		assertEquals(true, graph.adjMat(resistor1, wire2))
+		assertEquals(true, graph.adjMat(wire2, battery))
+		//Test getDirectedTo connections
+		assertEquals(Set(wire1, wire2), graph.adjMat.getDirectedTo(battery))
+		assertEquals(Set(battery), graph.adjMat.getDirectedTo(wire1))
+		assertEquals(Set(wire1, wire2), graph.adjMat.getDirectedTo(resistor1))
+		assertEquals(Set(resistor1), graph.adjMat.getDirectedTo(wire2))
+		//Test getDirectedFrom connections
+		assertEquals(Set(wire1), graph.adjMat.getDirectedFrom(battery))
+		assertEquals(Set(battery, resistor1), graph.adjMat.getDirectedFrom(wire1))
+		assertEquals(Set(wire2), graph.adjMat.getDirectedFrom(resistor1))
+		assertEquals(Set(resistor1, battery), graph.adjMat.getDirectedFrom(wire2))
 	}
 
 	@Test
 	def testSolve1() {
 		/**
-		 * Graph 1
+		 * The most simple circuit
 		 */
-		val graph = generateCircuit1
+		val profilerGen = new Profiler("Generate graph 1")
+
+		val graph = new GraphElectric
+
+		val battery = new DummyComponent()
+		val wire1 = new DummyWire()
+		val resistor1 = new DummyComponent()
+		val wire2 = new DummyWire()
+
+		battery.connectNeg(wire2)
+		val components = connectInSeries(battery, wire1, resistor1, wire2)
+		wire2.connect(battery)
+
+		components.foreach(graph.add)
+		println(profilerGen)
+
 		graph.buildAll()
 
 		val profiler = new Profiler("Solving graph 1")
 
 		for (trial <- 1 to 1000) {
 			val voltage = trial * 10d * Math.random()
-			graph.getNodes.get(0).asInstanceOf[NodeElectricComponent].genVoltage = voltage
+			battery.genVoltage = voltage
 			graph.solveAll()
 
 			//Test battery
-			assertEquals(voltage, graph.getNodes.get(0).voltage, 0.0001)
-			assertEquals(voltage, graph.getNodes.get(0).current, 0.0001)
+			assertEquals(voltage, battery.voltage, 0.0001)
+			assertEquals(voltage, battery.current, 0.0001)
 			//Test resistor
-			assertEquals(voltage, graph.getNodes.get(2).voltage, 0.0001)
-			assertEquals(voltage, graph.getNodes.get(2).current, 0.0001)
+			assertEquals(voltage, resistor1.voltage, 0.0001)
+			assertEquals(voltage, resistor1.current, 0.0001)
 			profiler.lap()
 		}
 
