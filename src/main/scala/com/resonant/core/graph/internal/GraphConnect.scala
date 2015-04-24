@@ -2,7 +2,7 @@ package com.resonant.core.graph.internal
 
 import java.util.{List => JLIst}
 
-import com.resonant.core.graph.internal.matrix.AdjacencyMatrix
+import com.resonant.lib.math.matrix.AdjacencyMatrix
 
 import scala.collection.JavaConversions._
 /**
@@ -36,7 +36,7 @@ abstract class GraphConnect[N <: Node[_]] extends Graph[N] {
 	def isConnected(from: N, to: N): Boolean = adjMat(id(from))(id(to))
 
 	def build() {
-		adjMat = new AdjacencyMatrix(nodes.size, nodes.size)
+		adjMat = new AdjacencyMatrix(nodes, nodes)
 
 		for (node <- nodes) {
 			for (con <- node.connections) {

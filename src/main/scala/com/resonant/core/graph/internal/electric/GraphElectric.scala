@@ -3,8 +3,8 @@ package com.resonant.core.graph.internal.electric
 import com.resonant.core.graph.api.NodeElectric
 import com.resonant.core.graph.internal.GraphConnect
 import com.resonant.core.graph.internal.electric.component.Junction
-import com.resonant.core.graph.internal.matrix.AdjacencyMatrix
 import com.resonant.core.prefab.block.Updater
+import com.resonant.lib.math.matrix.AdjacencyMatrix
 import nova.core.game.Game
 import nova.core.util.transform.Matrix
 
