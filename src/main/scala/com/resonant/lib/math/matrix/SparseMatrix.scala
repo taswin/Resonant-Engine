@@ -1,16 +1,18 @@
 package com.resonant.lib.math.matrix
 
+import scala.Numeric.Implicits._
+
 /**
  * A general sparse matrix with generic keys and values.
  * @author Calclavia
  */
+object SparseMatrix {
+	def apply[V](rows: Int, columns: Int)(implicit n: Numeric[V]) = new SparseMatrix[Int, V]((0 until rows).toSet, (0 until columns).toSet)(n)
+}
+
 class SparseMatrix[K, V](val rows: Set[K], var columns: Set[K])(implicit n: Numeric[V]) {
 
-	private var mat = Map.empty[(K, K), V].withDefaultValue(n.zero)
-
-	def this(rows: Int, columns: Int) {
-		this((0 until rows).toSet, (0 until columns).toSet)
-	}
+	protected var mat = Map.empty[(K, K), V].withDefaultValue(n.zero)
 
 	def apply(i: K, j: K): V = mat(i, j)
 
@@ -22,7 +24,7 @@ class SparseMatrix[K, V](val rows: Set[K], var columns: Set[K])(implicit n: Nume
 		assert(columns == B.rows)
 		val C = new SparseMatrix[K, V](rows, B.columns)
 		for (row <- C.rows; column <- C.columns; aCol <- columns)
-			C(row, column) = n.plus(C(row, column), n.times(this(row, aCol), B(aCol, column)))
+			C(row, column) += this(row, aCol) * B(aCol, column)
 		return C
 	}
 

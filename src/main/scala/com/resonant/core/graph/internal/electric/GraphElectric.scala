@@ -43,7 +43,7 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 		 * Builds the adjacency matrix.
 		 * The directed graph indicate current flow from positive terminal to negative terminal.
 		 */
-		adjMat = new AdjacencyMatrix(nodes.size, nodes.size)
+		adjMat = new AdjacencyMatrix(nodes, nodes)
 
 		var recursedWires = Set.empty[NodeElectricJunction]
 
@@ -51,13 +51,13 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 			case node: NodeElectricComponent =>
 				for (con <- node.positives) {
 					if (nodes.contains(con)) {
-						adjMat(id(node), id(con.asInstanceOf[NodeAbstractElectric])) = true
+						adjMat(node, con.asInstanceOf[NodeAbstractElectric]) = true
 					}
 				}
 			case node: NodeElectricJunction =>
 				for (con <- node.connections()) {
 					if (nodes.contains(con)) {
-						adjMat(id(node), id(con.asInstanceOf[NodeAbstractElectric])) = true
+						adjMat(node, con.asInstanceOf[NodeAbstractElectric]) = true
 					}
 				}
 
@@ -304,7 +304,7 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 				//A set of current sources that is going into this junction
 				sourceMatrix(i, 0) = currentSources.filter(
 					source =>
-						(adjMat.getDirectedTo(nodes.indexOf(source)).contains(junctions(i)) && source.current > 0) || (adjMat.getDirectedFrom(nodes.indexOf(source)).contains(junctions(i)) && source.current < 0)
+						(adjMat.getDirectedTo(source).contains(junctions(i)) && source.current > 0) || (adjMat.getDirectedFrom(source).contains(junctions(i)) && source.current < 0)
 				)
 					.map(_.current)
 					.sum
@@ -336,9 +336,9 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 
 		//Calculate the potential difference for each component based on its junctions
 		resistors.zipWithIndex.foreach {
-			case (components, index) =>
-				val wireTo = nodes(adjMat.getDirectedTo(nodes.indexOf(components)).head)
-				val wireFrom = nodes(adjMat.getDirectedFrom(nodes.indexOf(components)).head)
+			case (component, index) =>
+				val wireTo = nodes(adjMat.getDirectedTo(component).head)
+				val wireFrom = nodes(adjMat.getDirectedFrom(component).head)
 
 				val voltageIn = junctions.find(_.wires.contains(wireTo)).headOption match {
 					case Some(junction) => junction.voltage
@@ -349,8 +349,8 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 					case _ => 0 //Ground
 				}
 
-				components.voltage = voltageIn - voltageOut
-				components.current = components.voltage / components.resistance
+				component.voltage = voltageIn - voltageOut
+				component.current = component.voltage / component.resistance
 		}
 	}
 

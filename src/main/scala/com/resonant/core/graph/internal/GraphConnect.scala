@@ -10,38 +10,27 @@ import scala.collection.JavaConversions._
  * @author Calclavia
  */
 abstract class GraphConnect[N <: Node[_]] extends Graph[N] {
-
-	protected var nodes = List.empty[N]
-	protected[graph] var adjMat: AdjacencyMatrix = null
+	protected var nodes = Set.empty[N]
+	protected[graph] var adjMat: AdjacencyMatrix[N] = null
 
 	def add(node: N) {
-		if (!nodes.contains(node)) {
-			nodes :+= node
-		}
+		nodes += node
 	}
 
 	def remove(node: N) {
-		if (nodes.contains(node)) {
-			nodes.diff(List(node))
-		}
+		nodes -= node
 	}
 
-	def id(node: AnyRef): Int = {
-		assert(nodes.contains(node))
-		return nodes.indexOf(node)
-	}
-
-	override def getNodes: JLIst[N] = nodes
-
-	def isConnected(from: N, to: N): Boolean = adjMat(id(from))(id(to))
+	//TODO: Collection?
+	override def getNodes: JLIst[N] = nodes.toList
 
 	def build() {
-		adjMat = new AdjacencyMatrix(nodes, nodes)
+		adjMat = new AdjacencyMatrix[N](nodes, nodes)
 
 		for (node <- nodes) {
 			for (con <- node.connections) {
 				if (nodes.contains(con)) {
-					adjMat(id(node), id(con.asInstanceOf[N])) = true
+					adjMat(node, con.asInstanceOf[N]) = true
 				}
 			}
 		}

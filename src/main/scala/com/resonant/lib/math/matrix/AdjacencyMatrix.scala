@@ -1,29 +1,30 @@
 package com.resonant.lib.math.matrix
 
+import com.resonant.lib.math.matrix.GaloisField.GF2
+
 /**
  * @author Calclavia
  */
-class AdjacencyMatrix[K1, K2](rows: Seq[K1], columns: Seq[K2]) extends SparseMatrix[K1, K2, GF2](rows, columns) {
+class AdjacencyMatrix[K](rows: Set[K], columns: Set[K]) extends SparseMatrix[K, GF2](rows, columns)(new GF2(false)) {
 
-	def isConnected(from: K1, to: K2): Boolean = {
-		return this(from, to) || this(to, from)
-	}
+	def isConnected(from: K, to: K): Boolean = this(from, to) || this(to, from)
 
-	def isBiConnected(from: Int, to: Int): Boolean = {
-		return mat(from)(to) || mat(to)(from)
-	}
+	def isBiConnected(from: K, to: K): Boolean = this(from, to) && this(to, from)
 
 	/**
 	 * @param node - The node to check
 	 * @return Gets a set of nodes that the given node is connected to.
 	 */
-	def getDirectedTo(node: Int): Set[Int] = (0 until mat(0).size).filter(mat(node)(_)).toSet
+	def getDirectedTo(node: K): Set[K] = mat.collect { case ((k1, k2), v) if k1 == node && v => k2 }.toSet
 
 	/**
 	 * @param node - The node to check
 	 * @return Gets a set of nodes that the given node is connected from.
 	 */
-	def getDirectedFrom(node: Int): Set[Int] = (0 until mat.size).filter(mat(_)(node)).toSet
+	def getDirectedFrom(node: K): Set[K] = mat.collect { case ((k1, k2), v) if k2 == node && v => k1 }.toSet
 
-	def getDirected(node: Int) = getDirectedTo(node) | getDirectedFrom(node)
+	/**
+	 * @return Gets nodes directed both from and to this node.
+	 */
+	def getDirected(node: K) = getDirectedTo(node) | getDirectedFrom(node)
 }
