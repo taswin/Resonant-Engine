@@ -16,7 +16,7 @@ import scala.collection.mutable
 class GraphElectricTest {
 
 	val error = 0.001
-	
+
 	/**
 	 * Connects a sequence of electric nodes in series excluding the first and last connection.
 	 */
@@ -98,8 +98,8 @@ class GraphElectricTest {
 
 		for (trial <- 1 to 1000) {
 			val voltage = trial * 10d * Math.random()
-			battery.genVoltage = voltage
-			graph.solveAll()
+			battery.setVoltage(voltage)
+			graph.update(profiler.delta)
 
 			//Test battery
 			assertEquals(voltage, battery.voltage, error)
@@ -136,7 +136,7 @@ class GraphElectricTest {
 		val components = connectInSeries(battery, wire1, wire2, resistor1, wire3, resistor2, wire4)
 		wire4.connect(battery)
 
-		battery.generateVoltage(6)
+		battery.setVoltage(6)
 
 		components.foreach(graph.add)
 		println(profilerGen)
@@ -146,8 +146,8 @@ class GraphElectricTest {
 
 		for (trial <- 1 to 1000) {
 			val voltage = trial * 10d * Math.random()
-			battery.genVoltage = voltage
-			graph.solveAll()
+			battery.setVoltage(voltage)
+			graph.update(profiler.delta)
 
 			val current = voltage / 3d
 			//Test battery
@@ -211,8 +211,8 @@ class GraphElectricTest {
 
 		for (trial <- 1 to 1000) {
 			val voltage = trial * 10d * Math.random()
-			battery.genVoltage = voltage
-			graph.solveAll()
+			battery.setVoltage(voltage)
+			graph.update(profiler.delta)
 
 			//Test battery
 			assertEquals(voltage, battery.voltage, error)
@@ -312,9 +312,9 @@ class GraphElectricTest {
 
 		for (trial <- 1 to 1000) {
 			val voltage = trial * 10d * Math.random()
-			battery1.genVoltage = voltage
-			battery2.genVoltage = voltage
-			graph.solveAll()
+			battery1.setVoltage(voltage)
+			battery2.setVoltage(voltage)
+			graph.update(profiler.delta)
 			//TODO: Test results
 			profiler.lap()
 		}
@@ -352,8 +352,10 @@ class GraphElectricTest {
 		var time = System.currentTimeMillis()
 		var lapped = Seq.empty[Long]
 
+		def delta = System.currentTimeMillis() - time
+
 		def lap() {
-			lapped :+= System.currentTimeMillis() - time
+			lapped :+= delta
 			time = System.currentTimeMillis()
 		}
 

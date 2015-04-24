@@ -31,6 +31,8 @@ class NodeElectricComponent(parent: NodeProvider) extends NodeAbstractElectric(p
 	 */
 	protected[electric] var genVoltage = 0d
 	protected[electric] var genCurrent = 0d
+	protected[graph] var onSetVoltage = Seq.empty[NodeElectric => Unit]
+	protected[graph] var onSetCurrent = Seq.empty[NodeElectric => Unit]
 
 	/**
 	 * The positive terminals are the directions in which charge can flow out of this electric component.
@@ -83,16 +85,18 @@ class NodeElectricComponent(parent: NodeProvider) extends NodeAbstractElectric(p
 	 * Generates a potential difference across the two intersections that go across this node.
 	 * @param voltage - The target voltage, in Volts
 	 */
-	def generateVoltage(voltage: Double) {
+	def setVoltage(voltage: Double) {
 		genVoltage = voltage
+		onSetVoltage.foreach(_.apply(this))
 	}
 
 	/**
 	 * Generates power by adjusting varying the voltage until the target power is reached
 	 * @param power - The target power, in Watts
 	 */
-	def generatePower(power: Double) {
+	def setCurrent(power: Double) {
 		genCurrent = power
+		onSetCurrent.foreach(_.apply(this))
 	}
 
 	override def toString = "ElectricComponent [" + connections.size() + " " + BigDecimal(current).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "A " + BigDecimal(voltage).setScale(2, BigDecimal.RoundingMode.HALF_UP) + "V]"

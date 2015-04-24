@@ -12,6 +12,8 @@ import scala.collection.JavaConversions._
 
 /**
  * An electric circuit grid for independent voltage sources.
+ * The circuit solver uses MNA, based on http://www.swarthmore.edu/NatSci/echeeve1/Ref/mna/MNA3.html
+ * We will be solving systems of linear equations using matrices.
  *
  * @author Calclavia
  */
@@ -26,17 +28,36 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 	var components = List.empty[NodeElectricComponent]
 
 	//The modified nodal analysis matrix (A) in Ax=b linear equation.
-	protected[graph] var mnaMat: Matrix = null
+	protected[graph] var mna: Matrix = null
 	//The source matrix (B)
 	protected[graph] var sourceMatrix: Matrix = null
 	//The component-junction matrix. Rows are from, columns are to. In the directed graph the arrow points from positive to negative in potential difference.
 	protected[graph] var terminalMatrix: AdjacencyMatrix[AnyRef] = null
 
+	var voltageSources = List.empty[NodeElectricComponent]
+	var currentSources = List.empty[NodeElectricComponent]
+	var resistors = List.empty[NodeElectricComponent]
+
+	//Changed flags
+	var resistorChanged = false
+	var sourceChanged = false
+
+	override def add(node: NodeElectric) {
+		super.add(node)
+
+		node match {
+			case node: NodeElectricComponent =>
+				node.onResistanceChange :+= ((resistor: NodeElectric) => resistorChanged = true)
+				node.onSetVoltage :+= ((source: NodeElectric) => sourceChanged = true)
+				node.onSetCurrent :+= ((source: NodeElectric) => sourceChanged = true)
+			case _ =>
+		}
+	}
+
 	/**
 	 * Reconstruct must build the links and intersections of the grid
 	 */
 	override def build() {
-
 		buildAll()
 		Game.instance.syncTicker.add(this)
 	}
@@ -48,7 +69,7 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 		junctions = List.empty
 		ground = null
 		components = List.empty
-		mnaMat = null
+		mna = null
 		sourceMatrix = null
 		terminalMatrix = null
 
@@ -166,126 +187,119 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 	}
 
 	/**
-	 * Solve circuit using MNA, based on http://www.swarthmore.edu/NatSci/echeeve1/Ref/mna/MNA3.html
-	 * We will be solving systems of linear equations using matrices.
+	 * Setup MNA Matrix.
+	 * This should be called if the number of voltage sources changes
 	 */
-	def solveAll() {
-		//TODO: The A matrix only should change when resistance changes
-		//TODO: The b matrix only changes when voltage or current sources change
 
-		val voltageSources = components.collect { case source if source.genVoltage != 0 => source }
-		val currentSources = components.collect { case source if source.genCurrent != 0 => source }
-		val resistors = components diff voltageSources diff currentSources
-		val n = junctions.size
-		val m = voltageSources.size
+	def setupMNA(): Unit = {
+		voltageSources = components.collect { case source if source.genVoltage != 0 => source }
+		currentSources = components.collect { case source if source.genCurrent != 0 => source }
+		resistors = components diff voltageSources diff currentSources
+		mna = new Matrix(voltageSources.size + junctions.size)
+	}
 
-		/**
-		 * Setup MNA Matrix
-		 */
-		mnaMat = new Matrix(n + m)
-
-		generateConductanceMatrix()
-		generateConnectionMatrix()
-
-		def generateConductanceMatrix() {
-			//Construct G sub-matrix
-			//Set all diagonals of the nxn part of the matrix with the sum of its adjacent resistor's conductance
-			junctions.zipWithIndex.foreach {
-				case (junction, i) =>
-					mnaMat(i, i) = resistors
-						.filter(resistor => terminalMatrix.isConnected(resistor, junction))
-						.map(1 / _.resistance)
-						.sum
-			}
-
-			//The off diagonal elements are the negative conductance of the element connected to the pair of corresponding node.
-			//Therefore a resistor between nodes 1 and 2 goes into the G matrix at location (1,2) and locations (2,1).
-			for (resistor <- resistors) {
-				//The id of the junction at negative terminal
-				val i = junctions.indexOf(terminalMatrix.getDirectedTo(resistor).head)
-				//The id of the junction at positive terminal
-				val j = junctions.indexOf(terminalMatrix.getDirectedFrom(resistor).head)
-
-				//Check to make sure this is not the ground reference junction
-				if (i != -1 && j != -1) {
-					val negConductance = -1 / resistor.resistance
-					mnaMat(i, j) = negConductance
-					mnaMat(j, i) = negConductance
-				}
-			}
-		}
-
-		/**
-		 * Construct B nxm and C mxn sub-matrix, with only 0, 1, and -1 elements.
-		 * The C matrix is the transpose of B matrix.
-		 * The B matrix is an nxm matrix with only 0, 1 and -1 elements.
-		 * Each location in the matrix corresponds to a particular voltage source (first dimension) or a node (second dimension).
-		 * If the positive terminal of the ith voltage source is connected to node k, then the element (i,k) in the B matrix is a 1.
-		 * If the negative terminal of the ith voltage source is connected to node k, then the element (i,k) in the B matrix is a -1.
-		 * Otherwise, elements of the B matrix are zero.
-		 */
-		def generateConnectionMatrix() {
-			//TODO: Matrix B and C only change when grid is rebuilt
-			voltageSources.zipWithIndex.foreach {
-				case (voltageSource, i) =>
-					//Positive terminal
-					val posIndex = junctions.indexOf(terminalMatrix.getDirectedFrom(voltageSource).head)
-					//Check to make sure this is not the ground reference junction
-					if (posIndex != -1) {
-						mnaMat(n + i, posIndex) = 1
-						mnaMat(posIndex, n + i) = 1
-					}
-					//Negative terminal
-					val negIndex = junctions.indexOf(terminalMatrix.getDirectedTo(voltageSource).head)
-					//Check to make sure this is not the ground reference junction
-					if (negIndex != -1) {
-						mnaMat(n + i, negIndex) = -1
-						mnaMat(negIndex, n + i) = -1
-					}
-			}
-		}
-
-		/**
-		 * The source matrix is a column vector, the right hand side of Ax = b equation.
-		 * It contains two parts.
-		 */
-		//TODO: Only when sources change
-		def computeSourceMatrix() {
-			sourceMatrix = new Matrix(n + m, 1)
-
-			//Part one: The sum of current sources corresponding to a particular node
-			for (i <- 0 until n) {
-				//A set of current sources that is going into this junction
-				sourceMatrix(i, 0) = currentSources.filter(
-					source =>
-						(adjMat.getDirectedTo(source).contains(junctions(i)) && source.current > 0) || (adjMat.getDirectedFrom(source).contains(junctions(i)) && source.current < 0)
-				)
-					.map(_.current)
+	/**
+	 * Generates the G Matrix, the conductance.
+	 * This matrix only changes if resistance changes.
+	 */
+	def generateConductanceMatrix() {
+		//Construct G sub-matrix
+		//Set all diagonals of the nxn part of the matrix with the sum of its adjacent resistor's conductance
+		junctions.zipWithIndex.foreach {
+			case (junction, i) =>
+				mna(i, i) = resistors
+					.filter(resistor => terminalMatrix.isConnected(resistor, junction))
+					.map(1 / _.resistance)
 					.sum
-			}
-
-			//Part two: The voltage of each voltage source
-			for (i <- 0 until m) {
-				sourceMatrix(i + n, 0) = voltageSources(i).genVoltage
-			}
 		}
 
-		computeSourceMatrix()
-		//TODO: Recalculation is only required when parts of circuit changes
+		//The off diagonal elements are the negative conductance of the element connected to the pair of corresponding node.
+		//Therefore a resistor between nodes 1 and 2 goes into the G matrix at location (1,2) and locations (2,1).
+		for (resistor <- resistors) {
+			//The id of the junction at negative terminal
+			val i = junctions.indexOf(terminalMatrix.getDirectedTo(resistor).head)
+			//The id of the junction at positive terminal
+			val j = junctions.indexOf(terminalMatrix.getDirectedFrom(resistor).head)
 
-		//Solve the circuit
+			//Check to make sure this is not the ground reference junction
+			if (i != -1 && j != -1) {
+				val negConductance = -1 / resistor.resistance
+				mna(i, j) = negConductance
+				mna(j, i) = negConductance
+			}
+		}
+	}
+
+	/**
+	 * Construct B nxm and C mxn sub-matrix, with only 0, 1, and -1 elements.
+	 * The C matrix is the transpose of B matrix.
+	 * The B matrix is an nxm matrix with only 0, 1 and -1 elements.
+	 * Each location in the matrix corresponds to a particular voltage source (first dimension) or a node (second dimension).
+	 * If the positive terminal of the ith voltage source is connected to node k, then the element (i,k) in the B matrix is a 1.
+	 * If the negative terminal of the ith voltage source is connected to node k, then the element (i,k) in the B matrix is a -1.
+	 * Otherwise, elements of the B matrix are zero.
+	 * Matrix B and C only change when grid is rebuilt
+	 */
+	def generateConnectionMatrix() {
+		voltageSources.zipWithIndex.foreach {
+			case (voltageSource, i) =>
+				//Positive terminal
+				val posIndex = junctions.indexOf(terminalMatrix.getDirectedFrom(voltageSource).head)
+				//Check to make sure this is not the ground reference junction
+				if (posIndex != -1) {
+					mna(junctions.size + i, posIndex) = 1
+					mna(posIndex, junctions.size + i) = 1
+				}
+				//Negative terminal
+				val negIndex = junctions.indexOf(terminalMatrix.getDirectedTo(voltageSource).head)
+				//Check to make sure this is not the ground reference junction
+				if (negIndex != -1) {
+					mna(junctions.size + i, negIndex) = -1
+					mna(negIndex, junctions.size + i) = -1
+				}
+		}
+	}
+
+	/**
+	 * The source matrix is a column vector, the right hand side of Ax = b equation.
+	 * It contains two parts. This matrix is only recalculated when sources change.
+	 */
+	def computeSourceMatrix() {
+		sourceMatrix = new Matrix(junctions.size + voltageSources.size, 1)
+
+		//Part one: The sum of current sources corresponding to a particular node
+		for (i <- 0 until junctions.size) {
+			//A set of current sources that is going into this junction
+			sourceMatrix(i, 0) = currentSources.filter(
+				source =>
+					(adjMat.getDirectedTo(source).contains(junctions(i)) && source.current > 0) || (adjMat.getDirectedFrom(source).contains(junctions(i)) && source.current < 0)
+			)
+				.map(_.current)
+				.sum
+		}
+
+		//Part two: The voltage of each voltage source
+		for (i <- 0 until voltageSources.size) {
+			sourceMatrix(i + junctions.size, 0) = voltageSources(i).genVoltage
+		}
+	}
+
+	/**
+	 * Solve the circuit based on the currently buffered matrices, then injects the data back into the nodes.
+	 */
+	def solve() {
 		//TODO: Check why negation is required?
-		val x = mnaMat.solve(sourceMatrix * -1)
+		val x = mna.solve(sourceMatrix * -1)
 
 		//Retrieve the voltage of the junctions
-		for (i <- 0 until n) {
+		for (i <- 0 until junctions.size) {
 			junctions(i).voltage = x(i, 0)
 		}
 
 		//Retrieve the current values of the voltage sources
-		for (i <- 0 until m) {
+		for (i <- 0 until voltageSources.size) {
 			voltageSources(i).voltage = voltageSources(i).genVoltage
-			voltageSources(i).current = x(i + n, 0)
+			voltageSources(i).current = x(i + junctions.size, 0)
 		}
 
 		//Calculate the potential difference for each component based on its junctions
@@ -299,6 +313,26 @@ class GraphElectric extends GraphConnect[NodeElectric] with Updater {
 	}
 
 	override def update(deltaTime: Double) {
-		solveAll()
+		if (mna == null) {
+			setupMNA()
+			generateConnectionMatrix()
+			resistorChanged = true
+			sourceChanged = true
+		}
+
+		if (resistorChanged) {
+			generateConductanceMatrix()
+		}
+
+		if (sourceChanged) {
+			computeSourceMatrix()
+		}
+
+		if (resistorChanged || sourceChanged) {
+			solve()
+		}
+
+		resistorChanged = false
+		sourceChanged = false
 	}
 }
